@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6c7a212d-3c91-4ff0-904b-dbc37de82ac8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/commandlinetools/Symfony_08_09_2020_16_43.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/commandlinetools/schemas/frameworkDescriptionVersion1.1.4.xsd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/da8dd7af-a698-4e33-8c11-37e4a52af3d5.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/da8dd7af-a698-4e33-8c11-37e4a52af3d5/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/plataform.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/plataform.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/symfony2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="6c7a212d-3c91-4ff0-904b-dbc37de82ac8" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -153,7 +142,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1599682229328</updated>
-      <workItem from="1599682231079" duration="306000" />
+      <workItem from="1599682231079" duration="608000" />
     </task>
     <servers />
   </component>
@@ -177,5 +166,9 @@
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
     <state x="2055" y="153" width="1009" height="737" key="SettingsEditor/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599682535902" />
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1599682811739">
+      <screen x="1600" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599682811739" />
   </component>
 </project>
