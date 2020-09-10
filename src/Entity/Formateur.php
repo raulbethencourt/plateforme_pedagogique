@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=FormateurRepository::class)
  */
-class Formateur
+class Formateur extends User
 {
     /**
      * @ORM\Id
@@ -132,6 +132,17 @@ class Formateur
                 $class->setFormateur(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @param mixed $id
+     * @return Formateur
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
 
         return $this;
     }
