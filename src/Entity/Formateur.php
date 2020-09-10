@@ -135,4 +135,15 @@ class Formateur extends User
 
         return $this;
     }
+
+    /**
+     * @param mixed $id
+     * @return Formateur
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
 }
