@@ -13,11 +13,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class FormateurController
+ * Class utilisateurController
  * @package App\Controller
- * @Route("/formateur")
+ * @Route("/utilisateur")
  */
-class FormateurController extends AbstractController
+class UtilisateurController extends AbstractController
 {
     /**
      * @var QuestionnaireRepository
@@ -35,13 +35,13 @@ class FormateurController extends AbstractController
     }
 
     /**
-     *@Route ("/", name="formateur_index")
+     *@Route ("/", name="utilisateur_index")
      * @return Response
      */
     public function index(): Response
     {
         $questionnaires = $this->repository->findAll();
-        return $this->render('formateur/index.html.twig', compact('questionnaires'));
+        return $this->render('utilisateur/index.html.twig', compact('questionnaires'));
     }
 
     /**
@@ -63,7 +63,7 @@ class FormateurController extends AbstractController
             $this->em->flush();
 
             $this->addFlash('success', 'questionnaire ajouté avec succès');
-            return $this->redirectToRoute('formateur_formateur_index');
+            return $this->redirectToRoute('utilisateur_index');
         }
 
         return $this->render('questionnaire/new.html.twig', [
@@ -85,9 +85,9 @@ class FormateurController extends AbstractController
             $this->em->flush();
             $this->addFlash('success', 'questionnaire modifié avec succes');
 
-            return $this->redirectToRoute('formateur_formateur_index');
+            return $this->redirectToRoute('utilisateur_index');
         }
-        return $this->render('questionnaire/edit.html.twig', [
+        return $this->render('utilisateur/edit.html.twig', [
             'questionnaire' => $questionnaire,
             'form' => $form->createView()
         ]);
@@ -106,6 +106,6 @@ class FormateurController extends AbstractController
             $this->em->flush();
             $this->addFlash('succes', 'questionnaire supprimé avec succès');
         }
-        return $this->redirectToRoute('formateur_formateur_index');
+        return $this->redirectToRoute('utilisateur_index');
     }
 }

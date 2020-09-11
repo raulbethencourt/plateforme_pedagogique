@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="dataSourceStorageLocal">
-    <data-source name="@devilbox" uuid="ce104aaa-125a-441e-b754-74484fdac2c0">
+    <data-source name="@devilbox_elan" uuid="ce104aaa-125a-441e-b754-74484fdac2c0">
       <database-info product="MariaDB" version="10.4.14-MariaDB-1:10.4.14+maria~focal" jdbc-version="4.2" driver-name="MariaDB Connector/J" driver-version="2.6.0" dbms="MARIADB" exact-version="10.4.14" exact-driver-version="2.6">
         <extra-name-characters>#@</extra-name-characters>
         <identifier-quote-string>`</identifier-quote-string>

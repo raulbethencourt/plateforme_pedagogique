@@ -30,12 +30,12 @@ class Formateur extends User
     private $photo_name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Questionnaire::class, mappedBy="formateur")
+     * @ORM\OneToMany(targetEntity=Questionnaire::class, mappedBy="utilisateur")
      */
     private $questionnaires;
 
     /**
-     * @ORM\OneToMany(targetEntity=Classe::class, mappedBy="formateur")
+     * @ORM\OneToMany(targetEntity=Classe::class, mappedBy="utilisateur")
      */
     private $classes;
 

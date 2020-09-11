@@ -23,7 +23,7 @@ class Proposition
     private $texte;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $correct;
 

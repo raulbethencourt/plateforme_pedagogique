@@ -30,7 +30,8 @@ class Question
     private $score;
 
     /**
-     * @ORM\OneToMany(targetEntity=Proposition::class, mappedBy="question")
+     * @ORM\OneToMany(targetEntity=Proposition::class, mappedBy="question",
+     *     orphanRemoval=true, cascade={"persist", "remove"})
      */
     private $propositions;
 
@@ -46,8 +47,7 @@ class Question
     }
 
     public function getId(): ?int
-    {
-        return $this->id;
+    {        return $this->id;
     }
 
     public function getEnonce(): ?string

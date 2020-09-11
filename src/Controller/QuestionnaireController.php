@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class QuestionnaireController extends AbstractController
 {
     /**
-     * @Route("/questionnaire", name="questionnaire_juex")
+     * @Route("/", name="questionnaire_juex")
      */
     public function play()
     {

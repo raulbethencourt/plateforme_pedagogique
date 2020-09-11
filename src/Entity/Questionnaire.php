@@ -30,7 +30,7 @@ class Questionnaire
     private $difficulte;
 
     /**
-     * @ORM\OneToMany(targetEntity=Question::class, mappedBy="questionnaire")
+     * @ORM\OneToMany(targetEntity=Question::class, mappedBy="questionnaire", orphanRemoval=true, cascade={"persist"})
      */
     private $questions;
 
@@ -41,7 +41,7 @@ class Questionnaire
     private $formateur;
 
     /**
-     * @ORM\OneToMany(targetEntity=Passer::class, mappedBy="questionnaire")
+     * @ORM\OneToMany(targetEntity=Passer::class, mappedBy="questionnaire", orphanRemoval=true)
      */
     private $passers;
 
