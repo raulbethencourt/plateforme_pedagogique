@@ -23,13 +23,9 @@
     <list default="true" id="6c7a212d-3c91-4ff0-904b-dbc37de82ac8" name="Default Changelist" comment="" />
 =======
     <list default="true" id="6c7a212d-3c91-4ff0-904b-dbc37de82ac8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ce104aaa-125a-441e-b754-74484fdac2c0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ce104aaa-125a-441e-b754-74484fdac2c0.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/twig.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/twig.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Formateur.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Formateur.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/home/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home/index.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20200909134607.php" beforeDir="false" />
     </list>
 >>>>>>> develop
     <option name="SHOW_DIALOG" value="false" />
@@ -189,8 +185,13 @@
 =======
       <workItem from="1599682231079" duration="306000" />
       <workItem from="1599726783815" duration="2566000" />
+<<<<<<< Updated upstream
       <workItem from="1599730569241" duration="13370000" />
 >>>>>>> develop
+=======
+      <workItem from="1599730569241" duration="13468000" />
+      <workItem from="1599805919052" duration="2021000" />
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>
@@ -218,10 +219,10 @@
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
     <state x="2348" y="399" width="414" height="244" key="#Composer/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599682301132" />
-    <state x="582" y="197" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1599725879171">
+    <state x="582" y="197" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1599813950401">
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
-    <state x="582" y="197" key="#com.intellij.execution.impl.EditConfigurationsDialog/62.0.1858.1080@62.0.1858.1080" timestamp="1599725879171" />
+    <state x="582" y="197" key="#com.intellij.execution.impl.EditConfigurationsDialog/62.0.1858.1080@62.0.1858.1080" timestamp="1599813950401" />
     <state x="385" y="263" key="#com.intellij.ide.util.MemberChooser" timestamp="1599747288857">
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
@@ -230,10 +231,10 @@
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
     <state x="2341" y="265" width="426" height="520" key="FileChooserDialogImpl/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599682527283" />
-    <state width="202" height="457" key="HiddenNamespacesPopup" timestamp="1599725887415">
+    <state width="202" height="457" key="HiddenNamespacesPopup" timestamp="1599814470101">
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
-    <state width="202" height="457" key="HiddenNamespacesPopup/62.0.1858.1080@62.0.1858.1080" timestamp="1599725887415" />
+    <state width="202" height="457" key="HiddenNamespacesPopup/62.0.1858.1080@62.0.1858.1080" timestamp="1599814470101" />
     <state x="795" y="127" width="1009" height="737" key="SettingsEditor" timestamp="1599746913791">
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
@@ -245,6 +246,14 @@
     <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599682811739" />
 =======
     <state x="795" y="127" key="SettingsEditor/62.0.1858.1080@62.0.1858.1080" timestamp="1599746913791" />
+    <state x="889" y="413" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599813980113">
+      <screen x="62" y="0" width="1858" height="1080" />
+    </state>
+    <state x="889" y="413" key="com.intellij.database.actions.DdlActions$CreateObject$1/62.0.1858.1080@62.0.1858.1080" timestamp="1599813980113" />
+    <state x="1353" y="421" width="323" height="252" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1599814376872">
+      <screen x="62" y="0" width="1858" height="1080" />
+    </state>
+    <state x="1353" y="421" width="323" height="252" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/62.0.1858.1080@62.0.1858.1080" timestamp="1599814376872" />
     <state x="647" y="250" key="run.anything.popup" timestamp="1599730868148">
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
