@@ -6,11 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class QuizController
+ * Class QuestionnaireController
  * @package App\Controller
  * @Route ("/questionnaire", name="questionnaire")
  */
-class QuizController extends AbstractController
+class QuestionnaireController extends AbstractController
 {
     /**
      * @Route("/questionnaire", name="questionnaire_juex")

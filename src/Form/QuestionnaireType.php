@@ -6,7 +6,6 @@ use App\Entity\Questionnaire;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,42 +20,44 @@ class QuestionnaireType extends AbstractType
             ->add(
                 'difficulte',
                 ChoiceType::class,
-                [
-                    'choices' => [
+                array(
+                    'choices' => array(
                         'Facile' => 'facile',
                         'Moyen' => 'moyen',
                         'Difficile' => 'difficile',
-                    ],
-                ]
+                    ),
+                )
             )
             ->add(
                 'questions',
                 CollectionType::class,
-                [
+                array
+                (
                     'entry_type' => QuestionType::class,
                     'allow_add' => true,
                     'allow_delete' => true,
                     'label' => false,
                     'by_reference' => false,
-                ]
+                )
             )
-            ->add('formateur_id', IntegerType::class)
             ->add(
                 'submit',
                 SubmitType::class,
-                [
+                array
+                (
                     'label' => 'Créer ce quiz',
-                    'attr' => ['class' => 'btn-secondary'],
-                ]
+                    'attr' => array('class' => 'btn-secondary'),
+                )
             );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
-            [
+            array
+            (
                 'data_class' => Questionnaire::class,
-            ]
+            )
         );
     }
 }

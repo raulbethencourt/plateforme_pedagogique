@@ -15,17 +15,22 @@ class PropsitionType extends AbstractType
     {
         $builder
             ->add('texte', TextType::class)
-            ->add('correct', CheckboxType::class, array(
-                'label' => 'Bonne réponse?',
-                'required' => false,
-            ))
-        ;
+            ->add(
+                'correct',
+                CheckboxType::class,
+                array(
+                    'label' => 'Bonne réponse?',
+                    'required' => false,
+                )
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'data_class' => Proposition::class,
-        ]);
+        $resolver->setDefaults(
+            array(
+                'data_class' => Proposition::class,
+            )
+        );
     }
 }

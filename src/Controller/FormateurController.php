@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class FormateurController
  * @package App\Controller
- * @Route("/formateur", name="formateur_")
+ * @Route("/formateur")
  */
 class FormateurController extends AbstractController
 {
@@ -38,7 +38,7 @@ class FormateurController extends AbstractController
      *@Route ("/", name="formateur_index")
      * @return Response
      */
-    public function index()
+    public function index(): Response
     {
         $questionnaires = $this->repository->findAll();
         return $this->render('formateur/index.html.twig', compact('questionnaires'));
@@ -93,11 +93,19 @@ class FormateurController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route ("/questionnaire/{id}", name="questionnaire_delete")
+     * @param Questionnaire $questionnaire
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function delete(Questionnaire $questionnaire, Request $request)
     {
-        if () {
+        if ($this->isCsrfTokenValid('delete' . $questionnaire->getId(), $request->get('_token'))) {
             $this->em->remove($questionnaire);
             $this->em->flush();
+            $this->addFlash('succes', 'questionnaire supprimé avec succès');
         }
+        return $this->redirectToRoute('formateur_formateur_index');
     }
 }
