@@ -69,6 +69,15 @@ class Classe
         return $this;
     }
 
+    public function setFormateurId($id)
+    {
+        $formateur = new Formateur();
+
+        $formateur = $formateur->setId($id);
+
+        return $formateur;
+    }
+
     /**
      * @return Collection|Etudiant[]
      */
@@ -98,5 +107,13 @@ class Classe
         }
 
         return $this;
+    }
+
+    /**
+     * @param  mixed  $id
+     */
+    public function setId($id): void
+    {
+        $this->id = $id;
     }
 }

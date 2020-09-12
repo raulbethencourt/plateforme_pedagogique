@@ -1,9 +1,10 @@
+// call jquery
 import $ from "jquery";
 
 var $collectionHolder;
 
-// setup an "add a tag" link
-var $addPropositionButton = $('<button type="button" class="add_tag_link">Ajouter un proposition</button>');
+// setup an "add a proposition" link
+var $addPropositionButton = $('<button type="button" class="btn btn-primary add_tag_link">Ajouter un proposition</button>');
 var $newLinkLi = $('<li></li>').append($addPropositionButton);
 
 $(document).ready(function() {
@@ -31,10 +32,6 @@ function addPropositionForm($collectionHolder, $newLinkLi) {
     var index = $collectionHolder.data('index');
 
     var newForm = prototype;
-    // You need this only if you didn't set 'label' => false in your tags field in TaskType
-    // Replace '__name__label__' in the prototype's HTML to
-    // instead be a number based on how many items we have
-    // newForm = newForm.replace(/__name__label__/g, index);
 
     // Replace '__name__' in the prototype's HTML to
     // instead be a number based on how many items we have
@@ -45,5 +42,18 @@ function addPropositionForm($collectionHolder, $newLinkLi) {
 
     // Display the form in the page in an li, before the "Add a tag" link li
     var $newFormLi = $('<li></li>').append(newForm);
+
+    // also add a remove button
+    $newFormLi.append('<a href="#" class="btn btn-danger remove-tag ">remove</a>');
+
     $newLinkLi.before($newFormLi);
+
+    // handle the removal
+    $('.remove-tag').click(function(e) {
+        e.preventDefault();
+
+        $(this).parent().remove();
+
+        return false;
+    });
 }

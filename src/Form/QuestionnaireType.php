@@ -5,7 +5,6 @@ namespace App\Form;
 use App\Entity\Questionnaire;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,32 +19,30 @@ class QuestionnaireType extends AbstractType
             ->add(
                 'difficulte',
                 ChoiceType::class,
-                array(
-                    'choices' => array(
+                [
+                    'choices' => [
                         'Facile' => 'facile',
                         'Moyen' => 'moyen',
                         'Difficile' => 'difficile',
-                    ),
-                )
+                    ],
+                ]
             )
             ->add(
                 'submit',
                 SubmitType::class,
-                array
-                (
+                [
                     'label' => 'Créer ce quiz',
-                    'attr' => array('class' => 'btn-secondary'),
-                )
+                    'attr' => ['class' => 'btn-secondary'],
+                ]
             );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
-            array
-            (
+            [
                 'data_class' => Questionnaire::class,
-            )
+            ]
         );
     }
 }

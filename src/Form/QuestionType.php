@@ -19,42 +19,41 @@ class QuestionType extends AbstractType
             ->add(
                 'enonce',
                 TextType::class,
-                array(
-                    'attr' => array(
+                [
+                    'attr' => [
                         'class' => 'enonceQuestionnaire',
                         'placeholder' => "Entrée l'intitulé de la question",
-                    ),
-                )
+                    ],
+                ]
             )
             ->add(
                 'propositions',
                 CollectionType::class,
-                array(
-                    'entry_type' => PropsitionType::class,
+                [
+                    'entry_type' => PropositionType::class,
                     'mapped' => false,
                     'allow_add' => true,
                     'allow_delete' => true,
                     'label' => false,
                     'by_reference' => false,
-                )
+                ]
             )
             ->add(
                 'score',
                 NumberType::class,
-                array(
-                    'attr' => array(
+                [
+                    'attr' => [
                         'class' => 'score',
-                    ),
-                )
+                    ],
+                ]
             )
             ->add(
                 'submit',
                 SubmitType::class,
-                array
-                (
+                [
                     'label' => 'Créer cette question',
-                    'attr' => array('class' => 'btn-secondary'),
-                )
+                    'attr' => ['class' => 'btn-secondary'],
+                ]
             );
     }
 

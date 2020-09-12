@@ -82,23 +82,23 @@ class Question
         return $this->propositions;
     }
 
-    public function addPropistion(Proposition $propistion): self
+    public function addProposition(Proposition $proposition): self
     {
-        if (!$this->propositions->contains($propistion)) {
-            $this->propositions[] = $propistion;
-            $propistion->setQuestion($this);
+        if (!$this->propositions->contains($proposition)) {
+            $this->propositions[] = $proposition;
+            $proposition->setQuestion($this);
         }
 
         return $this;
     }
 
-    public function removePropistion(Proposition $propistion): self
+    public function removePropistion(Proposition $proposition): self
     {
-        if ($this->propositions->contains($propistion)) {
-            $this->propositions->removeElement($propistion);
+        if ($this->propositions->contains($proposition)) {
+            $this->propositions->removeElement($proposition);
             // set the owning side to null (unless already changed)
-            if ($propistion->getQuestion() === $this) {
-                $propistion->setQuestion(null);
+            if ($proposition->getQuestion() === $this) {
+                $proposition->setQuestion(null);
             }
         }
 
