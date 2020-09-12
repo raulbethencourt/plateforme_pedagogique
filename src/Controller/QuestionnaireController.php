@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Repository\QuestionnaireRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -13,12 +16,37 @@ use Symfony\Component\Routing\Annotation\Route;
 class QuestionnaireController extends AbstractController
 {
     /**
+     * @var QuestionnaireRepository
+     */
+    private $repository;
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+
+    public function __construct(QuestionnaireRepository $repository, EntityManagerInterface $em)
+    {
+        $this->repository = $repository;
+        $this->em = $em;
+    }
+
+
+    /**
+     * @Route ("/")
+     * @return Response
+     */
+    public function index(): Response
+    {
+        return $this->render('questionnaire/index.html.twig');
+    }
+
+    /**
      * @Route("/", name="questionnaire_juex")
      */
-    public function play()
+    public function play(): Response
     {
-        return $this->render(':Questionnaire:play.twig', [
-            'controller_name' => 'QuizController',
+        return $this->render('questionnaire/jouer.html.twig', [
+            'controller_name' => 'QuestionnaireController',
         ]);
     }
 }

@@ -2,14 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Question;
 use App\Entity\Questionnaire;
 use App\Form\QuestionnaireType;
+use App\Form\QuestionType;
 use App\Repository\QuestionnaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -36,9 +38,9 @@ class UtilisateurController extends AbstractController
 
     /**
      *@Route ("/", name="utilisateur_index")
-     * @return Response
+     * @return ResponseAlias
      */
-    public function index(): Response
+    public function index(): ResponseAlias
     {
         $questionnaires = $this->repository->findAll();
         return $this->render('utilisateur/index.html.twig', compact('questionnaires'));
@@ -63,11 +65,43 @@ class UtilisateurController extends AbstractController
             $this->em->flush();
 
             $this->addFlash('success', 'questionnaire ajouté avec succès');
-            return $this->redirectToRoute('utilisateur_index');
+            return $this->redirectToRoute('questionnaire/index.html.twig');
         }
 
         return $this->render('questionnaire/new.html.twig', [
             'questionnaire' => $questionnaire,
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/question/create", name="question_create")
+     * @param  Question|null  $question
+     * @param  Request  $request
+     * @return RedirectResponse|ResponseAlias
+     */
+    public function newQuestion(Question $question = null, Questionnaire $questionnaire, Request $request)
+    {
+        if (!$question) {
+            $question = new Question();
+        }
+
+        $form = $this->createForm(QuestionType::class,  $question);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $question = $form->getData();
+
+            $this->em->persist($question);
+            $this->em->flush();
+
+            $this->addFlash('success', 'question ajouté avec succès');
+            return $this->redirectToRoute('questionnaire/index.html.twig');
+        }
+
+        return $this->render('question/new.html.twig', [
+            'questionner' => $questionner,
+            'question' => $question,
             'form' => $form->createView()
         ]);
     }

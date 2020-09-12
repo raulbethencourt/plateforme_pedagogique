@@ -20,20 +20,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c7a212d-3c91-4ff0-904b-dbc37de82ac8" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/templates/questionnaire/new.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/commandlinetools/Symfony_10_09_2020_10_33.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ce104aaa-125a-441e-b754-74484fdac2c0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ce104aaa-125a-441e-b754-74484fdac2c0.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/FormateurController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/UtilisateurController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bundles.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/QuestionnaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/QuestionnaireController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Formateur.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Formateur.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Proposition.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Proposition.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Question.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Question.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Questionnaire.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Questionnaire.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/formateur/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/utilisateur/index.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/UtilisateurController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/UtilisateurController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Form/QuestionType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/QuestionType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Form/QuestionnaireType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/QuestionnaireType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/QuestionnaireRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/QuestionnaireRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Questionnaire/edit.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/questionnaire/edit.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Questionnaire/new.html.twig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/Questionnaire/play.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/questionnaire/jouer.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/home/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home/index.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,8 +50,18 @@
       <executable path="/usr/local/bin/composer" />
     </execution>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/package.json" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="PHP 7.4">
     <include_path>
@@ -154,6 +168,7 @@
       <path value="$PROJECT_DIR$/vendor/psr/container" />
       <path value="$PROJECT_DIR$/vendor/psr/cache" />
       <path value="$PROJECT_DIR$/vendor/psr/log" />
+      <path value="$PROJECT_DIR$/vendor/symfony/webpack-encore-bundle" />
     </include_path>
   </component>
   <component name="ProjectId" id="1hHyHtcpK1LB2L73KA6kqbDSlI5" />
@@ -190,6 +205,9 @@
       <workItem from="1599805919052" duration="2021000" />
       <workItem from="1599850476119" duration="183000" />
       <workItem from="1599850669615" duration="4839000" />
+      <workItem from="1599894159627" duration="5118000" />
+      <workItem from="1599899892185" duration="1556000" />
+      <workItem from="1599901459439" duration="2109000" />
     </task>
     <servers />
   </component>
@@ -217,6 +235,10 @@
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
     <state x="2348" y="399" width="414" height="244" key="#Composer/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599682301132" />
+    <state x="2188" y="198" width="734" height="646" key="#Inspections" timestamp="1599898430991">
+      <screen x="1600" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2188" y="198" width="734" height="646" key="#Inspections/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599898430991" />
     <state x="582" y="197" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1599813950401">
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
@@ -229,6 +251,10 @@
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
     <state x="2336" y="202" key="#com.intellij.openapi.keymap.impl.ui.EditKeymapsDialog/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599852118857" />
+    <state x="2292" y="275" width="526" height="493" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1599898985385">
+      <screen x="1600" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2292" y="275" width="526" height="493" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599898985385" />
     <state x="2341" y="265" width="426" height="520" key="FileChooserDialogImpl" timestamp="1599682527283">
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
@@ -256,10 +282,10 @@
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
     <state x="647" y="250" key="run.anything.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1599730868148" />
-    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1599855399533">
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1599903244089">
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
-    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599855399533" />
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599903244089" />
     <state x="654" y="235" width="672" height="678" key="search.everywhere.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1599749817753" />
   </component>
 </project>

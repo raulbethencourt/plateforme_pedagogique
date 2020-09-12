@@ -29,18 +29,6 @@ class QuestionnaireType extends AbstractType
                 )
             )
             ->add(
-                'questions',
-                CollectionType::class,
-                array
-                (
-                    'entry_type' => QuestionType::class,
-                    'allow_add' => true,
-                    'allow_delete' => true,
-                    'label' => false,
-                    'by_reference' => false,
-                )
-            )
-            ->add(
                 'submit',
                 SubmitType::class,
                 array

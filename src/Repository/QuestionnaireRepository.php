@@ -20,7 +20,7 @@ class QuestionnaireRepository extends ServiceEntityRepository
     }
 
     // /**
-    //  * @return Questionnaire[] Returns an array of Questionnaire objects
+    //  * @return questionnaire[] Returns an array of questionnaire objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class QuestionnaireRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Questionnaire
+    public function findOneBySomeField($value): ?questionnaire
     {
         return $this->createQueryBuilder('q')
             ->andWhere('q.exampleField = :val')

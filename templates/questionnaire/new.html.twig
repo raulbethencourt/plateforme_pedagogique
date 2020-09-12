@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Questionnaire{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        {{ form_start(form) }}
+
+        {{ form_row(form.nom) }}
+        {{ form_row(form.difficulte) }}
+        {{ form_row(form.submit) }}
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}

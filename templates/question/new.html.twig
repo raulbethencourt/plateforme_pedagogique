@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Question{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        {{ form_start(form) }}
+
+        {{ form_row(form.enonce) }}
+        {{ form_row(form.score) }}
+
+        <ul class="propositions" data-prototype="{{ form_widget(form.propositions.vars.prototype)|e('html_attr') }}"></ul>
+
+        {{ form_row(form.submit) }}
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}

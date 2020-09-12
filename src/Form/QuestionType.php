@@ -6,6 +6,7 @@ use App\Entity\Question;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -30,6 +31,7 @@ class QuestionType extends AbstractType
                 CollectionType::class,
                 array(
                     'entry_type' => PropsitionType::class,
+                    'mapped' => false,
                     'allow_add' => true,
                     'allow_delete' => true,
                     'label' => false,
@@ -43,6 +45,15 @@ class QuestionType extends AbstractType
                     'attr' => array(
                         'class' => 'score',
                     ),
+                )
+            )
+            ->add(
+                'submit',
+                SubmitType::class,
+                array
+                (
+                    'label' => 'Créer cette question',
+                    'attr' => array('class' => 'btn-secondary'),
                 )
             );
     }
