@@ -17,11 +17,11 @@ class QuestionType extends AbstractType
     {
         $builder
             ->add(
-                'enonce',
+                'wording',
                 TextType::class,
                 [
                     'attr' => [
-                        'class' => 'enonceQuestionnaire',
+                        'class' => 'wordingQuestionnaire',
                         'placeholder' => "Entrée l'intitulé de la question",
                     ],
                 ]

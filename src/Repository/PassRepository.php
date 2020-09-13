@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Passer;
+use App\Entity\Pass;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Passer|null find($id, $lockMode = null, $lockVersion = null)
- * @method Passer|null findOneBy(array $criteria, array $orderBy = null)
- * @method Passer[]    findAll()
- * @method Passer[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Pass|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Pass|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Pass[]    findAll()
+ * @method Pass[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PasserRepository extends ServiceEntityRepository
+class PassRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Passer::class);
+        parent::__construct($registry, Pass::class);
     }
 
     // /**
-    //  * @return Passer[] Returns an array of Passer objects
+    //  * @return Pass[] Returns an array of Pass objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class PasserRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Passer
+    public function findOneBySomeField($value): ?pass
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.exampleField = :val')

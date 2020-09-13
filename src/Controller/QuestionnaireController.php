@@ -41,11 +41,11 @@ class QuestionnaireController extends AbstractController
     }
 
     /**
-     * @Route("/", name="questionnaire_juex")
+     * @Route("/play", name="questionnaire_play")
      */
     public function play(): Response
     {
-        return $this->render('questionnaire/jouer.html.twig', [
+        return $this->render('questionnaire/play.html.twig', [
             'controller_name' => 'QuestionnaireController',
         ]);
     }

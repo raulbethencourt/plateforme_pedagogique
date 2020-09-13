@@ -3,8 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Classe;
-use App\Entity\Etudiant;
-use App\Entity\Formateur;
+use App\Entity\student;
+use App\Entity\teacher;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -27,16 +27,16 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('username')
-            ->add('nom', TextType::class)
-            ->add('prenom', TextType::class)
+            ->add('surname', TextType::class)
+            ->add('name', TextType::class)
             ->add('email', EmailType::class)
             /*->add(
                 'type',
                 ChoiceType::class,
                 [
                     'choices' => [
-                        new Formateur(),
-                        new Etudiant(),
+                        new teacher(),
+                        new student(),
                     ],
                 ]
             )
@@ -81,7 +81,7 @@ class RegistrationFormType extends AbstractType
                         ),
                         new Regex(
                             [
-                                'pattern' => "/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=\\S+$).{8, 20}$/i",
+                                'pattern' => "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$/i",
                             ]
                         ),
                     ],

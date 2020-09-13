@@ -96,8 +96,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             return new RedirectResponse($targetPath);
         }
 
-        // TODO buscar la diferencia entre formateur y etudiant
-        return new RedirectResponse($this->urlGenerator->generate('formateur_index'));
+        // TODO buscar la diferencia entre teacher y student
+        return new RedirectResponse($this->urlGenerator->generate('teacher_index'));
     }
 
     protected function getLoginUrl()

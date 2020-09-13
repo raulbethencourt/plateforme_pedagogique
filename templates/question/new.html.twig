@@ -6,7 +6,7 @@
     <div class="container mt-4">
         {{ form_start(form) }}
 
-        {{ form_row(form.enonce) }}
+        {{ form_row(form.wording) }}
         {{ form_row(form.score) }}
 
         <ul class="propositions" data-prototype="{{ form_widget(form.propositions.vars.prototype)|e('html_attr') }}"></ul>

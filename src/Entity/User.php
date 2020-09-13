@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @InheritanceType("SINGLE_TABLE")
  * @DiscriminatorColumn(name="type", type="string")
- * @DiscriminatorMap({"user" = "User", "etudiant" = "Etudiant", "utilisateur" = "Formateur"})
+ * @DiscriminatorMap({"user" = "User", "student" = "Student", "teacher" = "Teacher"})
  * @UniqueEntity(fields={"username"}, message="There is already an account with this username")
  */
 class User implements UserInterface
@@ -45,17 +45,22 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $nom;
+    private $surname;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $prenom;
+    private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $email;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $photo_name;
 
     /**
      * @ORM\Column(type="boolean")
@@ -130,26 +135,26 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function getNom(): ?string
+    public function getSurname(): ?string
     {
-        return $this->nom;
+        return $this->surname;
     }
 
-    public function setNom(string $nom): self
+    public function setSurname(string $surname): self
     {
-        $this->nom = $nom;
+        $this->surname = $surname;
 
         return $this;
     }
 
-    public function getPrenom(): ?string
+    public function getName(): ?string
     {
-        return $this->prenom;
+        return $this->name;
     }
 
-    public function setPrenom(string $prenom): self
+    public function setName(string $name): self
     {
-        $this->prenom = $prenom;
+        $this->name = $name;
 
         return $this;
     }
@@ -174,6 +179,18 @@ class User implements UserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getPhotoName(): ?string
+    {
+        return $this->photo_name;
+    }
+
+    public function setPhotoName(string $photo_name): self
+    {
+        $this->photo_name = $photo_name;
 
         return $this;
     }

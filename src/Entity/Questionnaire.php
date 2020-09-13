@@ -22,12 +22,12 @@ class Questionnaire
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $nom;
+    private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $difficulte;
+    private $difficulty;
 
     /**
      * @ORM\OneToMany(targetEntity=Question::class, mappedBy="questionnaire", orphanRemoval=true, cascade={"persist"})
@@ -35,21 +35,21 @@ class Questionnaire
     private $questions;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Formateur::class, inversedBy="questionnaires")
+     * @ORM\ManyToOne(targetEntity=Teacher::class, inversedBy="questionnaires")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $formateur;
+    private $teacher;
 
     /**
-     * @ORM\OneToMany(targetEntity=Passer::class, mappedBy="questionnaire", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Pass::class, mappedBy="questionnaire", orphanRemoval=true)
      */
-    private $passers;
+    private $pass;
 
     public function __construct()
     {
         $this->questionnaire = new ArrayCollection();
         $this->questions = new ArrayCollection();
-        $this->passers = new ArrayCollection();
+        $this->pass = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -57,26 +57,26 @@ class Questionnaire
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getTitle(): ?string
     {
-        return $this->nom;
+        return $this->title;
     }
 
-    public function setNom(string $nom): self
+    public function setTitle(string $title): self
     {
-        $this->nom = $nom;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getDifficulte(): ?string
+    public function getDifficulty(): ?string
     {
-        return $this->difficulte;
+        return $this->difficulty;
     }
 
-    public function setDifficulte(string $difficulte): self
+    public function setDifficulty(string $difficulty): self
     {
-        $this->difficulte = $difficulte;
+        $this->difficulty = $difficulty;
 
         return $this;
     }
@@ -112,43 +112,43 @@ class Questionnaire
         return $this;
     }
 
-    public function getFormateur(): ?Formateur
+    public function getTeacher(): ?Teacher
     {
-        return $this->formateur;
+        return $this->teacher;
     }
 
-    public function setFormateur(?Formateur $formateur): self
+    public function setTeacher(?Teacher $teacher): self
     {
-        $this->formateur = $formateur;
+        $this->teacher = $teacher;
 
         return $this;
     }
 
     /**
-     * @return Collection|Passer[]
+     * @return Collection|Pass[]
      */
-    public function getPassers(): Collection
+    public function getPass(): Collection
     {
-        return $this->passers;
+        return $this->pass;
     }
 
-    public function addPasser(Passer $passer): self
+    public function addPass(Pass $pass): self
     {
-        if (!$this->passers->contains($passer)) {
-            $this->passers[] = $passer;
-            $passer->setQuestionnaire($this);
+        if (!$this->pass->contains($pass)) {
+            $this->pass[] = $pass;
+            $pass->setQuestionnaire($this);
         }
 
         return $this;
     }
 
-    public function removePasser(Passer $passer): self
+    public function removePass(Pass $pass): self
     {
-        if ($this->passers->contains($passer)) {
-            $this->passers->removeElement($passer);
+        if ($this->pass->contains($pass)) {
+            $this->pass->removeElement($pass);
             // set the owning side to null (unless already changed)
-            if ($passer->getQuestionnaire() === $this) {
-                $passer->setQuestionnaire(null);
+            if ($pass->getQuestionnaire() === $this) {
+                $pass->setQuestionnaire(null);
             }
         }
 

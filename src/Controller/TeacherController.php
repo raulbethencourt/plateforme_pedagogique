@@ -15,9 +15,9 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/formateur")
+ * @Route("/teacher")
  */
-class FormateurController extends AbstractController
+class TeacherController extends AbstractController
 {
     /**
      * @var QuestionnaireRepository
@@ -34,12 +34,12 @@ class FormateurController extends AbstractController
         $this->em = $em;
     }
     /**
-     * @Route("/{id}", name="formateur_index")
+     * @Route("/{id}", name="teacher_index")
      */
     public function index()
     {
-        return $this->render('formateur/index.html.twig', [
-            'controller_name' => 'FormateurController',
+        return $this->render('teacher/index.html.twig', [
+            'controller_name' => 'TeacherController',
         ]);
     }
 
@@ -125,11 +125,11 @@ class FormateurController extends AbstractController
             $this->em->flush();
             $this->addFlash('success', 'questionnaire modifié avec succes');
 
-            return $this->redirectToRoute('formateur_index');
+            return $this->redirectToRoute('teacher_index');
         }
 
         return $this->render(
-            'formateur/edit.html.twig',
+            'teacher/edit.html.twig',
             [
                 'questionnaire' => $questionnaire,
                 'form' => $form->createView(),
@@ -151,6 +151,6 @@ class FormateurController extends AbstractController
             $this->addFlash('succes', 'questionnaire supprimé avec succès');
         }
 
-        return $this->redirectToRoute('formateur_index');
+        return $this->redirectToRoute('teacher_index');
     }
 }

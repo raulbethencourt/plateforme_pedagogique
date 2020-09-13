@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Formateur;
+use App\Entity\Teacher;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Formateur|null find($id, $lockMode = null, $lockVersion = null)
- * @method Formateur|null findOneBy(array $criteria, array $orderBy = null)
- * @method Formateur[]    findAll()
- * @method Formateur[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Teacher|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Teacher|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Teacher[]    findAll()
+ * @method Teacher[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class FormateurRepository extends ServiceEntityRepository
+class TeacherRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Formateur::class);
+        parent::__construct($registry, Teacher::class);
     }
 
     // /**
-    //  * @return Formateur[] Returns an array of Formateur objects
+    //  * @return teacher[] Returns an array of teacher objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class FormateurRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Formateur
+    public function findOneBySomeField($value): ?teacher
     {
         return $this->createQueryBuilder('f')
             ->andWhere('f.exampleField = :val')

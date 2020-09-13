@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Classe;
+use App\Entity\Classroom;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Classe|null find($id, $lockMode = null, $lockVersion = null)
- * @method Classe|null findOneBy(array $criteria, array $orderBy = null)
- * @method Classe[]    findAll()
- * @method Classe[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Classroom|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Classroom|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Classroom[]    findAll()
+ * @method Classroom[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ClasseRepository extends ServiceEntityRepository
+class ClassroomRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Classe::class);
+        parent::__construct($registry, Classroom::class);
     }
 
     // /**
-    //  * @return Classe[] Returns an array of Classe objects
+    //  * @return Classroom[] Returns an array of Classroom objects
     //  */
     /*
     public function findByExampleField($value)

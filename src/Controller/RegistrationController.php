@@ -90,6 +90,6 @@ class RegistrationController extends AbstractController
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Vous été bien connecté');
 
-        return $this->redirectToRoute('formateur_index');
+        return $this->redirectToRoute('teacher_index');
     }
 }

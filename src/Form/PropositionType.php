@@ -14,7 +14,7 @@ class PropositionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('texte', TextType::class)
+            ->add('text', TextType::class)
             ->add(
                 'correct',
                 CheckboxType::class,

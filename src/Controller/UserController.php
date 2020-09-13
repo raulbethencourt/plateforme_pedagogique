@@ -7,20 +7,20 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class UtilisateurController
+ * Class UserController
  * @package App\Controller
- * @Route("/utilisateur")
+ * @Route("/user")
  */
-class UtilisateurController extends AbstractController
+class UserController extends AbstractController
 {
     /**
-     * @Route ("/", name="utilisateur_index")
+     * @Route ("/", name="user_index")
      * @return ResponseAlias
      */
     public function index(): ResponseAlias
     {
         $questionnaires = $this->repository->findAll();
 
-        return $this->render('utilisateur/index.html.twig', compact('questionnaires'));
+        return $this->render('user/index.html.twig', compact('questionnaires'));
     }
 }

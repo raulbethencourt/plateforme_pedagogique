@@ -8,9 +8,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/etudiant/{id}")
+ * @Route("/student/{id}")
  */
-class EtudiantController extends AbstractController
+class StudentController extends AbstractController
 {
     /**
      * @var QuestionnaireRepository
@@ -28,12 +28,12 @@ class EtudiantController extends AbstractController
     }
 
     /**
-     * @Route("/", name="etudiant")
+     * @Route("/", name="student")
      */
     public function index()
     {
-        return $this->render('etudiant/index.html.twig', [
-            'controller_name' => 'EtudiantController',
+        return $this->render('student/index.html.twig', [
+            'controller_name' => 'StudentController',
         ]);
     }
 }

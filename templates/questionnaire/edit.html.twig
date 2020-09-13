@@ -1,13 +1,20 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}
-
-{% endblock %}
+{% block title %}Edit Questionnaire{% endblock %}
 
 {% block body %}
     <div class="container mt-4">
-        {{ form(form) }}
+        {{ form_start(form) }}
+
+        {{ form_row(form.title) }}
+        {{ form_row(form.difficulty) }}
+        {{ form_row(form.submit) }}
+
+        {{ form_end(form) }}
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
 {% endblock %}
 
 

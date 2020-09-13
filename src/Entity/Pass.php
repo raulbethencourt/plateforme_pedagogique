@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\PasserRepository;
+use App\Repository\PassRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=PasserRepository::class)
+ * @ORM\Entity(repositoryClass=PassRepository::class)
  */
-class Passer
+class Pass
 {
     /**
      * @ORM\Id
@@ -28,13 +28,13 @@ class Passer
     private $date_realisation;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Etudiant::class, inversedBy="passers")
+     * @ORM\ManyToOne(targetEntity=Student::class, inversedBy="pass")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $etudiant;
+    private $student;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Questionnaire::class, inversedBy="passers")
+     * @ORM\ManyToOne(targetEntity=Questionnaire::class, inversedBy="pass")
      * @ORM\JoinColumn(nullable=false)
      */
     private $questionnaire;
@@ -68,14 +68,14 @@ class Passer
         return $this;
     }
 
-    public function getEtudiant(): ?Etudiant
+    public function getStudent(): ?Student
     {
-        return $this->etudiant;
+        return $this->student;
     }
 
-    public function setEtudiant(?Etudiant $etudiant): self
+    public function setStudent(?Student $student): self
     {
-        $this->etudiant = $etudiant;
+        $this->student = $student;
 
         return $this;
     }
