@@ -25,7 +25,7 @@ class Teacher extends User
     private $questionnaires;
 
     /**
-     * @ORM\ManyToOne (targetEntity=Classroom::class, mappedBy="teachers")
+     * @ORM\ManyToOne (targetEntity=Classroom::class, inversedBy="teachers")
      * @ORM\JoinColumn(nullable=false)
      */
     private $classroom;

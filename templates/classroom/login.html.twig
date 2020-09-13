@@ -1,0 +1,50 @@
+{% extends 'security/security_base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+
+    <div class="container-sm pt-5 mt-5">
+        <div class="row justify-content-md-center my-auto">
+            <form method="post">
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                {% if app.user %}
+                    <div class="mb-3">
+                        You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                    </div>
+                {% endif %}
+
+                <h1 class="h3 mb-3 font-weight-normal">Sign in your Classroom</h1>
+                <label for="inputUsername">Name</label>
+                <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control"
+                       required
+                       autofocus>
+                <label for="inputPassword">Access Code</label>
+                <input type="password" name="password" id="inputPassword" class="form-control" required>
+
+                <input type="hidden" name="_csrf_token"
+                       value="{{ csrf_token('authenticate') }}"
+                >
+
+                <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" name="_remember_me"> Remember me
+                    </label>
+                </div>
+
+
+                <button class="btn btn-sm btn-primary" type="submit">
+                    Sign in
+                </button>
+
+                <a href="{{ path('app_register') }}" role="button">Create an account</a>
+            </form>
+        </div>
+
+    </div>
+
+
+{% endblock %}

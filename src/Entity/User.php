@@ -68,6 +68,11 @@ class User implements UserInterface
     private $isVerified = false;
 
     /**
+     * @ORM\Column(type="date")
+     */
+    private $entry_date;
+
+    /**
      * A visual identifier that represents this user.
      *
      * @see UserInterface
@@ -191,6 +196,18 @@ class User implements UserInterface
     public function setPhotoName(string $photo_name): self
     {
         $this->photo_name = $photo_name;
+
+        return $this;
+    }
+
+    public function getEntryDate(): ?\DateTimeInterface
+    {
+        return $this->entry_date;
+    }
+
+    public function setEntryDate(\DateTimeInterface $entry_date): self
+    {
+        $this->entry_date = $entry_date;
 
         return $this;
     }

@@ -23,41 +23,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c7a212d-3c91-4ff0-904b-dbc37de82ac8" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20200911192317.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20200912203206.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/EtudiantController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/StudentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/FormateurController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TeacherController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/app.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bundles.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/security.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/QuestionnaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/QuestionnaireController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/RegistrationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/RegistrationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/SecurityController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/SecurityController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/UtilisateurController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Classe.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Classroom.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Etudiant.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Student.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Formateur.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Teacher.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Passer.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Pass.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Proposition.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Proposition.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Question.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Question.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Questionnaire.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Questionnaire.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Classroom.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Classroom.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Teacher.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Teacher.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/PropositionType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/PropositionType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/QuestionType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/QuestionType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/QuestionnaireType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/QuestionnaireType.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Form/RegistrationFormType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/RegistrationFormType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/ClasseRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/ClassroomRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/EtudiantRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/StudentRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/FormateurRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/TeacherRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/PasserRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/PassRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Security/LoginFormAuthenticator.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Security/LoginFormAuthenticator.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/etudiant/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/student/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/formateur/edit.html.twig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/formateur/index.html.twig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/question/new.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/question/new.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/questionnaire/edit.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/questionnaire/edit.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/questionnaire/jouer.html.twig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/questionnaire/new.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/questionnaire/new.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/registration/register.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration/register.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/utilisateur/index.html.twig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -193,6 +173,9 @@
       <path value="$PROJECT_DIR$/vendor/doctrine/data-fixtures" />
       <path value="$PROJECT_DIR$/vendor/doctrine/doctrine-fixtures-bundle" />
       <path value="$PROJECT_DIR$/vendor/symfonycasts/verify-email-bundle" />
+      <path value="$PROJECT_DIR$/vendor/willdurand/jsonp-callback-validator" />
+      <path value="$PROJECT_DIR$/vendor/willdurand/negotiation" />
+      <path value="$PROJECT_DIR$/vendor/friendsofsymfony/rest-bundle" />
     </include_path>
   </component>
   <component name="ProjectId" id="1hHyHtcpK1LB2L73KA6kqbDSlI5" />
@@ -209,8 +192,10 @@
     <property name="DatabaseDriversLRU" value="mariadb" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="add_unversioned_files" value="$PROJECT_DIR$/public/build/app.css" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="php.override.implement.member.chooser.php.doc" value="NONE" />
     <property name="settings.editor.selected.configurable" value="fileTemplates" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -241,7 +226,8 @@
       <workItem from="1599909274319" duration="6752000" />
       <workItem from="1599917290768" duration="8025000" />
       <workItem from="1599934717520" duration="11265000" />
-      <workItem from="1599983758707" duration="5775000" />
+      <workItem from="1599983758707" duration="25591000" />
+      <workItem from="1600022963382" duration="6475000" />
     </task>
     <servers />
   </component>
@@ -277,10 +263,10 @@
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
     <state x="582" y="197" key="#com.intellij.execution.impl.EditConfigurationsDialog/62.0.1858.1080@62.0.1858.1080" timestamp="1599813950401" />
-    <state x="1934" y="263" width="376" height="571" key="#com.intellij.ide.util.MemberChooser" timestamp="1599914997250">
+    <state x="1934" y="263" width="402" height="571" key="#com.intellij.ide.util.MemberChooser" timestamp="1600005418945">
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
-    <state x="1934" y="263" width="376" height="571" key="#com.intellij.ide.util.MemberChooser/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599914997250" />
+    <state x="1934" y="263" width="402" height="571" key="#com.intellij.ide.util.MemberChooser/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600005418945" />
     <state x="385" y="263" key="#com.intellij.ide.util.MemberChooser/62.0.1858.1080@62.0.1858.1080" timestamp="1599747288857" />
     <state x="2336" y="202" key="#com.intellij.openapi.keymap.impl.ui.EditKeymapsDialog" timestamp="1599852118857">
       <screen x="1600" y="0" width="1920" height="1080" />
@@ -294,10 +280,10 @@
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
     <state x="2292" y="267" width="526" height="509" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599912936598" />
-    <state x="2292" y="275" width="526" height="493" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1599920877278">
+    <state x="2292" y="275" width="526" height="493" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1600026233025">
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
-    <state x="2292" y="275" width="526" height="493" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599920877278" />
+    <state x="2292" y="275" width="526" height="493" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600026233025" />
     <state x="2341" y="265" width="426" height="520" key="FileChooserDialogImpl" timestamp="1599682527283">
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
@@ -307,10 +293,14 @@
     </state>
     <state width="247" height="457" key="HiddenNamespacesPopup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599942485537" />
     <state width="202" height="457" key="HiddenNamespacesPopup/62.0.1858.1080@62.0.1858.1080" timestamp="1599814470101" />
-    <state x="2183" y="122" width="1009" height="737" key="SettingsEditor" timestamp="1599914987819">
+    <state x="2247" y="233" width="615" height="577" key="NewPhpClassDialog" timestamp="1599994943197">
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
-    <state x="2183" y="122" width="1009" height="737" key="SettingsEditor/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599914987819" />
+    <state x="2247" y="233" width="615" height="577" key="NewPhpClassDialog/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599994943197" />
+    <state x="2183" y="122" width="1009" height="737" key="SettingsEditor" timestamp="1599998277384">
+      <screen x="1600" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2183" y="122" width="1009" height="737" key="SettingsEditor/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599998277384" />
     <state x="795" y="127" key="SettingsEditor/62.0.1858.1080@62.0.1858.1080" timestamp="1599746913791" />
     <state x="2455" y="413" width="194" height="264" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599852136542">
       <screen x="1600" y="0" width="1920" height="1080" />
@@ -321,18 +311,19 @@
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
     <state x="1353" y="421" width="323" height="252" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/62.0.1858.1080@62.0.1858.1080" timestamp="1599814376872" />
-    <state x="1956" y="93" width="1046" height="937" key="find.popup" timestamp="1599985893293">
+    <state x="2442" y="99" width="1046" height="937" key="find.popup" timestamp="1600023008615">
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
-    <state x="1956" y="93" width="1046" height="937" key="find.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599985893293" />
-    <state x="647" y="250" key="run.anything.popup" timestamp="1599730868148">
-      <screen x="62" y="0" width="1858" height="1080" />
+    <state x="2442" y="99" width="1046" height="937" key="find.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600023008615" />
+    <state x="2205" y="250" key="run.anything.popup" timestamp="1600003637222">
+      <screen x="1600" y="0" width="1920" height="1080" />
     </state>
+    <state x="2205" y="250" key="run.anything.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600003637222" />
     <state x="647" y="250" key="run.anything.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1599730868148" />
-    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1599985268045">
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1600029864328">
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
-    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599985268045" />
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600029864328" />
     <state x="654" y="235" width="672" height="678" key="search.everywhere.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1599749817753" />
   </component>
 </project>

@@ -1,9 +1,10 @@
 security:
     enable_authenticator_manager: true
 
-
     encoders:
         App\Entity\User:
+            algorithm: auto
+        App\Entity\Classroom:
             algorithm: auto
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
@@ -24,6 +25,7 @@ security:
 
             # configure the form authentication as the entry point for unauthenticated users
             entry_point: form_login
+            provider: app_user_provider
             guard:
                 authenticators:
                     - App\Security\LoginFormAuthenticator
@@ -32,11 +34,12 @@ security:
                 # where to redirect after logout
                 # target: app_any_route
 
+
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 
             # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+            switch_user: true
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used

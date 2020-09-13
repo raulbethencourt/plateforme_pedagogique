@@ -32,7 +32,7 @@ class QuestionnaireController extends AbstractController
 
 
     /**
-     * @Route ("/")
+     * @Route ("/{id}")
      * @return Response
      */
     public function index(): Response

@@ -2,15 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\ClassroomRepository;
+use App\Entity\Student;use App\Entity\Teacher;use App\Repository\ClassroomRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ORM\Entity(repositoryClass=ClassroomRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\ClassroomRepository", repositoryClass=ClassroomRepository::class)
  */
-class Classroom
+class Classroom implements UserInterface
 {
     /**
      * @ORM\Id
@@ -22,10 +23,10 @@ class Classroom
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $nom;
+    private $name;
 
     /**
-     * @ORM\OneToMany (targetEntity=Teacher::class, inversedBy="classroom")
+     * @ORM\OneToMany (targetEntity=Teacher::class, mappedBy="classroom")
      */
     private $teachers;
 
@@ -33,6 +34,11 @@ class Classroom
      * @ORM\OneToMany(targetEntity=Student::class, mappedBy="classroom")
      */
     private $students;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $access_code;
 
     public function __construct()
     {
@@ -44,31 +50,19 @@ class Classroom
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getTeachers(): ?Teacher
     {
-        return $this->nom;
+        return $this->teachers;
     }
 
-    public function setNom(string $nom): self
+    public function setTeachers(?Teacher $teachers): self
     {
-        $this->nom = $nom;
+        $this->teachers = $teachers;
 
         return $this;
     }
 
-    public function getTeacher(): ?Teacher
-    {
-        return $this->teacher;
-    }
-
-    public function setTeacher(?Teacher $teacher): self
-    {
-        $this->teacher = $teacher;
-
-        return $this;
-    }
-
-    public function setTeacherId($id): Teacher
+    public function setTeachersId($id): Teacher
     {
         $teacher = new Teacher();
 
@@ -114,5 +108,58 @@ class Classroom
     public function setId($id): void
     {
         $this->id = $id;
+    }
+
+    public function getAccessCode(): ?string
+    {
+        return $this->access_code;
+    }
+
+    public function setAccessCode(string $access_code): self
+    {
+        $this->access_code = $access_code;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param  mixed  $name
+     */
+    public function setName($name): void
+    {
+        $this->name = $name;
+    }
+
+    public function getRoles()
+    {
+        // TODO: Implement getRoles() method.
+    }
+
+    public function getPassword()
+    {
+        // TODO: Implement getPassword() method.
+    }
+
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    public function getUsername()
+    {
+        // TODO: Implement getUsername() method.
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
     }
 }
