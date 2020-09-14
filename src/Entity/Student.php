@@ -20,38 +20,26 @@ class Student extends User
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Classroom::class, inversedBy="students")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $classroom;
-
-    /**
      * @ORM\OneToMany(targetEntity=Pass::class, mappedBy="student")
      */
     private $pass;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Classroom::class, mappedBy="students")
+     */
+    private $classrooms;
+
     public function __construct()
     {
         $this->pass = new ArrayCollection();
+        $this->classrooms = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
     }
-    
 
-    public function getClassroom(): ?Classroom
-    {
-        return $this->classroom;
-    }
-
-    public function setClassroom(?Classroom $classroom): self
-    {
-        $this->classroom = $classroom;
-
-        return $this;
-    }
 
     /**
      * @return Collection|Pass[]
@@ -79,6 +67,34 @@ class Student extends User
             if ($pass->getStudent() === $this) {
                 $pass->setStudent(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Classroom[]
+     */
+    public function getClassrooms(): Collection
+    {
+        return $this->classrooms;
+    }
+
+    public function addClassroom(Classroom $classroom): self
+    {
+        if (!$this->classrooms->contains($classroom)) {
+            $this->classrooms[] = $classroom;
+            $classroom->addStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClassroom(Classroom $classroom): self
+    {
+        if ($this->classrooms->contains($classroom)) {
+            $this->classrooms->removeElement($classroom);
+            $classroom->removeStudent($this);
         }
 
         return $this;

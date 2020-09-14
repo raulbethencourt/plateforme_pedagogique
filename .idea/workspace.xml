@@ -23,32 +23,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c7a212d-3c91-4ff0-904b-dbc37de82ac8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ce104aaa-125a-441e-b754-74484fdac2c0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ce104aaa-125a-441e-b754-74484fdac2c0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/app.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/css/sass/style.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/sass/style.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bundles.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20200913094533.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20200913095556.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20200913100733.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20200913104201.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20200913112855.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20200913114432.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20200913114457.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ClassroomController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/QuestionnaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/QuestionnaireController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/StudentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/TeacherController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TeacherController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/UserController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Classroom.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Classroom.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Student.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Student.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Teacher.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Teacher.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/ClassroomRegistrationType.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/user/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/index.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -241,7 +219,7 @@
       <workItem from="1600022963382" duration="6475000" />
       <workItem from="1600065486553" duration="111000" />
       <workItem from="1600065624722" duration="13609000" />
-      <workItem from="1600090819568" duration="2803000" />
+      <workItem from="1600090819568" duration="3866000" />
     </task>
     <servers />
   </component>
@@ -311,11 +289,11 @@
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
     <state x="2247" y="233" width="615" height="577" key="NewPhpClassDialog/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599994943197" />
-    <state x="2183" y="122" width="1009" height="737" key="SettingsEditor" timestamp="1599998277384">
-      <screen x="1600" y="0" width="1920" height="1080" />
+    <state x="795" y="127" width="1009" height="737" key="SettingsEditor" timestamp="1600095073523">
+      <screen x="62" y="0" width="1858" height="1080" />
     </state>
     <state x="2183" y="122" width="1009" height="737" key="SettingsEditor/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599998277384" />
-    <state x="795" y="127" key="SettingsEditor/62.0.1858.1080@62.0.1858.1080" timestamp="1599746913791" />
+    <state x="795" y="127" key="SettingsEditor/62.0.1858.1080@62.0.1858.1080" timestamp="1600095073523" />
     <state x="2455" y="413" width="194" height="264" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599852136542">
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>

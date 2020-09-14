@@ -24,25 +24,66 @@ class Teacher extends User
      */
     private $questionnaires;
 
-    /**
-     * @ORM\ManyToOne (targetEntity=Classroom::class, inversedBy="teachers")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $classroom;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $subject;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Classroom::class, mappedBy="teachers")
+     */
+    private $classrooms;
+
     public function __construct()
     {
         $this->questionnaires = new ArrayCollection();
+        $this->classrooms = new ArrayCollection();
+    }
+
+    /**
+     * @return Collection|Classroom[]
+     */
+    public function getClassrooms(): Collection
+    {
+        return $this->classrooms;
+    }
+
+    public function addClassroom(Classroom $classroom): self
+    {
+        if (!$this->classrooms->contains($classroom)) {
+            $this->classrooms[] = $classroom;
+            $classroom->addTeacher($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClassroom(Classroom $classroom): self
+    {
+        if ($this->classrooms->contains($classroom)) {
+            $this->classrooms->removeElement($classroom);
+            $classroom->removeTeacher($this);
+        }
+
+        return $this;
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getSubject(): ?string
+    {
+        return $this->subject;
+    }
+
+    public function setSubject(?string $subject): self
+    {
+        $this->subject = $subject;
+
+        return $this;
     }
 
     /**
@@ -57,7 +98,7 @@ class Teacher extends User
     {
         if (!$this->questionnaires->contains($questionnaire)) {
             $this->questionnaires[] = $questionnaire;
-            $questionnaire->setteacher($this);
+            $questionnaire->setTeacher($this);
         }
 
         return $this;
@@ -68,35 +109,12 @@ class Teacher extends User
         if ($this->questionnaires->contains($questionnaire)) {
             $this->questionnaires->removeElement($questionnaire);
             // set the owning side to null (unless already changed)
-            if ($questionnaire->getteacher() === $this) {
-                $questionnaire->setteacher(null);
+            if ($questionnaire->getTeacher() === $this) {
+                $questionnaire->setTeacher(null);
             }
         }
 
         return $this;
     }
 
-    public function getClassroom(): ?Classroom
-    {
-        return $this->classroom;
-    }
-
-    public function setClassroom(?Classroom $classroom): self
-    {
-        $this->classroom = $classroom;
-
-        return $this;
-    }
-
-    public function getSubject(): ?string
-    {
-        return $this->subject;
-    }
-
-    public function setSubject(?string $subject): self
-    {
-        $this->subject = $subject;
-
-        return $this;
-    }
 }

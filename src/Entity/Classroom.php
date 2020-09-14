@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ClassroomRepository", repositoryClass=ClassroomRepository::class)
  */
-class Classroom implements UserInterface
+class Classroom
 {
     /**
      * @ORM\Id
@@ -26,24 +26,24 @@ class Classroom implements UserInterface
     private $name;
 
     /**
-     * @ORM\OneToMany (targetEntity=Teacher::class, mappedBy="classroom")
-     */
-    private $teachers;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Student::class, mappedBy="classroom")
-     */
-    private $students;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $access_code;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Teacher::class, inversedBy="classrooms")
+     */
+    private $teachers;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Student::class, inversedBy="classrooms")
+     */
+    private $students;
+
     public function __construct()
     {
-        $this->students = new ArrayCollection();
         $this->teachers = new ArrayCollection();
+        $this->students = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -51,64 +51,16 @@ class Classroom implements UserInterface
         return $this->id;
     }
 
-    public function getTeachers(): ?Teacher
+    public function getName(): ?string
     {
-        return $this->teachers;
+        return $this->name;
     }
 
-    public function setTeachers(?Teacher $teachers): self
+    public function setName(string $name): self
     {
-        $this->teachers = $teachers;
+        $this->name = $name;
 
         return $this;
-    }
-
-    public function setTeachersId($id): Teacher
-    {
-        $teacher = new Teacher();
-
-        $teacher = $teacher->setId($id);
-
-        return $teacher;
-    }
-
-    /**
-     * @return Collection|Student[]
-     */
-    public function getStudents(): Collection
-    {
-        return $this->students;
-    }
-
-    public function addStudent(Student $student): self
-    {
-        if (!$this->students->contains($student)) {
-            $this->students[] = $student;
-            $student->setClassroom($this);
-        }
-
-        return $this;
-    }
-
-    public function removeStudent(Student $student): self
-    {
-        if ($this->students->contains($student)) {
-            $this->students->removeElement($student);
-            // set the owning side to null (unless already changed)
-            if ($student->getClassroom() === $this) {
-                $student->setClassroom(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param  mixed  $id
-     */
-    public function setId($id): void
-    {
-        $this->id = $id;
     }
 
     public function getAccessCode(): ?string
@@ -124,51 +76,17 @@ class Classroom implements UserInterface
     }
 
     /**
-     * @return mixed
+     * @return Collection|Teacher[]
      */
-    public function getName()
+    public function getTeachers(): Collection
     {
-        return $this->name;
-    }
-
-    /**
-     * @param  mixed  $name
-     */
-    public function setName($name): void
-    {
-        $this->name = $name;
-    }
-
-    public function getRoles()
-    {
-        // TODO: Implement getRoles() method.
-    }
-
-    public function getPassword()
-    {
-        // TODO: Implement getPassword() method.
-    }
-
-    public function getSalt()
-    {
-        // TODO: Implement getSalt() method.
-    }
-
-    public function getUsername()
-    {
-        // TODO: Implement getUsername() method.
-    }
-
-    public function eraseCredentials()
-    {
-        // TODO: Implement eraseCredentials() method.
+        return $this->teachers;
     }
 
     public function addTeacher(Teacher $teacher): self
     {
         if (!$this->teachers->contains($teacher)) {
             $this->teachers[] = $teacher;
-            $teacher->setClassroom($this);
         }
 
         return $this;
@@ -178,12 +96,37 @@ class Classroom implements UserInterface
     {
         if ($this->teachers->contains($teacher)) {
             $this->teachers->removeElement($teacher);
-            // set the owning side to null (unless already changed)
-            if ($teacher->getClassroom() === $this) {
-                $teacher->setClassroom(null);
-            }
         }
 
         return $this;
     }
+
+    /**
+     * @return Collection|Student[]
+     */
+    public function getStudents(): Collection
+    {
+        return $this->students;
+    }
+
+    public function addStudent(Student $student): self
+    {
+        if (!$this->students->contains($student)) {
+            $this->students[] = $student;
+        }
+
+        return $this;
+    }
+
+    public function removeStudent(Student $student): self
+    {
+        if ($this->students->contains($student)) {
+            $this->students->removeElement($student);
+        }
+
+        return $this;
+    }
+
+
+
 }
