@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class QuestionnaireController
  * @package App\Controller
- * @Route ("/questionnaire", name="questionnaire")
+ * @Route ("/questionnaire/{id}", name="questionnaire")
  */
 class QuestionnaireController extends AbstractController
 {
@@ -32,7 +32,7 @@ class QuestionnaireController extends AbstractController
 
 
     /**
-     * @Route ("/{id}")
+     * @Route ("/")
      * @return Response
      */
     public function index(): Response

@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/student/{id}")
+ * @Route("/student")
  */
 class StudentController extends AbstractController
 {
@@ -28,7 +28,7 @@ class StudentController extends AbstractController
     }
 
     /**
-     * @Route("/", name="student")
+     * @Route("/{id}", name="student")
      */
     public function index()
     {

@@ -30,6 +30,11 @@ class Teacher extends User
      */
     private $classroom;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $subject;
+
     public function __construct()
     {
         $this->questionnaires = new ArrayCollection();
@@ -79,6 +84,18 @@ class Teacher extends User
     public function setClassroom(?Classroom $classroom): self
     {
         $this->classroom = $classroom;
+
+        return $this;
+    }
+
+    public function getSubject(): ?string
+    {
+        return $this->subject;
+    }
+
+    public function setSubject(?string $subject): self
+    {
+        $this->subject = $subject;
 
         return $this;
     }

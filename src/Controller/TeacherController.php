@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/teacher")
+ * @Route("/teacher", name="teacher")
  */
 class TeacherController extends AbstractController
 {
@@ -45,8 +45,11 @@ class TeacherController extends AbstractController
 
     /**
      * @Route("/questionnaire/create", name="questionnaire_create")
+     * @param Questionnaire|null $questionnaire
+     * @param Request $request
+     * @return RedirectResponse|ResponseAlias
      */
-    public function newQuestionner(Questionnaire $questionnaire = null, Request $request)
+    public function create(Questionnaire $questionnaire = null, Request $request)
     {
         if (!$questionnaire) {
             $questionnaire = new Questionnaire();
@@ -114,7 +117,7 @@ class TeacherController extends AbstractController
     }
 
     /**
-     * @Route ("/questionnaire/{id}", name="questionnaire_edit", methods={"GET","POST"})
+     * @Route ("/questionnaire/edit/{id}", name="questionnaire_edit", methods={"GET","POST"})
      */
     public function editQuestionnaire(Questionnaire $questionnaire, Request $request)
     {
@@ -138,12 +141,12 @@ class TeacherController extends AbstractController
     }
 
     /**
-     * @Route ("/questionnaire/{id}", name="questionnaire_delete")
+     * @Route ("/questionnaire/delete/{id}", name="questionnaire_delete")
      * @param  Questionnaire  $questionnaire
      * @param  Request  $request
      * @return RedirectResponse
      */
-    public function delete(Questionnaire $questionnaire, Request $request)
+    public function deleteQuestionnaire(Questionnaire $questionnaire, Request $request)
     {
         if ($this->isCsrfTokenValid('delete'.$questionnaire->getId(), $request->get('_token'))) {
             $this->em->remove($questionnaire);

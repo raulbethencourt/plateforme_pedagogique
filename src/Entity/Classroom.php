@@ -43,6 +43,7 @@ class Classroom implements UserInterface
     public function __construct()
     {
         $this->students = new ArrayCollection();
+        $this->teachers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -161,5 +162,28 @@ class Classroom implements UserInterface
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
+    }
+
+    public function addTeacher(Teacher $teacher): self
+    {
+        if (!$this->teachers->contains($teacher)) {
+            $this->teachers[] = $teacher;
+            $teacher->setClassroom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTeacher(Teacher $teacher): self
+    {
+        if ($this->teachers->contains($teacher)) {
+            $this->teachers->removeElement($teacher);
+            // set the owning side to null (unless already changed)
+            if ($teacher->getClassroom() === $this) {
+                $teacher->setClassroom(null);
+            }
+        }
+
+        return $this;
     }
 }
