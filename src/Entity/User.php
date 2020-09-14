@@ -222,11 +222,4 @@ class User implements UserInterface
     {
         return $this->isVerified;
     }
-
-    public function setClassroomId()
-    {
-        $classroom = new Classroom();
-
-        $classroom->setId(1);
-    }
 }

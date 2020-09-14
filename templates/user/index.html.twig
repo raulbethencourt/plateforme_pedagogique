@@ -3,18 +3,8 @@
 {% block title %}Hello UserController!{% endblock %}
 
 {% block body %}
-    <style>
-        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-    </style>
-
-    <div class="example-wrapper">
-        <h1>Hello User! ✅</h1>
-
-        This friendly message is coming from:
-        <ul>
-            <li>Your controller at <code><a href="{{ '/home/raulbethencourt/sites/plataform/plataform/src/Controller/teacherController.php'|file_link(0) }}">src/Controller/teacherController.php</a></code></li>
-            <li>Your template at <code><a href="{{ '/home/raulbethencourt/sites/plataform/plataform/templates/teacher/index.html.twig'|file_link(0) }}">templates/teacher/index.html.twig</a></code></li>
-        </ul>
-    </div>
+   <div class="d-flex justify-content-center mt-lg-5">
+      <h1 class="font-weight-bolder">Bienvenido</h1>
+      <a class="btn btn-primary" href="{{ path('teacher_questionnaire_create') }}" role="button">Create Questionnaire</a>
+   </div>
 {% endblock %}

@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/teacher", name="teacher")
+ * @Route("/teacher/{id}", name="teacher")
  */
 class TeacherController extends AbstractController
 {
@@ -34,7 +34,7 @@ class TeacherController extends AbstractController
         $this->em = $em;
     }
     /**
-     * @Route("/{id}", name="teacher_index")
+     * @Route("/", name="_teacher_index")
      */
     public function index()
     {
@@ -44,7 +44,7 @@ class TeacherController extends AbstractController
     }
 
     /**
-     * @Route("/questionnaire/create", name="questionnaire_create")
+     * @Route("/questionnaire/create", name="_questionnaire_create")
      * @param Questionnaire|null $questionnaire
      * @param Request $request
      * @return RedirectResponse|ResponseAlias
@@ -79,7 +79,7 @@ class TeacherController extends AbstractController
     }
 
     /**
-     * @Route("/question/create", name="question_create")
+     * @Route("/question/create", name="_question_create")
      * @param  Question|null  $question
      * @param  Request  $request
      * @return RedirectResponse|ResponseAlias
@@ -117,7 +117,7 @@ class TeacherController extends AbstractController
     }
 
     /**
-     * @Route ("/questionnaire/edit/{id}", name="questionnaire_edit", methods={"GET","POST"})
+     * @Route ("/questionnaire/edit/", name="_questionnaire_edit", methods={"GET","POST"})
      */
     public function editQuestionnaire(Questionnaire $questionnaire, Request $request)
     {
@@ -141,7 +141,7 @@ class TeacherController extends AbstractController
     }
 
     /**
-     * @Route ("/questionnaire/delete/{id}", name="questionnaire_delete")
+     * @Route ("/questionnaire/delete", name="questionnaire_delete")
      * @param  Questionnaire  $questionnaire
      * @param  Request  $request
      * @return RedirectResponse

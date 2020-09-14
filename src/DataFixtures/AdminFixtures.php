@@ -23,7 +23,7 @@ class AdminFixtures extends Fixture
         $admin->setEmail("admin@admin.com");
         $admin->setRoles(["ROLE_ADMIN"]);
         $admin->setPassword(
-           $this->passwordEncoder->encodePassword($admin, "secret_text")
+           $this->passwordEncoder->encodePassword($admin, "Admin")
         );
         $admin->setEntryDate(new \DateTime());
 
