@@ -86,17 +86,21 @@ class TeacherController extends AbstractController
      * @param  Request  $request
      * @return RedirectResponse|ResponseAlias
      */
-    public function newQuestion(Question $question = null,  Request $request)
+    public function newQuestion(Question $question = null, Request $request)
     {
+        $questionnaire_id = $request->request->get('questionnaire_id');
+        $em = $this->getDoctrine()->getManager();
+        $questionnaire = $em->getRepository(Questionnaire::class)->find($questionnaire_id);
+
+        dd($questionnaire);
+
         if (!$question) {
             $question = new Question();
         }
 
-        $questionnaire = new Questionnaire();
+        $form = $this->createForm(QuestionType::class, $question)->add($questionnaire);
 
-        $form = $this->createForm(QuestionType::class, $question);
-
-        $form->handleRequest($request);
+        $form->handleRequest($request)->add();
         if ($form->isSubmitted() && $form->isValid()) {
             $question = $form->getData();
 

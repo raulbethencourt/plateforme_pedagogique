@@ -22,7 +22,7 @@
                     <td class="d-flex justify-content-between ">
                         {{ classroom.accessCode }}
                         <div class="d-flex justify-content-around w-50">
-                            <a href=" {{ path('user_teacher_create') }} " class="btn btn-primary"
+                            <a href=" {#{{ path('user_teacher_create') }}#} " class="btn btn-primary"
                                role="button">Invite teacher</a>
 
                             <a href="{{ path('user_classroom_edit', {id: classroom.id}) }}" class="btn btn-primary"

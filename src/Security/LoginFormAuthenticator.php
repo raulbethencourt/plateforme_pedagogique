@@ -2,6 +2,8 @@
 
 namespace App\Security;
 
+use App\Entity\Student;
+use App\Entity\Teacher;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -96,7 +98,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             return new RedirectResponse($targetPath);
         }
 
-        // TODO buscar la diferencia entre teacher y student
         return new RedirectResponse($this->urlGenerator->generate('user_index'));
     }
 
