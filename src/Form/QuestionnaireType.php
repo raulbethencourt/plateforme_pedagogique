@@ -32,7 +32,7 @@ class QuestionnaireType extends AbstractType
                 SubmitType::class,
                 [
                     'label' => 'Créer ce quiz',
-                    'attr' => ['class' => 'btn-secondary'],
+                    'attr' => ['class' => 'btn-primary'],
                 ]
             );
     }

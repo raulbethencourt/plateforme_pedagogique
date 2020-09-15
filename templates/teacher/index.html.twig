@@ -3,18 +3,40 @@
 {% block title %}Hello teacherController!{% endblock %}
 
 {% block body %}
-    <style>
-        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-    </style>
-
-    <div class="example-wrapper">
-        <h1>Hello {{ controller_name }}! ✅</h1>
-
-        This friendly message is coming from:
-        <ul>
-            <li>Your controller at <code><a href="{{ '/home/raulbethencourt/sites/plataform/plataform/src/Controller/teacherController.php'|file_link(0) }}">src/Controller/teacherController.php</a></code></li>
-            <li>Your template at <code><a href="{{ '/home/raulbethencourt/sites/plataform/plataform/templates/teacher/index.html.twig'|file_link(0) }}">templates/teacher/index.html.twig</a></code></li>
-        </ul>
+    <div class="container-sm d-flex justify-content-center flex-column  mt-lg-5">
+        <h1>Bienvenido {{ user }}</h1>
+        <h3>questionnaire List</h3>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+                <th scope="col">Access code</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for questionnaire in questionnaires %}
+                <tr>
+                    <th scope="row">{{ questionnaire.id }}</th>
+                    <td>{{ questionnaire.title }}</td>
+                    <td>{{ questionnaire.difficulty }}</td>
+                    <td>
+                        <a href="{{ path('teacher_questionnaire_edit', {id: questionnaire.id}) }}" class="btn btn-primary"
+                           role="button">Edit</a>
+                        {#<form method="post" action="{{ path('teacher_questionnaire_delete', {id: questionnaire.id}) }}"
+                              style="display: inline-block" onsubmit="return confirm('Are you sure?')">
+                            <input type="hidden" name="_method" value='DELETE'>
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ questionnaire.id) }}">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>#}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="text-right">
+            <a href="{{ path('teacher_questionnaire_create') }}" class="btn btn-primary">Créer questionnaire</a>
+        </div>
     </div>
 {% endblock %}

@@ -1,0 +1,9 @@
+{% block body %}
+    <div class="container mt-4">
+        {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.access_code) }}
+        <button type="submit" class="btn btn-primary">{{ button|default('Enregistrer') }}</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Question;
 use App\Entity\Questionnaire;
+use App\Entity\Teacher;
+use App\Entity\User;
 use App\Form\QuestionnaireType;
 use App\Form\QuestionType;
 use App\Repository\QuestionnaireRepository;
@@ -15,31 +17,33 @@ use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/teacher/{id}", name="teacher")
+ * @Route("/teacher", name="teacher")
  */
 class TeacherController extends AbstractController
 {
-    /**
-     * @var QuestionnaireRepository
-     */
-    private $repository;
     /**
      * @var EntityManagerInterface
      */
     private $em;
 
-    public function __construct(QuestionnaireRepository $repository, EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em)
     {
-        $this->repository = $repository;
         $this->em = $em;
     }
+
     /**
      * @Route("/", name="_teacher_index")
+     * @param QuestionnaireRepository $repository
+     * @return ResponseAlias
      */
-    public function index()
+    public function index(QuestionnaireRepository $repository): ResponseAlias
     {
+        $questionnaires = $repository->findAll();
+        $user = $this->getUser()->getUsername();
+
         return $this->render('teacher/index.html.twig', [
-            'controller_name' => 'TeacherController',
+            'questionnaires' => $questionnaires,
+            'user' => $user
         ]);
     }
 
@@ -49,7 +53,7 @@ class TeacherController extends AbstractController
      * @param Request $request
      * @return RedirectResponse|ResponseAlias
      */
-    public function create(Questionnaire $questionnaire = null, Request $request)
+    public function create(Questionnaire $questionnaire = null, Teacher $teacher, Request $request)
     {
         if (!$questionnaire) {
             $questionnaire = new Questionnaire();
@@ -59,8 +63,6 @@ class TeacherController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $questionnaire = $form->getData();
-
             $this->em->persist($questionnaire);
             $this->em->flush();
 
