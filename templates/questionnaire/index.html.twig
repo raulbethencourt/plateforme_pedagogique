@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="container-sm d-flex justify-content-center flex-column  mt-lg-5">
-        <h1>Questionnaire {{ questionnaire.title }}</h1>
+        <h1>Questionnaire {{ title }}</h1>
         <h3>List de Questions</h3>
         <table class="table">
             <thead class="thead-dark">
@@ -21,9 +21,9 @@
                     <td>{{ question.wording }}</td>
                     <td>{{ question.propositions }}</td>
                     <td>
-                        <a href="{{ path('question_edit', {id: question.id}) }}" class="btn btn-primary"
+                        <a href="{#{{ path('question_edit', {id: question.id}) }}#}" class="btn btn-primary"
                            role="button">Edit</a>
-                        <form method="post" action="{{ path('question_delete', {id: question.id}) }}"
+                        <form method="post" action="{#{{ path('question_delete', {id: question.id}) }}#}"
                               style="display: inline-block" onsubmit="return confirm('Are you sure?')">
                             <input type="hidden" name="_method" value='DELETE'>
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">

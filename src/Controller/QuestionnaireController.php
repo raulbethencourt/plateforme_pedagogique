@@ -18,8 +18,8 @@ class QuestionnaireController extends AbstractController
 {
     /**
      * @Route ("/{id}", name="questionnaire_index")
-     * @param QuestionRepository $repository
-     * @param Request $request
+     * @param  QuestionRepository  $repository
+     * @param  Request  $request
      * @return Response
      */
     public function index(QuestionRepository $repository, Request $request): Response
@@ -28,13 +28,17 @@ class QuestionnaireController extends AbstractController
             ->getRepository(Questionnaire::class)
             ->findOneById($request->attributes->get('id'));
 
+        $questionnaireTitle = $questionnaire->getTitle();
+//        dd(is_string($questionnaire->getTitle()));
+
+
         $questions = $repository->findAll();
 
         return $this->render(
             'questionnaire/index.html.twig',
             [
                 'questions' => $questions,
-                'questionnaire' => $questionnaire,
+                'title' => $questionnaireTitle,
             ]
         );
     }
