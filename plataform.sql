@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql
--- Generation Time: Sep 14, 2020 at 09:19 PM
+-- Generation Time: Sep 16, 2020 at 02:52 PM
 -- Server version: 10.4.14-MariaDB-1:10.4.14+maria~focal
 -- PHP Version: 7.4.9
 
@@ -80,7 +80,8 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 ('DoctrineMigrations\\Version20200913112855', '2020-09-13 13:29:02', 12),
 ('DoctrineMigrations\\Version20200913114432', '2020-09-13 13:44:36', 12),
 ('DoctrineMigrations\\Version20200913114457', '2020-09-13 13:45:00', 12),
-('DoctrineMigrations\\Version20200914200830', '2020-09-14 22:10:22', 143);
+('DoctrineMigrations\\Version20200914200830', '2020-09-14 22:10:22', 143),
+('DoctrineMigrations\\Version20200916090810', '2020-09-16 09:08:42', 1484);
 
 -- --------------------------------------------------------
 
@@ -109,6 +110,22 @@ CREATE TABLE `proposition` (
   `correct` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `proposition`
+--
+
+INSERT INTO `proposition` (`id`, `question_id`, `text`, `correct`) VALUES
+(3, 6, 'respuesta evidente', 1),
+(4, 6, 'respuesta sin sentido', 0),
+(5, 6, 'respuesta posible pero \"no\"', 0),
+(6, 7, 'facil', 1),
+(7, 7, 'dificil', 0),
+(8, 8, 'rreponse 1', 1),
+(9, 8, 'reponse 2', 0),
+(10, 8, 'reponse 3', 1),
+(11, 9, 'repons 1', 0),
+(12, 9, 'reponse 2', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -122,6 +139,16 @@ CREATE TABLE `question` (
   `score` decimal(5,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `question`
+--
+
+INSERT INTO `question` (`id`, `questionnaire_id`, `wording`, `score`) VALUES
+(6, 13, 'Pregunta dificilisima', '5.00'),
+(7, 13, 'test question 2', '3.00'),
+(8, 14, 'Question 1', '9.00'),
+(9, 14, 'question 2', '6.00');
+
 -- --------------------------------------------------------
 
 --
@@ -134,6 +161,17 @@ CREATE TABLE `questionnaire` (
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `difficulty` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `questionnaire`
+--
+
+INSERT INTO `questionnaire` (`id`, `teacher_id`, `title`, `difficulty`) VALUES
+(1, 16, 'test questionnaire', 'difficile'),
+(2, 16, 'test questionnaire 2', 'facile'),
+(3, 16, 'test questionnaire 3', 'moyen'),
+(13, 16, 'test questionnaire de la hostia 2046', 'difficile'),
+(14, 16, 'questionnnaire test', 'moyen');
 
 -- --------------------------------------------------------
 
@@ -153,15 +191,18 @@ CREATE TABLE `user` (
   `is_verified` tinyint(1) NOT NULL,
   `entry_date` date NOT NULL,
   `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `subject` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `subject` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `hooby` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `roles`, `password`, `surname`, `name`, `email`, `photo_name`, `is_verified`, `entry_date`, `type`, `subject`) VALUES
-(3, 'Admin', '[\"ROLE_ADMIN\"]', '$argon2id$v=19$m=65536,t=4,p=1$r5/tBkujMKdDZwynY316Zw$7i7HQoMkD4wsQyDX4UVNqCWmtYgribLOUQoawZgHerc', NULL, NULL, 'admin@admin.com', NULL, 0, '2020-09-14', 'user', NULL);
+INSERT INTO `user` (`id`, `username`, `roles`, `password`, `surname`, `name`, `email`, `photo_name`, `is_verified`, `entry_date`, `type`, `subject`, `hooby`) VALUES
+(14, 'admin', '[\"ROLE_ADMIN\"]', '$argon2id$v=19$m=65536,t=4,p=1$0jsuEN8/xlghcdD9tbFG9Q$xsBFVqKhI/giBH3rqsMJYqkrYyfyD5vWItbUVXReNYU', NULL, NULL, 'admin@test.mail', NULL, 0, '2020-09-16', 'user', NULL, NULL),
+(15, 'student', '[]', '$argon2id$v=19$m=65536,t=4,p=1$lpjZe8b+fW3f1wWMJY5VSw$/pkoSm+PH6d/jG19hFQvH/x7dXdY2MqoJ7XMfqcc/G4', NULL, NULL, 'student@test.mail', NULL, 0, '2020-09-16', 'student', NULL, NULL),
+(16, 'teacher', '[]', '$argon2id$v=19$m=65536,t=4,p=1$L+ewk49T0+6KfkVeL4fQRw$tHKuI4m9U/tcAJzeBS3QGSoVFTmKFj1Eb2bACey7hIM', NULL, NULL, 'teacher@test.mail', NULL, 0, '2020-09-16', 'teacher', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -239,7 +280,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `classroom`
 --
 ALTER TABLE `classroom`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `pass`
@@ -251,25 +292,25 @@ ALTER TABLE `pass`
 -- AUTO_INCREMENT for table `proposition`
 --
 ALTER TABLE `proposition`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `question`
 --
 ALTER TABLE `question`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `questionnaire`
 --
 ALTER TABLE `questionnaire`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Constraints for dumped tables

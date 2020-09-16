@@ -9,11 +9,12 @@
         {{ form_row(form.wording) }}
         {{ form_row(form.score) }}
 
-        <ul class="propositions" data-prototype="{{ form_widget(form.propositions.vars.prototype)|e('html_attr') }}"></ul>
+        <ul class="propositions" style="list-style: none;" data-prototype="{{ form_widget(form.propositions.vars.prototype)|e('html_attr') }}"></ul>
 
         {{ form_row(form.submit) }}
 
         {{ form_end(form) }}
+        <a class="btn btn-primary" href="{{ path('teacher_index') }}" role="button">Fini questionnaire</a>
     </div>
 {% endblock %}
 

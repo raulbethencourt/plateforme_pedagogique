@@ -2,42 +2,41 @@
 
 namespace App\Controller;
 
-use App\Repository\QuestionnaireRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Questionnaire;
+use App\Repository\QuestionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class QuestionnaireController
  * @package App\Controller
- * @Route ("/questionnaire/{id}", name="questionnaire")
+ * @Route ("/questionnaire")
  */
 class QuestionnaireController extends AbstractController
 {
     /**
-     * @var QuestionnaireRepository
-     */
-    private $repository;
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    public function __construct(QuestionnaireRepository $repository, EntityManagerInterface $em)
-    {
-        $this->repository = $repository;
-        $this->em = $em;
-    }
-
-
-    /**
-     * @Route ("/")
+     * @Route ("/{id}", name="questionnaire_index")
+     * @param QuestionRepository $repository
+     * @param Request $request
      * @return Response
      */
-    public function index(): Response
+    public function index(QuestionRepository $repository, Request $request): Response
     {
-        return $this->render('questionnaire/index.html.twig');
+        $questionnaire = $this->getDoctrine()
+            ->getRepository(Questionnaire::class)
+            ->findOneById($request->attributes->get('id'));
+
+        $questions = $repository->findAll();
+
+        return $this->render(
+            'questionnaire/index.html.twig',
+            [
+                'questions' => $questions,
+                'questionnaire' => $questionnaire,
+            ]
+        );
     }
 
     /**
@@ -45,8 +44,11 @@ class QuestionnaireController extends AbstractController
      */
     public function play(): Response
     {
-        return $this->render('questionnaire/play.html.twig', [
-            'controller_name' => 'QuestionnaireController',
-        ]);
+        return $this->render(
+            'questionnaire/play.html.twig',
+            [
+                'controller_name' => 'QuestionnaireController',
+            ]
+        );
     }
 }

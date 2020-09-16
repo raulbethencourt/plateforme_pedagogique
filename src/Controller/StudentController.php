@@ -28,7 +28,7 @@ class StudentController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="student")
+     * @Route("/", name="student_index")
      */
     public function index()
     {

@@ -26,14 +26,6 @@ class QuestionnaireType extends AbstractType
                         'Difficile' => 'difficile',
                     ],
                 ]
-            )
-            ->add(
-                'submit',
-                SubmitType::class,
-                [
-                    'label' => 'Créer ce quiz',
-                    'attr' => ['class' => 'btn-primary'],
-                ]
             );
     }
 

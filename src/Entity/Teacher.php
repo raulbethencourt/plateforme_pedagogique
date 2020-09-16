@@ -13,13 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Teacher extends User
 {
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
      * @ORM\OneToMany(targetEntity=Questionnaire::class, mappedBy="teacher")
      */
     private $questionnaires;
@@ -69,11 +62,6 @@ class Teacher extends User
         return $this;
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     public function getSubject(): ?string
     {
         return $this->subject;
@@ -116,13 +104,4 @@ class Teacher extends User
 
         return $this;
     }
-
-    /**
-     * @param mixed $id
-     */
-    public function setId($id): void
-    {
-        $this->id = $id;
-    }
-
 }
