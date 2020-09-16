@@ -32,6 +32,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     private $urlGenerator;
     private $csrfTokenManager;
     private $passwordEncoder;
+    private $userConnected;
 
     public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -39,6 +40,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
+        $this->userConnected = null;
     }
 
     public function supports(Request $request)
@@ -76,6 +78,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             throw new CustomUserMessageAuthenticationException('Username could not be found.');
         }
 
+        $this->userConnected = $user;
         return $user;
     }
 
@@ -98,7 +101,14 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('user_index'));
+        switch(get_class($this->userConnected)){
+            case Teacher::class:
+                return new RedirectResponse($this->urlGenerator->generate('teacher_index', ['user' => $this->userConnected]));
+            case Student::class:
+                return new RedirectResponse($this->urlGenerator->generate('student_index'));
+            default:
+                return new RedirectResponse($this->urlGenerator->generate('user_index'));
+        }
     }
 
     protected function getLoginUrl()

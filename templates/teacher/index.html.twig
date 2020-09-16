@@ -4,8 +4,8 @@
 
 {% block body %}
     <div class="container-sm d-flex justify-content-center flex-column  mt-lg-5">
-        <h1>Bienvenido {{ user }}</h1>
-        <h3>questionnaire List</h3>
+        <h1>Bienvenido TEACHER {{ teacher.username }}</h1>
+        <h3>Questionnaire List</h3>
         <table class="table">
             <thead class="thead-dark">
             <tr>
@@ -19,24 +19,24 @@
             {% for questionnaire in questionnaires %}
                 <tr>
                     <th scope="row">{{ questionnaire.id }}</th>
-                    <td>{{ questionnaire.title }}</td>
+                    <td><a href="{{ path('questionnaire_index', {id: questionnaire.id}) }}" role="button">{{ questionnaire.title }}</a></td>
                     <td>{{ questionnaire.difficulty }}</td>
                     <td>
-                        <a href="{{ path('teacher_questionnaire_edit', {id: questionnaire.id}) }}" class="btn btn-primary"
+                        <a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}" class="btn btn-primary"
                            role="button">Edit</a>
-                        {#<form method="post" action="{{ path('teacher_questionnaire_delete', {id: questionnaire.id}) }}"
+                        <form method="post" action="{{ path('questionnaire_delete', {id: questionnaire.id}) }}"
                               style="display: inline-block" onsubmit="return confirm('Are you sure?')">
                             <input type="hidden" name="_method" value='DELETE'>
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ questionnaire.id) }}">
                             <button class="btn btn-danger">Delete</button>
-                        </form>#}
+                        </form>
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
         <div class="text-right">
-            <a href="{{ path('teacher_questionnaire_create') }}" class="btn btn-primary">Créer questionnaire</a>
+            <a href="{{ path('questionnaire_create') }}" class="btn btn-primary">Créer questionnaire</a>
         </div>
     </div>
 {% endblock %}

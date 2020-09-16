@@ -1,20 +1,12 @@
+{% extends "base.html.twig" %}
+
 {% block title %}Edit Questionnaire{% endblock %}
 
 {% block body %}
     <div class="container mt-4">
-        {{ form_start(form) }}
-
-        {{ form_row(form.title) }}
-        {{ form_row(form.difficulty) }}
-        {{ form_row(form.submit) }}
-
-        {{ form_end(form) }}
+        <h1>Editer Questionnaire</h1>
+        {{ include('questionnaire/_form.html.twig', {form: form, button: 'Edit'}) }}
     </div>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-
 {% endblock %}
 
 

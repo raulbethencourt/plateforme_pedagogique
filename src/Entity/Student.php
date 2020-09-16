@@ -13,13 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Student extends User
 {
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
      * @ORM\OneToMany(targetEntity=Pass::class, mappedBy="student")
      */
     private $pass;
@@ -29,18 +22,16 @@ class Student extends User
      */
     private $classrooms;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $Hooby;
+
     public function __construct()
     {
         $this->pass = new ArrayCollection();
         $this->classrooms = new ArrayCollection();
     }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-
     /**
      * @return Collection|Pass[]
      */
@@ -96,6 +87,18 @@ class Student extends User
             $this->classrooms->removeElement($classroom);
             $classroom->removeStudent($this);
         }
+
+        return $this;
+    }
+
+    public function getHooby(): ?string
+    {
+        return $this->Hooby;
+    }
+
+    public function setHooby(?string $Hooby): self
+    {
+        $this->Hooby = $Hooby;
 
         return $this;
     }

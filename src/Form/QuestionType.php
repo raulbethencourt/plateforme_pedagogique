@@ -31,7 +31,6 @@ class QuestionType extends AbstractType
                 CollectionType::class,
                 [
                     'entry_type' => PropositionType::class,
-                    'mapped' => false,
                     'allow_add' => true,
                     'allow_delete' => true,
                     'label' => false,
@@ -51,7 +50,7 @@ class QuestionType extends AbstractType
                 'submit',
                 SubmitType::class,
                 [
-                    'label' => 'Créer cette question',
+                    'label' => 'Ajouter cette question',
                     'attr' => ['class' => 'btn-secondary'],
                 ]
             );

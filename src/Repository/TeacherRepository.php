@@ -36,15 +36,14 @@ class TeacherRepository extends ServiceEntityRepository
     }
     */
 
-    /*
-    public function findOneBySomeField($value): ?teacher
+    public function findOneBySomeField($username): ?teacher
     {
         return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('f.username = :val')
+            ->setParameter('val', $username)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+
 }

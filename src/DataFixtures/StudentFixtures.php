@@ -2,12 +2,12 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Teacher;
+use App\Entity\Student;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class TeacherFixtures extends Fixture
+class StudentFixtures extends Fixture
 {
     private $passwordEncoder;
 
@@ -17,15 +17,14 @@ class TeacherFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $teacher = new Teacher();
-        $teacher->setUsername('teacher');
-        $teacher->setEmail('teacher@test.mail');
-        $teacher->setPassword(
-            $this->passwordEncoder->encodePassword($teacher, "teacher")
+        $student = new Student();
+        $student->setUsername('student');
+        $student->setEmail('student@test.mail');
+        $student->setPassword(
+            $this->passwordEncoder->encodePassword($student, "student")
         );
-        $teacher->setEntryDate(new \DateTime());
-
-        $manager->persist($teacher);
+        $student->setEntryDate(new \DateTime());
+        $manager->persist($student);
 
         $manager->flush();
     }
