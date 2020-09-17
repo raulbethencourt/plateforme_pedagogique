@@ -14,9 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/teacher")
- */
 class TeacherController extends AbstractController
 {
     /**
@@ -30,7 +27,7 @@ class TeacherController extends AbstractController
     }
 
     /**
-     * @Route("/", name="teacher_index")
+     * @Route("/teacher", name="teacher_index")
      * @param QuestionnaireRepository $repository
      * @return ResponseAlias
      */
@@ -49,7 +46,7 @@ class TeacherController extends AbstractController
     }
 
     /**
-     * @Route("/questionnaire/create", name="questionnaire_create")
+     * @Route("/teacher/questionnaire/create", name="questionnaire_create")
      * @param Request $request
      * @return RedirectResponse|ResponseAlias
      */
@@ -87,7 +84,7 @@ class TeacherController extends AbstractController
     }
 
     /**
-     * @Route ("/questionnaire/{id}", name="questionnaire_edit", methods={"GET","POST"})
+     * @Route ("/teacher/questionnaire/{id}", name="questionnaire_edit", methods={"GET","POST"})
      */
     public function editQuestionnaire(Questionnaire $questionnaire, Request $request)
     {
@@ -119,7 +116,7 @@ class TeacherController extends AbstractController
     }
 
     /**
-     * @Route ("/questionnaire/{id}", name="questionnaire_delete")
+     * @Route ("/teacher/questionnaire/{id}", name="questionnaire_delete")
      * @param Questionnaire $questionnaire
      * @param Request $request
      * @return RedirectResponse
@@ -137,7 +134,7 @@ class TeacherController extends AbstractController
 
 
     /**
-     * @Route("/question/create", name="question_create", methods={"GET","POST"})
+     * @Route("/teacher/question/create", name="question_create", methods={"GET","POST"})
      * @param Question|null $question
      * @param Request $request
      * @return RedirectResponse|ResponseAlias
@@ -181,7 +178,7 @@ class TeacherController extends AbstractController
     }
 
     /**
-     * @Route("/question/{id}", name="question_edit", methods={"GET","POST"})
+     * @Route("/teacher/question/{id}", name="question_edit", methods={"GET","POST"})
      * @param Question|null $question
      * @param Request $request
      * @return RedirectResponse|ResponseAlias

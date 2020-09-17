@@ -24,16 +24,10 @@
   <component name="ChangeListManager">
     <list default="true" id="6c7a212d-3c91-4ff0-904b-dbc37de82ac8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/css/scss/_variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/scss/_variables.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/js/question_create.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/question_create.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/QuestionnaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/QuestionnaireController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/css/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/app.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/TeacherController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TeacherController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Questionnaire.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Questionnaire.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/QuestionnaireRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/QuestionnaireRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/question/new.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/question/new.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/questionnaire/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/questionnaire/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/teacher/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/teacher/index.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,11 +186,13 @@
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="php.override.implement.member.chooser.php.doc" value="NONE" />
-    <property name="settings.editor.selected.configurable" value="editing.templates" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/images" />
+      <recent name="$PROJECT_DIR$/images" />
       <recent name="C:\Users\Stagiaire\sites\plataform\plataform\assets\css\scss" />
       <recent name="$PROJECT_DIR$/templates/formateur" />
     </key>
@@ -265,6 +261,7 @@
       <workItem from="1600193740749" duration="6972000" />
       <workItem from="1600285369277" duration="1071000" />
       <workItem from="1600324265880" duration="19159000" />
+      <workItem from="1600371552879" duration="4359000" />
     </task>
     <servers />
   </component>
@@ -354,10 +351,10 @@
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
     <state x="2247" y="233" width="615" height="577" key="NewPhpClassDialog/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599994943197" />
-    <state x="795" y="127" width="1009" height="737" key="SettingsEditor" timestamp="1600159440048">
-      <screen x="62" y="0" width="1858" height="1080" />
+    <state x="2301" y="130" width="1009" height="737" key="SettingsEditor" timestamp="1600373382244">
+      <screen x="1600" y="0" width="1920" height="1080" />
     </state>
-    <state x="2301" y="130" width="1009" height="737" key="SettingsEditor/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600114427028" />
+    <state x="2301" y="130" width="1009" height="737" key="SettingsEditor/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600373382244" />
     <state x="795" y="127" key="SettingsEditor/62.0.1858.1080@62.0.1858.1080" timestamp="1600159440048" />
     <state x="2455" y="413" width="194" height="264" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599852136542">
       <screen x="1600" y="0" width="1920" height="1080" />
@@ -381,10 +378,10 @@
     </state>
     <state x="2205" y="250" key="run.anything.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600003637222" />
     <state x="647" y="250" key="run.anything.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1599730868148" />
-    <state x="654" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1600354423808">
-      <screen x="62" y="0" width="1858" height="1080" />
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1600373117365">
+      <screen x="1600" y="0" width="1920" height="1080" />
     </state>
-    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600285874163" />
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600373117365" />
     <state x="654" y="235" width="672" height="678" key="search.everywhere.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1600354423808" />
   </component>
   <component name="XDebuggerManager">
