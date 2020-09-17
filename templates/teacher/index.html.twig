@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello teacherController!{% endblock %}
+
+{% block body %}
+    <div class="container-sm d-flex justify-content-center flex-column  mt-lg-5">
+        <h1>Bienvenido TEACHER {{ teacher.username }}</h1>
+        <h3>Questionnaire List</h3>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+                <th scope="col">Access code</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for questionnaire in questionnaires %}
+                <tr>
+                    <th scope="row">{{ questionnaire.id }}</th>
+                    <td><a href="{{ path('questionnaire_index', {id: questionnaire.id}) }}"
+                           role="button">{{ questionnaire.title }}</a></td>
+                    {% if questionnaire.difficulty == 'facile' %}
+                        <td><span class="badge badge-success">{{ questionnaire.difficulty }}</span></td>
+                    {% elseif questionnaire.difficulty == 'difficile' %}
+                        <td><span class="badge badge-danger">{{ questionnaire.difficulty }}</span></td>
+                        {% else %}
+                            <td><span class="badge badge-secondary">{{ questionnaire.difficulty }}</span></td>
+                    {% endif %}
+
+                    <td>
+                        <a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}" class="btn btn-primary"
+                           role="button">Edit</a>
+                        <form method="post" action="{{ path('questionnaire_delete', {id: questionnaire.id}) }}"
+                              style="display: inline-block" onsubmit="return confirm('Are you sure?')">
+                            <input type="hidden" name="_method" value='DELETE'>
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ questionnaire.id) }}">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="text-right">
+            <a href="{{ path('questionnaire_create') }}" class="btn btn-primary">Créer questionnaire</a>
+        </div>
+    </div>
+{% endblock %}

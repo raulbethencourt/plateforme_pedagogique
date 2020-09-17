@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ questionnaire.title }}{% endblock %}
+
+{% block body %}
+    <div class="container-sm d-flex justify-content-center flex-column mt-lg-5">
+
+        <h1>{{ questionnaire.title }}</h1>
+        <h3>Liste de Questions</h3>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Title</th>
+                <th scope="col">Propositions</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for question in questionnaire.questions %}
+                <tr>
+                    <th scope="row">{{ question.id }}</th>
+                    <td>{{ question.wording }}</td>
+                    <td>
+                        {% for proposition in question.propositions %}
+                            {% if proposition.correct %}
+                                <span class="badge badge-success">{{ proposition.text }}</span>
+                            {% else %}
+                                <span class="badge badge-secondary">{{ proposition.text }}</span>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{{ path('question_edit', {id: question.id}) }}" class="btn btn-primary"
+                           role="button">Edit</a>
+                        <form method="post" action="{# {{ path('question_delete', {id: question.id}) }} #}"
+                              style="display: inline-block" onsubmit="return confirm('Are you sure?')">
+                            <input type="hidden" name="_method" value='DELETE'>
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="text-right">
+            <a href="{{ path('question_create') }}" class="btn btn-primary">Ajouter question</a>
+        </div>
+    </div>
+{% endblock %}

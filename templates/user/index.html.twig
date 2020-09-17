@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+    <div class="container-sm d-flex justify-content-center flex-column  mt-lg-5">
+        <h1>Bienvenido {{ user }}</h1>
+        <h3>Classroom List</h3>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+                <th scope="col">Access code</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for classroom in classrooms %}
+                <tr>
+                    <th scope="row">{{ classroom.id }}</th>
+                    <td>{{ classroom.name }}</td>
+                    <td class="d-flex justify-content-between ">
+                        {{ classroom.accessCode }}
+                        <div class="d-flex justify-content-around w-50">
+                            <a href=" {#{{ path('user_teacher_create') }}#} " class="btn btn-primary"
+                               role="button">Invite teacher</a>
+
+                            <a href="{{ path('user_classroom_edit', {id: classroom.id}) }}" class="btn btn-primary"
+                               role="button">Edit</a>
+                            <form method="post" action="{{ path('user_classroom_delete', {id: classroom.id}) }}"
+                                  style="display: inline-block" onsubmit="return confirm('Are you sure?')">
+                                <input type="hidden" name="_method" value='DELETE'>
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ classroom.id) }}">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="text-right">
+            <a href="{{ path('user_classroom_create') }}" class="btn btn-primary">Créer Classroom</a>
+        </div>
+    </div>
+{% endblock %}

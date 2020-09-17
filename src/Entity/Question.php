@@ -22,7 +22,7 @@ class Question
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $enonce;
+    private $wording;
 
     /**
      * @ORM\Column(type="decimal", precision=5, scale=2)
@@ -30,7 +30,8 @@ class Question
     private $score;
 
     /**
-     * @ORM\OneToMany(targetEntity=Proposition::class, mappedBy="question")
+     * @ORM\OneToMany(targetEntity=Proposition::class, mappedBy="question",
+     *     orphanRemoval=true, cascade={"persist", "remove"})
      */
     private $propositions;
 
@@ -46,18 +47,17 @@ class Question
     }
 
     public function getId(): ?int
-    {
-        return $this->id;
+    {        return $this->id;
     }
 
-    public function getEnonce(): ?string
+    public function getWording(): ?string
     {
-        return $this->enonce;
+        return $this->wording;
     }
 
-    public function setEnonce(string $enonce): self
+    public function setWording(string $wording): self
     {
-        $this->enonce = $enonce;
+        $this->wording = $wording;
 
         return $this;
     }
@@ -77,28 +77,28 @@ class Question
     /**
      * @return Collection|Proposition[]
      */
-    public function getpropositions(): Collection
+    public function getPropositions(): Collection
     {
         return $this->propositions;
     }
 
-    public function addPropistion(Proposition $propistion): self
+    public function addProposition(Proposition $proposition): self
     {
-        if (!$this->propositions->contains($propistion)) {
-            $this->propositions[] = $propistion;
-            $propistion->setQuestion($this);
+        if (!$this->propositions->contains($proposition)) {
+            $this->propositions[] = $proposition;
+            $proposition->setQuestion($this);
         }
 
         return $this;
     }
 
-    public function removePropistion(Proposition $propistion): self
+    public function removeProposition(Proposition $proposition): self
     {
-        if ($this->propositions->contains($propistion)) {
-            $this->propositions->removeElement($propistion);
+        if ($this->propositions->contains($proposition)) {
+            $this->propositions->removeElement($proposition);
             // set the owning side to null (unless already changed)
-            if ($propistion->getQuestion() === $this) {
-                $propistion->setQuestion(null);
+            if ($proposition->getQuestion() === $this) {
+                $proposition->setQuestion(null);
             }
         }
 

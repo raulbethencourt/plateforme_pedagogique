@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Question{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Créer Question</h1>
+        {{ include('question/_form.html.twig') }}
+
+        <a class="btn btn-primary" href="{{ path('teacher_index') }}"
+           role="button">{{ button|default('Fini questionnaire') }}</a>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+{% endblock %}
