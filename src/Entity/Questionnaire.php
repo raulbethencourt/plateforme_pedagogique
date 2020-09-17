@@ -47,9 +47,13 @@ class Questionnaire
 
     public function __construct()
     {
-        $this->questionnaire = new ArrayCollection();
         $this->questions = new ArrayCollection();
         $this->pass = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->title;
     }
 
     public function getId(): ?int

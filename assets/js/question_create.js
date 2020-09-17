@@ -22,6 +22,14 @@ $(document).ready(function() {
         // add a new tag form (see next code block)
         addPropositionForm($collectionHolder, $newLinkLi);
     });
+
+    $('.remove-tag').click(function(e) {
+        e.preventDefault();
+
+        $(this).parent().remove();
+
+        return false;
+    });
 });
 
 function addPropositionForm($collectionHolder, $newLinkLi) {

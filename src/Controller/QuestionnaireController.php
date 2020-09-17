@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Questionnaire;
-use App\Repository\QuestionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,27 +17,15 @@ class QuestionnaireController extends AbstractController
 {
     /**
      * @Route ("/{id}", name="questionnaire_index")
-     * @param  QuestionRepository  $repository
      * @param  Request  $request
      * @return Response
      */
-    public function index(QuestionRepository $repository, Request $request): Response
+    public function index(Questionnaire $questionnaire, Request $request): Response
     {
-        $questionnaire = $this->getDoctrine()
-            ->getRepository(Questionnaire::class)
-            ->findOneById($request->attributes->get('id'));
-
-        $questionnaireTitle = $questionnaire->getTitle();
-//        dd(is_string($questionnaire->getTitle()));
-
-
-        $questions = $repository->findAll();
-
         return $this->render(
             'questionnaire/index.html.twig',
             [
-                'questions' => $questions,
-                'title' => $questionnaireTitle,
+                'questionnaire' => $questionnaire,
             ]
         );
     }

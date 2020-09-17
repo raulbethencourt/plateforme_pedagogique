@@ -86,7 +86,6 @@ class TeacherController extends AbstractController
         );
     }
 
-
     /**
      * @Route ("/questionnaire/{id}", name="questionnaire_edit", methods={"GET","POST"})
      */
@@ -138,14 +137,15 @@ class TeacherController extends AbstractController
 
 
     /**
-     * @Route("/questionnaire/{id}/question/create", name="question_create")
+     * @Route("/question/create", name="question_create", methods={"GET","POST"})
      * @param Question|null $question
      * @param Request $request
      * @return RedirectResponse|ResponseAlias
      */
     public function createQuestion(Question $question = null, Request $request)
     {
-        $questionnaire_id = $request->attributes->get("id");
+        $questionnaire_id = $request->query->get('id');
+
         $em = $this->getDoctrine()->getManager();
         $questionnaire = $em->getRepository(Questionnaire::class)->findOneById($questionnaire_id);
 
@@ -163,13 +163,58 @@ class TeacherController extends AbstractController
 
             $this->addFlash('success', 'question ajouté avec succès');
 
-            return $this->redirectToRoute('question_create', [
-                'id' => $questionnaire_id
-            ]);
+            return $this->redirectToRoute(
+                'question_create',
+                [
+                    'id' => $questionnaire_id,
+                ]
+            );
         }
 
         return $this->render(
             'question/new.html.twig',
+            [
+                'question' => $question,
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * @Route("/question/{id}", name="question_edit", methods={"GET","POST"})
+     * @param Question|null $question
+     * @param Request $request
+     * @return RedirectResponse|ResponseAlias
+     */
+    public function editQuestion(Question $question = null, Request $request)
+    {
+        $questionnaire = $request->attributes->get('question');
+        $questionnaire = (array) $questionnaire;
+//        dd($questionnaire);
+        $questionnaire = $questionnaire["\x00App\Entity\Question\x00questionnaire"];
+        $questionnaire_id = (array) $questionnaire;
+        $questionnaire_id = $questionnaire_id["\x00App\Entity\Questionnaire\x00id"];
+
+        $question->setQuestionnaire($questionnaire);
+        $form = $this->createForm(QuestionType::class, $question);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->persist($question);
+            $this->em->flush();
+
+            $this->addFlash('success', 'question ajouté avec succès');
+
+            return $this->redirectToRoute(
+                'questionnaire_index',
+                [
+                    'id' => $questionnaire_id,
+                ]
+            );
+        }
+
+        return $this->render(
+            'question/edit.html.twig',
             [
                 'question' => $question,
                 'form' => $form->createView(),

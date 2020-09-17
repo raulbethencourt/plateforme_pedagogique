@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Questionnaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -38,11 +39,14 @@ class QuestionnaireRepository extends ServiceEntityRepository
 
     public function findOneById($id): ?questionnaire
     {
-        return $this->createQueryBuilder('q')
-            ->andWhere('q.id = :val')
-            ->setParameter('val', $id)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        try {
+            return $this->createQueryBuilder('q')
+                ->andWhere('q.id = :val')
+                ->setParameter('val', $id)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } catch (NonUniqueResultException $e) {
+            dd($e);
+        }
     }
 }

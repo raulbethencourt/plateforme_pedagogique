@@ -4,17 +4,11 @@
 
 {% block body %}
     <div class="container mt-4">
-        {{ form_start(form) }}
+        <h1>Créer Question</h1>
+        {{ include('question/_form.html.twig') }}
 
-        {{ form_row(form.wording) }}
-        {{ form_row(form.score) }}
-
-        <ul class="propositions" style="list-style: none;" data-prototype="{{ form_widget(form.propositions.vars.prototype)|e('html_attr') }}"></ul>
-
-        {{ form_row(form.submit) }}
-
-        {{ form_end(form) }}
-        <a class="btn btn-primary" href="{{ path('teacher_index') }}" role="button">Fini questionnaire</a>
+        <a class="btn btn-primary" href="{{ path('teacher_index') }}"
+           role="button">{{ button|default('Fini questionnaire') }}</a>
     </div>
 {% endblock %}
 

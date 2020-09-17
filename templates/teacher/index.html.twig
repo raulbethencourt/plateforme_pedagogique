@@ -19,8 +19,16 @@
             {% for questionnaire in questionnaires %}
                 <tr>
                     <th scope="row">{{ questionnaire.id }}</th>
-                    <td><a href="{{ path('questionnaire_index', {id: questionnaire.id}) }}" role="button">{{ questionnaire.title }}</a></td>
-                    <td>{{ questionnaire.difficulty }}</td>
+                    <td><a href="{{ path('questionnaire_index', {id: questionnaire.id}) }}"
+                           role="button">{{ questionnaire.title }}</a></td>
+                    {% if questionnaire.difficulty == 'facile' %}
+                        <td><span class="badge badge-success">{{ questionnaire.difficulty }}</span></td>
+                    {% elseif questionnaire.difficulty == 'difficile' %}
+                        <td><span class="badge badge-danger">{{ questionnaire.difficulty }}</span></td>
+                        {% else %}
+                            <td><span class="badge badge-secondary">{{ questionnaire.difficulty }}</span></td>
+                    {% endif %}
+
                     <td>
                         <a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}" class="btn btn-primary"
                            role="button">Edit</a>
