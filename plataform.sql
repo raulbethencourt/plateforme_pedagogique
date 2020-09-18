@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql
--- Generation Time: Sep 16, 2020 at 02:52 PM
+-- Generation Time: Sep 18, 2020 at 02:49 PM
 -- Server version: 10.4.14-MariaDB-1:10.4.14+maria~focal
 -- PHP Version: 7.4.9
 
@@ -33,6 +33,14 @@ CREATE TABLE `classroom` (
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `access_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `classroom`
+--
+
+INSERT INTO `classroom` (`id`, `name`, `access_code`) VALUES
+(19, 'primera clase 2.0', 'arte/escultura'),
+(20, 'dl7', 'programacion web');
 
 -- --------------------------------------------------------
 
@@ -115,16 +123,28 @@ CREATE TABLE `proposition` (
 --
 
 INSERT INTO `proposition` (`id`, `question_id`, `text`, `correct`) VALUES
-(3, 6, 'respuesta evidente', 1),
-(4, 6, 'respuesta sin sentido', 0),
-(5, 6, 'respuesta posible pero \"no\"', 0),
-(6, 7, 'facil', 1),
-(7, 7, 'dificil', 0),
-(8, 8, 'rreponse 1', 1),
-(9, 8, 'reponse 2', 0),
-(10, 8, 'reponse 3', 1),
-(11, 9, 'repons 1', 0),
-(12, 9, 'reponse 2', 1);
+(21, 13, 'proposition 1', 0),
+(22, 13, 'propsiton 2', 0),
+(23, 13, 'propsition 3 la buena', 1),
+(24, 14, 'respuesta buena', 1),
+(26, 14, 'la nueva respuesta mala', 0),
+(31, 17, 'test 2', 0),
+(32, 18, 'test 2', 0),
+(33, 19, 'fsgf', 0),
+(34, 20, 'propsiton 2', 0),
+(35, 20, 'propsition 3 la buena', 1),
+(36, 21, 'respuesta 1', 0),
+(37, 21, 'respuesta 2 buena', 1),
+(38, 22, 'respuesta buena', 1),
+(39, 22, 'mala respuesta', 0),
+(40, 23, 'respuesta 1', 1),
+(41, 23, 'reponse 3', 0),
+(42, 25, 'respuesta 1', 1),
+(43, 26, 'respu', 0),
+(44, 27, 'respuesta 1', 1),
+(45, 28, 'respuesta 1', 0),
+(46, 28, 'respuesta 2 buena editada', 1),
+(47, 28, 'repuesta 3', 0);
 
 -- --------------------------------------------------------
 
@@ -144,10 +164,20 @@ CREATE TABLE `question` (
 --
 
 INSERT INTO `question` (`id`, `questionnaire_id`, `wording`, `score`) VALUES
-(6, 13, 'Pregunta dificilisima', '5.00'),
-(7, 13, 'test question 2', '3.00'),
-(8, 14, 'Question 1', '9.00'),
-(9, 14, 'question 2', '6.00');
+(13, 22, 'pregunta facil', '4.00'),
+(14, 22, 'segunda pregunta un poco mas dificl', '8.00'),
+(17, 23, 'pregunta 2 de test', '6.00'),
+(18, 23, 'pregunta 2 de test', '6.00'),
+(19, 23, 'test question 2', '7.00'),
+(20, 23, 'pregunta ultima que quiero ver que he anadido', '10.00'),
+(21, 24, 'pregunta1', '7.00'),
+(22, 24, 'pregunta 2', '8.00'),
+(23, 24, 'pregunta de prueba nueva de prueba', '6.00'),
+(24, 24, 'pregunta 4', '6.00'),
+(25, 26, 'pregunta1', '5.00'),
+(26, 27, 'pregunta1', '5.00'),
+(27, 27, 'pregunta1', '5.00'),
+(28, 27, 'pregunta 2', '9.00');
 
 -- --------------------------------------------------------
 
@@ -167,11 +197,12 @@ CREATE TABLE `questionnaire` (
 --
 
 INSERT INTO `questionnaire` (`id`, `teacher_id`, `title`, `difficulty`) VALUES
-(1, 16, 'test questionnaire', 'difficile'),
-(2, 16, 'test questionnaire 2', 'facile'),
-(3, 16, 'test questionnaire 3', 'moyen'),
-(13, 16, 'test questionnaire de la hostia 2046', 'difficile'),
-(14, 16, 'questionnnaire test', 'moyen');
+(22, 16, 'ultimas pruebas editado', 'difficile'),
+(23, 16, 'test questionnaire que te cagas de duro', 'moyen'),
+(24, 16, 'nueva prueba', 'facile'),
+(25, 16, 'test questionnaire de la hostia 2.0', 'difficile'),
+(26, 16, 'test questionnaire que te cagas de duro 2.0', 'difficile'),
+(27, 16, 'test questionnaire que te cagas de duro 2.0.1', 'facile');
 
 -- --------------------------------------------------------
 
@@ -280,7 +311,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `classroom`
 --
 ALTER TABLE `classroom`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `pass`
@@ -292,19 +323,19 @@ ALTER TABLE `pass`
 -- AUTO_INCREMENT for table `proposition`
 --
 ALTER TABLE `proposition`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `question`
 --
 ALTER TABLE `question`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `questionnaire`
 --
 ALTER TABLE `questionnaire`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `user`

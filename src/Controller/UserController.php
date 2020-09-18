@@ -78,6 +78,7 @@ class UserController extends AbstractController
 
     /**
      * @Route ("/classroom/{id}", name="user_classroom_edit", methods={"GET","POST"})
+     * @param Classroom $classroom
      * @param Request $request
      * @return RedirectResponse|ResponseAlias
      */

@@ -17,11 +17,12 @@
         {% for classroom in classrooms %}
             <tr>
                 <th scope="row">{{ classroom.id }}</th>
-                <td><a href=""></a>{{ classroom.name }}</td>
+                {% dump(classroom.id) %}
+                <td><a href="{{ path('classroom_index', {id: classroom.id}) }}">{{ classroom.name }}</a></td>
                 <td class="d-flex justify-content-between ">
                     {{ classroom.accessCode }}
-                    <div class="d-flex justify-content-around w-50">
-                        <a href="{{ path('user_classroom_edit', {id: classroom.id}) }}" class="btn btn-primary"
+                    <div class="d-flex justify-content-center w-50">
+                        <a href="{{ path('user_classroom_edit', {id: classroom.id}) }}" class="btn btn-primary mr-lg-2"
                            role="button">Edit</a>
                         <form method="post" action="{{ path('user_classroom_delete', {id: classroom.id}) }}"
                               style="display: inline-block" onsubmit="return confirm('Are you sure?')">
