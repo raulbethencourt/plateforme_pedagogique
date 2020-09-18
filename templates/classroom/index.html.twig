@@ -16,7 +16,7 @@
         </tr>
         </thead>
         <tbody>
-        {%  for teacher in teachers %}
+        {% for teacher in teachers %}
             <tr>
                 <th scope="row"></th>
                 <td></td>
@@ -38,7 +38,7 @@
         </tr>
         </thead>
         <tbody>
-        {%  for student in students %}
+        {% for student in students %}
             <tr>
                 <th scope="row"></th>
                 <td></td>
@@ -50,10 +50,11 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <div class="d-flex justify-content-between w-25">
-        <a href="{#{{ path('question_create') }}#}" class="btn btn-primary">Inviter Teacher</a>
-        <a href="{#{{ path('question_create') }}#}" class="btn btn-primary">Inviter Student</a>
+    <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-between w-25">
+            <a href="{# {{ path('question_create') }} #}" class="btn btn-primary">Inviter Teacher</a>
+            <a href="{# {{ path('question_create') }} #}" class="btn btn-primary">Inviter Student</a>
+        </div>
     </div>
 {% endblock %}
 
