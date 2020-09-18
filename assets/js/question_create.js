@@ -4,7 +4,7 @@ import $ from "jquery";
 var $collectionHolder;
 
 // setup an "add a proposition" link
-var $addPropositionButton = $('<button type="button" class="btn btn-primary add_tag_link">Ajouter un proposition</button>');
+var $addPropositionButton = $('<button type="button" class="btn btn-secondary add_tag_link">Ajouter un proposition</button>');
 var $newLinkLi = $('<li></li>').append($addPropositionButton);
 
 $(document).ready(function() {

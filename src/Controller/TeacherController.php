@@ -116,7 +116,7 @@ class TeacherController extends AbstractController
     }
 
     /**
-     * @Route ("/teacher/questionnaire/{id}", name="questionnaire_delete")
+     * @Route ("/teacher/questionnaire/{id}", name="questionnaire_delete", methods={"DELETE"})
      * @param Questionnaire $questionnaire
      * @param Request $request
      * @return RedirectResponse
@@ -134,24 +134,18 @@ class TeacherController extends AbstractController
 
 
     /**
-     * @Route("/teacher/question/create", name="question_create", methods={"GET","POST"})
-     * @param Question|null $question
+     * @Route("/teacher/question_create/{id}", name="question_create", methods={"GET","POST"})
+     * @param Questionnaire $questionnaire
      * @param Request $request
      * @return RedirectResponse|ResponseAlias
      */
-    public function createQuestion(Question $question = null, Request $request)
+    public function createQuestion(Questionnaire $questionnaire, Request $request)
     {
-        $questionnaire_id = $request->query->get('id');
-
-        $em = $this->getDoctrine()->getManager();
-        $questionnaire = $em->getRepository(Questionnaire::class)->findOneById($questionnaire_id);
-
-        if (!$question) {
-            $question = new Question();
-        }
+        $question = new Question();
 
         $question->setQuestionnaire($questionnaire);
         $form = $this->createForm(QuestionType::class, $question);
+        $questionnaire_id = $questionnaire->getId();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -178,18 +172,17 @@ class TeacherController extends AbstractController
     }
 
     /**
-     * @Route("/teacher/question/{id}", name="question_edit", methods={"GET","POST"})
+     * @Route("/teacher/question_edit/{id}", name="question_edit", methods={"GET","POST"})
      * @param Question|null $question
      * @param Request $request
      * @return RedirectResponse|ResponseAlias
      */
-    public function editQuestion(Question $question = null, Request $request)
+    public function editQuestion(Question $question, Request $request)
     {
         $questionnaire = $request->attributes->get('question');
-        $questionnaire = (array) $questionnaire;
-//        dd($questionnaire);
+        $questionnaire = (array)$questionnaire;
         $questionnaire = $questionnaire["\x00App\Entity\Question\x00questionnaire"];
-        $questionnaire_id = (array) $questionnaire;
+        $questionnaire_id = (array)$questionnaire;
         $questionnaire_id = $questionnaire_id["\x00App\Entity\Questionnaire\x00id"];
 
         $question->setQuestionnaire($questionnaire);
@@ -215,6 +208,29 @@ class TeacherController extends AbstractController
             [
                 'question' => $question,
                 'form' => $form->createView(),
+            ]
+        );
+    }
+
+    /**
+     * @Route ("/teacher/question_delete/{id}", name="question_delete", methods={"DELETE"})
+     * @param Questionnaire $questionnaire
+     * @param Question $question
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function deleteQuestion(Questionnaire $questionnaire, Question $question, Request $request): RedirectResponse
+    {
+        if ($this->isCsrfTokenValid('delete'.$question->getId(), $request->get('_token'))) {
+            $this->em->remove($question);
+            $this->em->flush();
+            $this->addFlash('succes', 'questionnaire supprimé avec succès');
+        }
+
+        return $this->redirectToRoute(
+            'questionnaire_index',
+            [
+                'id' => $questionnaire,
             ]
         );
     }

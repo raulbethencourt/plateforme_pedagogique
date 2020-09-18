@@ -5,8 +5,8 @@
 {% block body %}
 
     <div class="container-sm pt-5 mt-5">
-        <div class="row justify-content-md-center my-auto">
-            <form method="post">
+        <div class="row justify-content-md-center my-auto ">
+            <form method="post" class="border rounded p-4">
                 {% if error %}
                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                 {% endif %}

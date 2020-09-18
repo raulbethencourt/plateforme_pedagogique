@@ -7,13 +7,18 @@ use App\Entity\Teacher;
 use App\Form\ClassroomType;
 use App\Form\UserTeacherRegistrationType;
 use App\Repository\ClassroomRepository;
+use App\Security\LoginFormAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 /**
  * Class UserController
@@ -110,16 +115,57 @@ class UserController extends AbstractController
         return $this->redirectToRoute('user_index');
     }
 
-    public function createTeacher(Request $request)
+    /**
+     * @Route("/register", name="teacher_register")
+     * @param Classroom $classroom
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param GuardAuthenticatorHandler $guardHandler
+     * @param LoginFormAuthenticator $authenticator
+     * @return ResponseAlias
+     */
+        public function teacherRegister(Request $request, UserPasswordEncoderInterface $passwordEncoder,
+        GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
     {
+        dd($request);
         $teacher = new Teacher();
         $form = $this->createForm(UserTeacherRegistrationType::class, $teacher);
         $form->handleRequest($request);
+
+        $teacher->setEntryDate(new \DateTime());
         if ($form->isSubmitted() && $form->isValid()) {
+            // encode the plain password
+            $teacher->setPassword(
+                $passwordEncoder->encodePassword(
+                    $teacher,
+                    $form->get('plainPassword')->getData()
+                )
+            );
 
-            $this->addFlash('success', '');
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($teacher);
+            $entityManager->flush();
 
-            return $this->redirectToRoute('', []);
+            // generate a signed url and email it to the user
+            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $teacher,
+                (new TemplatedEmail())
+                    ->from(new Address('raoulbetilla@gmail.com', 'Plataform Mail Bot'))
+                    ->to($teacher->getEmail())
+                    ->subject('vous ete bien ajoute comment formateur')
+                    ->htmlTemplate('registration/confirmation_email.html.twig')
+            );
+            // do anything else you need here, like send an email
+
+            return $guardHandler->authenticateUserAndHandleSuccess(
+                $teacher,
+                $request,
+                $authenticator,
+                'main' // firewall name in security.yaml
+            );
         }
+
+        return $this->render('user/teacher/registration.html.twig', [
+            'registrationForm' => $form->createView(),
+        ]);
     }
 }

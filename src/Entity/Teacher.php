@@ -104,4 +104,15 @@ class Teacher extends User
 
         return $this;
     }
+
+    /**
+     * @param Classroom $classrooms
+     * @return Teacher
+     */
+    public function setClassrooms(Classroom $classrooms): Teacher
+    {
+        $this->classrooms = $classrooms;
+
+        return $this;
+    }
 }
