@@ -33,14 +33,14 @@ class TeacherController extends AbstractController
      */
     public function index(QuestionnaireRepository $repository): ResponseAlias
     {
-        $questionnaires = $repository->findAll();
-        $user = $this->getUser();
-
+        $teacher = $this->getUser();
         return $this->render(
             'teacher/index.html.twig',
             [
-                'questionnaires' => $questionnaires,
-                'teacher' => $user,
+                'questionnaires' => $this->getDoctrine()
+                    ->getRepository(Questionnaire::class)
+                    ->findByTeacher($teacher),
+                'teacher' => $teacher,
             ]
         );
     }

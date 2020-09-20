@@ -9,9 +9,9 @@
     <table class="table">
         <thead class="thead-dark">
         <tr>
-            <th scope="col">na</th>
+            <th scope="col">id</th>
             <th scope="col"></th>
-            <th scope="col">Type</th>
+            <th scope="col">Name</th>
             <th scope="col"></th>
         </tr>
         </thead>
@@ -28,12 +28,13 @@
         {% endfor %}
         </tbody>
     </table>
+    <h3>Teachers</h3>
     <table class="table">
         <thead class="thead-dark">
         <tr>
-            <th scope="col">na</th>
+            <th scope="col">id</th>
             <th scope="col"></th>
-            <th scope="col">Type</th>
+            <th scope="col">Name</th>
             <th scope="col"></th>
         </tr>
         </thead>
@@ -51,10 +52,30 @@
         </tbody>
     </table>
     <div class="d-flex justify-content-end">
-        <div class="d-flex justify-content-between w-25">
-            <a href="{# {{ path('question_create') }} #}" class="btn btn-primary">Inviter Teacher</a>
-            <a href="{# {{ path('question_create') }} #}" class="btn btn-primary">Inviter Student</a>
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success mr-2 mb-0">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {% if not form.vars.valid %}
+            <div class="alert alert-danger mr-2 mb-0" role="alert">
+                <strong>Erreur fatal</strong>
+            </div>
+        {% endif %}
+        <div id="inviteForm"{% if not form.vars.submitted %} style="display: none;" {% endif %}
+             class="w-75">
+            {{ form_start(form) }}
+            <div class="d-flex justify-content-between align-items-center">
+                {{ form_row(form.name) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.type) }}
+                {{ form_row(form.submit) }}
+            </div>
+            {{ form_end(form) }}
         </div>
+        <a name="btn" id="inviterBtn" class="btn btn-secondary" href="#" role="button" {% if form.vars.submitted %}
+            style="display:none;" {% endif %}>Inviter</a>
     </div>
 {% endblock %}
 

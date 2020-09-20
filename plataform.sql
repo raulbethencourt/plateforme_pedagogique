@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql
--- Generation Time: Sep 18, 2020 at 02:49 PM
+-- Generation Time: Sep 20, 2020 at 09:11 PM
 -- Server version: 10.4.14-MariaDB-1:10.4.14+maria~focal
 -- PHP Version: 7.4.9
 
@@ -89,7 +89,9 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 ('DoctrineMigrations\\Version20200913114432', '2020-09-13 13:44:36', 12),
 ('DoctrineMigrations\\Version20200913114457', '2020-09-13 13:45:00', 12),
 ('DoctrineMigrations\\Version20200914200830', '2020-09-14 22:10:22', 143),
-('DoctrineMigrations\\Version20200916090810', '2020-09-16 09:08:42', 1484);
+('DoctrineMigrations\\Version20200916090810', '2020-09-16 09:08:42', 1484),
+('DoctrineMigrations\\Version20200918211023', '2020-09-18 23:10:38', 84),
+('DoctrineMigrations\\Version20200918212454', '2020-09-18 23:25:03', 19);
 
 -- --------------------------------------------------------
 
@@ -123,11 +125,6 @@ CREATE TABLE `proposition` (
 --
 
 INSERT INTO `proposition` (`id`, `question_id`, `text`, `correct`) VALUES
-(21, 13, 'proposition 1', 0),
-(22, 13, 'propsiton 2', 0),
-(23, 13, 'propsition 3 la buena', 1),
-(24, 14, 'respuesta buena', 1),
-(26, 14, 'la nueva respuesta mala', 0),
 (31, 17, 'test 2', 0),
 (32, 18, 'test 2', 0),
 (33, 19, 'fsgf', 0),
@@ -144,7 +141,14 @@ INSERT INTO `proposition` (`id`, `question_id`, `text`, `correct`) VALUES
 (44, 27, 'respuesta 1', 1),
 (45, 28, 'respuesta 1', 0),
 (46, 28, 'respuesta 2 buena editada', 1),
-(47, 28, 'repuesta 3', 0);
+(47, 28, 'repuesta 3', 0),
+(52, 31, 'respuesta 1', 1),
+(53, 31, 'respuesta sin sentido', 0),
+(54, 32, 'respuesta 1', 0),
+(55, 32, 'respuesta 2 buena', 1),
+(56, 32, 'respuesta', 1),
+(57, 33, 'respuesta 1', 1),
+(58, 33, 'respuesta 2 mala', 0);
 
 -- --------------------------------------------------------
 
@@ -164,8 +168,6 @@ CREATE TABLE `question` (
 --
 
 INSERT INTO `question` (`id`, `questionnaire_id`, `wording`, `score`) VALUES
-(13, 22, 'pregunta facil', '4.00'),
-(14, 22, 'segunda pregunta un poco mas dificl', '8.00'),
 (17, 23, 'pregunta 2 de test', '6.00'),
 (18, 23, 'pregunta 2 de test', '6.00'),
 (19, 23, 'test question 2', '7.00'),
@@ -177,7 +179,10 @@ INSERT INTO `question` (`id`, `questionnaire_id`, `wording`, `score`) VALUES
 (25, 26, 'pregunta1', '5.00'),
 (26, 27, 'pregunta1', '5.00'),
 (27, 27, 'pregunta1', '5.00'),
-(28, 27, 'pregunta 2', '9.00');
+(28, 27, 'pregunta 2', '9.00'),
+(31, 29, 'question 1', '6.00'),
+(32, 29, 'test question 2', '9.00'),
+(33, 30, 'pregunta 1 de test', '5.00');
 
 -- --------------------------------------------------------
 
@@ -197,12 +202,13 @@ CREATE TABLE `questionnaire` (
 --
 
 INSERT INTO `questionnaire` (`id`, `teacher_id`, `title`, `difficulty`) VALUES
-(22, 16, 'ultimas pruebas editado', 'difficile'),
 (23, 16, 'test questionnaire que te cagas de duro', 'moyen'),
 (24, 16, 'nueva prueba', 'facile'),
 (25, 16, 'test questionnaire de la hostia 2.0', 'difficile'),
 (26, 16, 'test questionnaire que te cagas de duro 2.0', 'difficile'),
-(27, 16, 'test questionnaire que te cagas de duro 2.0.1', 'facile');
+(27, 16, 'test questionnaire que te cagas de duro 2.0.1', 'facile'),
+(29, 16, 'test questionnaire edité', 'difficile'),
+(30, 17, 'primero de raul', 'facile');
 
 -- --------------------------------------------------------
 
@@ -233,7 +239,8 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `username`, `roles`, `password`, `surname`, `name`, `email`, `photo_name`, `is_verified`, `entry_date`, `type`, `subject`, `hooby`) VALUES
 (14, 'admin', '[\"ROLE_ADMIN\"]', '$argon2id$v=19$m=65536,t=4,p=1$0jsuEN8/xlghcdD9tbFG9Q$xsBFVqKhI/giBH3rqsMJYqkrYyfyD5vWItbUVXReNYU', NULL, NULL, 'admin@test.mail', NULL, 0, '2020-09-16', 'user', NULL, NULL),
 (15, 'student', '[]', '$argon2id$v=19$m=65536,t=4,p=1$lpjZe8b+fW3f1wWMJY5VSw$/pkoSm+PH6d/jG19hFQvH/x7dXdY2MqoJ7XMfqcc/G4', NULL, NULL, 'student@test.mail', NULL, 0, '2020-09-16', 'student', NULL, NULL),
-(16, 'teacher', '[]', '$argon2id$v=19$m=65536,t=4,p=1$L+ewk49T0+6KfkVeL4fQRw$tHKuI4m9U/tcAJzeBS3QGSoVFTmKFj1Eb2bACey7hIM', NULL, NULL, 'teacher@test.mail', NULL, 0, '2020-09-16', 'teacher', NULL, NULL);
+(16, 'teacher', '[]', '$argon2id$v=19$m=65536,t=4,p=1$L+ewk49T0+6KfkVeL4fQRw$tHKuI4m9U/tcAJzeBS3QGSoVFTmKFj1Eb2bACey7hIM', NULL, NULL, 'teacher@test.mail', NULL, 0, '2020-09-16', 'teacher', NULL, NULL),
+(17, 'raulbethencourt', '[]', '$argon2id$v=19$m=65536,t=4,p=1$AM6s366x/VnpCmps8j08+Q$iV/AsI3TcoxRhBGxMTCoC1P6gxCiXyoS7iYbD9hrfw0', 'Beta', 'Raul', 'raul@test.mail', NULL, 0, '2020-09-20', 'teacher', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -323,25 +330,25 @@ ALTER TABLE `pass`
 -- AUTO_INCREMENT for table `proposition`
 --
 ALTER TABLE `proposition`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `question`
 --
 ALTER TABLE `question`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `questionnaire`
 --
 ALTER TABLE `questionnaire`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Constraints for dumped tables

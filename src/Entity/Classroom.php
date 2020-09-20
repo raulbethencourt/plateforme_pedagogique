@@ -43,6 +43,7 @@ class Classroom
     {
         $this->teachers = new ArrayCollection();
         $this->students = new ArrayCollection();
+        $this->invites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -125,7 +126,4 @@ class Classroom
 
         return $this;
     }
-
-
-
 }
