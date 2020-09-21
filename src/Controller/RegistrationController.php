@@ -31,10 +31,10 @@ class RegistrationController extends AbstractController
 
     /**
      * @Route("/register", name="app_register")
-     * @param Request $request
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     * @param GuardAuthenticatorHandler $guardHandler
-     * @param LoginFormAuthenticator $authenticator
+     * @param  Request  $request
+     * @param  UserPasswordEncoderInterface  $passwordEncoder
+     * @param  GuardAuthenticatorHandler  $guardHandler
+     * @param  LoginFormAuthenticator  $authenticator
      * @return Response
      */
     public function register(
@@ -91,10 +91,10 @@ class RegistrationController extends AbstractController
 
     /**
      * @Route("/usager_register", name="usager_register")
-     * @param Request $request
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     * @param GuardAuthenticatorHandler $guardHandler
-     * @param LoginFormAuthenticator $authenticator
+     * @param  Request  $request
+     * @param  UserPasswordEncoderInterface  $passwordEncoder
+     * @param  GuardAuthenticatorHandler  $guardHandler
+     * @param  LoginFormAuthenticator  $authenticator
      * @return Response
      */
     public function usagerRegister(
@@ -132,6 +132,7 @@ class RegistrationController extends AbstractController
             foreach ($classrooms as $classroom) {
                 switch ($type) {
                     case 'teacher':
+//                        dd($classroom);
                         $usager->addClassroom($classroom);
                         break;
                     default:
@@ -166,23 +167,21 @@ class RegistrationController extends AbstractController
             );
         }
 
-        switch ($type) {
-            case 'teacher':
-                return $this->render(
-                    'registration/teacher_register.html.twig',
-                    [
-                        'form' => $form->createView(),
-                    ]
-                );
-                break;
-            default:
-                return $this->render(
-                    'registration/student_register.html.twig',
-                    [
-                        'form' => $form->createView(),
-                    ]
-                );
+        if ($type === 'teacher') {
+            return $this->render(
+                'registration/teacher_register.html.twig',
+                [
+                    'form' => $form->createView(),
+                ]
+            );
         }
+
+        return $this->render(
+            'registration/student_register.html.twig',
+            [
+                'form' => $form->createView(),
+            ]
+        );
     }
 
     /**
@@ -201,9 +200,15 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_register');
         }
 
-        // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('success', 'Vous été bien connecté');
-
-        return $this->redirectToRoute('teacher_index');
+        switch (get_class($this->getUser())) {
+            case Teacher::class:
+                return $this->redirectToRoute('teacher_index');
+                break;
+            case Student::class:
+                return $this->redirectToRoute('student_index');
+                break;
+            default:
+                return $this->redirectToRoute('user_index');
+        }
     }
 }

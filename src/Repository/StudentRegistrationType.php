@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller;
+namespace App\Repository;
 
 
 use App\Entity\Classroom;

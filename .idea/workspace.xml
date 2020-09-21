@@ -23,21 +23,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c7a212d-3c91-4ff0-904b-dbc37de82ac8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ce104aaa-125a-441e-b754-74484fdac2c0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ce104aaa-125a-441e-b754-74484fdac2c0.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/css/scss/utilities/_background.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/scss/utilities/_background.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/js/question_create.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/question_create.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ClassroomController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ClassroomController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/RegistrationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/RegistrationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Student.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Student.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Teacher.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Teacher.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/RegistrationFormType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/RegistrationFormType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/UserTeacherRegistrationType.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/StudentRegistrationType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/StudentRegistrationType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Classroom.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Classroom.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/StudentRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/StudentRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/TeacherRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/TeacherRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Security/LoginFormAuthenticator.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Security/LoginFormAuthenticator.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/classroom/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/classroom/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/emails/invitation.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/emails/invitation.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -201,6 +196,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/Form" />
       <recent name="$PROJECT_DIR$/public/images" />
       <recent name="$PROJECT_DIR$/images" />
       <recent name="C:\Users\Stagiaire\sites\plataform\plataform\assets\css\scss" />
@@ -285,6 +281,7 @@
       <workItem from="1600670363036" duration="2331000" />
       <workItem from="1600672966784" duration="6055000" />
       <workItem from="1600679735422" duration="14794000" />
+      <workItem from="1600708175919" duration="8256000" />
     </task>
     <servers />
   </component>
@@ -312,10 +309,10 @@
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
     <state x="2348" y="399" width="414" height="244" key="#Composer/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599682301132" />
-    <state x="631" y="198" width="734" height="646" key="#Inspections" timestamp="1600157074499">
-      <screen x="62" y="0" width="1858" height="1080" />
+    <state x="2188" y="198" width="734" height="646" key="#Inspections" timestamp="1600713971168">
+      <screen x="1600" y="0" width="1920" height="1080" />
     </state>
-    <state x="2188" y="198" width="734" height="646" key="#Inspections/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599898430991" />
+    <state x="2188" y="198" width="734" height="646" key="#Inspections/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600713971168" />
     <state x="631" y="198" key="#Inspections/62.0.1858.1080@62.0.1858.1080" timestamp="1600157074499" />
     <state x="582" y="197" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1599813950401">
       <screen x="62" y="0" width="1858" height="1080" />
@@ -411,10 +408,10 @@
     </state>
     <state x="2205" y="250" width="672" height="677" key="run.anything.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600455072754" />
     <state x="647" y="250" key="run.anything.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1599730868148" />
-    <state x="654" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1600699356899">
-      <screen x="62" y="0" width="1858" height="1080" />
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1600720743021">
+      <screen x="1600" y="0" width="1920" height="1080" />
     </state>
-    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600636072752" />
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600720743021" />
     <state x="654" y="235" width="672" height="678" key="search.everywhere.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1600699356899" />
   </component>
 </project>
