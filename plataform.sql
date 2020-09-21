@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql
--- Generation Time: Sep 21, 2020 at 02:51 PM
+-- Generation Time: Sep 21, 2020 at 08:54 PM
 -- Server version: 10.4.14-MariaDB-1:10.4.14+maria~focal
--- PHP Version: 7.4.10
+-- PHP Version: 7.4.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -92,7 +92,8 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 ('DoctrineMigrations\\Version20200916090810', '2020-09-16 09:08:42', 1484),
 ('DoctrineMigrations\\Version20200918211023', '2020-09-18 23:10:38', 84),
 ('DoctrineMigrations\\Version20200918212454', '2020-09-18 23:25:03', 19),
-('DoctrineMigrations\\Version20200921143804', '2020-09-21 14:38:32', 615);
+('DoctrineMigrations\\Version20200921143804', '2020-09-21 14:38:32', 615),
+('DoctrineMigrations\\Version20200921202346', '2020-09-21 22:23:52', 140);
 
 -- --------------------------------------------------------
 
@@ -235,7 +236,7 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `username`, `roles`, `password`, `surname`, `name`, `email`, `photo_name`, `is_verified`, `entry_date`, `type`, `subject`, `hobby`) VALUES
 (14, 'admin', '[\"ROLE_ADMIN\"]', '$argon2id$v=19$m=65536,t=4,p=1$0jsuEN8/xlghcdD9tbFG9Q$xsBFVqKhI/giBH3rqsMJYqkrYyfyD5vWItbUVXReNYU', NULL, NULL, 'admin@test.mail', NULL, 0, '2020-09-16', 'user', NULL, NULL),
 (16, 'teacher', '[]', '$argon2id$v=19$m=65536,t=4,p=1$L+ewk49T0+6KfkVeL4fQRw$tHKuI4m9U/tcAJzeBS3QGSoVFTmKFj1Eb2bACey7hIM', NULL, NULL, 'teacher@test.mail', NULL, 0, '2020-09-16', 'teacher', NULL, NULL),
-(34, 'raulbethencourt', '[]', '$argon2id$v=19$m=65536,t=4,p=1$8clUVi/maLQAI3TqdLdhHQ$aP5shDlIZfRgNeaYZ9CqA7+u0sOdNQpZ93DLeaOlAHQ', 'bethencourt', 'Raul', 'raul@test.mail', NULL, 1, '2020-09-21', 'teacher', 'informatique', NULL);
+(38, 'raulbethencourt', '[]', '$argon2id$v=19$m=65536,t=4,p=1$pW2ywkN02OVlhzFvtFkcVg$IXnz8mopPchIUGGWr8gGOTru+YDGukQngkpRGTsadAM', 'bethencourt', 'Raul', 'raul@test.mail', NULL, 0, '2020-09-21', 'teacher', 'tenis', NULL);
 
 --
 -- Indexes for dumped tables
@@ -343,7 +344,7 @@ ALTER TABLE `questionnaire`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- Constraints for dumped tables
@@ -353,15 +354,15 @@ ALTER TABLE `user`
 -- Constraints for table `classroom_student`
 --
 ALTER TABLE `classroom_student`
-  ADD CONSTRAINT `FK_3DD26E1B6278D5A8` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK_3DD26E1BCB944F1A` FOREIGN KEY (`student_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `FK_3DD26E1B6278D5A8` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`),
+  ADD CONSTRAINT `FK_3DD26E1BCB944F1A` FOREIGN KEY (`student_id`) REFERENCES `user` (`id`);
 
 --
 -- Constraints for table `classroom_teacher`
 --
 ALTER TABLE `classroom_teacher`
-  ADD CONSTRAINT `FK_3A0767FD41807E1D` FOREIGN KEY (`teacher_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK_3A0767FD6278D5A8` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `FK_3A0767FD41807E1D` FOREIGN KEY (`teacher_id`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `FK_3A0767FD6278D5A8` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`);
 
 --
 -- Constraints for table `pass`
