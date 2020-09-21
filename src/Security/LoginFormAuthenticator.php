@@ -34,8 +34,12 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     private $passwordEncoder;
     private $userConnected;
 
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
-    {
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        UrlGeneratorInterface $urlGenerator,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        UserPasswordEncoderInterface $passwordEncoder
+    ) {
         $this->entityManager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
@@ -79,6 +83,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         }
 
         $this->userConnected = $user;
+
         return $user;
     }
 
@@ -101,11 +106,29 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             return new RedirectResponse($targetPath);
         }
 
-        switch(get_class($this->userConnected)){
-            case Teacher::class:
-                return new RedirectResponse($this->urlGenerator->generate('teacher_index', ['user' => $this->userConnected]));
-            case Student::class:
-                return new RedirectResponse($this->urlGenerator->generate('student_index'));
+        if (!$request->get('type')) {
+            $teacher = get_class($this->userConnected) === Teacher::class;
+            $student = get_class($this->userConnected) === Student::class;
+        } else {
+            $teacher = $request->get('type') === 'teacher';
+            $student = $request->get('type') === 'student';
+        }
+
+        switch (true) {
+            case $teacher:
+                return new RedirectResponse(
+                    $this->urlGenerator->generate(
+                        'teacher_index',
+                        ['user' => $this->userConnected]
+                    )
+                );
+            case $student:
+                return new RedirectResponse(
+                    $this->urlGenerator->generate(
+                        'student_index',
+                        ['user' => $this->userConnected]
+                    )
+                );
             default:
                 return new RedirectResponse($this->urlGenerator->generate('user_index'));
         }

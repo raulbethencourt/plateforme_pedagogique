@@ -25,7 +25,7 @@ class Student extends User
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $Hooby;
+    private $hobby;
 
     public function __construct()
     {
@@ -91,15 +91,19 @@ class Student extends User
         return $this;
     }
 
-    public function getHooby(): ?string
+    /**
+     * @return mixed
+     */
+    public function getHobby()
     {
-        return $this->Hooby;
+        return $this->hobby;
     }
 
-    public function setHooby(?string $Hooby): self
+    /**
+     * @param mixed $hobby
+     */
+    public function setHobby($hobby): void
     {
-        $this->Hooby = $Hooby;
-
-        return $this;
+        $this->hobby = $hobby;
     }
 }

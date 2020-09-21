@@ -1,13 +1,16 @@
 <?php
 
+
 namespace App\Form;
 
+
+use App\Entity\Classroom;
 use App\Entity\Teacher;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,7 +20,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
-class UserTeacherRegistrationType extends AbstractType
+class TeacherRegistrationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -26,18 +29,20 @@ class UserTeacherRegistrationType extends AbstractType
             ->add('surname', TextType::class)
             ->add('name', TextType::class)
             ->add('email', EmailType::class)
-            ->add('photo_name', TextType::class)
             ->add(
-                'isVerified',
-                ChoiceType::class,
+                'classrooms',
+                EntityType::class,
                 [
-                    'choices' => [
-                        'yes' => true,
-                        'no' => false,
-                    ],
+                    'class' => Classroom::class,
+                    'choice_label' => 'id',
+                    'multiple' => true,
+                    'expanded' => true,
                 ]
             )
-            ->add('subject', TextType::class)
+            ->add('photoName',FileType::class, [
+                'required' => false
+            ])
+            ->add('subject',TextType::class)
             ->add(
                 'agreeTerms',
                 CheckboxType::class,
@@ -75,6 +80,9 @@ class UserTeacherRegistrationType extends AbstractType
                                 'pattern' => "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,10}$/i",
                             ]
                         ),
+                    ],
+                    'attr' => [
+                        'id' => 'pass',
                     ],
                 ]
             );

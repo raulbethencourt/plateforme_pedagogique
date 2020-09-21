@@ -6,6 +6,7 @@ use App\Entity\Student;
 use App\Entity\Teacher;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Form\TeacherRegistrationType;
 use App\Security\EmailVerifier;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -17,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use function Symfony\Component\String\u;
 
 class RegistrationController extends AbstractController
 {
@@ -29,15 +31,18 @@ class RegistrationController extends AbstractController
 
     /**
      * @Route("/register", name="app_register")
-     * @param  Request  $request
-     * @param  UserPasswordEncoderInterface  $passwordEncoder
-     * @param  GuardAuthenticatorHandler  $guardHandler
-     * @param  LoginFormAuthenticator  $authenticator
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param GuardAuthenticatorHandler $guardHandler
+     * @param LoginFormAuthenticator $authenticator
      * @return Response
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder,
-        GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
-    {
+    public function register(
+        Request $request,
+        UserPasswordEncoderInterface $passwordEncoder,
+        GuardAuthenticatorHandler $guardHandler,
+        LoginFormAuthenticator $authenticator
+    ): Response {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
@@ -56,13 +61,16 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            $this->emailVerifier->sendEmailConfirmation(
+                'app_verify_email',
+                $user,
                 (new TemplatedEmail())
                     ->from(new Address('raoulbetilla@gmail.com', 'Plataform Mail Bot'))
                     ->to($user->getEmail())
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
+
             // do anything else you need here, like send an email
 
             return $guardHandler->authenticateUserAndHandleSuccess(
@@ -73,113 +81,108 @@ class RegistrationController extends AbstractController
             );
         }
 
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
+        return $this->render(
+            'registration/register.html.twig',
+            [
+                'registrationForm' => $form->createView(),
+            ]
+        );
     }
 
     /**
-     * @Route("/teacher_register", name="teacher_register")
-     * @param  Request  $request
-     * @param  UserPasswordEncoderInterface  $passwordEncoder
-     * @param  GuardAuthenticatorHandler  $guardHandler
-     * @param  LoginFormAuthenticator  $authenticator
+     * @Route("/usager_register", name="usager_register")
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param GuardAuthenticatorHandler $guardHandler
+     * @param LoginFormAuthenticator $authenticator
      * @return Response
      */
-    public function teacherRegister(Request $request, UserPasswordEncoderInterface $passwordEncoder,
-        GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
-    {
-        $student = new Student();
-        $form = $this->createForm(RegistrationFormType::class, $student);
+    public function usagerRegister(
+        Request $request,
+        UserPasswordEncoderInterface $passwordEncoder,
+        GuardAuthenticatorHandler $guardHandler,
+        LoginFormAuthenticator $authenticator
+    ): Response {
+        $type = $request->query->get("type");
+
+        switch ($type) {
+            case 'teacher':
+                $usager = new Teacher();
+                $form = $this->createForm(TeacherRegistrationType::class, $usager);
+                break;
+            default:
+                $usager = new Student();
+                $form = $this->createForm(StudentRegistrationType::class, $usager);
+        }
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
-            $student->setPassword(
+            $usager->setPassword(
                 $passwordEncoder->encodePassword(
-                    $student,
+                    $usager,
                     $form->get('plainPassword')->getData()
                 )
             );
 
-            $student->setEntryDate(new \DateTime());
+            $classrooms = $form->getNormData();
+            $classrooms = $classrooms->getClassrooms();
+
+            foreach ($classrooms as $classroom) {
+                switch ($type) {
+                    case 'teacher':
+                        $usager->addClassroom($classroom);
+                        break;
+                    default:
+                        $usager->addClassroom($classroom);
+                }
+
+            }
+
+            $usager->setEntryDate(new \DateTime());
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($student);
+            $entityManager->persist($usager);
             $entityManager->flush();
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $student,
+            $this->emailVerifier->sendEmailConfirmation(
+                'app_verify_email',
+                $usager,
                 (new TemplatedEmail())
                     ->from(new Address('raoulbetilla@gmail.com', 'Plataform Mail Bot'))
-                    ->to($student->getEmail())
+                    ->to($usager->getEmail())
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
+
             // do anything else you need here, like send an email
 
             return $guardHandler->authenticateUserAndHandleSuccess(
-                $student,
+                $usager,
                 $request,
                 $authenticator,
                 'main' // firewall name in security.yaml
             );
         }
 
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/student_register", name="student_register")
-     * @param  Request  $request
-     * @param  UserPasswordEncoderInterface  $passwordEncoder
-     * @param  GuardAuthenticatorHandler  $guardHandler
-     * @param  LoginFormAuthenticator  $authenticator
-     * @return Response
-     */
-    public function studentRegister(Request $request, UserPasswordEncoderInterface $passwordEncoder,
-        GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
-    {
-        $teacher = new Teacher();
-        $form = $this->createForm(RegistrationFormType::class, $teacher);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $teacher->setPassword(
-                $passwordEncoder->encodePassword(
-                    $teacher,
-                    $form->get('plainPassword')->getData()
-                )
-            );
-
-            $teacher->setEntryDate(new \DateTime());
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($teacher);
-            $entityManager->flush();
-
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $teacher,
-                (new TemplatedEmail())
-                    ->from(new Address('raoulbetilla@gmail.com', 'Plataform Mail Bot'))
-                    ->to($teacher->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
-            // do anything else you need here, like send an email
-
-            return $guardHandler->authenticateUserAndHandleSuccess(
-                $teacher,
-                $request,
-                $authenticator,
-                'main' // firewall name in security.yaml
-            );
+        switch ($type) {
+            case 'teacher':
+                return $this->render(
+                    'registration/teacher_register.html.twig',
+                    [
+                        'form' => $form->createView(),
+                    ]
+                );
+                break;
+            default:
+                return $this->render(
+                    'registration/student_register.html.twig',
+                    [
+                        'form' => $form->createView(),
+                    ]
+                );
         }
-
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
     }
 
     /**

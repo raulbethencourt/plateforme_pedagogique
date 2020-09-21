@@ -42,6 +42,10 @@ class Teacher extends User
         return $this->classrooms;
     }
 
+    /**
+     * @param Classroom $classroom
+     * @return $this
+     */
     public function addClassroom(Classroom $classroom): self
     {
         if (!$this->classrooms->contains($classroom)) {
@@ -52,6 +56,10 @@ class Teacher extends User
         return $this;
     }
 
+    /**
+     * @param Classroom $classroom
+     * @return $this
+     */
     public function removeClassroom(Classroom $classroom): self
     {
         if ($this->classrooms->contains($classroom)) {
@@ -101,17 +109,6 @@ class Teacher extends User
                 $questionnaire->setTeacher(null);
             }
         }
-
-        return $this;
-    }
-
-    /**
-     * @param Classroom $classrooms
-     * @return Teacher
-     */
-    public function setClassrooms(Classroom $classrooms): Teacher
-    {
-        $this->classrooms = $classrooms;
 
         return $this;
     }

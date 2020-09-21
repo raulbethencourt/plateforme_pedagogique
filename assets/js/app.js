@@ -12,6 +12,7 @@ import '../css/app.scss';
 import $ from "jquery";
 
 import './question_create';
+import './password_confirm';
 
 // Invite form for User
 $('#inviterBtn').click(function (e) {

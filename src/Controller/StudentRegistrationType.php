@@ -1,11 +1,16 @@
 <?php
 
-namespace App\Form;
 
-use App\Entity\User;
+namespace App\Controller;
+
+
+use App\Entity\Classroom;
+use App\Entity\Student;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,7 +20,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 
-class RegistrationFormType extends AbstractType
+class StudentRegistrationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -24,6 +29,20 @@ class RegistrationFormType extends AbstractType
             ->add('surname', TextType::class)
             ->add('name', TextType::class)
             ->add('email', EmailType::class)
+            ->add(
+                'classrooms',
+                EntityType::class,
+                [
+                    'class' => Classroom::class,
+                    'choice_label' => 'id',
+                    'multiple' => true,
+                    'expanded' => true,
+                ]
+            )
+            ->add('photoName',FileType::class, [
+                'required' => false
+            ])
+            ->add('hobby',TextType::class)
             ->add(
                 'agreeTerms',
                 CheckboxType::class,
@@ -73,7 +92,7 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => User::class,
+                'data_class' => Student::class,
             ]
         );
     }

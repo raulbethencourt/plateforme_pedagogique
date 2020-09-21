@@ -52,7 +52,9 @@ function addPropositionForm($collectionHolder, $newLinkLi) {
     var $newFormLi = $('<li></li>').append(newForm);
 
     // also add a remove button
-    $newFormLi.append('<a href="#" class="btn btn-danger remove-tag ">remove</a>');
+    $newFormLi.append('<button type="button" class="close remove-tag" aria-label="Close">' +
+        '<span aria-hidden="true" class="text-danger">&times;</span>' +
+        '</button>');
 
     $newLinkLi.before($newFormLi);
 
