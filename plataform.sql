@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql
--- Generation Time: Sep 21, 2020 at 08:54 PM
+-- Generation Time: Sep 22, 2020 at 12:12 PM
 -- Server version: 10.4.14-MariaDB-1:10.4.14+maria~focal
--- PHP Version: 7.4.9
+-- PHP Version: 7.4.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -39,8 +39,7 @@ CREATE TABLE `classroom` (
 --
 
 INSERT INTO `classroom` (`id`, `name`, `access_code`) VALUES
-(19, 'primera clase 2.0', 'arte/escultura'),
-(20, 'dl7', 'programacion web');
+(21, 'clase de informatica', 'informatica');
 
 -- --------------------------------------------------------
 
@@ -63,6 +62,13 @@ CREATE TABLE `classroom_teacher` (
   `classroom_id` int(11) NOT NULL,
   `teacher_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `classroom_teacher`
+--
+
+INSERT INTO `classroom_teacher` (`classroom_id`, `teacher_id`) VALUES
+(21, 39);
 
 -- --------------------------------------------------------
 
@@ -92,8 +98,7 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 ('DoctrineMigrations\\Version20200916090810', '2020-09-16 09:08:42', 1484),
 ('DoctrineMigrations\\Version20200918211023', '2020-09-18 23:10:38', 84),
 ('DoctrineMigrations\\Version20200918212454', '2020-09-18 23:25:03', 19),
-('DoctrineMigrations\\Version20200921143804', '2020-09-21 14:38:32', 615),
-('DoctrineMigrations\\Version20200921202346', '2020-09-21 22:23:52', 140);
+('DoctrineMigrations\\Version20200921143804', '2020-09-21 14:38:32', 615);
 
 -- --------------------------------------------------------
 
@@ -122,33 +127,6 @@ CREATE TABLE `proposition` (
   `correct` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `proposition`
---
-
-INSERT INTO `proposition` (`id`, `question_id`, `text`, `correct`) VALUES
-(31, 17, 'test 2', 0),
-(32, 18, 'test 2', 0),
-(34, 20, 'propsiton 2', 0),
-(35, 20, 'propsition 3 la buena', 1),
-(36, 21, 'respuesta 1', 0),
-(37, 21, 'respuesta 2 buena', 1),
-(38, 22, 'respuesta buena', 1),
-(39, 22, 'mala respuesta', 0),
-(40, 23, 'respuesta 1', 1),
-(41, 23, 'reponse 3', 0),
-(42, 25, 'respuesta 1', 1),
-(43, 26, 'respu', 0),
-(44, 27, 'respuesta 1', 1),
-(45, 28, 'respuesta 1', 0),
-(46, 28, 'respuesta 2 buena editada', 1),
-(47, 28, 'repuesta 3', 0),
-(52, 31, 'respuesta 1', 1),
-(53, 31, 'respuesta sin sentido', 0),
-(54, 32, 'respuesta 1', 0),
-(55, 32, 'respuesta 2 buena', 1),
-(56, 32, 'respuesta', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -162,26 +140,6 @@ CREATE TABLE `question` (
   `score` decimal(5,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `question`
---
-
-INSERT INTO `question` (`id`, `questionnaire_id`, `wording`, `score`) VALUES
-(17, 23, 'pregunta 2 de test', '6.00'),
-(18, 23, 'pregunta 2 de test', '6.00'),
-(19, 23, 'test question 2', '7.00'),
-(20, 23, 'pregunta ultima que quiero ver que he anadido', '10.00'),
-(21, 24, 'pregunta1', '7.00'),
-(22, 24, 'pregunta 2', '8.00'),
-(23, 24, 'pregunta de prueba nueva de prueba', '6.00'),
-(24, 24, 'pregunta 4', '6.00'),
-(25, 26, 'pregunta1', '5.00'),
-(26, 27, 'pregunta1', '5.00'),
-(27, 27, 'pregunta1', '5.00'),
-(28, 27, 'pregunta 2', '9.00'),
-(31, 29, 'question 1', '6.00'),
-(32, 29, 'test question 2', '9.00');
-
 -- --------------------------------------------------------
 
 --
@@ -194,18 +152,6 @@ CREATE TABLE `questionnaire` (
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `difficulty` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `questionnaire`
---
-
-INSERT INTO `questionnaire` (`id`, `teacher_id`, `title`, `difficulty`) VALUES
-(23, 16, 'test questionnaire que te cagas de duro', 'moyen'),
-(24, 16, 'nueva prueba', 'facile'),
-(25, 16, 'test questionnaire de la hostia 2.0', 'difficile'),
-(26, 16, 'test questionnaire que te cagas de duro 2.0', 'difficile'),
-(27, 16, 'test questionnaire que te cagas de duro 2.0.1', 'facile'),
-(29, 16, 'test questionnaire edité', 'difficile');
 
 -- --------------------------------------------------------
 
@@ -235,8 +181,7 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `username`, `roles`, `password`, `surname`, `name`, `email`, `photo_name`, `is_verified`, `entry_date`, `type`, `subject`, `hobby`) VALUES
 (14, 'admin', '[\"ROLE_ADMIN\"]', '$argon2id$v=19$m=65536,t=4,p=1$0jsuEN8/xlghcdD9tbFG9Q$xsBFVqKhI/giBH3rqsMJYqkrYyfyD5vWItbUVXReNYU', NULL, NULL, 'admin@test.mail', NULL, 0, '2020-09-16', 'user', NULL, NULL),
-(16, 'teacher', '[]', '$argon2id$v=19$m=65536,t=4,p=1$L+ewk49T0+6KfkVeL4fQRw$tHKuI4m9U/tcAJzeBS3QGSoVFTmKFj1Eb2bACey7hIM', NULL, NULL, 'teacher@test.mail', NULL, 0, '2020-09-16', 'teacher', NULL, NULL),
-(38, 'raulbethencourt', '[]', '$argon2id$v=19$m=65536,t=4,p=1$pW2ywkN02OVlhzFvtFkcVg$IXnz8mopPchIUGGWr8gGOTru+YDGukQngkpRGTsadAM', 'bethencourt', 'Raul', 'raul@test.mail', NULL, 0, '2020-09-21', 'teacher', 'tenis', NULL);
+(39, 'raulbethencourt', '[]', '$argon2id$v=19$m=65536,t=4,p=1$ZFRr/bPcpJjlY5SzzrzMxQ$GnK/UYBi5Nd7GEXXDUWmkdNPVvFo4ocO6l137Rh5nuI', 'bethencourt', 'Raul', 'raul@test.mail', NULL, 0, '2020-09-22', 'teacher', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -314,7 +259,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `classroom`
 --
 ALTER TABLE `classroom`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `pass`
@@ -344,7 +289,7 @@ ALTER TABLE `questionnaire`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- Constraints for dumped tables
@@ -354,15 +299,15 @@ ALTER TABLE `user`
 -- Constraints for table `classroom_student`
 --
 ALTER TABLE `classroom_student`
-  ADD CONSTRAINT `FK_3DD26E1B6278D5A8` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`),
-  ADD CONSTRAINT `FK_3DD26E1BCB944F1A` FOREIGN KEY (`student_id`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `FK_3DD26E1B6278D5A8` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_3DD26E1BCB944F1A` FOREIGN KEY (`student_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `classroom_teacher`
 --
 ALTER TABLE `classroom_teacher`
-  ADD CONSTRAINT `FK_3A0767FD41807E1D` FOREIGN KEY (`teacher_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `FK_3A0767FD6278D5A8` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`);
+  ADD CONSTRAINT `FK_3A0767FD41807E1D` FOREIGN KEY (`teacher_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_3A0767FD6278D5A8` FOREIGN KEY (`classroom_id`) REFERENCES `classroom` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `pass`
