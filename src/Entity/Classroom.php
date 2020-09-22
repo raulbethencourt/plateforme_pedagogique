@@ -31,17 +31,11 @@ class Classroom
 
     /**
      * @ORM\ManyToMany(targetEntity=Teacher::class, inversedBy="classrooms")
-     * @ORM\JoinTable(name="classroom_teacher",
-     *     joinColumns={@ORM\JoinColumn(name="classroom_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="teacher_id", referencedColumnName="id")})
      */
     private $teachers;
 
     /**
      * @ORM\ManyToMany(targetEntity=Student::class, inversedBy="classrooms")
-     * @ORM\JoinTable(name="classroom_student",
-     *     joinColumns={@ORM\JoinColumn(name="classroom_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="student_id", referencedColumnName="id")})
      */
     private $students;
 

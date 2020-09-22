@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Classroom;
 use App\Entity\Student;
 use App\Entity\Teacher;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Form\TeacherRegistrationType;
+use App\Repository\StudentRegistrationType;
 use App\Security\EmailVerifier;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -18,7 +20,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
-use function Symfony\Component\String\u;
 
 class RegistrationController extends AbstractController
 {
@@ -31,10 +32,10 @@ class RegistrationController extends AbstractController
 
     /**
      * @Route("/register", name="app_register")
-     * @param  Request  $request
-     * @param  UserPasswordEncoderInterface  $passwordEncoder
-     * @param  GuardAuthenticatorHandler  $guardHandler
-     * @param  LoginFormAuthenticator  $authenticator
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param GuardAuthenticatorHandler $guardHandler
+     * @param LoginFormAuthenticator $authenticator
      * @return Response
      */
     public function register(
@@ -43,7 +44,20 @@ class RegistrationController extends AbstractController
         GuardAuthenticatorHandler $guardHandler,
         LoginFormAuthenticator $authenticator
     ): Response {
-        $user = new User();
+        $type = $request->query->get("type");
+        $classroom = $request->query->get("classroom");
+        $classroom = $this->getDoctrine()->getRepository(Classroom::class)->findOneById($classroom);
+
+        switch ($type) {
+            case 'teacher':
+                $user = new Teacher();
+                break;
+            case 'student':
+                $user = new Student();
+                break;
+            default:
+                $user = new User();
+        }
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
@@ -56,6 +70,11 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            if ($type === 'teacher' || $type === 'student') {
+                $user->addClassrooms($classroom);
+            }
+
+            $user->setEntryDate(new \DateTime());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -71,8 +90,6 @@ class RegistrationController extends AbstractController
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
 
-            // do anything else you need here, like send an email
-
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
                 $request,
@@ -85,101 +102,6 @@ class RegistrationController extends AbstractController
             'registration/register.html.twig',
             [
                 'registrationForm' => $form->createView(),
-            ]
-        );
-    }
-
-    /**
-     * @Route("/usager_register", name="usager_register")
-     * @param  Request  $request
-     * @param  UserPasswordEncoderInterface  $passwordEncoder
-     * @param  GuardAuthenticatorHandler  $guardHandler
-     * @param  LoginFormAuthenticator  $authenticator
-     * @return Response
-     */
-    public function usagerRegister(
-        Request $request,
-        UserPasswordEncoderInterface $passwordEncoder,
-        GuardAuthenticatorHandler $guardHandler,
-        LoginFormAuthenticator $authenticator
-    ): Response {
-        $type = $request->query->get("type");
-
-        switch ($type) {
-            case 'teacher':
-                $usager = new Teacher();
-                $form = $this->createForm(TeacherRegistrationType::class, $usager);
-                break;
-            default:
-                $usager = new Student();
-                $form = $this->createForm(StudentRegistrationType::class, $usager);
-        }
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $usager->setPassword(
-                $passwordEncoder->encodePassword(
-                    $usager,
-                    $form->get('plainPassword')->getData()
-                )
-            );
-
-            $classrooms = $form->getNormData();
-            $classrooms = $classrooms->getClassrooms();
-
-            foreach ($classrooms as $classroom) {
-                switch ($type) {
-                    case 'teacher':
-//                        dd($classroom);
-                        $usager->addClassroom($classroom);
-                        break;
-                    default:
-                        $usager->addClassroom($classroom);
-                }
-
-            }
-
-            $usager->setEntryDate(new \DateTime());
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($usager);
-            $entityManager->flush();
-
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation(
-                'app_verify_email',
-                $usager,
-                (new TemplatedEmail())
-                    ->from(new Address('raoulbetilla@gmail.com', 'Plataform Mail Bot'))
-                    ->to($usager->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
-
-            // do anything else you need here, like send an email
-
-            return $guardHandler->authenticateUserAndHandleSuccess(
-                $usager,
-                $request,
-                $authenticator,
-                'main' // firewall name in security.yaml
-            );
-        }
-
-        if ($type === 'teacher') {
-            return $this->render(
-                'registration/teacher_register.html.twig',
-                [
-                    'form' => $form->createView(),
-                ]
-            );
-        }
-
-        return $this->render(
-            'registration/student_register.html.twig',
-            [
-                'form' => $form->createView(),
             ]
         );
     }
