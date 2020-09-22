@@ -2,11 +2,15 @@
 
 {% block title %}Create Question{% endblock %}
 
-{% block body %}
-    <div class="container mt-4">
-        <h1>Créer Question</h1>
-        {{ include('question/_form.html.twig') }}
+{% block home %}
+    <a class="dropdown-item" href="{{ path('teacher_index') }}">Home <span class="sr-only">(current)</span></a>
+{% endblock %}
 
+{% block body %}
+    <h1>Créer Question</h1>
+    {{ include('question/_form.html.twig') }}
+
+    <div class="text-right">
         <a class="btn btn-primary" href="{{ path('teacher_index') }}"
            role="button">{{ button|default('Fini questionnaire') }}</a>
     </div>

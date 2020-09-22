@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Questionnaire;
+use App\Entity\Teacher;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -20,22 +21,20 @@ class QuestionnaireRepository extends ServiceEntityRepository
         parent::__construct($registry, Questionnaire::class);
     }
 
-    // /**
-    //  * @return questionnaire[] Returns an array of questionnaire objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param  Teacher  $value
+     * @return questionnaire[] Returns an array of questionnaire objects
+     */
+    public function findByTeacher(Teacher $value): array
     {
         return $this->createQueryBuilder('q')
-            ->andWhere('q.exampleField = :val')
+            ->andWhere('q.teacher = :val')
             ->setParameter('val', $value)
             ->orderBy('q.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
 
     public function findOneById($id): ?questionnaire
     {

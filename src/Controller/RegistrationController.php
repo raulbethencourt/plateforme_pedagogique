@@ -2,8 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Classroom;
+use App\Entity\Student;
+use App\Entity\Teacher;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Form\TeacherRegistrationType;
+use App\Repository\StudentRegistrationType;
 use App\Security\EmailVerifier;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -27,11 +32,32 @@ class RegistrationController extends AbstractController
 
     /**
      * @Route("/register", name="app_register")
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param GuardAuthenticatorHandler $guardHandler
+     * @param LoginFormAuthenticator $authenticator
+     * @return Response
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder,
-        GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
-    {
-        $user = new User();
+    public function register(
+        Request $request,
+        UserPasswordEncoderInterface $passwordEncoder,
+        GuardAuthenticatorHandler $guardHandler,
+        LoginFormAuthenticator $authenticator
+    ): Response {
+        $type = $request->query->get("type");
+        $classroom = $request->query->get("classroom");
+        $classroom = $this->getDoctrine()->getRepository(Classroom::class)->findOneById($classroom);
+
+        switch ($type) {
+            case 'teacher':
+                $user = new Teacher();
+                break;
+            case 'student':
+                $user = new Student();
+                break;
+            default:
+                $user = new User();
+        }
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
@@ -44,19 +70,25 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            if ($type === 'teacher' || $type === 'student') {
+                $user->addClassrooms($classroom);
+            }
+
+            $user->setEntryDate(new \DateTime());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            $this->emailVerifier->sendEmailConfirmation(
+                'app_verify_email',
+                $user,
                 (new TemplatedEmail())
                     ->from(new Address('raoulbetilla@gmail.com', 'Plataform Mail Bot'))
                     ->to($user->getEmail())
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
-            // do anything else you need here, like send an email
 
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
@@ -66,9 +98,12 @@ class RegistrationController extends AbstractController
             );
         }
 
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
+        return $this->render(
+            'registration/register.html.twig',
+            [
+                'registrationForm' => $form->createView(),
+            ]
+        );
     }
 
     /**
@@ -87,9 +122,15 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_register');
         }
 
-        // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('success', 'Vous été bien connecté');
-
-        return $this->redirectToRoute('teacher_index');
+        switch (get_class($this->getUser())) {
+            case Teacher::class:
+                return $this->redirectToRoute('teacher_index');
+                break;
+            case Student::class:
+                return $this->redirectToRoute('student_index');
+                break;
+            default:
+                return $this->redirectToRoute('user_index');
+        }
     }
 }

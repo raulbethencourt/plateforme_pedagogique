@@ -37,10 +37,10 @@ $blue: #3a6894 !default;
 $indigo:  #6610f2 !default;
 $purple:  #6f42c1 !default;
 $pink:    #e83e8c !default;
-$red:     #dc3545 !default;
+$red: #992531 !default;
 $orange:  #fd7e14 !default;
 $yellow:  #ffc107 !default;
-$green:   #28a745 !default;
+$green: #57720e !default;
 $teal:    #20c997 !default;
 $cyan:    #17a2b8 !default;
 
@@ -165,7 +165,7 @@ $sizes: map-merge(
 //
 // Settings for the `<body>` element.
 
-$body-bg:                   $white !default;
+$body-bg:                   $gray-100 !default;
 $body-color:                $gray-900 !default;
 
 

@@ -3,9 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Classroom;
-use App\Entity\Teacher;
+use App\Entity\Invite;
 use App\Form\ClassroomType;
-use App\Form\UserTeacherRegistrationType;
+use App\Form\InviteType;
+use App\invitation\Invitation;
 use App\Repository\ClassroomRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,23 +35,32 @@ class UserController extends AbstractController
 
     /**
      * @Route ("/", name="user_index")
-     * @param ClassroomRepository $repository
+     * @param  ClassroomRepository  $repository
      * @return ResponseAlias
      */
     public function index(ClassroomRepository $repository): Response
     {
         $classrooms = $repository->findAll();
-        $user = $this->getUser()->getUsername();
+        $user = $this->getUser();
+        $role_admin = $user->getRoles();
 
-        return $this->render('user/index.html.twig', [
-            'classrooms' => $classrooms,
-            'user' => $user
-        ]);
+        if ($role_admin[0] !== "ROLE_ADMIN")
+        {
+            return $this->redirectToRoute('app_logout');
+        }
+
+        return $this->render(
+            'user/index.html.twig',
+            [
+                'classrooms' => $classrooms,
+                'user' => $user,
+            ]
+        );
     }
 
     /**
      * @Route ("/classroom/create", name="user_classroom_create")
-     * @param Request $request
+     * @param  Request  $request
      * @return RedirectResponse|ResponseAlias
      */
     public function createClassroom(Request $request)
@@ -65,18 +75,23 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('user_index');
         }
-        return $this->render('user/classroom/create.html.twig', [
-            'classrooms' => $classroom,
-            'form' => $form->createView()
-        ]);
+
+        return $this->render(
+            'user/classroom/create.html.twig',
+            [
+                'classrooms' => $classroom,
+                'form' => $form->createView(),
+            ]
+        );
     }
 
     /**
      * @Route ("/classroom/{id}", name="user_classroom_edit", methods={"GET","POST"})
-     * @param Request $request
+     * @param  Classroom  $classroom
+     * @param  Request  $request
      * @return RedirectResponse|ResponseAlias
      */
-    public function editClassroom(Classroom $classroom,Request $request)
+    public function editClassroom(Classroom $classroom, Request $request)
     {
         $form = $this->createForm(ClassroomType::class, $classroom);
         $form->handleRequest($request);
@@ -87,39 +102,33 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('user_index');
         }
-        return $this->render('user/classroom/edit.html.twig', [
-            'classroom' => $classroom,
-            'form' => $form->createView()
-        ]);
+
+        return $this->render(
+            'user/classroom/edit.html.twig',
+            [
+                'classroom' => $classroom,
+                'form' => $form->createView(),
+            ]
+        );
     }
 
     /**
      * @Route ("/classroom/{id}", name="user_classroom_delete", methods={"DELETE"})
-     * @param Classroom $classroom
-     * @param Request $request
+     * @param  Classroom  $classroom
+     * @param  Request  $request
      * @return RedirectResponse
      */
-    public function delete(Classroom $classroom, Request $request)
+    public function delete(Classroom $classroom, Request $request): RedirectResponse
     {
-        if ($this->isCsrfTokenValid('delete' . $classroom->getId(),
-            $request->get('_token'))) {
+        if ($this->isCsrfTokenValid(
+            'delete'.$classroom->getId(),
+            $request->get('_token')
+        )) {
             $this->em->remove($classroom);
             $this->em->flush();
             $this->addFlash('success', 'Bien supprimé avec succès');
         }
+
         return $this->redirectToRoute('user_index');
-    }
-
-    public function createTeacher(Request $request)
-    {
-        $teacher = new Teacher();
-        $form = $this->createForm(UserTeacherRegistrationType::class, $teacher);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $this->addFlash('success', '');
-
-            return $this->redirectToRoute('', []);
-        }
     }
 }

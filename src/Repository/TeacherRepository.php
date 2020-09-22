@@ -19,14 +19,13 @@ class TeacherRepository extends ServiceEntityRepository
         parent::__construct($registry, Teacher::class);
     }
 
-    // /**
-    //  * @return teacher[] Returns an array of teacher objects
-    //  */
-    /*
-    public function findByExampleField($value)
+     /**
+      * @return teacher[] Returns an array of teacher objects
+      */
+    public function findByClassroom($value): array
     {
         return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
+            ->andWhere('f.classrooms = :val')
             ->setParameter('val', $value)
             ->orderBy('f.id', 'ASC')
             ->setMaxResults(10)
@@ -34,7 +33,6 @@ class TeacherRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    */
 
     public function findOneBySomeField($username): ?teacher
     {

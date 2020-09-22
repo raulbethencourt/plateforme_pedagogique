@@ -4,7 +4,7 @@ import $ from "jquery";
 var $collectionHolder;
 
 // setup an "add a proposition" link
-var $addPropositionButton = $('<button type="button" class="btn btn-primary add_tag_link">Ajouter un proposition</button>');
+var $addPropositionButton = $('<button type="button" class="btn btn-secondary add_tag_link">Ajouter un proposition</button>');
 var $newLinkLi = $('<li></li>').append($addPropositionButton);
 
 $(document).ready(function() {
@@ -52,7 +52,9 @@ function addPropositionForm($collectionHolder, $newLinkLi) {
     var $newFormLi = $('<li></li>').append(newForm);
 
     // also add a remove button
-    $newFormLi.append('<a href="#" class="btn btn-danger remove-tag ">remove</a>');
+    $newFormLi.append('<button type="button" class="close remove-tag" aria-label="Close">' +
+        '<span aria-hidden="true" class="text-danger">&times;</span>' +
+        '</button>');
 
     $newLinkLi.before($newFormLi);
 

@@ -35,11 +35,6 @@ class QuestionnaireController extends AbstractController
      */
     public function play(): Response
     {
-        return $this->render(
-            'questionnaire/play.html.twig',
-            [
-                'controller_name' => 'QuestionnaireController',
-            ]
-        );
+
     }
 }

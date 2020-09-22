@@ -12,4 +12,11 @@ import '../css/app.scss';
 import $ from "jquery";
 
 import './question_create';
-console.log('victoria');
+import './password_confirm';
+
+// Invite form for User
+$('#inviterBtn').click(function (e) {
+    e.preventDefault();
+    $('#inviteForm').fadeIn();
+    $('#inviterBtn').hide();
+});

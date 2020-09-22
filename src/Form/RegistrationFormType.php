@@ -14,7 +14,6 @@ use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
-use function Sodium\add;
 
 class RegistrationFormType extends AbstractType
 {
@@ -62,6 +61,9 @@ class RegistrationFormType extends AbstractType
                                 'pattern' => "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,10}$/i",
                             ]
                         ),
+                    ],
+                    'attr' => [
+                        'id' => 'pass',
                     ],
                 ]
             );

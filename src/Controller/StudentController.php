@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Questionnaire;
 use App\Repository\QuestionnaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,8 +33,17 @@ class StudentController extends AbstractController
      */
     public function index()
     {
+        $student = $this->getUser();
         return $this->render('student/index.html.twig', [
-            'controller_name' => 'StudentController',
+            'student' => $student,
+            'questionnaires' => $this->getDoctrine()
+                ->getRepository(Questionnaire::class)
+                ->findAll(),
         ]);
+    }
+
+    public function play()
+    {
+        
     }
 }
