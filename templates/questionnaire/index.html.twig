@@ -2,6 +2,10 @@
 
 {% block title %}{{ questionnaire.title }}{% endblock %}
 
+{% block home %}
+    <a class="dropdown-item" href="{{ path('teacher_index') }}">Home <span class="sr-only">(current)</span></a>
+{% endblock %}
+
 {% block body %}
     <h1>{{ questionnaire.title }}</h1>
     <h3>Liste de Questions</h3>

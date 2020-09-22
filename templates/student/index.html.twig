@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello teacherController!{% endblock %}
+{% block title %}Student - {{ student.name }}{% endblock %}
+
+{% block home %}
+    <a class="dropdown-item" href="{{ path('student_index') }}">Home <span class="sr-only">(current)</span></a>
+{% endblock %}
 
 {% block body %}
     <h1>Bienvenido {{ student.name }}</h1>
@@ -10,7 +14,7 @@
         <tr>
             <th scope="col"></th>
             <th scope="col">Name</th>
-            <th scope="col">Access code</th>
+            <th scope="col">Difficutltée</th>
             <th scope="col"></th>
         </tr>
         </thead>
@@ -18,8 +22,7 @@
         {% for questionnaire in questionnaires %}
             <tr>
                 <th scope="row">{{ questionnaire.id }}</th>
-                <td><a href="{{ path('questionnaire_index', {id: questionnaire.id}) }}"
-                       role="button">{{ questionnaire.title }}</a></td>
+                <td>{{ questionnaire.title }}</td>
                 {% if questionnaire.difficulty == 'facile' %}
                     <td><span class="badge badge-success">{{ questionnaire.difficulty }}</span></td>
                 {% elseif questionnaire.difficulty == 'difficile' %}
@@ -29,7 +32,7 @@
                 {% endif %}
 
                 <td>
-                    <a href="{#{{ path('questionnaire_edit', {id: questionnaire.id}) }}#}" class="btn btn-primary"
+                    <a href="{# {{ path('questionnaire_edit', {id: questionnaire.id}) }} #}" class="btn btn-primary"
                        role="button">Play</a>
                 </td>
             </tr>

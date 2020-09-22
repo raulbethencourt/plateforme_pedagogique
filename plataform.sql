@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql
--- Generation Time: Sep 22, 2020 at 12:12 PM
+-- Generation Time: Sep 22, 2020 at 08:54 PM
 -- Server version: 10.4.14-MariaDB-1:10.4.14+maria~focal
--- PHP Version: 7.4.10
+-- PHP Version: 7.4.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -51,6 +51,13 @@ CREATE TABLE `classroom_student` (
   `classroom_id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `classroom_student`
+--
+
+INSERT INTO `classroom_student` (`classroom_id`, `student_id`) VALUES
+(21, 40);
 
 -- --------------------------------------------------------
 
@@ -127,6 +134,16 @@ CREATE TABLE `proposition` (
   `correct` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `proposition`
+--
+
+INSERT INTO `proposition` (`id`, `question_id`, `text`, `correct`) VALUES
+(59, 34, 'respuesta 1 buena', 1),
+(60, 34, 'respuesta 2 mala', 0),
+(61, 35, 'respuesta 1 mala', 0),
+(62, 35, 'respuesta 2 buena', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -140,6 +157,14 @@ CREATE TABLE `question` (
   `score` decimal(5,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `question`
+--
+
+INSERT INTO `question` (`id`, `questionnaire_id`, `wording`, `score`) VALUES
+(34, 31, 'pregunta 1 de test', '5.00'),
+(35, 31, 'pregunta 2 de test', '7.00');
+
 -- --------------------------------------------------------
 
 --
@@ -152,6 +177,13 @@ CREATE TABLE `questionnaire` (
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `difficulty` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `questionnaire`
+--
+
+INSERT INTO `questionnaire` (`id`, `teacher_id`, `title`, `difficulty`) VALUES
+(31, 39, 'cuestionario de pruba', 'difficile');
 
 -- --------------------------------------------------------
 
@@ -180,8 +212,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `roles`, `password`, `surname`, `name`, `email`, `photo_name`, `is_verified`, `entry_date`, `type`, `subject`, `hobby`) VALUES
-(14, 'admin', '[\"ROLE_ADMIN\"]', '$argon2id$v=19$m=65536,t=4,p=1$0jsuEN8/xlghcdD9tbFG9Q$xsBFVqKhI/giBH3rqsMJYqkrYyfyD5vWItbUVXReNYU', NULL, NULL, 'admin@test.mail', NULL, 0, '2020-09-16', 'user', NULL, NULL),
-(39, 'raulbethencourt', '[]', '$argon2id$v=19$m=65536,t=4,p=1$ZFRr/bPcpJjlY5SzzrzMxQ$GnK/UYBi5Nd7GEXXDUWmkdNPVvFo4ocO6l137Rh5nuI', 'bethencourt', 'Raul', 'raul@test.mail', NULL, 0, '2020-09-22', 'teacher', NULL, NULL);
+(14, 'admin', '[\"ROLE_ADMIN\"]', '$argon2id$v=19$m=65536,t=4,p=1$0jsuEN8/xlghcdD9tbFG9Q$xsBFVqKhI/giBH3rqsMJYqkrYyfyD5vWItbUVXReNYU', NULL, 'PLATAFORM', 'admin@test.mail', NULL, 0, '2020-09-16', 'user', NULL, NULL),
+(39, 'raulbethencourt', '[]', '$argon2id$v=19$m=65536,t=4,p=1$ZFRr/bPcpJjlY5SzzrzMxQ$GnK/UYBi5Nd7GEXXDUWmkdNPVvFo4ocO6l137Rh5nuI', 'bethencourt', 'Raul', 'raul@test.mail', NULL, 0, '2020-09-22', 'teacher', NULL, NULL),
+(40, 'valentin', '[]', '$argon2id$v=19$m=65536,t=4,p=1$9Ngs14uJ8Dtus9sIuwGoiQ$rUr38RqEVb9c3OTXfoFeu2rqXv9su7tScKay9Jj5qyU', 'juncos', 'Valentin', 'valentin@test.mail', NULL, 0, '2020-09-22', 'student', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -271,25 +304,25 @@ ALTER TABLE `pass`
 -- AUTO_INCREMENT for table `proposition`
 --
 ALTER TABLE `proposition`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT for table `question`
 --
 ALTER TABLE `question`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `questionnaire`
 --
 ALTER TABLE `questionnaire`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- Constraints for dumped tables
