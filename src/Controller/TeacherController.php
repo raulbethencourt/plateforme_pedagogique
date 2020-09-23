@@ -56,6 +56,7 @@ class TeacherController extends AbstractController
             $questionnaire = new Questionnaire();
         }
 
+        $questionnaire->setDateCreation(new \DateTime());
         $questionnaire->setTeacher($this->getUser());
         $form = $this->createForm(QuestionnaireType::class, $questionnaire);
 

@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=QuestionnaireRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\QuestionnaireRepository", repositoryClass=QuestionnaireRepository::class)
  */
 class Questionnaire
 {
@@ -44,6 +44,11 @@ class Questionnaire
      * @ORM\OneToMany(targetEntity=Pass::class, mappedBy="questionnaire", orphanRemoval=true)
      */
     private $pass;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $date_creation;
 
     public function __construct()
     {
@@ -157,5 +162,36 @@ class Questionnaire
         }
 
         return $this;
+    }
+
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->date_creation;
+    }
+
+    public function setDateCreation(\DateTimeInterface $date_creation): self
+    {
+        $this->date_creation = $date_creation;
+
+        return $this;
+    }
+
+    public function getTotalScore(): int
+    {
+        $total = 0;
+        foreach($this->questions as $question){
+            $total+= $question->getScore();
+        }
+        return $total;
+    }
+
+    public function isPlayable(): bool
+    {
+        if(count($this->questions) == 0) {
+            return false;
+        }
+        return $this->questions->forAll(function($key, $question) {
+            return count($question->getPropositions()) >= 2;
+        });
     }
 }

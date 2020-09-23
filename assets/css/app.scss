@@ -17,3 +17,16 @@
   right: 0;
   left: auto;
 }
+
+.proposition {
+  .wrong {
+    background-color: #ff6a50;
+    color: #FFFFFF;
+  }
+
+  .correct {
+    background-color: #4CAF50;
+    color: #FFFFFF;
+  }
+}
+

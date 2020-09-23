@@ -1,10 +1,58 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-
-{% endblock %}
-
 {% block title %}
-
+    {{ parent() }} - {{ questionnaire.title }}
 {% endblock %}
 
+{% block home %}
+    <a class="dropdown-item" href="{{ path('student_index') }}">Home <span class="sr-only">(current)</span></a>
+{% endblock %}
+
+{% block body %}
+    <header class="row">
+        <h3>
+            {{ questionnaire.title }}
+            <span class="badge badge-info badge-{{ questionnaire.difficulty }}">{{ questionnaire.difficulty }}</span>
+        </h3>
+    </header>
+
+    {% if finalResults['given'] is not null %}
+        <div class="alert alert-primary">Votre score : {{ score }}/{{ questionnaire.totalScore }}</div>
+    {% endif %}
+
+    <form method="post">
+        {% for question in questions %}
+            <article class="container">
+                <h5 class="pt-3 mb-0">{{ question.wording }}</h5>
+                <small class="text-muted">{{ question.score }} {{ question.score > 1 ? "points" : "point" }}</small>
+
+                <ul class="list-group">
+                    {% for prop in question.propositions %}
+
+                        {% set lgi_class, checked = "", "" %}
+                        {% if finalResults['given'] is not null and prop.id in finalResults['given'] %}
+                            {% set checked = "checked" %}
+                            {% if prop.id in finalResults['rights'] %}
+                                {% set lgi_class = "correct" %}
+                            {% else %}
+                                {% set lgi_class = "wrong" %}
+                            {% endif %}
+                        {% endif %}
+
+                        <li class="list-group-item proposition {{ lgi_class }}">
+                            <label>
+                                <input type="radio" name="{{ question.id }}" value="{{ prop.id }}" {{ checked }}>
+                                {{ prop.text }}
+                            </label>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </article>
+        {% endfor %}
+
+        <footer class="text-center mt-3">
+            <button class="btn btn-primary" type="submit"><i class="fas fa-check"></i>&nbsp;Je valide mes réponses</button>
+        </footer>
+
+    </form>
+{% endblock %}

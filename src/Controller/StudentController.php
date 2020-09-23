@@ -4,13 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Questionnaire;
 use App\Repository\QuestionnaireRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/student")
- */
 class StudentController extends AbstractController
 {
     /**
@@ -29,7 +29,7 @@ class StudentController extends AbstractController
     }
 
     /**
-     * @Route("/", name="student_index")
+     * @Route("/student", name="student_index")
      */
     public function index()
     {
@@ -42,8 +42,5 @@ class StudentController extends AbstractController
         ]);
     }
 
-    public function play()
-    {
-        
-    }
+
 }

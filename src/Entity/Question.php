@@ -116,4 +116,11 @@ class Question
 
         return $this;
     }
+
+    public function getRightPropositions() :ArrayCollection
+    {
+        return $this->propositions->filter(function($prop){
+            return $prop->getCorrect() == true;
+        });
+    }
 }
