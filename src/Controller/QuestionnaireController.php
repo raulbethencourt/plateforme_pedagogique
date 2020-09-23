@@ -47,14 +47,14 @@ class QuestionnaireController extends AbstractController
 
         $answers = null;
         $rights = null;
-        $score = null;
+        $points = null;
 
         if ($request->isMethod("post")) {
             $answers = $request->request;//equivalent à $_POST
 
             $eval = $this->evaluateQuestionnaire($answers, $questionnaire);
             $rights = $eval['rights'];
-            $points = $eval['score'];
+            $points = $eval['points'];
 
             $em = $this->getDoctrine()->getManager();
             $pass = $em->getRepository(Pass::class)->findOneBy(
@@ -76,7 +76,7 @@ class QuestionnaireController extends AbstractController
             [
                 "questionnaire" => $questionnaire,
                 "questions" => $questionnaire->getQuestions(),
-                "score" => $score,
+                "points" => $points,
                 "finalResults" => [
                     "given" => $answers,
                     "rights" => $rights,
@@ -87,7 +87,7 @@ class QuestionnaireController extends AbstractController
 
     private function evaluateQuestionnaire($answers, $questionnaire): array
     {
-        $score = 0;
+        $points = 0;
         $goodPropositions = [];
 
         foreach ($questionnaire->getQuestions() as $question) {
@@ -95,12 +95,12 @@ class QuestionnaireController extends AbstractController
             foreach ($rightProps as $rightProp) {
                 if ($answers->get($question->getId()) == $rightProp->getId()) {
                     $goodPropositions[] = $rightProp->getId();
-                    $score += $question->getScore();
+                    $points += $question->getScore();
                 }
             }
         }
 
-        return ["rights" => $goodPropositions, "score" => $score];
+        return ["rights" => $goodPropositions, "points" => $points];
     }
 }
 

@@ -23,18 +23,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c7a212d-3c91-4ff0-904b-dbc37de82ac8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/ce104aaa-125a-441e-b754-74484fdac2c0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/ce104aaa-125a-441e-b754-74484fdac2c0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/commandlinetools/Symfony_23_09_2020_08_46.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/css/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/app.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/QuestionnaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/QuestionnaireController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/StudentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/TeacherController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TeacherController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Question.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Question.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Questionnaire.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Questionnaire.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/ClassroomRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/ClassroomRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/questionnaire/play.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/questionnaire/play.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/student/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/student/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -292,7 +285,7 @@
       <workItem from="1600781165032" duration="1422000" />
       <workItem from="1600782598076" duration="4867000" />
       <workItem from="1600802815197" duration="4570000" />
-      <workItem from="1600843584831" duration="7965000" />
+      <workItem from="1600843584831" duration="8897000" />
     </task>
     <servers />
   </component>

@@ -17,7 +17,7 @@
     </header>
 
     {% if finalResults['given'] is not null %}
-        <div class="alert alert-primary">Votre score : {{ score }}/{{ questionnaire.totalScore }}</div>
+        <div class="alert alert-primary">Votre score : {{ points }}/{{ questionnaire.totalScore }}</div>
     {% endif %}
 
     <form method="post">
