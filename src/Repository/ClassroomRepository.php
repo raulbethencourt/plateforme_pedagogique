@@ -46,7 +46,7 @@ class ClassroomRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.id = :val')
-            ->setParameter('val', $idb)
+            ->setParameter('val', $id)
             ->getQuery()
             ->getOneOrNullResult()
         ;

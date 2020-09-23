@@ -42,8 +42,10 @@ class ClassroomController extends AbstractController
             [
                 'form' => $form->createView(),
                 'classroom' => $classroom,
-                'students' => $this->getDoctrine()->getRepository(Student::class)->findAll(),
-                'teachers' => $this->getDoctrine()->getRepository(Teacher::class)->findAll(),
+                'students' => $this->getDoctrine()
+                    ->getRepository(Student::class)->findByClassroom($classroom),
+                'teachers' => $this->getDoctrine()
+                    ->getRepository(Teacher::class)->findByClassroom($classroom),
             ]
         );
     }

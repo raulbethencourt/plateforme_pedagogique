@@ -14,7 +14,7 @@ class ClassroomType extends AbstractType
     {
         $builder
             ->add('name', TextType::class)
-            ->add('access_code', TextType::class)
+            ->add('discipline', TextType::class)
             ;
     }
 

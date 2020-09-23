@@ -25,11 +25,6 @@ class Classroom
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $access_code;
-
-    /**
      * @ORM\ManyToMany(targetEntity=Teacher::class, inversedBy="classrooms")
      */
     private $teachers;
@@ -38,6 +33,11 @@ class Classroom
      * @ORM\ManyToMany(targetEntity=Student::class, inversedBy="classrooms")
      */
     private $students;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $discipline;
 
     public function __construct()
     {
@@ -62,17 +62,7 @@ class Classroom
         return $this;
     }
 
-    public function getAccessCode(): ?string
-    {
-        return $this->access_code;
-    }
-
-    public function setAccessCode(string $access_code): self
-    {
-        $this->access_code = $access_code;
-
-        return $this;
-    }
+    
 
     /**
      * @return Collection|Teacher[]
@@ -126,6 +116,18 @@ class Classroom
         if ($this->students->contains($student)) {
             $this->students->removeElement($student);
         }
+
+        return $this;
+    }
+
+    public function getDiscipline(): ?string
+    {
+        return $this->discipline;
+    }
+
+    public function setDiscipline(?string $discipline): self
+    {
+        $this->discipline = $discipline;
 
         return $this;
     }

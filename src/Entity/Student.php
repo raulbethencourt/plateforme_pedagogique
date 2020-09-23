@@ -106,4 +106,24 @@ class Student extends User
     {
         $this->hobby = $hobby;
     }
+
+    public function addClassroom(Classroom $classroom): self
+    {
+        if (!$this->classrooms->contains($classroom)) {
+            $this->classrooms[] = $classroom;
+            $classroom->addStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClassroom(Classroom $classroom): self
+    {
+        if ($this->classrooms->contains($classroom)) {
+            $this->classrooms->removeElement($classroom);
+            $classroom->removeStudent($this);
+        }
+
+        return $this;
+    }
 }

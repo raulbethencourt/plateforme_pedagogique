@@ -48,15 +48,19 @@ class RegistrationController extends AbstractController
         $classroom = $request->query->get("classroom");
         $classroom = $this->getDoctrine()->getRepository(Classroom::class)->findOneById($classroom);
 
+
         switch ($type) {
             case 'teacher':
                 $user = new Teacher();
+                $user->setRoles(['ROLE_TEACHER']);
                 break;
             case 'student':
                 $user = new Student();
+                $user->setRoles(['ROLE_STUDENT']);
                 break;
             default:
                 $user = new User();
+                $user->setRoles(['ROLE_ADMIN']);
         }
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
