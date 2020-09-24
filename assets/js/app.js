@@ -11,6 +11,10 @@ import '../css/app.scss';
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
 import $ from "jquery";
 
+// ChartJs
+import Chart from 'chart.js';
+
+import './chartJS';
 import './question_create';
 import './password_confirm';
 

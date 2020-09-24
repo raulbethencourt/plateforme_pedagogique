@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - {{ questionnaire.title }}
+    Student - {{ questionnaire.title }}
 {% endblock %}
 
 {% block home %}
@@ -9,10 +9,18 @@
 {% endblock %}
 
 {% block body %}
-    <header class="row">
+    <header>
         <h3>
             {{ questionnaire.title }}
-            <span class="badge badge-info badge-{{ questionnaire.difficulty }}">{{ questionnaire.difficulty }}</span>
+            <span class="badge
+            {% if questionnaire.difficulty == "difficile" %}
+                badge-danger
+            {% elseif questionnaire.difficulty ==  "facile" %}
+                badge-success
+            {% else %}
+                badge-info
+            {% endif %}
+            ">{{ questionnaire.difficulty }}</span>
         </h3>
     </header>
 
@@ -27,22 +35,22 @@
                 <small class="text-muted">{{ question.score }} {{ question.score > 1 ? "points" : "point" }}</small>
 
                 <ul class="list-group">
-                    {% for prop in question.propositions %}
+                    {% for proposition in question.propositions %}
 
                         {% set lgi_class, checked = "", "" %}
-                        {% if finalResults['given'] is not null and prop.id in finalResults['given'] %}
+                        {% if finalResults['given'] is not null and proposition.id in finalResults['given'] %}
                             {% set checked = "checked" %}
-                            {% if prop.id in finalResults['rights'] %}
+                            {% if proposition.id in finalResults['rights'] %}
                                 {% set lgi_class = "correct" %}
                             {% else %}
                                 {% set lgi_class = "wrong" %}
                             {% endif %}
                         {% endif %}
 
-                        <li class="list-group-item proposition {{ lgi_class }}">
+                        <li class="list-group-item {{ lgi_class }}">
                             <label>
-                                <input type="radio" name="{{ question.id }}" value="{{ prop.id }}" {{ checked }}>
-                                {{ prop.text }}
+                                <input type="radio" name="{{ question.id }}" value="{{ proposition.id }}" {{ checked }}>
+                                {{ proposition.text }}
                             </label>
                         </li>
                     {% endfor %}
@@ -51,7 +59,8 @@
         {% endfor %}
 
         <footer class="text-center mt-3">
-            <button class="btn btn-primary" type="submit"><i class="fas fa-check"></i>&nbsp;Je valide mes réponses</button>
+            <button class="btn btn-primary" type="submit"><i class="fas fa-check"></i>&nbsp;Je valide mes réponses
+            </button>
         </footer>
 
     </form>

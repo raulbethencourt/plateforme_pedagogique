@@ -20,22 +20,21 @@ class ClassroomRepository extends ServiceEntityRepository
         parent::__construct($registry, Classroom::class);
     }
 
-    // /**
-    //  * @return Classroom[] Returns an array of Classroom objects
-    //  */
-    /*
-    public function findByExampleField($value)
+     /**
+      * @return Classroom[] Returns an array of Classroom objects
+      */
+    public function findByStudent($student): array
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere(':val MEMBER OF c.students')
+            ->setParameter('val', $student)
             ->orderBy('c.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
 
     /**
      * @param $id

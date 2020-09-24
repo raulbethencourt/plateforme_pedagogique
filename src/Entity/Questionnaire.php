@@ -187,7 +187,7 @@ class Questionnaire
 
     public function isPlayable(): bool
     {
-        if(count($this->questions) == 0) {
+        if(count($this->questions) === 0) {
             return false;
         }
         return $this->questions->forAll(function($key, $question) {

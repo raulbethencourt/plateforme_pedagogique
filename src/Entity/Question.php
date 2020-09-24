@@ -119,8 +119,8 @@ class Question
 
     public function getRightPropositions() :ArrayCollection
     {
-        return $this->propositions->filter(function($prop){
-            return $prop->getCorrect() == true;
+        return $this->propositions->filter(function($proposition){
+            return $proposition->getCorrect() == true;
         });
     }
 }

@@ -126,11 +126,11 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_register');
         }
 
-        switch (get_class($this->getUser())) {
-            case Teacher::class:
+        switch ($this->getUser()->getRoles()) {
+            case "ROLE_TEACHER":
                 return $this->redirectToRoute('teacher_index');
                 break;
-            case Student::class:
+            case "ROLE_STUDENT":
                 return $this->redirectToRoute('student_index');
                 break;
             default:

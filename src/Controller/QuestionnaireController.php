@@ -42,7 +42,7 @@ class QuestionnaireController extends AbstractController
         if (!$questionnaire->isPlayable()) {
             $this->addFlash('error', 'Questionnaire indisponible !');
 
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('student_index');
         }
 
         $answers = null;
@@ -53,18 +53,20 @@ class QuestionnaireController extends AbstractController
             $answers = $request->request;//equivalent à $_POST
 
             $eval = $this->evaluateQuestionnaire($answers, $questionnaire);
-            $rights = $eval['rights'];
+            $rights = $eval['corrects'];
             $points = $eval['points'];
 
             $em = $this->getDoctrine()->getManager();
             $pass = $em->getRepository(Pass::class)->findOneBy(
                 ['student' => $this->getUser(), "questionnaire" => $questionnaire]
             );
+
             if (!$pass) {
                 $pass = new Pass();
                 $pass->setStudent($this->getUser());
                 $pass->setQuestionnaire($questionnaire);
             }
+
             $pass->setPoints($points);
             $pass->setDateRealisation(new\ DateTime());
             $em->persist($pass);
@@ -88,19 +90,21 @@ class QuestionnaireController extends AbstractController
     private function evaluateQuestionnaire($answers, $questionnaire): array
     {
         $points = 0;
-        $goodPropositions = [];
+        $correctPropositions = [];
 
         foreach ($questionnaire->getQuestions() as $question) {
-            $rightProps = $question->getRightPropositions();
-            foreach ($rightProps as $rightProp) {
-                if ($answers->get($question->getId()) == $rightProp->getId()) {
-                    $goodPropositions[] = $rightProp->getId();
+            $rightPropositions = $question->getRightPropositions();
+
+            foreach ($rightPropositions as $rightProposition) {
+                $rightProposition = $rightProposition->getId();
+                if ($answers->get($question->getId()) == $rightProposition) {
+                    $correctPropositions[] = $rightProposition;
                     $points += $question->getScore();
                 }
             }
         }
 
-        return ["rights" => $goodPropositions, "points" => $points];
+        return ["corrects" => $correctPropositions, "points" => $points];
     }
 }
 
