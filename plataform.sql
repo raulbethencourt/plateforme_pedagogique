@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql
--- Generation Time: Sep 22, 2020 at 08:54 PM
+-- Generation Time: Sep 24, 2020 at 02:56 PM
 -- Server version: 10.4.14-MariaDB-1:10.4.14+maria~focal
--- PHP Version: 7.4.9
+-- PHP Version: 7.4.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -31,15 +31,15 @@ SET time_zone = "+00:00";
 CREATE TABLE `classroom` (
   `id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `access_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `discipline` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `classroom`
 --
 
-INSERT INTO `classroom` (`id`, `name`, `access_code`) VALUES
-(21, 'clase de informatica', 'informatica');
+INSERT INTO `classroom` (`id`, `name`, `discipline`) VALUES
+(1, 'clase de programacion web', 'informatica');
 
 -- --------------------------------------------------------
 
@@ -57,7 +57,7 @@ CREATE TABLE `classroom_student` (
 --
 
 INSERT INTO `classroom_student` (`classroom_id`, `student_id`) VALUES
-(21, 40);
+(1, 5);
 
 -- --------------------------------------------------------
 
@@ -75,7 +75,7 @@ CREATE TABLE `classroom_teacher` (
 --
 
 INSERT INTO `classroom_teacher` (`classroom_id`, `teacher_id`) VALUES
-(21, 39);
+(1, 4);
 
 -- --------------------------------------------------------
 
@@ -94,18 +94,7 @@ CREATE TABLE `doctrine_migration_versions` (
 --
 
 INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_time`) VALUES
-('DoctrineMigrations\\Version20200913094533', '2020-09-13 11:46:23', 225),
-('DoctrineMigrations\\Version20200913095556', '2020-09-13 11:56:02', 14),
-('DoctrineMigrations\\Version20200913100733', '2020-09-13 12:07:41', 13),
-('DoctrineMigrations\\Version20200913104201', '2020-09-13 12:42:07', 13),
-('DoctrineMigrations\\Version20200913112855', '2020-09-13 13:29:02', 12),
-('DoctrineMigrations\\Version20200913114432', '2020-09-13 13:44:36', 12),
-('DoctrineMigrations\\Version20200913114457', '2020-09-13 13:45:00', 12),
-('DoctrineMigrations\\Version20200914200830', '2020-09-14 22:10:22', 143),
-('DoctrineMigrations\\Version20200916090810', '2020-09-16 09:08:42', 1484),
-('DoctrineMigrations\\Version20200918211023', '2020-09-18 23:10:38', 84),
-('DoctrineMigrations\\Version20200918212454', '2020-09-18 23:25:03', 19),
-('DoctrineMigrations\\Version20200921143804', '2020-09-21 14:38:32', 615);
+('DoctrineMigrations\\Version20200924072201', '2020-09-24 07:22:17', 1381);
 
 -- --------------------------------------------------------
 
@@ -120,6 +109,13 @@ CREATE TABLE `pass` (
   `points` int(11) NOT NULL,
   `date_realisation` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `pass`
+--
+
+INSERT INTO `pass` (`id`, `student_id`, `questionnaire_id`, `points`, `date_realisation`) VALUES
+(1, 5, 1, 6, '2020-09-24');
 
 -- --------------------------------------------------------
 
@@ -139,10 +135,13 @@ CREATE TABLE `proposition` (
 --
 
 INSERT INTO `proposition` (`id`, `question_id`, `text`, `correct`) VALUES
-(59, 34, 'respuesta 1 buena', 1),
-(60, 34, 'respuesta 2 mala', 0),
-(61, 35, 'respuesta 1 mala', 0),
-(62, 35, 'respuesta 2 buena', 0);
+(1, 1, 'Java', 0),
+(2, 1, 'PHP', 1),
+(3, 1, 'JS', 0),
+(4, 2, '2008', 0),
+(5, 2, '2005', 1),
+(6, 2, '2010', 0),
+(7, 2, '2020', 0);
 
 -- --------------------------------------------------------
 
@@ -162,8 +161,8 @@ CREATE TABLE `question` (
 --
 
 INSERT INTO `question` (`id`, `questionnaire_id`, `wording`, `score`) VALUES
-(34, 31, 'pregunta 1 de test', '5.00'),
-(35, 31, 'pregunta 2 de test', '7.00');
+(1, 1, 'En quel langage est développé le framework Symfony ?', '4.00'),
+(2, 1, 'En quelle année a été crée Symfony ?', '2.00');
 
 -- --------------------------------------------------------
 
@@ -175,15 +174,16 @@ CREATE TABLE `questionnaire` (
   `id` int(11) NOT NULL,
   `teacher_id` int(11) NOT NULL,
   `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `difficulty` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `difficulty` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `date_creation` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `questionnaire`
 --
 
-INSERT INTO `questionnaire` (`id`, `teacher_id`, `title`, `difficulty`) VALUES
-(31, 39, 'cuestionario de pruba', 'difficile');
+INSERT INTO `questionnaire` (`id`, `teacher_id`, `title`, `difficulty`, `date_creation`) VALUES
+(1, 4, 'Symfony', 'facile', '2020-09-24');
 
 -- --------------------------------------------------------
 
@@ -203,18 +203,18 @@ CREATE TABLE `user` (
   `is_verified` tinyint(1) NOT NULL,
   `entry_date` date NOT NULL,
   `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `subject` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `hobby` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `hobby` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `subject` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `username`, `roles`, `password`, `surname`, `name`, `email`, `photo_name`, `is_verified`, `entry_date`, `type`, `subject`, `hobby`) VALUES
-(14, 'admin', '[\"ROLE_ADMIN\"]', '$argon2id$v=19$m=65536,t=4,p=1$0jsuEN8/xlghcdD9tbFG9Q$xsBFVqKhI/giBH3rqsMJYqkrYyfyD5vWItbUVXReNYU', NULL, 'PLATAFORM', 'admin@test.mail', NULL, 0, '2020-09-16', 'user', NULL, NULL),
-(39, 'raulbethencourt', '[]', '$argon2id$v=19$m=65536,t=4,p=1$ZFRr/bPcpJjlY5SzzrzMxQ$GnK/UYBi5Nd7GEXXDUWmkdNPVvFo4ocO6l137Rh5nuI', 'bethencourt', 'Raul', 'raul@test.mail', NULL, 0, '2020-09-22', 'teacher', NULL, NULL),
-(40, 'valentin', '[]', '$argon2id$v=19$m=65536,t=4,p=1$9Ngs14uJ8Dtus9sIuwGoiQ$rUr38RqEVb9c3OTXfoFeu2rqXv9su7tScKay9Jj5qyU', 'juncos', 'Valentin', 'valentin@test.mail', NULL, 0, '2020-09-22', 'student', NULL, NULL);
+INSERT INTO `user` (`id`, `username`, `roles`, `password`, `surname`, `name`, `email`, `photo_name`, `is_verified`, `entry_date`, `type`, `hobby`, `subject`) VALUES
+(1, 'admin', '[\"ROLE_ADMIN\"]', '$argon2id$v=19$m=65536,t=4,p=1$0jvgyua5sWauRQCr9ZCHzQ$Tt33xJVowAsud0iNjgPwOtNS1H/6rZwkaUbYbaGN7LY', NULL, NULL, 'admin@test.mail', NULL, 0, '2020-09-24', 'user', NULL, NULL),
+(4, 'Micka', '[\"ROLE_TEACHER\"]', '$argon2id$v=19$m=65536,t=4,p=1$5qi9RevAFvhhBzbUwVpduQ$Z61gl0QFaqueRalpQIy9C737uokjjL4dWTQpnixDVXU', 'Mickael', 'MURMANN', 'mickael.murmann@gmail.com', NULL, 0, '2020-09-24', 'teacher', NULL, NULL),
+(5, 'Raul', '[\"ROLE_STUDENT\"]', '$argon2id$v=19$m=65536,t=4,p=1$yi2S6lXMmUa9VzuKnCnCcA$D9smaZ8ezYIkhhvSjmLV8PASC1GXrki3duiNbh9KjrU', 'Raul', 'BETHENCOURT', 'raul@exemple.com', NULL, 0, '2020-09-24', 'student', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -292,37 +292,37 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `classroom`
 --
 ALTER TABLE `classroom`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `pass`
 --
 ALTER TABLE `pass`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `proposition`
 --
 ALTER TABLE `proposition`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `question`
 --
 ALTER TABLE `question`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `questionnaire`
 --
 ALTER TABLE `questionnaire`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
