@@ -30,7 +30,8 @@ class Questionnaire
     private $difficulty;
 
     /**
-     * @ORM\OneToMany(targetEntity=Question::class, mappedBy="questionnaire", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Question::class, mappedBy="questionnaire",
+     *     orphanRemoval=true, cascade={"persist"})
      */
     private $questions;
 

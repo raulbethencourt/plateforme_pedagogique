@@ -1,11 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Admin - {{ user.name }}{% endblock %}
-
-{% block home %}
-    <a class="dropdown-item" href="{{ path('user_index') }}">Home <span class="sr-only">(current)</span></a>
-{% endblock %}
-
 {% block body %}
     <h1>Bienvenido {{ user.name }}</h1>
     <h3>Classroom List</h3>

@@ -42,12 +42,14 @@ class UserController extends AbstractController
     {
         $classrooms = $repository->findAll();
         $user = $this->getUser();
+
         $roles_admin = $user->getRoles();
 
         foreach ($roles_admin as $role_admin) {
             if ($role_admin !== "ROLE_ADMIN") {
                 return $this->redirectToRoute('app_logout');
             }
+            break;
         }
 
         return $this->render(

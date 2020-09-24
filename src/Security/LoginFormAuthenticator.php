@@ -106,7 +106,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             return new RedirectResponse($targetPath);
         }
 
-//        dd($request);
         if (!$request->get('type')) {
             $teacher = get_class($this->userConnected) === Teacher::class;
             $student = get_class($this->userConnected) === Student::class;

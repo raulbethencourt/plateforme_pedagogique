@@ -1,28 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Student - {{ student.name }}{% endblock %}
+{% block title %}Teacher - {{ teacher.name }}{% endblock %}
 
 {% block logo %}
-    <a class="navbar-brand ml-4" href="{{ path('student_index') }}">
+    <a class="navbar-brand ml-4" href="{{ path('teacher_index') }}">
         <img src="{{ asset('images/ubuntu.png') }}" width="30" height="30" alt="logo ubuntu">
     </a>
 {% endblock %}
 
 {% block home %}
     <li class="nav-item">
-        <a class="nav-link" href="{{ path('student_index') }}">Home</a>
+        <a class="nav-link" href="{{ path('teacher_index') }}">Home</a>
     </li>
 {% endblock %}
 
 {% block profile %}
     <li class="nav-item">
-        <a class="nav-link mr-2" href="{#{{ path('student_profile') }}#}">
+        <a class="nav-link mr-2" href="{#{{ path('teacher_profile') }}#}">
             <img class="profile" src="{{ asset('images/profile.png') }}" alt="profile icon"></a>
     </li>
 {% endblock %}
 
 {% block body %}
-    <div style="width: 75%">
-        <canvas id="myChart"></canvas>
-    </div>
+
+{% endblock %}
+
+{% block title %}
+
 {% endblock %}
