@@ -51,6 +51,8 @@ class Questionnaire
      */
     private $date_creation;
 
+    public const DIFFICULTIES = ["facile", "moyen", "difficile"];
+
     public function __construct()
     {
         $this->questions = new ArrayCollection();

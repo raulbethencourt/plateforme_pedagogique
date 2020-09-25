@@ -16,13 +16,46 @@
 
 {% block profile %}
     <li class="nav-item">
-        <a class="nav-link mr-2" href="{#{{ path('student_profile') }}#}">
+        <a class="nav-link mr-2" href="{# {{ path('student_profile') }} #}">
             <img class="profile" src="{{ asset('images/profile.png') }}" alt="profile icon"></a>
     </li>
 {% endblock %}
 
 {% block body %}
-    <div style="width: 75%">
-        <canvas id="myChart"></canvas>
+    <div class="d-flex">
+        <div class="card w-50 m-1">
+            <h2 class="card-header text-white bg-dark">Profile</h2>
+            <div class="card-body">
+                <h3 class="card-title">{{ student.username }}</h3>
+                <p class="card-text">{{ student.name ~ " " ~ student.surname }}</p>
+                <p class="card-text">{{ student.email }}</p>
+                <p class="card-text">{{ student.hobby }}</p>
+                <a href="" class="btn btn-primary float-right">Edit</a>
+            </div>
+        </div>
+        <div class="card w-50 m-1">
+            <h2 class="card-header text-white bg-dark">Stats</h2>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        Nombre de quiz joués | questions jouées :
+                    </li>
+                    <li class="list-group-item">
+                        Score total :
+                    </li>
+                    <li class="list-group-item">
+                        Score moyen :
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
+    <div class="mr-auto ml-auto text-center mt-3 w-75">
+        <h2>Scores par diffculté :</h2>
+        <canvas id="studentChart"></canvas>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+
 {% endblock %}
