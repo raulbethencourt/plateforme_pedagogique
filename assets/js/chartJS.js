@@ -10,8 +10,9 @@ if ($('#studentChart'.length)) {
 
         // The data for our dataset
         data: {
-            labels: ['facile', 'Moyen', 'Difficile'],
+            labels: ['Facile', 'Moyen', 'Difficile'],
             datasets: [{
+                label: 'difficulties',
                 data: data,
                 backgroundColor: [
                     'rgb(141,255,99, 0.2)',
@@ -26,5 +27,14 @@ if ($('#studentChart'.length)) {
                 borderWidth: 1
             }]
         },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
     })
 }

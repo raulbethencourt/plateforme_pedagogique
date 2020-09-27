@@ -30,7 +30,7 @@
                 <p class="card-text">{{ student.name ~ " " ~ student.surname }}</p>
                 <p class="card-text">{{ student.email }}</p>
                 <p class="card-text">{{ student.hobby }}</p>
-                <a href="" class="btn btn-primary float-right">Edit</a>
+                <a href="" class="btn btn-primary">Edit</a>
             </div>
         </div>
         <div class="card w-50 m-1">
@@ -38,13 +38,20 @@
             <div class="card-body">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
-                        Nombre de quiz joués | questions jouées :
+                        Nombre de quiz joués :
+                        <span class="badge badge-info p-1 rounded">{{ passes|length }} - questionnaires</span>
+                    </li>
+                    <li class="list-group-item">
+                        Questions jouées :
+                        <span class="badge badge-info p-1 rounded">{{ numberOfQuestions }} -  questions</span>
                     </li>
                     <li class="list-group-item">
                         Score total :
+                        <span class="badge badge-info p-1 rounded">{{ sum }}</span>
                     </li>
                     <li class="list-group-item">
                         Score moyen :
+                        <span class="badge badge-info p-1 rounded">{{ average }}</span>
                     </li>
                 </ul>
             </div>

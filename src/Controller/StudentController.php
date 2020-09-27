@@ -102,9 +102,9 @@ class StudentController extends AbstractController
             "student/profile.html.twig",
             [
                 'student' => $this->getUser(),
-                'plays' => $passes,
+                'passes' => $passes,
                 'sum' => $sum,
-                'avg' => $average,
+                'average' => $average,
                 'statsPerDiff' => $statsPerDiff,
                 'spdjson' => json_encode(array_values($statsPerDiff)),
                 'numberOfQuestions' => $numberOfQuestions,

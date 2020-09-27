@@ -28,7 +28,7 @@ class Proposition
     private $correct;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Question::class, inversedBy="propistions")
+     * @ORM\ManyToOne(targetEntity=Question::class, inversedBy="propositions")
      * @ORM\JoinColumn(nullable=false)
      */
     private $question;

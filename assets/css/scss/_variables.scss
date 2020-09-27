@@ -6,14 +6,14 @@
 // Color system
 
 $white:    #fff !default;
-$gray-100: #f8f9fa !default;
+$gray-100: #edeec9 !default;
 $gray-200: #e9ecef !default;
 $gray-300: #dee2e6 !default;
 $gray-400: #ced4da !default;
 $gray-500: #adb5bd !default;
 $gray-600: #6c757d !default;
 $gray-700: #495057 !default;
-$gray-800: #343a40 !default;
+$gray-800: #77bfa3 !default;
 $gray-900: #212529 !default;
 $black:    #000 !default;
 
@@ -33,14 +33,14 @@ $grays: map-merge(
   $grays
 );
 
-$blue: #3a6894 !default;
+$blue: #aad0ce !default;
 $indigo:  #6610f2 !default;
 $purple:  #6f42c1 !default;
 $pink:    #e83e8c !default;
 $red: #992531 !default;
 $orange:  #fd7e14 !default;
 $yellow:  #ffc107 !default;
-$green: #57720e !default;
+$green: #dde7c7 !default;
 $teal:    #20c997 !default;
 $cyan:    #17a2b8 !default;
 
@@ -408,7 +408,7 @@ $input-btn-border-width:      $border-width !default;
 
 // Buttons
 //
-// For each of Bootstrap's buttons, define text, background, and border color.
+// For each of Bootstrap's buttons, define text, backgroundbackground, and border color.
 
 $btn-padding-y:               $input-btn-padding-y !default;
 $btn-padding-x:               $input-btn-padding-x !default;

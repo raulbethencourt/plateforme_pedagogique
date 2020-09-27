@@ -24,10 +24,11 @@
   <component name="ChangeListManager">
     <list default="true" id="6c7a212d-3c91-4ff0-904b-dbc37de82ac8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/css/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/app.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/css/scss/_variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/scss/_variables.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/js/chartJS.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/chartJS.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/security.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/StudentController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Proposition.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Proposition.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/student/profile.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/student/profile.html.twig" afterDir="false" />
     </list>
@@ -297,6 +298,7 @@
       <workItem from="1601153713761" duration="201000" />
       <workItem from="1601154124039" duration="118000" />
       <workItem from="1601195550279" duration="1729000" />
+      <workItem from="1601233120233" duration="2563000" />
     </task>
     <servers />
   </component>
@@ -333,6 +335,10 @@
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
     <state x="582" y="197" key="#com.intellij.execution.impl.EditConfigurationsDialog/62.0.1858.1080@62.0.1858.1080" timestamp="1599813950401" />
+    <state x="2203" y="320" width="704" height="403" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1601234965463">
+      <screen x="1600" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2203" y="320" width="704" height="403" key="#com.intellij.fileTypes.FileTypeChooser/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1601234965463" />
     <state x="385" y="263" width="433" height="578" key="#com.intellij.ide.util.MemberChooser" timestamp="1600698906494">
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
@@ -427,10 +433,10 @@
     </state>
     <state x="2205" y="250" width="672" height="677" key="run.anything.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600977129115" />
     <state x="647" y="250" key="run.anything.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1600953262574" />
-    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1601195994409">
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1601235672768">
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
-    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1601195994409" />
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1601235672768" />
     <state x="654" y="235" width="672" height="678" key="search.everywhere.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1601045210754" />
   </component>
 </project>
