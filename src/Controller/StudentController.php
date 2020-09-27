@@ -15,7 +15,7 @@ class StudentController extends AbstractController
      * @Route("/student", name="student_index")
      * @IsGranted("ROLE_STUDENT")
      */
-    public function index()
+    public function index(): Response
     {
         $student = $this->getUser();
         $classrooms = $student->getClassrooms();
@@ -39,73 +39,72 @@ class StudentController extends AbstractController
     /**
      * @Route("/student/profile", name="student_profile")
      * @IsGranted("ROLE_STUDENT")
-     * @return Response
      */
-    public function profile()
+    public function profile(): Response
     {
-        $passes = $this->getDoctrine()->getRepository(Pass::class)->findBy(['student' => $this->getUser()]);
+        $passes = $this->getDoctrine()->getRepository(Pass::class)
+            ->findBy(['student' => $this->getUser()]);
 
         $sum = array_reduce(
             $passes,
-            function ($i, $play) {
-                return $i += $play->getScore();
+            function ($i, $pass) {
+                return $i += $pass->getPoints();
             }
         );
 
         $numberOfQuestions = array_reduce(
             $passes,
-            function ($i, $play) {
-                return $i += count($play->getQuestionnaire()->getQuestions());
+            function ($i, $pass) {
+                return $i += count($pass->getQuestionnaire()->getQuestions());
             }
         );
 
-        $diffs = Questionnaire::DIFFICULTIES;
+        $difficulties = Questionnaire::DIFFICULTIES;
         $playsPerDiff = [];
         $statsPerDiff = [];
 
-        foreach ($diffs as $diff) {
-            $playsPerDiff[$diff] = array_filter(
+        foreach ($difficulties as $difficulty) {
+            $playsPerDiff[$difficulty] = array_filter(
                 $passes,
-                function ($play) use ($diff) {
-                    return $play->getQuestionnaire()->getDifficulty() == $diff;
+                function ($pass) use ($difficulty) {
+                    return $pass->getQuestionnaire()->getDifficulty() == $difficulty;
                 }
             );
             $totalScore = array_reduce(
-                $playsPerDiff[$diff],
+                $playsPerDiff[$difficulty],
                 function ($i, $play) {
                     return $i += $play->getQuestionnaire()->getTotalScore();
                 }
             );
             $playerScore = array_reduce(
-                $playsPerDiff[$diff],
+                $playsPerDiff[$difficulty],
                 function ($i, $play) {
-                    return $i += $play->getScore();
+                    return $i += $play->getPoints();
                 }
             );
             if ($totalScore != null) {
-                $statsPerDiff[$diff] = round(($playerScore / $totalScore) * 100, 2);
+                $statsPerDiff[$difficulty] = round(($playerScore / $totalScore) * 100, 2);
             } else {
-                $statsPerDiff[$diff] = null;
+                $statsPerDiff[$difficulty] = null;
             }
         }
 
         $sumMax = array_reduce(
-            $plays,
-            function ($i, $play) {
-                return $i += $play->getQuestionnaire()->getTotalScore();
+            $passes,
+            function ($i, $pass) {
+                return $i += $pass->getQuestionnaire()->getTotalScore();
             }
         );
 
-        $avg = (round($sum / $sumMax, 2) * 100)."%";
-
-        //$percentAvg = $avg / count($plays);
+        $average = (round($sum / $sumMax, 2) * 100)."%";
 
         return $this->render(
-            "security/profile.html.twig",
+            "student/profile.html.twig",
             [
-                'plays' => $plays,
+                'student' => $this->getUser(),
+                'plays' => $passes,
                 'sum' => $sum,
-                'avg' => $avg,
+                'avg' => $average,
                 'statsPerDiff' => $statsPerDiff,
                 'spdjson' => json_encode(array_values($statsPerDiff)),
                 'numberOfQuestions' => $numberOfQuestions,
