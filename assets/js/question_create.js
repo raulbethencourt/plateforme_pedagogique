@@ -7,7 +7,7 @@ var $collectionHolder;
 var $addPropositionButton = $('<button type="button" class="btn btn-secondary add_tag_link">Ajouter un proposition</button>');
 var $newLinkLi = $('<li></li>').append($addPropositionButton);
 
-$(document).ready(function() {
+$(document).ready(function () {
     // Get the ul that holds the collection of tags
     $collectionHolder = $('ul.propositions');
 
@@ -18,12 +18,12 @@ $(document).ready(function() {
     // index when inserting a new item (e.g. 2)
     $collectionHolder.data('index', $collectionHolder.find('input').length);
 
-    $addPropositionButton.on('click', function(e) {
+    $addPropositionButton.on('click', function (e) {
         // add a new tag form (see next code block)
         addPropositionForm($collectionHolder, $newLinkLi);
     });
 
-    $('.remove-tag').click(function(e) {
+    $('.remove-tag').click(function (e) {
         e.preventDefault();
 
         $(this).parent().remove();
@@ -59,7 +59,7 @@ function addPropositionForm($collectionHolder, $newLinkLi) {
     $newLinkLi.before($newFormLi);
 
     // handle the removal
-    $('.remove-tag').click(function(e) {
+    $('.remove-tag').click(function (e) {
         e.preventDefault();
 
         $(this).parent().remove();

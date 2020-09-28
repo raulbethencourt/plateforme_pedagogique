@@ -1,7 +1,7 @@
 import Chart from "chart.js";
 import $ from "jquery";
 
-if ($('#studentChart'.length)) {
+if ($('#studentChart').length) {
     let ctx = $('#studentChart');
 
     let studentChart = new Chart(ctx, {

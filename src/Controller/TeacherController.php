@@ -8,6 +8,7 @@ use App\Form\QuestionnaireType;
 use App\Form\QuestionType;
 use App\Repository\QuestionnaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +31,7 @@ class TeacherController extends AbstractController
      * @Route("/teacher", name="teacher_index")
      * @param QuestionnaireRepository $repository
      * @return ResponseAlias
+     * @IsGranted ("ROLE_TEACHER")
      */
     public function index(QuestionnaireRepository $repository): ResponseAlias
     {
