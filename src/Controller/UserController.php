@@ -3,12 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Classroom;
-use App\Entity\Invite;
 use App\Form\ClassroomType;
-use App\Form\InviteType;
-use App\invitation\Invitation;
 use App\Repository\ClassroomRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,6 +33,7 @@ class UserController extends AbstractController
 
     /**
      * @Route ("/", name="user_index")
+     * @IsGranted ("ROLE_ADMIN")
      * @param  ClassroomRepository  $repository
      * @return ResponseAlias
      */

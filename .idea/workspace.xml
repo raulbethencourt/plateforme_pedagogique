@@ -23,7 +23,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c7a212d-3c91-4ff0-904b-dbc37de82ac8" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/css/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/app.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/logo-carpa.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ClassroomController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ClassroomController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/QuestionnaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/QuestionnaireController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/TeacherController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TeacherController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/UserController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/security/login.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/security/login.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/user/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/index.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -296,6 +305,7 @@
       <workItem from="1601275344668" duration="5469000" />
       <workItem from="1601288164496" duration="376000" />
       <workItem from="1601323844021" duration="667000" />
+      <workItem from="1601361807291" duration="8471000" />
     </task>
     <servers />
   </component>
@@ -425,15 +435,15 @@
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
     <state x="2270" y="287" width="569" height="468" key="refactoring.ChangeSignatureDialog/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600603578515" />
-    <state x="2205" y="250" width="672" height="677" key="run.anything.popup" timestamp="1600977129115">
-      <screen x="1600" y="0" width="1920" height="1080" />
+    <state x="647" y="250" key="run.anything.popup" timestamp="1601388797731">
+      <screen x="62" y="0" width="1858" height="1080" />
     </state>
     <state x="2205" y="250" width="672" height="677" key="run.anything.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600977129115" />
-    <state x="647" y="250" key="run.anything.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1600953262574" />
-    <state x="654" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1601303186046">
+    <state x="647" y="250" key="run.anything.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1601388797731" />
+    <state x="654" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1601388788798">
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
     <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1601239350819" />
-    <state x="654" y="235" width="672" height="678" key="search.everywhere.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1601303186046" />
+    <state x="654" y="235" width="672" height="678" key="search.everywhere.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1601388788798" />
   </component>
 </project>

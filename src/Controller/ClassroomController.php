@@ -4,10 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Classroom;
 use App\Entity\Invite;
-use App\Entity\Student;
-use App\Entity\Teacher;
 use App\Form\InviteType;
 use App\invitation\Invitation;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,9 +17,10 @@ class ClassroomController extends AbstractController
 {
     /**
      * @Route("/classroom/{id}", name="classroom_index")
-     * @param  Classroom  $classroom
-     * @param  Request  $request
-     * @param  Invitation  $invitation
+     * @IsGranted ("ROLE_USER")
+     * @param Classroom $classroom
+     * @param Request $request
+     * @param Invitation $invitation
      * @return Response
      * @throws TransportExceptionInterface
      */

@@ -29,9 +29,9 @@ class TeacherController extends AbstractController
 
     /**
      * @Route("/teacher", name="teacher_index")
+     *  @IsGranted ("ROLE_TEACHER")
      * @param QuestionnaireRepository $repository
      * @return ResponseAlias
-     * @IsGranted ("ROLE_TEACHER")
      */
     public function index(QuestionnaireRepository $repository): ResponseAlias
     {

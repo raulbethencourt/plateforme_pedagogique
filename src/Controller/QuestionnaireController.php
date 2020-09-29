@@ -18,6 +18,7 @@ class QuestionnaireController extends AbstractController
 {
     /**
      * @Route ("/{id}", name="questionnaire_index")
+     * @param Questionnaire $questionnaire
      * @param Request $request
      * @return Response
      */
@@ -87,6 +88,11 @@ class QuestionnaireController extends AbstractController
         );
     }
 
+    /**
+     * @param $answers
+     * @param $questionnaire
+     * @return array
+     */
     private function evaluateQuestionnaire($answers, $questionnaire): array
     {
         $points = 0;
