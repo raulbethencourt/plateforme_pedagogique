@@ -4,22 +4,27 @@ namespace App\Controller;
 
 use App\Entity\Pass;
 use App\Entity\Questionnaire;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class StudentController
+ * This class manage student index and his profile
+ * @Route("/student")
+ * @package App\Controller
+ */
 class StudentController extends AbstractController
 {
     /**
-     * @Route("/student", name="student_index")
-     * @IsGranted("ROLE_STUDENT")
+     * @Route("/", name="student_index")
      */
     public function index(): Response
     {
         $student = $this->getUser();
         $classrooms = $student->getClassrooms();
 
+        // We get all questionnaires that the student has access in this classroom
         foreach ($classrooms as $classroom) {
             $teachers = $classroom->getTeachers();
             foreach ($teachers as $teacher) {
@@ -37,11 +42,12 @@ class StudentController extends AbstractController
     }
 
     /**
-     * @Route("/student/profile", name="student_profile")
-     * @IsGranted("ROLE_STUDENT")
+     * This methode builds student profile
+     * @Route("/profile", name="student_profile")
      */
     public function profile(): Response
     {
+        // Get each time that the student has passed q questionnaire
         $passes = $this->getDoctrine()->getRepository(Pass::class)
             ->findBy(['student' => $this->getUser()]);
 

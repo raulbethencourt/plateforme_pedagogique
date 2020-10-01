@@ -62,20 +62,11 @@ class Classroom
         return $this;
     }
 
-    
-
-    /**
-     * @return Collection|Teacher[]
-     */
     public function getTeachers(): Collection
     {
         return $this->teachers;
     }
 
-    /**
-     * @param  \App\Entity\Teacher  $teacher
-     * @return $this
-     */
     public function addTeacher(Teacher $teacher): self
     {
         if (!$this->teachers->contains($teacher)) {
@@ -94,9 +85,6 @@ class Classroom
         return $this;
     }
 
-    /**
-     * @return Collection|Student[]
-     */
     public function getStudents(): Collection
     {
         return $this->students;

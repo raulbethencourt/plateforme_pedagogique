@@ -7,6 +7,11 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+/**
+ * Class StudentFixtures
+ * This class creates fictitious Student for tests
+ * @package App\DataFixtures
+ */
 class StudentFixtures extends Fixture
 {
     private $passwordEncoder;

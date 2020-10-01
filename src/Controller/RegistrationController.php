@@ -131,7 +131,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_register');
         }
 
-        // If validate email is accept we redirect by Role
+        // If validate email is accepted we redirect by Role
         switch ($this->getUser()->getRoles()) {
             case "ROLE_TEACHER":
                 return $this->redirectToRoute('teacher_index');

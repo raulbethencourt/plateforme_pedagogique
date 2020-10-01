@@ -6,7 +6,6 @@ use App\Entity\Classroom;
 use App\Form\ClassroomType;
 use App\Repository\ClassroomRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +32,6 @@ class UserController extends AbstractController
 
     /**
      * @Route ("/", name="user_index")
-     * @IsGranted ("ROLE_ADMIN")
      * @param  ClassroomRepository  $repository
      * @return ResponseAlias
      */
@@ -41,15 +39,6 @@ class UserController extends AbstractController
     {
         $classrooms = $repository->findAll();
         $user = $this->getUser();
-
-        $roles_admin = $user->getRoles();
-
-        foreach ($roles_admin as $role_admin) {
-            if ($role_admin !== "ROLE_ADMIN") {
-                return $this->redirectToRoute('app_logout');
-            }
-            break;
-        }
 
         return $this->render(
             'user/index.html.twig',
@@ -62,14 +51,20 @@ class UserController extends AbstractController
 
     /**
      * @Route ("/classroom/create", name="user_classroom_create")
-     * @param  Request  $request
+     * @param Request $request
+     * @param Classroom|null $classroom
      * @return RedirectResponse|ResponseAlias
      */
-    public function createClassroom(Request $request)
+    public function createClassroom(Request $request, Classroom $classroom = null)
     {
-        $classroom = new Classroom();
+        // Check if the classroom already exist
+        if (!$classroom) {
+            $classroom = new Classroom();
+        }
+
         $form = $this->createForm(ClassroomType::class, $classroom);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($classroom);
             $this->em->flush();
@@ -122,6 +117,7 @@ class UserController extends AbstractController
      */
     public function delete(Classroom $classroom, Request $request): RedirectResponse
     {
+        // Check the token
         if ($this->isCsrfTokenValid(
             'delete'.$classroom->getId(),
             $request->get('_token')

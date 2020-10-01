@@ -9,6 +9,11 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 
+/**
+ * Class Invitation
+ * This class manage email invitation for nex users
+ * @package App\invitation
+ */
 class Invitation extends AbstractController
 {
     /**

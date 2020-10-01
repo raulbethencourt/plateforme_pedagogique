@@ -32,9 +32,7 @@ class Student extends User
         $this->pass = new ArrayCollection();
         $this->classrooms = new ArrayCollection();
     }
-    /**
-     * @return Collection|Pass[]
-     */
+
     public function getPass(): Collection
     {
         return $this->pass;
@@ -63,9 +61,6 @@ class Student extends User
         return $this;
     }
 
-    /**
-     * @return Collection|Classroom[]
-     */
     public function getClassrooms(): Collection
     {
         return $this->classrooms;
@@ -91,39 +86,13 @@ class Student extends User
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
     public function getHobby()
     {
         return $this->hobby;
     }
 
-    /**
-     * @param mixed $hobby
-     */
     public function setHobby($hobby): void
     {
         $this->hobby = $hobby;
-    }
-
-    public function addClassroom(Classroom $classroom): self
-    {
-        if (!$this->classrooms->contains($classroom)) {
-            $this->classrooms[] = $classroom;
-            $classroom->addStudent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeClassroom(Classroom $classroom): self
-    {
-        if ($this->classrooms->contains($classroom)) {
-            $this->classrooms->removeElement($classroom);
-            $classroom->removeStudent($this);
-        }
-
-        return $this;
     }
 }

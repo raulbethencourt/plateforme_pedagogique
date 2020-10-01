@@ -33,7 +33,6 @@ security:
                 # target: app_any_route
             switch_user: true
 
-
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
 

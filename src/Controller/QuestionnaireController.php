@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Pass;
 use App\Entity\Questionnaire;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,12 +13,14 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class QuestionnaireController
  * This class manage the questionnaires plays
+ * @Route ("/questionnaire")
  * @package App\Controller
  */
 class QuestionnaireController extends AbstractController
 {
     /**
-     * @Route ("/questionnaire/{id}", name="questionnaire_index")
+     * @Route ("/{id}", name="questionnaire_index")
+     * @IsGranted ("ROLE_TEACHER")
      * @param Questionnaire $questionnaire
      * @param Request $request
      * @return Response
@@ -34,7 +37,8 @@ class QuestionnaireController extends AbstractController
 
     /**
      * This methode control the questionnaires gaming
-     * @Route("/questionnaire/{id}/play", name="questionnaire_play")
+     * @Route("/{id}/play", name="questionnaire_play")
+     * @IsGranted("ROLE_STUDENT")
      * @param Questionnaire $questionnaire
      * @param Request $request
      * @return Response

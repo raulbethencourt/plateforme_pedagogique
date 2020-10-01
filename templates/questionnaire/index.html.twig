@@ -37,7 +37,7 @@
         {% for question in questionnaire.questions %}
             <tr>
                 <th scope="row">{{ question.id }}</th>
-                <td>{{ question.wording }}</td>
+                <td>{{ question.title }}</td>
                 <td>
                     {% for proposition in question.propositions %}
                         {% if proposition.correct %}

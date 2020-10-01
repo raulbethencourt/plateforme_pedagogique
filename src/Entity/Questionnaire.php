@@ -93,9 +93,6 @@ class Questionnaire
         return $this;
     }
 
-    /**
-     * @return Collection|Question[]
-     */
     public function getQuestions(): Collection
     {
         return $this->questions;
@@ -136,9 +133,6 @@ class Questionnaire
         return $this;
     }
 
-    /**
-     * @return Collection|Pass[]
-     */
     public function getPass(): Collection
     {
         return $this->pass;
@@ -188,6 +182,11 @@ class Questionnaire
         return $total;
     }
 
+    /**
+     * Method to check if a questionnaire has at list 1 question
+     * and the question has at list 2 propositions
+     * @return bool
+     */
     public function isPlayable(): bool
     {
         if(count($this->questions) === 0) {

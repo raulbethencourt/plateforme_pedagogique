@@ -16,6 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class ClassroomController
  * This class manage the classrooms
+ * @Route("/classroom")
  * @package App\Controller
  */
 class ClassroomController extends AbstractController
@@ -23,7 +24,7 @@ class ClassroomController extends AbstractController
     /**
      * This methode shows the students and teacher that belongs to the classroom
      * and It allows us to invite new Teachers or students
-     * @Route("/classroom/{id}", name="classroom_index")
+     * @Route("/{id}", name="classroom_index")
      * @IsGranted ("ROLE_USER")
      * @param Classroom $classroom
      * @param Request $request

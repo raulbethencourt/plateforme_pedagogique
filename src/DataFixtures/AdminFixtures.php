@@ -7,6 +7,11 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+/**
+ * Class AdminFixtures
+ * This class creates fictitious Admin for tests
+ * @package App\DataFixtures
+ */
 class AdminFixtures extends Fixture
 {
     private $passwordEncoder;

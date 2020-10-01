@@ -22,7 +22,7 @@ class Question
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $wording;
+    private $title;
 
     /**
      * @ORM\Column(type="decimal", precision=5, scale=2)
@@ -50,14 +50,14 @@ class Question
     {        return $this->id;
     }
 
-    public function getWording(): ?string
+    public function getTitle(): ?string
     {
-        return $this->wording;
+        return $this->title;
     }
 
-    public function setWording(string $wording): self
+    public function setTitle(string $title): self
     {
-        $this->wording = $wording;
+        $this->title = $title;
 
         return $this;
     }
@@ -74,9 +74,6 @@ class Question
         return $this;
     }
 
-    /**
-     * @return Collection|Proposition[]
-     */
     public function getPropositions(): Collection
     {
         return $this->propositions;
@@ -117,6 +114,10 @@ class Question
         return $this;
     }
 
+    /**
+     * Method to get the right propositions in a question
+     * @return ArrayCollection
+     */
     public function getRightPropositions() :ArrayCollection
     {
         return $this->propositions->filter(function($proposition){

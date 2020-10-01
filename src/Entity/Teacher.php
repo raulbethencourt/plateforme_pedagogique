@@ -17,7 +17,6 @@ class Teacher extends User
      */
     private $questionnaires;
 
-
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
@@ -34,18 +33,11 @@ class Teacher extends User
         $this->classrooms = new ArrayCollection();
     }
 
-    /**
-     * @return Collection|Classroom[]
-     */
     public function getClassrooms(): Collection
     {
         return $this->classrooms;
     }
 
-    /**
-     * @param Classroom $classroom
-     * @return $this
-     */
     public function addClassrooms(Classroom $classroom): self
     {
         if (!$this->classrooms->contains($classroom)) {
@@ -56,10 +48,6 @@ class Teacher extends User
         return $this;
     }
 
-    /**
-     * @param Classroom $classroom
-     * @return $this
-     */
     public function removeClassrooms(Classroom $classroom): self
     {
         if ($this->classrooms->contains($classroom)) {
@@ -82,9 +70,6 @@ class Teacher extends User
         return $this;
     }
 
-    /**
-     * @return Collection|Questionnaire[]
-     */
     public function getQuestionnaires(): Collection
     {
         return $this->questionnaires;
@@ -108,26 +93,6 @@ class Teacher extends User
             if ($questionnaire->getTeacher() === $this) {
                 $questionnaire->setTeacher(null);
             }
-        }
-
-        return $this;
-    }
-
-    public function addClassroom(Classroom $classroom): self
-    {
-        if (!$this->classrooms->contains($classroom)) {
-            $this->classrooms[] = $classroom;
-            $classroom->addTeacher($this);
-        }
-
-        return $this;
-    }
-
-    public function removeClassroom(Classroom $classroom): self
-    {
-        if ($this->classrooms->contains($classroom)) {
-            $this->classrooms->removeElement($classroom);
-            $classroom->removeTeacher($this);
         }
 
         return $this;
