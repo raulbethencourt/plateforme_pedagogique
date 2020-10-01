@@ -193,4 +193,14 @@ class User implements UserInterface
     {
         return $this->isVerified;
     }
+
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
 }

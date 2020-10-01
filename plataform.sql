@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql
--- Generation Time: Sep 24, 2020 at 02:56 PM
+-- Generation Time: Oct 01, 2020 at 08:56 PM
 -- Server version: 10.4.14-MariaDB-1:10.4.14+maria~focal
 -- PHP Version: 7.4.10
 
@@ -39,7 +39,7 @@ CREATE TABLE `classroom` (
 --
 
 INSERT INTO `classroom` (`id`, `name`, `discipline`) VALUES
-(1, 'clase de programacion web', 'informatica');
+(3, 'Dl7', 'informatique');
 
 -- --------------------------------------------------------
 
@@ -57,7 +57,8 @@ CREATE TABLE `classroom_student` (
 --
 
 INSERT INTO `classroom_student` (`classroom_id`, `student_id`) VALUES
-(1, 5);
+(3, 12),
+(3, 13);
 
 -- --------------------------------------------------------
 
@@ -75,7 +76,7 @@ CREATE TABLE `classroom_teacher` (
 --
 
 INSERT INTO `classroom_teacher` (`classroom_id`, `teacher_id`) VALUES
-(1, 4);
+(3, 6);
 
 -- --------------------------------------------------------
 
@@ -110,13 +111,6 @@ CREATE TABLE `pass` (
   `date_realisation` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `pass`
---
-
-INSERT INTO `pass` (`id`, `student_id`, `questionnaire_id`, `points`, `date_realisation`) VALUES
-(1, 5, 1, 6, '2020-09-24');
-
 -- --------------------------------------------------------
 
 --
@@ -129,19 +123,6 @@ CREATE TABLE `proposition` (
   `text` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `correct` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `proposition`
---
-
-INSERT INTO `proposition` (`id`, `question_id`, `text`, `correct`) VALUES
-(1, 1, 'Java', 0),
-(2, 1, 'PHP', 1),
-(3, 1, 'JS', 0),
-(4, 2, '2008', 0),
-(5, 2, '2005', 1),
-(6, 2, '2010', 0),
-(7, 2, '2020', 0);
 
 -- --------------------------------------------------------
 
@@ -156,14 +137,6 @@ CREATE TABLE `question` (
   `score` decimal(5,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `question`
---
-
-INSERT INTO `question` (`id`, `questionnaire_id`, `wording`, `score`) VALUES
-(1, 1, 'En quel langage est développé le framework Symfony ?', '4.00'),
-(2, 1, 'En quelle année a été crée Symfony ?', '2.00');
-
 -- --------------------------------------------------------
 
 --
@@ -177,13 +150,6 @@ CREATE TABLE `questionnaire` (
   `difficulty` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date_creation` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `questionnaire`
---
-
-INSERT INTO `questionnaire` (`id`, `teacher_id`, `title`, `difficulty`, `date_creation`) VALUES
-(1, 4, 'Symfony', 'facile', '2020-09-24');
 
 -- --------------------------------------------------------
 
@@ -213,8 +179,9 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `username`, `roles`, `password`, `surname`, `name`, `email`, `photo_name`, `is_verified`, `entry_date`, `type`, `hobby`, `subject`) VALUES
 (1, 'admin', '[\"ROLE_ADMIN\"]', '$argon2id$v=19$m=65536,t=4,p=1$0jvgyua5sWauRQCr9ZCHzQ$Tt33xJVowAsud0iNjgPwOtNS1H/6rZwkaUbYbaGN7LY', NULL, NULL, 'admin@test.mail', NULL, 0, '2020-09-24', 'user', NULL, NULL),
-(4, 'Micka', '[\"ROLE_TEACHER\"]', '$argon2id$v=19$m=65536,t=4,p=1$5qi9RevAFvhhBzbUwVpduQ$Z61gl0QFaqueRalpQIy9C737uokjjL4dWTQpnixDVXU', 'Mickael', 'MURMANN', 'mickael.murmann@gmail.com', NULL, 0, '2020-09-24', 'teacher', NULL, NULL),
-(5, 'Raul', '[\"ROLE_STUDENT\"]', '$argon2id$v=19$m=65536,t=4,p=1$yi2S6lXMmUa9VzuKnCnCcA$D9smaZ8ezYIkhhvSjmLV8PASC1GXrki3duiNbh9KjrU', 'Raul', 'BETHENCOURT', 'raul@exemple.com', NULL, 0, '2020-09-24', 'student', NULL, NULL);
+(6, 'virgile', '[\"ROLE_TEACHER\"]', '$argon2id$v=19$m=65536,t=4,p=1$uEXRgsOThOUQZE8uV9IxEw$C7InImFHUwY3Rr0U1qQc0oEE4fJEH8bhB/tKay5s81s', 'Gibello', 'Virgile', 'virgile@test.mail', NULL, 1, '2020-10-01', 'teacher', NULL, NULL),
+(12, 'raul', '[\"ROLE_STUDENT\"]', '$argon2id$v=19$m=65536,t=4,p=1$6W1DtQIv34ABE8YSyoafZg$Dbt7pyAPLeIiGwKdziod1Ca1fNSWcBGhAMO771eZb+M', 'bethencourt', 'Raul', 'raul@test.mail', NULL, 1, '2020-10-01', 'student', NULL, NULL),
+(13, 'valentin', '[\"ROLE_STUDENT\"]', '$argon2id$v=19$m=65536,t=4,p=1$fsqTLw3xSZPslcwDcc+hug$q7FFg0BNOiaq9jIN2IJeF0PvYj7CZBNIN94kmiRPB6M', 'juncos', 'Valentin', 'valenti@test.mail', NULL, 1, '2020-10-01', 'student', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -292,7 +259,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `classroom`
 --
 ALTER TABLE `classroom`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `pass`
@@ -322,7 +289,7 @@ ALTER TABLE `questionnaire`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables

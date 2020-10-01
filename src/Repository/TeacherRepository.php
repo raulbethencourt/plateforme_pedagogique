@@ -20,6 +20,7 @@ class TeacherRepository extends ServiceEntityRepository
     }
 
     /**
+     * This method allows to find a teacher by a classroom
      * @param $clasroom
      * @return teacher[] Returns an array of teacher objects
      */
@@ -35,7 +36,7 @@ class TeacherRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findOneBySomeField($username): ?teacher
+    /*public function findOneBySomeField($username): ?teacher
     {
         return $this->createQueryBuilder('f')
             ->andWhere('f.username = :val')
@@ -43,6 +44,6 @@ class TeacherRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult()
         ;
-    }
+    }*/
 
 }

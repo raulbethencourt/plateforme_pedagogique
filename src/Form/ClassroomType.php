@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Classroom;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,8 +20,23 @@ class ClassroomType extends AbstractType
     {
         $builder
             ->add('name', TextType::class)
-            ->add('discipline', TextType::class)
-            ;
+            ->add(
+                'discipline',
+                ChoiceType::class,
+                [
+                    'choices' => [
+                        'Arts' => 'arts',
+                        'Français' => 'français',
+                        'Histoire' => 'histoire',
+                        'Musique' => 'musique',
+                        'Mathematiques' => 'mathematiques',
+                        'Informatique' => 'informatique',
+                        'Philosophie' => 'philosophie',
+                        'Chimie' => 'chimie',
+                        'Physique' => 'physique',
+                    ],
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)

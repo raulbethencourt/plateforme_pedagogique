@@ -44,7 +44,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
-        $this->userConnected = null;
     }
 
     public function supports(Request $request)
@@ -114,6 +113,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             $student = $request->get('type') === 'student';
         }
 
+        // I do a redirection using the user type to arrive a different parts of the application
         switch (true) {
             case $teacher:
                 return new RedirectResponse(

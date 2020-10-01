@@ -23,6 +23,7 @@ class QuestionnaireRepository extends ServiceEntityRepository
     }
 
     /**
+     * This method allows to find a questionnaire by a teacher
      * @param Teacher $value
      * @return questionnaire[] Returns an array of questionnaire objects
      */
@@ -37,6 +38,12 @@ class QuestionnaireRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * This method allows to find a questionnaire by an Id
+     * @param $id
+     * @return Questionnaire|null
+     * @throws NonUniqueResultException
+     */
     public function findOneById($id): ?questionnaire
     {
         return $this->createQueryBuilder('q')

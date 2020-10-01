@@ -21,6 +21,7 @@ class ClassroomRepository extends ServiceEntityRepository
     }
 
      /**
+      * This method allows to find a class by a Student
       * @return Classroom[] Returns an array of Classroom objects
       */
     public function findByStudent($student): array
@@ -37,6 +38,7 @@ class ClassroomRepository extends ServiceEntityRepository
 
 
     /**
+     * This method allows to find a classroom by an Id
      * @param $id
      * @return Classroom|null
      * @throws NonUniqueResultException

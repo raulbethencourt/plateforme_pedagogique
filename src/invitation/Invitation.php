@@ -33,6 +33,7 @@ class Invitation extends AbstractController
      */
     public function invite($data, $classroom_id): void
     {
+        // I creates a new email to send to the new user
         $email = (new TemplatedEmail())
             ->from(Address::fromString('Plataform <plataform@exemple.com>'))
             ->to($data->getEmail())

@@ -20,6 +20,7 @@ class StudentRepository extends ServiceEntityRepository
     }
 
     /**
+     * This method allows to find a student by a classroom
      * @param $classroom
      * @return student[] Returns an array of student objects
      */
