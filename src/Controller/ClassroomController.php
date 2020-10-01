@@ -13,9 +13,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class ClassroomController
+ * This class manage the classrooms
+ * @package App\Controller
+ */
 class ClassroomController extends AbstractController
 {
     /**
+     * This methode shows the students and teacher that belongs to the classroom
+     * and It allows us to invite new Teachers or students
      * @Route("/classroom/{id}", name="classroom_index")
      * @IsGranted ("ROLE_USER")
      * @param Classroom $classroom
@@ -26,8 +33,10 @@ class ClassroomController extends AbstractController
      */
     public function index(Classroom $classroom, Request $request, Invitation $invitation): Response
     {
-        $invite = new Invite();
+        $invite = new Invite(); // New teacher or student
+
         $form = $this->createForm(InviteType::class, $invite);
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $invitation->invite($invite, $classroom->getId());

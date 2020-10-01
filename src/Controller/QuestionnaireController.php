@@ -11,13 +11,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class QuestionnaireController
+ * This class manage the questionnaires plays
  * @package App\Controller
- * @Route ("/questionnaire")
  */
 class QuestionnaireController extends AbstractController
 {
     /**
-     * @Route ("/{id}", name="questionnaire_index")
+     * @Route ("/questionnaire/{id}", name="questionnaire_index")
      * @param Questionnaire $questionnaire
      * @param Request $request
      * @return Response
@@ -33,19 +33,22 @@ class QuestionnaireController extends AbstractController
     }
 
     /**
-     * @Route("/play/{id}", name="questionnaire_play")
+     * This methode control the questionnaires gaming
+     * @Route("/questionnaire/{id}/play", name="questionnaire_play")
      * @param Questionnaire $questionnaire
      * @param Request $request
      * @return Response
      */
     public function play(Questionnaire $questionnaire, Request $request): Response
     {
+        // Check if we can play the questionnaire or not
         if (!$questionnaire->isPlayable()) {
             $this->addFlash('error', 'Questionnaire indisponible !');
 
             return $this->redirectToRoute('student_index');
         }
 
+        // Creates the variables that I'm gonna need later on
         $answers = null;
         $rights = null;
         $points = null;
@@ -89,6 +92,7 @@ class QuestionnaireController extends AbstractController
     }
 
     /**
+     * This methode checks questionnaire answers
      * @param $answers
      * @param $questionnaire
      * @return array
@@ -98,7 +102,9 @@ class QuestionnaireController extends AbstractController
         $points = 0;
         $correctPropositions = [];
 
+        // For each questionnaire question we check if the student has chosen a good answer
         foreach ($questionnaire->getQuestions() as $question) {
+            // Call a methode in question Entity
             $rightPropositions = $question->getRightPropositions();
 
             foreach ($rightPropositions as $rightProposition) {

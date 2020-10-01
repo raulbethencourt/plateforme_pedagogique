@@ -25,14 +25,11 @@
     <list default="true" id="6c7a212d-3c91-4ff0-904b-dbc37de82ac8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/css/app.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/app.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/logo-carpa.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/ClassroomController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ClassroomController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/QuestionnaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/QuestionnaireController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/TeacherController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TeacherController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/security/login.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/security/login.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/user/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/index.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/RegistrationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/RegistrationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/SecurityController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/SecurityController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -306,6 +303,7 @@
       <workItem from="1601288164496" duration="376000" />
       <workItem from="1601323844021" duration="667000" />
       <workItem from="1601361807291" duration="8471000" />
+      <workItem from="1601548446540" duration="2001000" />
     </task>
     <servers />
   </component>
@@ -333,9 +331,10 @@
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
     <state x="2348" y="399" width="414" height="244" key="#Composer/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599682301132" />
-    <state x="631" y="198" width="734" height="646" key="#Inspections" timestamp="1600757473044">
-      <screen x="62" y="0" width="1858" height="1080" />
+    <state x="588" y="190" width="734" height="646" key="#Inspections" timestamp="1601549004261">
+      <screen x="0" y="0" width="1920" height="1036" />
     </state>
+    <state x="588" y="190" key="#Inspections/0.0.1920.1036@0.0.1920.1036" timestamp="1601549004261" />
     <state x="2188" y="198" width="734" height="646" key="#Inspections/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600713971168" />
     <state x="631" y="198" key="#Inspections/62.0.1858.1080@62.0.1858.1080" timestamp="1600757473044" />
     <state x="582" y="197" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1599813950401">
@@ -423,9 +422,10 @@
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
     <state x="2130" y="164" width="850" height="714" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600975778363" />
-    <state x="343" y="456" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1600326688207">
-      <screen x="62" y="0" width="1858" height="1080" />
+    <state x="290" y="437" width="411" height="175" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1601549385747">
+      <screen x="0" y="0" width="1920" height="1036" />
     </state>
+    <state x="290" y="437" width="411" height="175" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1036@0.0.1920.1036" timestamp="1601549385747" />
     <state x="343" y="456" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/62.0.1858.1080@62.0.1858.1080" timestamp="1600326688207" />
     <state x="2442" y="99" width="1046" height="937" key="find.popup" timestamp="1600023008615">
       <screen x="1600" y="0" width="1920" height="1080" />
@@ -440,9 +440,10 @@
     </state>
     <state x="2205" y="250" width="672" height="677" key="run.anything.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600977129115" />
     <state x="647" y="250" key="run.anything.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1601388797731" />
-    <state x="654" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1601388788798">
-      <screen x="62" y="0" width="1858" height="1080" />
+    <state x="612" y="225" width="695" height="651" key="search.everywhere.popup" timestamp="1601549790971">
+      <screen x="0" y="0" width="1920" height="1036" />
     </state>
+    <state x="612" y="225" width="695" height="651" key="search.everywhere.popup/0.0.1920.1036@0.0.1920.1036" timestamp="1601549790971" />
     <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1601239350819" />
     <state x="654" y="235" width="672" height="678" key="search.everywhere.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1601388788798" />
   </component>

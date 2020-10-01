@@ -16,10 +16,5 @@ let data = null;
 import './chartJS';
 import './question_create';
 import './password_confirm';
+import './invite';
 
-// Invite form for User
-$('#inviterBtn').click(function (e) {
-    e.preventDefault();
-    $('#inviteForm').fadeIn();
-    $('#inviterBtn').hide();
-});

@@ -7,8 +7,6 @@ use App\Entity\Student;
 use App\Entity\Teacher;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
-use App\Form\TeacherRegistrationType;
-use App\Repository\StudentRegistrationType;
 use App\Security\EmailVerifier;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -21,6 +19,11 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
+/**
+ * Class RegistrationController
+ * This class manage the different users registrations
+ * @package App\Controller
+ */
 class RegistrationController extends AbstractController
 {
     private $emailVerifier;
@@ -44,11 +47,12 @@ class RegistrationController extends AbstractController
         GuardAuthenticatorHandler $guardHandler,
         LoginFormAuthenticator $authenticator
     ): Response {
+        // I get User type property to change the registration way
         $type = $request->query->get("type");
         $classroom = $request->query->get("classroom");
         $classroom = $this->getDoctrine()->getRepository(Classroom::class)->findOneById($classroom);
 
-
+        // In depends of type we creates different user
         switch ($type) {
             case 'teacher':
                 $user = new Teacher();
@@ -62,6 +66,7 @@ class RegistrationController extends AbstractController
                 $user = new User();
                 $user->setRoles(['ROLE_ADMIN']);
         }
+
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
@@ -126,6 +131,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_register');
         }
 
+        // If validate email is accept we redirect by Role
         switch ($this->getUser()->getRoles()) {
             case "ROLE_TEACHER":
                 return $this->redirectToRoute('teacher_index');
