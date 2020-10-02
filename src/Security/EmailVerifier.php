@@ -3,37 +3,49 @@
 namespace App\Security;
 
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
-class EmailVerifier
+class EmailVerifier extends AbstractController
 {
     private $verifyEmailHelper;
     private $mailer;
     private $entityManager;
+    private $urlGenerator;
+    private $userConnected;
 
-    public function __construct(VerifyEmailHelperInterface $helper, MailerInterface $mailer,
-        EntityManagerInterface $manager)
-    {
+    public function __construct(
+        VerifyEmailHelperInterface $helper,
+        MailerInterface $mailer,
+        EntityManagerInterface $manager,
+        UrlGeneratorInterface $urlGenerator
+    ) {
         $this->verifyEmailHelper = $helper;
         $this->mailer = $mailer;
         $this->entityManager = $manager;
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
-     * @param  string  $verifyEmailRouteName
-     * @param  UserInterface  $user
-     * @param  TemplatedEmail  $email
+     * @param string $verifyEmailRouteName
+     * @param UserInterface $user
+     * @param TemplatedEmail $email
      * @throws TransportExceptionInterface
      */
-    public function sendEmailConfirmation(string $verifyEmailRouteName,
-        UserInterface $user, TemplatedEmail $email): void
-    {
+    public function sendEmailConfirmation(
+        string $verifyEmailRouteName,
+        UserInterface $user,
+        TemplatedEmail $email
+    ): void {
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
             $verifyEmailRouteName,
             $user->getId(),
@@ -50,11 +62,11 @@ class EmailVerifier
     }
 
     /**
-     * @param  Request  $request
-     * @param  UserInterface  $user
+     * @param Request $request
+     * @param UserInterface $user
      * @throws VerifyEmailExceptionInterface
      */
-    public function handleEmailConfirmation(Request $request, UserInterface $user): void
+    public function handleEmailConfirmation(Request $request, UserInterface $user)
     {
         $this->verifyEmailHelper->validateEmailConfirmation($request->getUri(), $user->getId(), $user->getEmail());
 
@@ -62,5 +74,14 @@ class EmailVerifier
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+        /*
+        // If validate email is accepted we redirect by Role
+        switch ($user->getRoles()[0]) {
+            case "ROLE_TEACHER":
+                return $this->redirectToRoute('teacher_index');
+            case "ROLE_STUDENT":
+                dd($user->getRoles()[0]);
+                return $this->redirectToRoute('student_index');
+        }*/
     }
 }

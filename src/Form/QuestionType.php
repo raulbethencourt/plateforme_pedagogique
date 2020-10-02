@@ -24,6 +24,7 @@ class QuestionType extends AbstractType
                         'class' => 'titleQuestionnaire',
                         'placeholder' => "Entrée l'intitulé de la question",
                     ],
+                    'purify_html' => true,
                 ]
             )
             ->add(

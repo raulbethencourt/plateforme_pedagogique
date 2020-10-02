@@ -39,11 +39,30 @@ class RegistrationFormType extends AbstractType
                             ]
                         ),
                     ],
+                    'purify_html' => true,
                 ]
             )
-            ->add('surname', TextType::class)
-            ->add('name', TextType::class)
-            ->add('email', EmailType::class)
+            ->add(
+                'surname',
+                TextType::class,
+                [
+                    'purify_html' => true,
+                ]
+            )
+            ->add(
+                'name',
+                TextType::class,
+                [
+                    'purify_html' => true,
+                ]
+            )
+            ->add(
+                'email',
+                EmailType::class,
+                [
+                    'purify_html' => true,
+                ]
+            )
             ->add(
                 'agreeTerms',
                 CheckboxType::class,
@@ -78,6 +97,7 @@ class RegistrationFormType extends AbstractType
                     'attr' => [
                         'id' => 'pass',
                     ],
+                    'purify_html' => true,
                 ]
             );
     }

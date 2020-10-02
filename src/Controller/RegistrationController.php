@@ -99,12 +99,13 @@ class RegistrationController extends AbstractController
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
 
-            return $guardHandler->authenticateUserAndHandleSuccess(
+            return $this->redirectToRoute('templates/');
+           /* return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
                 $request,
                 $authenticator,
                 'main' // firewall name in security.yaml
-            );
+            );*/
         }
 
         return $this->render(
@@ -131,7 +132,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_register');
         }
 
-        // If validate email is accepted we redirect by Role
+        /*// If validate email is accepted we redirect by Role
         switch ($this->getUser()->getRoles()) {
             case "ROLE_TEACHER":
                 return $this->redirectToRoute('teacher_index');
@@ -141,6 +142,7 @@ class RegistrationController extends AbstractController
                 break;
             default:
                 return $this->redirectToRoute('user_index');
-        }
+        }*/
+        return $this->redirectToRoute('app_login');
     }
 }

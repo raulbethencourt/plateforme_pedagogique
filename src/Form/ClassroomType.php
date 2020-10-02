@@ -19,7 +19,13 @@ class ClassroomType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class)
+            ->add(
+                'name',
+                TextType::class,
+                [
+                    'purify_html' => true,
+                ]
+            )
             ->add(
                 'discipline',
                 ChoiceType::class,

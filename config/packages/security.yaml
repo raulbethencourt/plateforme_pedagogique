@@ -43,4 +43,4 @@ security:
     access_control:
         - { path: ^/user, roles: ROLE_ADMIN }
         - { path: ^/teacher, roles: ROLE_TEACHER }
-        - { path: ^/student, roles: ROLE_STUDENT }
+        - { path: ^/student, roles: IS_AUTHENTICATED_FULLY }

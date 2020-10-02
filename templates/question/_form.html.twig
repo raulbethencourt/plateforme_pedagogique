@@ -1,5 +1,5 @@
 {{ form_start(form) }}
-    {{ form_row(form.wording) }}
+    {{ form_row(form.title) }}
     {{ form_row(form.score) }}
     <ul class="propositions" style="list-style: none;"
         data-prototype="{{ form_widget(form.propositions.vars.prototype)|e('html_attr') }}">

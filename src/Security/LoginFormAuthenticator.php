@@ -81,7 +81,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             throw new CustomUserMessageAuthenticationException('Username could not be found.');
         }
 
-        $this->userConnected = $user;
+       // $this->userConnected = $user;
 
         return $user;
     }

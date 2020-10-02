@@ -29,9 +29,10 @@ class Invitation extends AbstractController
     /**
      * @param $data
      * @param $classroom_id
+     * @param $discipline
      * @throws TransportExceptionInterface
      */
-    public function invite($data, $classroom_id): void
+    public function invite($data, $classroom_id, $discipline): void
     {
         // I creates a new email to send to the new user
         $email = (new TemplatedEmail())
@@ -45,6 +46,7 @@ class Invitation extends AbstractController
                         'type' => $data->getType(),
                         'name' => $data->getName(),
                         'classroom' => $classroom_id,
+                        'discipline' => $discipline,
                     ],
                 ]
             );

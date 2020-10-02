@@ -27,6 +27,7 @@ class InviteType extends AbstractType
                         'class' => 'm-1',
                         'placeholder' => 'email...',
                     ],
+                    'purify_html' => true,
                 ]
             )
             ->add(
@@ -43,12 +44,17 @@ class InviteType extends AbstractType
                     ],
                 ]
             )
-            ->add('name', TextType::class, [
-                'label' => false,
-                'attr' => [
-                    'placeholder' => 'name...'
+            ->add(
+                'name',
+                TextType::class,
+                [
+                    'label' => false,
+                    'attr' => [
+                        'placeholder' => 'name...',
+                    ],
+                    'purify_html' => true,
                 ]
-            ])
+            )
             ->add(
                 'submit',
                 SubmitType::class,

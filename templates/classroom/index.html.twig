@@ -3,6 +3,18 @@
 {% block title %}Admin - {{ classroom.name }}{% endblock %}
 
 {% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success mr-2 mb-0">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% if not form.vars.valid %}
+        <div class="alert alert-danger mr-2 mb-0" role="alert">
+            <strong>Erreur fatal</strong>
+        </div>
+    {% endif %}
+
     <h1>{{ classroom.name }} - <span class="badge badge-info">{{ classroom.discipline }}</span></h1>
     <h3>Liste de Partisipants</h3>
     <h3>Teachers</h3>
@@ -46,17 +58,6 @@
         </tbody>
     </table>
     <div class="d-flex justify-content-end">
-        {% for message in app.flashes('success') %}
-            <div class="alert alert-success mr-2 mb-0">
-                {{ message }}
-            </div>
-        {% endfor %}
-
-        {% if not form.vars.valid %}
-            <div class="alert alert-danger mr-2 mb-0" role="alert">
-                <strong>Erreur fatal</strong>
-            </div>
-        {% endif %}
         <div id="inviteForm"{% if not form.vars.submitted %} style="display: none;" {% endif %}
              class="w-75">
             {{ form_start(form) }}
