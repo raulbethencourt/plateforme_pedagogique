@@ -15,11 +15,44 @@
         </div>
     {% endif %}
 
-    <h1>{{ classroom.name }} - <span class="badge badge-info">{{ classroom.discipline }}</span></h1>
-    <h3>Liste de Partisipants</h3>
-    <h3>Teachers</h3>
+    <h1>{{ classroom.name }} - <span class="badge badge-pill badge-info text-white">{{ classroom.discipline }}</span></h1>
+    <div class="d-flex align-items-center">
+        <div class="d-block">
+            <h3>Liste de Partisipants</h3>
+            <h3>Teachers</h3>
+        </div>
+        <div class="d-flex justify-content-end w-75">
+            <div id="inviteForm"{% if not form.vars.submitted %} style="display: none;" {% endif %}
+                 class="w-100">
+                {{ form_start(form) }}
+                <div class="d-flex justify-content-sm-around align-items-center">
+                    <div class="form-group m-0">
+                        {{ form_errors(form.name) }}
+                        {{ form_widget(form.name) }}
+                        {{ form_help(form.name) }}
+                    </div>
+                    <div class="form-group m-0">
+                        {{ form_errors(form.email) }}
+                        {{ form_widget(form.email) }}
+                        {{ form_help(form.email) }}
+                    </div>
+                    <div class="form-group m-0">
+                        {{ form_errors(form.type) }}
+                        {{ form_widget(form.type) }}
+                        {{ form_help(form.type) }}
+                    </div>
+                    <div class="form-group m-0">
+                        {{ form_widget(form.submit) }}
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+            <a id="inviterBtn" class="btn btn-secondary h-50" href="#" role="button" {% if form.vars.submitted %}
+                style="display:none;" {% endif %}>Inviter</a>
+        </div>
+    </div>
     <table class="table">
-        <thead class="thead-dark">
+        <thead class="thead-dark rounded-top">
         <tr>
             <th scope="col">id</th>
             <th scope="col">Name</th>
@@ -38,8 +71,8 @@
         </tbody>
     </table>
     <h3>Students</h3>
-    <table class="table">
-        <thead class="thead-dark">
+    <table class="table rounded-top">
+        <thead class="thead-dark ">
         <tr>
             <th scope="col">id</th>
             <th scope="col">Name</th>
@@ -57,20 +90,6 @@
         {% endfor %}
         </tbody>
     </table>
-    <div class="d-flex justify-content-end">
-        <div id="inviteForm"{% if not form.vars.submitted %} style="display: none;" {% endif %}
-             class="w-75">
-            {{ form_start(form) }}
-            <div class="d-flex justify-content-between align-items-center">
-                {{ form_row(form.name) }}
-                {{ form_row(form.email) }}
-                {{ form_row(form.type) }}
-                {{ form_row(form.submit) }}
-            </div>
-            {{ form_end(form) }}
-        </div>
-        <a name="btn" id="inviterBtn" class="btn btn-secondary" href="#" role="button" {% if form.vars.submitted %}
-            style="display:none;" {% endif %}>Inviter</a>
-    </div>
+
 {% endblock %}
 

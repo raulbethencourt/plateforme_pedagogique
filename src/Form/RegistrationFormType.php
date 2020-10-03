@@ -94,9 +94,6 @@ class RegistrationFormType extends AbstractType
                             ]
                         ),
                     ],
-                    'attr' => [
-                        'id' => 'pass',
-                    ],
                     'purify_html' => true,
                 ]
             );

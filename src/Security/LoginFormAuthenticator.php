@@ -44,6 +44,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
+        $this->userConnected = null;
     }
 
     public function supports(Request $request)
@@ -81,7 +82,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             throw new CustomUserMessageAuthenticationException('Username could not be found.');
         }
 
-       // $this->userConnected = $user;
+       $this->userConnected = $user;
 
         return $user;
     }

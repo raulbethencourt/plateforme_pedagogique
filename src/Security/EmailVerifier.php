@@ -74,14 +74,5 @@ class EmailVerifier extends AbstractController
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
-        /*
-        // If validate email is accepted we redirect by Role
-        switch ($user->getRoles()[0]) {
-            case "ROLE_TEACHER":
-                return $this->redirectToRoute('teacher_index');
-            case "ROLE_STUDENT":
-                dd($user->getRoles()[0]);
-                return $this->redirectToRoute('student_index');
-        }*/
     }
 }

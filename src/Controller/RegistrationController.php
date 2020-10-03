@@ -99,8 +99,8 @@ class RegistrationController extends AbstractController
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
 
-            return $this->redirectToRoute('templates/');
-           /* return $guardHandler->authenticateUserAndHandleSuccess(
+            return $this->render('registration/confirm.html.twig');
+            /*return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
                 $request,
                 $authenticator,
@@ -121,14 +121,13 @@ class RegistrationController extends AbstractController
      */
     public function verifyUserEmail(Request $request): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $exception->getReason());
-
             return $this->redirectToRoute('app_register');
         }
 
@@ -143,6 +142,7 @@ class RegistrationController extends AbstractController
             default:
                 return $this->redirectToRoute('user_index');
         }*/
-        return $this->redirectToRoute('app_login');
+
+        return $this->redirectToRoute('app_logout');
     }
 }

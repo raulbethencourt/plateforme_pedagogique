@@ -24,7 +24,6 @@ class InviteType extends AbstractType
                 [
                     'label' => false,
                     'attr' => [
-                        'class' => 'm-1',
                         'placeholder' => 'email...',
                     ],
                     'purify_html' => true,
@@ -38,9 +37,6 @@ class InviteType extends AbstractType
                     'choices' => [
                         'teacher' => 'teacher',
                         'student' => 'student',
-                    ],
-                    'attr' => [
-                        'class' => 'm-1 w-100',
                     ],
                 ]
             )

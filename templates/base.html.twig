@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Raul Bethencourt Gonzalez">
+    <meta name="description" content="Carpa is a pedagogical platform for modern training schools">
     <title>{% block title %}Admin - CARPA{% endblock %}</title>
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
@@ -16,16 +18,17 @@
             <img src="{{ asset('images/logo-carpa.svg') }}" width="55" height="55" alt="logo ubuntu">
         </a>
     {% endblock %}
-    <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2 bg-dark text-white" type="search" placeholder="Search..."
-               aria-label="Search">
-    </form>
+
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2 bg-dark text-white" type="search" placeholder="Search..."
+                   aria-label="Search">
+        </form>
         <ul class="navbar-nav justify-content-between align-items-center w-100">
             {% block home %}
                 <li class="nav-item">

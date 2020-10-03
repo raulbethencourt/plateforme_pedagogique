@@ -23,30 +23,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c7a212d-3c91-4ff0-904b-dbc37de82ac8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bundles.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/security.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ClassroomController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ClassroomController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/css/scss/_variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/scss/_variables.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/css/scss/libs/custom.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/scss/libs/custom.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/css/scss/responsive/profile.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/scss/libs/responsive/profile.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/js/password_confirm.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/password_confirm.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/RegistrationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/RegistrationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Student.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Student.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Teacher.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Teacher.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/ClassroomType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/ClassroomType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/SecurityController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/SecurityController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Form/InviteType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/InviteType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/PropositionType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/PropositionType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/QuestionType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/QuestionType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/QuestionnaireType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/QuestionnaireType.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Form/RegistrationFormType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/RegistrationFormType.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Security/EmailVerifier.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Security/EmailVerifier.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Security/LoginFormAuthenticator.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Security/LoginFormAuthenticator.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/invitation/Invitation.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/invitation/Invitation.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/classroom/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/classroom/index.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/emails/invitation.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/emails/invitation.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/question/_form.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/question/_form.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/register.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration/register.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/security/security_base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/security/security_base.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,21 +196,21 @@
     <property name="DatabaseDriversLRU" value="mariadb" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="add_unversioned_files" value="$PROJECT_DIR$/public/build/app.css" />
+    <property name="add_unversioned_files" value="$PROJECT_DIR$/public/build/app.css&#10;/home/raulbethencourt/sites/plataform/plataform/vendor/symfony/security-guard/AuthenticatorInterface.php" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/public/images" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="php.override.implement.member.chooser.php.doc" value="NONE" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="editing.templates" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets/css/scss/libs" />
       <recent name="$PROJECT_DIR$/src/Form" />
       <recent name="$PROJECT_DIR$/public/images" />
       <recent name="$PROJECT_DIR$/images" />
       <recent name="C:\Users\Stagiaire\sites\plataform\plataform\assets\css\scss" />
-      <recent name="$PROJECT_DIR$/templates/formateur" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/public/images" />
@@ -327,6 +320,9 @@
       <workItem from="1601582270534" duration="790000" />
       <workItem from="1601583418381" duration="2379000" />
       <workItem from="1601620774502" duration="13227000" />
+      <workItem from="1601666327761" duration="4344000" />
+      <workItem from="1601671625341" duration="487000" />
+      <workItem from="1601711037860" duration="17997000" />
     </task>
     <servers />
   </component>
@@ -427,10 +423,10 @@
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
     <state x="2372" y="440" width="365" height="162" key="NewPhpFileDialog/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600518885535" />
-    <state x="795" y="127" width="1142" height="878" key="SettingsEditor" timestamp="1600679714794">
-      <screen x="62" y="0" width="1858" height="1080" />
+    <state x="2301" y="130" width="1142" height="878" key="SettingsEditor" timestamp="1601738690677">
+      <screen x="1600" y="0" width="1920" height="1080" />
     </state>
-    <state x="2301" y="130" width="1142" height="878" key="SettingsEditor/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600606438232" />
+    <state x="2301" y="130" width="1142" height="878" key="SettingsEditor/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1601738690677" />
     <state x="795" y="127" key="SettingsEditor/62.0.1858.1080@62.0.1858.1080" timestamp="1600679714794" />
     <state x="2455" y="413" width="194" height="264" key="com.intellij.database.actions.DdlActions$CreateObject$1" timestamp="1599852136542">
       <screen x="1600" y="0" width="1920" height="1080" />
@@ -464,11 +460,11 @@
     </state>
     <state x="2205" y="250" width="672" height="677" key="run.anything.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600977129115" />
     <state x="647" y="250" key="run.anything.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1601388797731" />
-    <state x="654" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1601632583136">
-      <screen x="62" y="0" width="1858" height="1080" />
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1601739758653">
+      <screen x="1600" y="0" width="1920" height="1080" />
     </state>
     <state x="612" y="225" width="695" height="651" key="search.everywhere.popup/0.0.1920.1036@0.0.1920.1036" timestamp="1601549790971" />
-    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1601583429042" />
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1601739758653" />
     <state x="654" y="235" width="672" height="678" key="search.everywhere.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1601632583136" />
   </component>
 </project>
