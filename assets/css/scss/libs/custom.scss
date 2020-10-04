@@ -1,5 +1,12 @@
 /* My personal CSS */
 @import "responsive/base.scss";
+@import "responsive/classroom.scss";
+
+/* Classroom CSS*/
+
+.invite-form--responsive {
+  display: flex;
+}
 
 .profile {
   width: 35px;
@@ -24,3 +31,4 @@
 .pass-list {
   font-size: 0.75rem;
 }
+

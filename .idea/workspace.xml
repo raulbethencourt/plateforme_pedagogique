@@ -24,22 +24,12 @@
   <component name="ChangeListManager">
     <list default="true" id="6c7a212d-3c91-4ff0-904b-dbc37de82ac8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/css/scss/_variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/scss/_variables.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/css/scss/libs/custom.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/scss/libs/custom.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/css/scss/responsive/profile.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/scss/libs/responsive/profile.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/js/password_confirm.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/password_confirm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/RegistrationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/RegistrationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/SecurityController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/SecurityController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/InviteType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/InviteType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/RegistrationFormType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/RegistrationFormType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Security/EmailVerifier.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Security/EmailVerifier.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Security/LoginFormAuthenticator.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Security/LoginFormAuthenticator.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/css/scss/libs/responsive.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/scss/libs/responsive.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/css/scss/libs/responsive/base.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/scss/libs/responsive/base.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/classroom/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/classroom/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/emails/invitation.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/emails/invitation.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/registration/register.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration/register.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/security/security_base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/security/security_base.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -323,6 +313,9 @@
       <workItem from="1601666327761" duration="4344000" />
       <workItem from="1601671625341" duration="487000" />
       <workItem from="1601711037860" duration="17997000" />
+      <workItem from="1601752523708" duration="2259000" />
+      <workItem from="1601799195962" duration="2174000" />
+      <workItem from="1601811804351" duration="2814000" />
     </task>
     <servers />
   </component>
@@ -460,11 +453,11 @@
     </state>
     <state x="2205" y="250" width="672" height="677" key="run.anything.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600977129115" />
     <state x="647" y="250" key="run.anything.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1601388797731" />
-    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1601739758653">
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1601806426515">
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
     <state x="612" y="225" width="695" height="651" key="search.everywhere.popup/0.0.1920.1036@0.0.1920.1036" timestamp="1601549790971" />
-    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1601739758653" />
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1601806426515" />
     <state x="654" y="235" width="672" height="678" key="search.everywhere.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1601632583136" />
   </component>
 </project>

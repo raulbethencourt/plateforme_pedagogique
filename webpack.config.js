@@ -13,6 +13,10 @@ Encore
     .setPublicPath('/build')
     // only needed for CDN's or sub-directory deploy
     .setManifestKeyPrefix('build/')
+    // will be applied for `encore dev --watch` and `encore dev-server` commands
+    .configureWatchOptions(watchOptions => {
+    watchOptions.poll = 250; // check for changes every 250 milliseconds
+    })
 
     /*
      * ENTRY CONFIG
