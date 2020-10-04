@@ -1,18 +1,17 @@
 <div class="container">
     <div id="contact">
-        <h3>{{ data.name }} Welcome to</h3>
+        <h3>{{ data.name }} Bienvenue à</h3>
         <h3>CARPA</h3>
-        <h4>Vous avez été invité a join la classe:</h4>
+        <h4>Vous avez été invité à joindre la classe:</h4>
         <p class="classroom-id">{{ data.discipline }}</p>
-        <p>Utilisée cette identifiant a l'heure de votre enregistrement</p>
 
         <fieldset>
             {% if data.type == "teacher" %}
-            <a href="http://plataform.loc/reg
-
-            ister?type=teacher&classroom={{ data.classroom }}" class="btn">S'enregistrée</a>
+                <a href="http://plataform.loc/register?type=teacher&classroom={{ data.classroom }}"
+                   class="btn">Enregistrement</a>
             {% else %}
-            <a href="http://plataform.loc/register?type=student&classroom={{ data.classroom }}" class="btn">S'enregistrée</a>
+                <a href="http://plataform.loc/register?type=student&classroom={{ data.classroom }}"
+                   class="btn">Enregistrement</a>
             {% endif %}
         </fieldset>
     </div>
@@ -20,6 +19,7 @@
 
 <style>
     @import url(https://fonts.googleapis.com/css?family=Roboto:400,300,600,400italic);
+
     * {
         margin: 0;
         padding: 0;

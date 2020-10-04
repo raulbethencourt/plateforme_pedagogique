@@ -57,7 +57,7 @@ class InviteType extends AbstractType
                 [
                     'label' => 'Envoyer',
                     'attr' => [
-                        'class' => 'btn btn-secondary',
+                        'class' => 'btn btn-primary',
                     ],
                 ]
             );

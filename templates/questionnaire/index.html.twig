@@ -4,7 +4,7 @@
 
 {% block logo %}
     <a class="navbar-brand ml-4" href="{{ path('teacher_index') }}">
-        <img src="{{ asset('images/ubuntu.png') }}" width="30" height="30" alt="logo ubuntu">
+        <img src="{{ asset('images/logo-carpa.svg') }}" class="logo-carpa" alt="logo ubuntu">
     </a>
 {% endblock %}
 
@@ -43,18 +43,18 @@
                         {% if proposition.correct %}
                             <span class="badge badge-success">{{ proposition.text }}</span>
                         {% else %}
-                            <span class="badge badge-secondary">{{ proposition.text }}</span>
+                            <span class="badge badge-info">{{ proposition.text }}</span>
                         {% endif %}
                     {% endfor %}
                 </td>
                 <td>
-                    <a href="{{ path('question_edit', {id: question.id}) }}" class="btn btn-primary"
+                    <a href="{{ path('question_edit', {id: question.id}) }}" class="btn btn-secondary"
                        role="button">Edit</a>
                     <form method="post" action="{{ path('question_delete', {id: question.id}) }}"
                           style="display: inline-block" onsubmit="return confirm('Are you sure?')">
                         <input type="hidden" name="_method" value='DELETE'>
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">
-                        <button class="btn btn-danger">Delete</button>
+                        <button class="btn btn-danger mt-2">Delete</button>
                     </form>
                 </td>
             </tr>

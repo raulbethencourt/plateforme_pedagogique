@@ -18,8 +18,8 @@
     <h1>{{ classroom.name }} - <span class="badge badge-pill badge-info text-white">{{ classroom.discipline }}</span></h1>
     <div class="d-flex align-items-center">
         <div class="d-block">
-            <h3>Liste de Partisipants</h3>
-            <h3>Teachers</h3>
+            <h2>Liste des Participants</h2>
+            <h3><span class="badge badge-pill badge-secondary text-white">Formateurs</span></h3>
         </div>
         <div class="d-flex justify-content-end w-75">
             <div id="inviteForm"{% if not form.vars.submitted %} style="display: none;" {% endif %}
@@ -47,45 +47,47 @@
                 </div>
                 {{ form_end(form) }}
             </div>
-            <a id="inviterBtn" class="btn btn-secondary h-50" href="#" role="button" {% if form.vars.submitted %}
+            <a id="inviterBtn" class="btn btn-primary h-50" href="#" role="button" {% if form.vars.submitted %}
                 style="display:none;" {% endif %}>Inviter</a>
         </div>
     </div>
     <table class="table">
-        <thead class="thead-dark rounded-top">
+        <thead class="thead-dark">
         <tr>
             <th scope="col">id</th>
-            <th scope="col">Name</th>
-            <th scope="col"></th>
+            <th scope="col">Prenom</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Matière</th>
         </tr>
         </thead>
         <tbody>
         {% for teacher in teachers %}
             <tr>
                 <th scope="row">{{ teacher.id }}</th>
-                <td>{{ teacher.username }}</td>
-                <td>
-                </td>
+                <td>{{ teacher.name }}</td>
+                <td>{{ teacher.surname }}</td>
+                <td>{{ teacher.subject }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-    <h3>Students</h3>
-    <table class="table rounded-top">
+    <h3><span class="badge badge-pill badge-secondary text-white">Etudiant</span></h3>
+    <table class="table">
         <thead class="thead-dark ">
         <tr>
             <th scope="col">id</th>
-            <th scope="col">Name</th>
-            <th scope="col"></th>
+            <th scope="col">Prenom</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Loisir</th>
         </tr>
         </thead>
         <tbody>
         {% for student in students %}
             <tr>
                 <th scope="row">{{ student.id }}</th>
-                <td>{{ student.username }}</td>
-                <td>
-                </td>
+                <td>{{ student.name }}</td>
+                <td>{{ student.surname }}</td>
+                <td>{{ student.hobby }}</td>
             </tr>
         {% endfor %}
         </tbody>
