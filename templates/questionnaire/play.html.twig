@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Student - {{ questionnaire.title }}{% endblock %}
+
+{% block logo %}
+    <a class="navbar-brand ml-4" href="{{ path('student_index') }}">
+        <img src="{{ asset('images/logo-carpa.svg') }}" class="logo-carpa" alt="logo carpa">
+    </a>
+{% endblock %}
+
+{% block home %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ path('student_index') }}">Home</a>
+    </li>
+{% endblock %}
+
+{% block profile %}
+    <li class="nav-item">
+        <a class="nav-link mr-2" href="{{ path('student_profile') }}">
+            <img class="profile" src="{{ asset('images/profile.png') }}" alt="profile icon"></a>
+    </li>
+{% endblock %}
+
+{% block body %}
+    <header>
+        <h3>
+            {{ questionnaire.title }}
+            <span class="badge badge-pill
+            {% if questionnaire.difficulty == "difficile" %}
+                badge-danger
+            {% elseif questionnaire.difficulty ==  "facile" %}
+                badge-success
+            {% else %}
+                badge-info
+            {% endif %}
+            ">{{ questionnaire.difficulty }}</span>
+        </h3>
+    </header>
+
+    {% if finalResults['given'] is not null %}
+        <div class="alert alert-primary">Votre score : {{ points }}/{{ questionnaire.totalScore }}</div>
+    {% endif %}
+
+    <form method="post">
+        {% for question in questions %}
+            <article class="container">
+                <h5 class="pt-3 mb-0">{{ question.title }}</h5>
+                <small class="text-muted">{{ question.score }} {{ question.score > 1 ? "points" : "point" }}</small>
+
+                <ul class="list-group">
+                    {% for proposition in question.propositions %}
+
+                        {% set lgi_class, checked = "", "" %}
+                        {% if finalResults['given'] is not null and proposition.id in finalResults['given'] %}
+                            {% set checked = "checked" %}
+                            {% if proposition.id in finalResults['rights'] %}
+                                {% set lgi_class = "correct" %}
+                            {% else %}
+                                {% set lgi_class = "wrong" %}
+                            {% endif %}
+                        {% endif %}
+
+                        <li class="list-group-item {{ lgi_class }}">
+                            <label>
+                                <input type="radio" name="{{ question.id }}" value="{{ proposition.id }}" {{ checked }}>
+                                {{ proposition.text }}
+                            </label>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </article>
+        {% endfor %}
+
+        <footer class="text-center mt-3">
+            <button class="btn btn-primary" type="submit"><i class="fas fa-check"></i>&nbsp;Je valide mes réponses
+            </button>
+        </footer>
+
+    </form>
+{% endblock %}

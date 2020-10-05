@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=QuestionnaireRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\QuestionnaireRepository", repositoryClass=QuestionnaireRepository::class)
  */
 class Questionnaire
 {
@@ -22,34 +22,46 @@ class Questionnaire
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $nom;
+    private $title;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $difficulte;
+    private $difficulty;
 
     /**
-     * @ORM\OneToMany(targetEntity=Question::class, mappedBy="questionnaire")
+     * @ORM\OneToMany(targetEntity=Question::class, mappedBy="questionnaire",
+     *     orphanRemoval=true, cascade={"persist"})
      */
     private $questions;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Formateur::class, inversedBy="questionnaires")
+     * @ORM\ManyToOne(targetEntity=Teacher::class, inversedBy="questionnaires")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $formateur;
+    private $teacher;
 
     /**
-     * @ORM\OneToMany(targetEntity=Passer::class, mappedBy="questionnaire")
+     * @ORM\OneToMany(targetEntity=Pass::class, mappedBy="questionnaire", orphanRemoval=true)
      */
-    private $passers;
+    private $pass;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $date_creation;
+
+    public const DIFFICULTIES = ["facile", "moyen", "difficile"];
 
     public function __construct()
     {
-        $this->questionnaire = new ArrayCollection();
         $this->questions = new ArrayCollection();
-        $this->passers = new ArrayCollection();
+        $this->pass = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->title;
     }
 
     public function getId(): ?int
@@ -57,33 +69,30 @@ class Questionnaire
         return $this->id;
     }
 
-    public function getNom(): ?string
+    public function getTitle(): ?string
     {
-        return $this->nom;
+        return $this->title;
     }
 
-    public function setNom(string $nom): self
+    public function setTitle(string $title): self
     {
-        $this->nom = $nom;
+        $this->title = $title;
 
         return $this;
     }
 
-    public function getDifficulte(): ?string
+    public function getDifficulty(): ?string
     {
-        return $this->difficulte;
+        return $this->difficulty;
     }
 
-    public function setDifficulte(string $difficulte): self
+    public function setDifficulty(string $difficulty): self
     {
-        $this->difficulte = $difficulte;
+        $this->difficulty = $difficulty;
 
         return $this;
     }
 
-    /**
-     * @return Collection|Question[]
-     */
     public function getQuestions(): Collection
     {
         return $this->questions;
@@ -112,46 +121,79 @@ class Questionnaire
         return $this;
     }
 
-    public function getFormateur(): ?Formateur
+    public function getTeacher(): ?Teacher
     {
-        return $this->formateur;
+        return $this->teacher;
     }
 
-    public function setFormateur(?Formateur $formateur): self
+    public function setTeacher(?Teacher $teacher): self
     {
-        $this->formateur = $formateur;
+        $this->teacher = $teacher;
 
         return $this;
     }
 
-    /**
-     * @return Collection|Passer[]
-     */
-    public function getPassers(): Collection
+    public function getPass(): Collection
     {
-        return $this->passers;
+        return $this->pass;
     }
 
-    public function addPasser(Passer $passer): self
+    public function addPass(Pass $pass): self
     {
-        if (!$this->passers->contains($passer)) {
-            $this->passers[] = $passer;
-            $passer->setQuestionnaire($this);
+        if (!$this->pass->contains($pass)) {
+            $this->pass[] = $pass;
+            $pass->setQuestionnaire($this);
         }
 
         return $this;
     }
 
-    public function removePasser(Passer $passer): self
+    public function removePass(Pass $pass): self
     {
-        if ($this->passers->contains($passer)) {
-            $this->passers->removeElement($passer);
+        if ($this->pass->contains($pass)) {
+            $this->pass->removeElement($pass);
             // set the owning side to null (unless already changed)
-            if ($passer->getQuestionnaire() === $this) {
-                $passer->setQuestionnaire(null);
+            if ($pass->getQuestionnaire() === $this) {
+                $pass->setQuestionnaire(null);
             }
         }
 
         return $this;
+    }
+
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->date_creation;
+    }
+
+    public function setDateCreation(\DateTimeInterface $date_creation): self
+    {
+        $this->date_creation = $date_creation;
+
+        return $this;
+    }
+
+    public function getTotalScore(): int
+    {
+        $total = 0;
+        foreach($this->questions as $question){
+            $total+= $question->getScore();
+        }
+        return $total;
+    }
+
+    /**
+     * Method to check if a questionnaire has at list 1 question
+     * and the question has at list 2 propositions
+     * @return bool
+     */
+    public function isPlayable(): bool
+    {
+        if(count($this->questions) === 0) {
+            return false;
+        }
+        return $this->questions->forAll(function($key, $question) {
+            return count($question->getPropositions()) >= 2;
+        });
     }
 }

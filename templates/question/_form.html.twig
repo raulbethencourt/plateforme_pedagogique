@@ -1,0 +1,20 @@
+{{ form_start(form) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.score) }}
+<ul class="propositions w-75 mr-auto ml-auto" style="list-style: none;"
+    data-prototype="{{ form_widget(form.propositions.vars.prototype)|e('html_attr') }}">
+    {% for prop in form.propositions %}
+        <li>
+            {{ form_errors(prop) }}
+            {{ form_widget(prop) }}
+            <button type="button" class="close remove-tag" aria-label="Close">
+                <span aria-hidden="true" class="text-danger">&times;</span>
+            </button>
+        </li>
+    {% endfor %}
+</ul>
+
+<div class="form-group d-flex justify-content-end">
+    {{ form_widget(form.submit) }}
+</div>
+{{ form_end(form) }}

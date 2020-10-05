@@ -20,15 +20,15 @@ class Proposition
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $texte;
+    private $text;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $correct;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Question::class, inversedBy="propistions")
+     * @ORM\ManyToOne(targetEntity=Question::class, inversedBy="propositions")
      * @ORM\JoinColumn(nullable=false)
      */
     private $question;
@@ -38,14 +38,14 @@ class Proposition
         return $this->id;
     }
 
-    public function getTexte(): ?string
+    public function getText(): ?string
     {
-        return $this->texte;
+        return $this->text;
     }
 
-    public function setTexte(string $texte): self
+    public function setText(string $text): self
     {
-        $this->texte = $texte;
+        $this->text = $text;
 
         return $this;
     }

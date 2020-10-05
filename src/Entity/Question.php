@@ -22,7 +22,7 @@ class Question
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $enonce;
+    private $title;
 
     /**
      * @ORM\Column(type="decimal", precision=5, scale=2)
@@ -30,7 +30,8 @@ class Question
     private $score;
 
     /**
-     * @ORM\OneToMany(targetEntity=Proposition::class, mappedBy="question")
+     * @ORM\OneToMany(targetEntity=Proposition::class, mappedBy="question",
+     *     orphanRemoval=true, cascade={"persist", "remove"})
      */
     private $propositions;
 
@@ -46,18 +47,17 @@ class Question
     }
 
     public function getId(): ?int
-    {
-        return $this->id;
+    {        return $this->id;
     }
 
-    public function getEnonce(): ?string
+    public function getTitle(): ?string
     {
-        return $this->enonce;
+        return $this->title;
     }
 
-    public function setEnonce(string $enonce): self
+    public function setTitle(string $title): self
     {
-        $this->enonce = $enonce;
+        $this->title = $title;
 
         return $this;
     }
@@ -74,31 +74,28 @@ class Question
         return $this;
     }
 
-    /**
-     * @return Collection|Proposition[]
-     */
-    public function getpropositions(): Collection
+    public function getPropositions(): Collection
     {
         return $this->propositions;
     }
 
-    public function addPropistion(Proposition $propistion): self
+    public function addProposition(Proposition $proposition): self
     {
-        if (!$this->propositions->contains($propistion)) {
-            $this->propositions[] = $propistion;
-            $propistion->setQuestion($this);
+        if (!$this->propositions->contains($proposition)) {
+            $this->propositions[] = $proposition;
+            $proposition->setQuestion($this);
         }
 
         return $this;
     }
 
-    public function removePropistion(Proposition $propistion): self
+    public function removeProposition(Proposition $proposition): self
     {
-        if ($this->propositions->contains($propistion)) {
-            $this->propositions->removeElement($propistion);
+        if ($this->propositions->contains($proposition)) {
+            $this->propositions->removeElement($proposition);
             // set the owning side to null (unless already changed)
-            if ($propistion->getQuestion() === $this) {
-                $propistion->setQuestion(null);
+            if ($proposition->getQuestion() === $this) {
+                $proposition->setQuestion(null);
             }
         }
 
@@ -115,5 +112,16 @@ class Question
         $this->questionnaire = $questionnaire;
 
         return $this;
+    }
+
+    /**
+     * Method to get the right propositions in a question
+     * @return ArrayCollection
+     */
+    public function getRightPropositions() :ArrayCollection
+    {
+        return $this->propositions->filter(function($proposition){
+            return $proposition->getCorrect() == true;
+        });
     }
 }

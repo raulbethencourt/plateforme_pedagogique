@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - {{ classroom.name }}{% endblock %}
+
+{% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success mr-2 mb-0">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% if not form.vars.valid %}
+        <div class="alert alert-danger mr-2 mb-0" role="alert">
+            <strong>Erreur fatal</strong>
+        </div>
+    {% endif %}
+
+    <h1>{{ classroom.name }} - <span class="badge badge-pill badge-info text-white">{{ classroom.discipline }}</span></h1>
+    <div class="d-flex align-items-center">
+        <div class="d-block">
+            <h2>Liste des Participants</h2>
+            <h3><span class="badge badge-pill badge-secondary text-white">Formateurs</span></h3>
+        </div>
+        <div class="d-flex justify-content-end w-75">
+            <div id="inviteForm"{% if not form.vars.submitted %} style="display: none;" {% endif %}
+                 class="w-100">
+                {{ form_start(form) }}
+                <div class="invite-form--responsive justify-content-sm-around align-items-center ">
+                    <div class="form-group m-0">
+                        {{ form_errors(form.name) }}
+                        {{ form_widget(form.name) }}
+                        {{ form_help(form.name) }}
+                    </div>
+                    <div class="form-group m-0">
+                        {{ form_errors(form.email) }}
+                        {{ form_widget(form.email) }}
+                        {{ form_help(form.email) }}
+                    </div>
+                    <div class="form-group m-0">
+                        {{ form_errors(form.type) }}
+                        {{ form_widget(form.type) }}
+                        {{ form_help(form.type) }}
+                    </div>
+                    <div class="form-group m-0">
+                        {{ form_widget(form.submit) }}
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+            <a id="inviterBtn" class="btn btn-primary h-50" href="#" role="button" {% if form.vars.submitted %}
+                style="display:none;" {% endif %}>Inviter</a>
+        </div>
+    </div>
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Prenom</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Matière</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for teacher in teachers %}
+            <tr>
+                <th scope="row">{{ teacher.id }}</th>
+                <td>{{ teacher.name }}</td>
+                <td>{{ teacher.surname }}</td>
+                <td>{{ teacher.subject }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <h3><span class="badge badge-pill badge-secondary text-white">Etudiant</span></h3>
+    <table class="table">
+        <thead class="thead-dark ">
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Prenom</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Loisir</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for student in students %}
+            <tr>
+                <th scope="row">{{ student.id }}</th>
+                <td>{{ student.name }}</td>
+                <td>{{ student.surname }}</td>
+                <td>{{ student.hobby }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
