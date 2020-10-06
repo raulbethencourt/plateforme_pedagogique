@@ -20,6 +20,7 @@ class QuestionType extends AbstractType
                 'title',
                 TextType::class,
                 [
+                    'label' => 'Titre',
                     'attr' => [
                         'class' => 'titleQuestionnaire',
                         'placeholder' => "Entrée l'intitulé de la question",

@@ -134,7 +134,7 @@ class TeacherController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$questionnaire->getId(), $request->get('_token'))) {
             $this->em->remove($questionnaire);
             $this->em->flush();
-            $this->addFlash('succes', 'questionnaire supprimé avec succès');
+            $this->addFlash('success', 'Questionnaire supprimé avec succès');
         }
 
         return $this->redirectToRoute('teacher_index');
@@ -161,7 +161,7 @@ class TeacherController extends AbstractController
             $this->em->persist($question);
             $this->em->flush();
 
-            $this->addFlash('success', 'question ajouté avec succès');
+            $this->addFlash('success', 'Question ajouté avec succès');
 
             return $this->redirectToRoute(
                 'question_create',

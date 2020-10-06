@@ -1,13 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Bienvenido {{ user.username }}</h1>
-    <h3>Classroom List</h3>
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success mr-2 mb-0">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <h1>Bienvenu {{ user.username }}</h1>
+    <h3>Liste des classes</h3>
     <table class="table">
         <thead class="thead-dark">
         <tr>
             <th scope="col"></th>
-            <th scope="col">Name</th>
+            <th scope="col">Nom</th>
             <th scope="col">Discipline</th>
         </tr>
         </thead>
@@ -19,13 +25,13 @@
                 <td class="d-flex justify-content-between ">
                     {{ classroom.discipline }}
                     <div class="d-flex justify-content-center w-50">
-                        <a href="{{ path('user_classroom_edit', {id: classroom.id}) }}" class="btn btn-primary mr-lg-2"
-                           role="button">Edit</a>
+                        <a href="{{ path('user_classroom_edit', {id: classroom.id}) }}" class="btn btn-secondary mr-lg-2"
+                           role="button">Editer</a>
                         <form method="post" action="{{ path('user_classroom_delete', {id: classroom.id}) }}"
-                              style="display: inline-block" onsubmit="return confirm('Are you sure?')">
+                              style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
                             <input type="hidden" name="_method" value='DELETE'>
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ classroom.id) }}">
-                            <button class="btn btn-danger">Delete</button>
+                            <button class="btn btn-danger">Supprimer</button>
                         </form>
                     </div>
                 </td>
@@ -34,6 +40,6 @@
         </tbody>
     </table>
     <div class="text-right">
-        <a href="{{ path('user_classroom_create') }}" class="btn btn-primary">Créer Classroom</a>
+        <a href="{{ path('user_classroom_create') }}" class="btn btn-primary">Créer classe</a>
     </div>
 {% endblock %}

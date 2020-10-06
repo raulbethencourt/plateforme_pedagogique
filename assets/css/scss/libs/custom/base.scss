@@ -1,3 +1,15 @@
+/* base.html.twig */
+.logo-carpa {
+  width: 55px;
+  height: 55px;
+}
+
+.profile {
+  width: 40px;
+  height: auto;
+  color: white;
+}
+
 @media #{$large-down} {
   .collapse {
     display: flex;

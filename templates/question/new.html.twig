@@ -2,26 +2,13 @@
 
 {% block title %}Create Question{% endblock %}
 
-{% block logo %}
-    <a class="navbar-brand ml-4" href="{{ path('teacher_index') }}">
-        <img src="{{ asset('images/logo-carpa.svg') }}" class="logo-carpa" alt="logo ubuntu">
-    </a>
-{% endblock %}
-
-{% block home %}
-    <li class="nav-item">
-        <a class="nav-link" href="{{ path('teacher_index') }}">Home</a>
-    </li>
-{% endblock %}
-
-{% block profile %}
-    <li class="nav-item">
-        <a class="nav-link mr-2" href="{#{{ path('teacher_profile') }}#}">
-            <img class="profile" src="{{ asset('images/profile.png') }}" alt="profile icon"></a>
-    </li>
-{% endblock %}
-
 {% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success mr-2 mb-0">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     <div class="d-flex justify-content-between">
         <h1>Créer Question</h1>
         <div class="text-right">

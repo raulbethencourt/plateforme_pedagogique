@@ -1,3 +1,8 @@
+/* Classroom CSS*/
+.invite-form--responsive {
+  display: flex;
+}
+
 @media #{$large-down} {
   .invite-form--responsive {
     display: block;

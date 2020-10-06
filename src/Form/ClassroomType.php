@@ -23,6 +23,7 @@ class ClassroomType extends AbstractType
                 'name',
                 TextType::class,
                 [
+                    'label' => 'Nom',
                     'purify_html' => true,
                 ]
             )

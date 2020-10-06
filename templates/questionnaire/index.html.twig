@@ -2,33 +2,20 @@
 
 {% block title %}{{ questionnaire.title }}{% endblock %}
 
-{% block logo %}
-    <a class="navbar-brand ml-4" href="{{ path('teacher_index') }}">
-        <img src="{{ asset('images/logo-carpa.svg') }}" class="logo-carpa" alt="logo ubuntu">
-    </a>
-{% endblock %}
-
-{% block home %}
-    <li class="nav-item">
-        <a class="nav-link" href="{{ path('teacher_index') }}">Home</a>
-    </li>
-{% endblock %}
-
-{% block profile %}
-    <li class="nav-item">
-        <a class="nav-link mr-2" href="{#{{ path('teacher_profile') }}#}">
-            <img class="profile" src="{{ asset('images/profile.png') }}" alt="profile icon"></a>
-    </li>
-{% endblock %}
-
 {% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success mr-2 mb-0">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     <h1>{{ questionnaire.title }}</h1>
     <h3>Liste de Questions</h3>
     <table class="table">
         <thead class="thead-dark">
         <tr>
             <th scope="col"></th>
-            <th scope="col">Title</th>
+            <th scope="col">Titre</th>
             <th scope="col">Propositions</th>
             <th scope="col"></th>
         </tr>
@@ -41,20 +28,20 @@
                 <td>
                     {% for proposition in question.propositions %}
                         {% if proposition.correct %}
-                            <span class="badge badge-success">{{ proposition.text }}</span>
+                            <span class="badge badge-pill badge-success p-2">{{ proposition.text }}</span>
                         {% else %}
-                            <span class="badge badge-info">{{ proposition.text }}</span>
+                            <span class="badge badge-pill badge-info p-2">{{ proposition.text }}</span>
                         {% endif %}
                     {% endfor %}
                 </td>
                 <td>
                     <a href="{{ path('question_edit', {id: question.id}) }}" class="btn btn-secondary"
-                       role="button">Edit</a>
+                       role="button">Editer</a>
                     <form method="post" action="{{ path('question_delete', {id: question.id}) }}"
-                          style="display: inline-block" onsubmit="return confirm('Are you sure?')">
+                          style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
                         <input type="hidden" name="_method" value='DELETE'>
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">
-                        <button class="btn btn-danger mt-2">Delete</button>
+                        <button class="btn btn-danger">Supprimer</button>
                     </form>
                 </td>
             </tr>
@@ -62,6 +49,7 @@
         </tbody>
     </table>
     <div class="text-right">
-        <a href="{{ path('question_create', {id: questionnaire.id}) }}" class="btn btn-primary">Ajouter question</a>
+        <a href="{{ path('question_create', {id: questionnaire.id}) }}"
+           class="btn btn-primary">Ajouter question</a>
     </div>
 {% endblock %}

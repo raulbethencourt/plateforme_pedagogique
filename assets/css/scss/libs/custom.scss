@@ -1,22 +1,8 @@
 /* My personal CSS */
-@import "responsive/base.scss";
-@import "responsive/classroom.scss";
-
-/* Classroom CSS*/
-
-.invite-form--responsive {
-  display: flex;
-}
-
-.profile {
-  width: 35px;
-  color: white;
-}
-
-.dropdown-menu-sw {
-  right: 0;
-  left: auto;
-}
+@import "custom/base.scss";
+@import "custom/classroom.scss";
+@import "custom/profile.scss";
+@import "custom/teacher/index.scss";
 
 .wrong {
   background-color: #d07d70;
@@ -31,7 +17,3 @@
   font-size: 0.75rem;
 }
 
-.logo-carpa {
-  width: 55px;
-  height: 55px;
-}

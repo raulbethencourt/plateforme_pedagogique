@@ -1,30 +1,55 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Teacher - {{ teacher.name }}{% endblock %}
-
-{% block logo %}
-    <a class="navbar-brand ml-4" href="{{ path('teacher_index') }}">
-        <img src="{{ asset('images/ubuntu.png') }}" width="30" height="30" alt="logo ubuntu">
-    </a>
-{% endblock %}
-
-{% block home %}
-    <li class="nav-item">
-        <a class="nav-link" href="{{ path('teacher_index') }}">Home</a>
-    </li>
-{% endblock %}
-
-{% block profile %}
-    <li class="nav-item">
-        <a class="nav-link mr-2" href="{#{{ path('teacher_profile') }}#}">
-            <img class="profile" src="{{ asset('images/profile.png') }}" alt="profile icon"></a>
-    </li>
-{% endblock %}
-
+{% block title %}Teacher - {{ student.name }}{% endblock %}
 {% block body %}
-
+    <div class="d-flex">
+        <div class="card w-50 m-1">
+            <h2 class="card-header text-white bg-dark">Profile</h2>
+            <div class="card-body d-flex justify-content-between">
+                <div class="flex-column">
+                    <h3 class="card-title">{{ student.username }}</h3>
+                    <p class="card-text">{{ student.name ~ " " ~ student.surname }}</p>
+                    <p class="card-text">{{ student.email }}</p>
+                    <p class="card-text">{{ student.hobby }}</p>
+                    <a href="" class="btn btn-primary">Edit</a>
+                </div>
+                <img src="{{ asset('images/profile_raul.jpg') }}" alt="profile" class="rounded"
+                     style="max-height: 200px; max-width: 200px;">
+            </div>
+        </div>
+        <div class="card w-50 m-1">
+            <h2 class="card-header text-white bg-dark">Stats</h2>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        Nombre de questionnaires crées :
+                        <span class="badge badge-info p-1 rounded">{{ passes|length }} - questionnaires</span>
+                    </li>
+                    <li class="list-group-item">
+                        Nombre de questions crées :
+                        <span class="badge badge-info p-1 rounded">{{ numberOfQuestions }} -  questions</span>
+                    </li>
+                    <li class="list-group-item">
+                        Score total :
+                        <span class="badge badge-info p-1 rounded">{{ sum }}</span>
+                    </li>
+                    <li class="list-group-item">
+                        Score moyen :
+                        <span class="badge badge-info p-1 rounded">{{ average }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="mr-auto ml-auto text-center mt-3 w-75">
+        <h2> :</h2>
+        <canvas id="studentChart"></canvas>
+    </div>
 {% endblock %}
 
-{% block title %}
+{% block javascripts %}
+
+    <script>let data = {{ spdjson|raw }}</script>
+    {{ parent() }}
 
 {% endblock %}

@@ -46,7 +46,7 @@ class InviteType extends AbstractType
                 [
                     'label' => false,
                     'attr' => [
-                        'placeholder' => 'name...',
+                        'placeholder' => 'prenom...',
                     ],
                     'purify_html' => true,
                 ]

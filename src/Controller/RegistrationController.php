@@ -99,13 +99,12 @@ class RegistrationController extends AbstractController
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
 
-            return $this->render('registration/confirm.html.twig');
-            /*return $guardHandler->authenticateUserAndHandleSuccess(
+            return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
                 $request,
                 $authenticator,
                 'main' // firewall name in security.yaml
-            );*/
+            );
         }
 
         return $this->render(

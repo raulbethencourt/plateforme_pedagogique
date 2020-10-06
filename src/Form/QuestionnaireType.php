@@ -20,6 +20,7 @@ class QuestionnaireType extends AbstractType
                 TextType::class,
                 [
                     'purify_html' => true,
+                    'label' => 'Titre',
                 ]
             )
             ->add(
@@ -31,6 +32,7 @@ class QuestionnaireType extends AbstractType
                         'Moyen' => 'moyen',
                         'Difficile' => 'difficile',
                     ],
+                    'label' => 'Difficulté'
                 ]
             );
     }

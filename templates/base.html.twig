@@ -6,18 +6,26 @@
     <meta name="author" content="Raul Bethencourt Gonzalez">
     <meta name="description" content="Carpa is a pedagogical platform for modern training schools">
     <title>{% block title %}Admin - CARPA{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}?v=2"/>
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
-        <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}?v=2"/>
     {% endblock %}
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    {% block logo %}
+    {% if is_granted('ROLE_TEACHER') %}
+    <a class="navbar-brand ml-4" href="{{ path('teacher_index') }}">
+        <img src="{{ asset('images/logo-carpa.svg') }}" class="logo-carpa" alt="logo carpa">
+    </a>
+    {% elseif is_granted('ROLE_STUDENT') %}
+    <a class="navbar-brand ml-4" href="{{ path('student_index') }}">
+        <img src="{{ asset('images/logo-carpa.svg') }}" class="logo-carpa" alt="logo carpa">
+    </a>
+    {% else %}
         <a class="navbar-brand ml-4" href="{{ path('user_index') }}">
-            <img src="{{ asset('images/logo-carpa.svg') }}" width="55" height="55" alt="logo ubuntu">
+            <img src="{{ asset('images/logo-carpa.svg') }}" width="55" height="55" alt="logo carpa">
         </a>
-    {% endblock %}
+    {% endif %}
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,25 +34,43 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2 bg-dark text-white" type="search" placeholder="Search..."
+            <input class="form-control mr-sm-2 bg-dark text-white" type="search" placeholder="Chercher..."
                    aria-label="Search">
         </form>
         <ul class="navbar-nav justify-content-between align-items-center w-100">
-            {% block home %}
+            {% if is_granted('ROLE_TEACHER') %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('user_index') }}">Home</a>
+                    <a class="nav-link" href="{{ path('teacher_index') }}">Accueil</a>
                 </li>
-            {% endblock %}
+            {% elseif is_granted('ROLE_STUDENT') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('student_index') }}">Accueil</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('user_index') }}">Accueil</a>
+                </li>
+            {% endif %}
             <div class="d-flex align-items-center nav__logout--responsive">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+                    <a class="nav-link" href="{{ path('app_logout') }}">Deconnexion</a>
                 </li>
-            {% block profile %}
-                <li class="nav-item">
-                    <a class="nav-link mr-2" href="{#{{ path('user_profile') }}#}">
-                        <img class="profile" src="{{ asset('images/profile.png') }}" alt="profile icon"></a>
-                </li>
-            {% endblock %}
+                {% if is_granted('ROLE_TEACHER') %}
+                    <li class="nav-item">
+                        <a class="nav-link mr-2" href="{# {{ path('teacher_profile') }} #}">
+                            <img class="profile" src="{{ asset('images/profile.png') }}" alt="profil icon"></a>
+                    </li>
+                {% elseif is_granted('ROLE_STUDENT') %}
+                    <li class="nav-item">
+                        <a class="nav-link mr-2" href=" {{ path('student_profile') }} ">
+                            <img class="profile" src="{{ asset('images/profile.png') }}" alt="profil icon"></a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link mr-2" href="{# {{ path('user_profile') }} #}">
+                            <img class="profile" src="{{ asset('images/profile.png') }}" alt="profil icon"></a>
+                    </li>
+                {% endif %}
             </div>
         </ul>
     </div>
