@@ -8,7 +8,7 @@
     {% endfor %}
     <div class="container-sm mt-5">
 
-        <h1>Register</h1>
+        <h1>Enregistrement</h1>
 
         {{ form_start(registrationForm, {'attr': {'class': 'regisForm'}}) }}
         {{ form_row(registrationForm.username) }}
@@ -18,11 +18,9 @@
 
         <div class="d-flex align-items-baseline">
             <div class="d-block w-75 mr-3">
-                {{ form_row(registrationForm.plainPassword, {
-                    label: 'Password'
-                }) }}
+                {{ form_row(registrationForm.plainPassword) }}
                 <div class="form-group">
-                    <label for="confpass">Confirm password:<span class="badge badge-danger error p-2 text-white ml-3"></span></label>
+                    <label for="confpass">Confirmez le mot de passe :<span class="badge badge-danger error p-2 text-white ml-3"></span></label>
                     <input type="password" name="confirm_password" id="confpass" class="form-control"/>
                 </div>
             </div>
@@ -37,7 +35,7 @@
 
         {{ form_row(registrationForm.agreeTerms) }}
 
-        <button id="btnSubmit" type="submit" class="btn btn-primary mb-xl-5">Register</button>
+        <button id="btnSubmit" type="submit" class="btn btn-primary mb-xl-5">S'enregistrer</button>
         {{ form_end(registrationForm) }}
     </div>
 

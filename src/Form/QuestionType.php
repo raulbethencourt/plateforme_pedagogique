@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Validator\Constraints\LessThanOrEqual;
 
 class QuestionType extends AbstractType
 {
@@ -43,6 +45,20 @@ class QuestionType extends AbstractType
                 'score',
                 NumberType::class,
                 [
+                    "constraints" => [
+                        new GreaterThanOrEqual(
+                            [
+                                'value' => "0",
+                                'message' => 'votre score doit être supérieur à 0',
+                            ]
+                        ),
+                        new LessThanOrEqual(
+                            [
+                                'value' => "10",
+                                'message' => 'votre score doit être inférieur à 10',
+                            ]
+                        ),
+                    ],
                     'attr' => [
                         'class' => 'score',
                     ],

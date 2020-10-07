@@ -40,6 +40,7 @@ class RegistrationFormType extends AbstractType
                         ),
                     ],
                     'purify_html' => true,
+                    'label' => 'Nom d\'utilisateur',
                 ]
             )
             ->add(
@@ -47,6 +48,7 @@ class RegistrationFormType extends AbstractType
                 TextType::class,
                 [
                     'purify_html' => true,
+                    'label' => 'Nom',
                 ]
             )
             ->add(
@@ -54,6 +56,7 @@ class RegistrationFormType extends AbstractType
                 TextType::class,
                 [
                     'purify_html' => true,
+                    'label' => 'Prenom',
                 ]
             )
             ->add(
@@ -67,6 +70,7 @@ class RegistrationFormType extends AbstractType
                 'agreeTerms',
                 CheckboxType::class,
                 [
+                    'label' => 'Accepter les conditions d\'utilisation',
                     'mapped' => false,
                     'constraints' => [
                         new IsTrue(
@@ -81,6 +85,7 @@ class RegistrationFormType extends AbstractType
                 'plainPassword',
                 PasswordType::class,
                 [
+                    'label' => 'Mot de passe',
                     'mapped' => false,
                     'constraints' => [
                         new NotBlank(
