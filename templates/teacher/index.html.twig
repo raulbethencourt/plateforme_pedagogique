@@ -1,13 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Teacher - {{ teacher.name }}{% endblock %}
-
-{% block profile %}
-    <li class="nav-item">
-        <a class="nav-link mr-2" href="{# {{ path('teacher_profile') }} #}">
-            <img class="profile" src="{{ asset('images/profile.png') }}" alt="profile icon"></a>
-    </li>
-{% endblock %}
+{% block title %}Formateur - {{ teacher.name }}{% endblock %}
 
 {% block body %}
     {% for message in app.flashes('success') %}

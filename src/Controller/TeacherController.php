@@ -71,7 +71,7 @@ class TeacherController extends AbstractController
             $this->em->persist($questionnaire);
             $this->em->flush();
 
-            $this->addFlash('success', 'questionnaire ajouté avec succès');
+            $this->addFlash('success', 'Questionnaire ajouté avec succès');
 
             return $this->redirectToRoute(
                 'question_create',
@@ -103,7 +103,7 @@ class TeacherController extends AbstractController
             $this->em->persist($questionnaire);
             $this->em->flush();
 
-            $this->addFlash('success', 'questionnaire modifié avec succès');
+            $this->addFlash('success', 'Questionnaire modifié avec succès');
 
             return $this->redirectToRoute(
                 'teacher_index',
@@ -202,7 +202,7 @@ class TeacherController extends AbstractController
             $this->em->persist($question);
             $this->em->flush();
 
-            $this->addFlash('success', 'question ajouté avec succès');
+            $this->addFlash('success', 'Question ajouté avec succès');
 
             return $this->redirectToRoute(
                 'questionnaire_index',
@@ -234,7 +234,7 @@ class TeacherController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$question->getId(), $request->get('_token'))) {
             $this->em->remove($question);
             $this->em->flush();
-            $this->addFlash('succes', 'questionnaire supprimé avec succès');
+            $this->addFlash('succes', 'Questionnaire supprimé avec succès');
         }
 
         return $this->redirectToRoute(

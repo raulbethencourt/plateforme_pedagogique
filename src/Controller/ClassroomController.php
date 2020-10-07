@@ -48,7 +48,7 @@ class ClassroomController extends AbstractController
         }
 
         return $this->render(
-            'classroom/index.html.twig',
+            'user/classroom/index.html.twig',
             [
                 'form' => $form->createView(),
                 'classroom' => $classroom,

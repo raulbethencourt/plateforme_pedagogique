@@ -102,7 +102,11 @@ class StudentController extends AbstractController
             }
         );
 
-        $average = (round($sum / $sumMax, 2) * 100)."%";
+        if ($sumMax) {
+            $average = (round($sum / $sumMax, 2) * 100)."%";
+        } else {
+            $average = 0;
+        }
 
         return $this->render(
             "student/profile.html.twig",

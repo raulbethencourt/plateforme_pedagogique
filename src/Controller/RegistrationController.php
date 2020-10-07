@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
 use App\Security\LoginFormAuthenticator;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -127,21 +128,18 @@ class RegistrationController extends AbstractController
             $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $exception->getReason());
+
             return $this->redirectToRoute('app_register');
         }
 
-        /*// If validate email is accepted we redirect by Role
-        switch ($this->getUser()->getRoles()) {
-            case "ROLE_TEACHER":
-                return $this->redirectToRoute('teacher_index');
-                break;
-            case "ROLE_STUDENT":
-                return $this->redirectToRoute('student_index');
-                break;
-            default:
-                return $this->redirectToRoute('user_index');
-        }*/
-
         return $this->redirectToRoute('app_logout');
+    }
+
+    /**
+     * @Route ("/confirmation", name="confirm_mail")
+     */
+    public function renderConfirmation()
+    {
+        return $this->render('registration/confirm.html.twig');
     }
 }

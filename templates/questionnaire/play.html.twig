@@ -1,25 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Student - {{ questionnaire.title }}{% endblock %}
-
-{% block logo %}
-    <a class="navbar-brand ml-4" href="{{ path('student_index') }}">
-        <img src="{{ asset('images/logo-carpa.svg') }}" class="logo-carpa" alt="logo carpa">
-    </a>
-{% endblock %}
-
-{% block home %}
-    <li class="nav-item">
-        <a class="nav-link" href="{{ path('student_index') }}">Home</a>
-    </li>
-{% endblock %}
-
-{% block profile %}
-    <li class="nav-item">
-        <a class="nav-link mr-2" href="{{ path('student_profile') }}">
-            <img class="profile" src="{{ asset('images/profile.png') }}" alt="profile icon"></a>
-    </li>
-{% endblock %}
+{% block title %}{{ questionnaire.title }}{% endblock %}
 
 {% block body %}
     <header>
@@ -38,7 +19,7 @@
     </header>
 
     {% if finalResults['given'] is not null %}
-        <div class="alert alert-primary">Votre score : {{ points }}/{{ questionnaire.totalScore }}</div>
+        <div class="alert alert-primary">Votre points : {{ points }}/{{ questionnaire.totalScore }}</div>
     {% endif %}
 
     <form method="post">

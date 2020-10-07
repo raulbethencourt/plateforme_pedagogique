@@ -25,27 +25,22 @@
     <list default="true" id="6c7a212d-3c91-4ff0-904b-dbc37de82ac8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/css/scss/libs/custom.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/scss/libs/custom.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/css/scss/libs/responsive/base.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/scss/libs/custom/base.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/css/scss/libs/responsive/classroom.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/scss/libs/custom/classroom.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/css/scss/libs/responsive/profile.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/scss/libs/custom/profile.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/js/chartJS.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/chartJS.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/packages/translation.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/translation.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ClassroomController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ClassroomController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/RegistrationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/RegistrationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/StudentController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/TeacherController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TeacherController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/ClassroomType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/ClassroomType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/InviteType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/InviteType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/QuestionType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/QuestionType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/QuestionnaireType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/QuestionnaireType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Security/LoginFormAuthenticator.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Security/LoginFormAuthenticator.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/question/edit.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/question/edit.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/question/new.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/question/new.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/questionnaire/edit.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/questionnaire/edit.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/questionnaire/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/questionnaire/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/questionnaire/new.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/questionnaire/new.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/classroom/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/classroom/index.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/questionnaire/play.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/questionnaire/play.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/registration/register.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration/register.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/security/login.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/security/login.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/security/security_base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/security/security_base.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/student/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/student/index.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/student/profile.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/student/profile.html.twig" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/teacher/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/teacher/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/teacher/profile.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/teacher/profile.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/user/classroom/create.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/classroom/create.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/user/classroom/edit.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/classroom/edit.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/user/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/index.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -211,15 +206,15 @@
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/public/images" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Stagiaire\sites\plataform\plataform\templates\user\classroom" />
       <recent name="C:\Users\Stagiaire\sites\plataform\plataform\assets\css\scss\libs\custom\teacher" />
       <recent name="$PROJECT_DIR$/assets/css/scss/libs" />
       <recent name="$PROJECT_DIR$/src/Form" />
       <recent name="$PROJECT_DIR$/public/images" />
-      <recent name="$PROJECT_DIR$/images" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/images" />
     </key>
   </component>
   <component name="RunManager" selected="npm.dev">
@@ -337,6 +332,7 @@
       <workItem from="1601975109626" duration="330000" />
       <workItem from="1601977198970" duration="1050000" />
       <workItem from="1601983576837" duration="11467000" />
+      <workItem from="1602052653342" duration="9852000" />
     </task>
     <servers />
   </component>
@@ -474,11 +470,11 @@
     </state>
     <state x="2205" y="250" width="672" height="677" key="run.anything.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600977129115" />
     <state x="647" y="250" key="run.anything.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1601388797731" />
-    <state x="654" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1601995061103">
+    <state x="654" y="235" width="672" height="678" key="search.everywhere.popup" timestamp="1602074902160">
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
     <state x="612" y="225" width="695" height="651" key="search.everywhere.popup/0.0.1920.1036@0.0.1920.1036" timestamp="1601549790971" />
     <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1601844829570" />
-    <state x="654" y="235" width="672" height="678" key="search.everywhere.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1601995061103" />
+    <state x="654" y="235" width="672" height="678" key="search.everywhere.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1602074902160" />
   </component>
 </project>

@@ -1,6 +1,6 @@
 {% extends 'security/security_base.html.twig' %}
 
-{% block title %}Log in !{% endblock %}
+{% block title %}Connexion !{% endblock %}
 
 {% block body %}
     <div class="container-sm d-flex flex-column align-items-center pt-5 mt-5">
@@ -14,14 +14,14 @@
 
                 {% if app.user %}
                     <div class="mb-3">
-                        You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                        Vous êtes connecté en tant que {{ app.user.username }}, <a href="{{ path('app_logout') }}">Se déconnecter</a>
                     </div>
                 {% endif %}
 
-                <label for="inputUsername" class="font-weight-bold">Username</label>
+                <label for="inputUsername" class="font-weight-bold">Nom d'utilisateur</label>
                 <input type="text" value="{{ last_username }}" name="username" id="inputUsername"
                        class="form-control" required autofocus>
-                <label for="inputPassword" class="font-weight-bold mt-2">Password</label>
+                <label for="inputPassword" class="font-weight-bold mt-2">Mot de passe</label>
                 <input type="password" name="password" id="inputPassword" class="form-control" required>
 
                 <input type="hidden"
@@ -29,7 +29,7 @@
                        value="{{ csrf_token('authenticate') }}">
 
                 <button class="btn btn-sm btn-primary rounded-pill w-100 mt-3" type="submit">
-                    Sign in
+                    Se connecter
                 </button>
             </form>
         </div>

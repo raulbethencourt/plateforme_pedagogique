@@ -12,7 +12,6 @@ if ($('#studentChart').length) {
         data: {
             labels: ['Facile', 'Moyen', 'Difficile'],
             datasets: [{
-                label: 'difficulties',
                 data: data,
                 backgroundColor: [
                     'rgb(141,255,99, 0.2)',
@@ -28,6 +27,16 @@ if ($('#studentChart').length) {
             }]
         },
         options: {
+            legend: {
+                display: false
+            },
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem) {
+                        return tooltipItem.yLabel;
+                    }
+                }
+            },
             scales: {
                 yAxes: [{
                     ticks: {

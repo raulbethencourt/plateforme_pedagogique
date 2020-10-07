@@ -82,7 +82,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             throw new CustomUserMessageAuthenticationException('Username could not be found.');
         }
 
-       $this->userConnected = $user;
+        $this->userConnected = $user;
 
         return $user;
     }
@@ -104,6 +104,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
+        }
+
+        if (!$this->userConnected) {
+            return  new RedirectResponse($this->urlGenerator->generate('confirm_mail'));
         }
 
         if (!$request->get('type')) {
