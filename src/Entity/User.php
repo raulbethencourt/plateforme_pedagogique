@@ -8,7 +8,9 @@ use Doctrine\ORM\Mapping\DiscriminatorColumn;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
 use Doctrine\ORM\Mapping\InheritanceType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -16,6 +18,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @DiscriminatorColumn(name="type", type="string")
  * @DiscriminatorMap({"user" = "User", "student" = "Student", "teacher" = "Teacher"})
  * @UniqueEntity(fields={"username"}, message="There is already an account with this username")
+ * @Vich\Uploadable()
  */
 class User implements UserInterface
 {
@@ -56,6 +59,12 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $email;
+
+    /**
+     * @var File|null
+     * @Vich\UploadableField(mapping="profile_image", fileNameProperty="$photo_name")
+     */
+    private $imageFile;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -202,5 +211,21 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
+    }
+
+    /**
+     * @return File|null
+     */
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    /**
+     * @param File|null $imageFile
+     */
+    public function setImageFile(?File $imageFile): void
+    {
+        $this->imageFile = $imageFile;
     }
 }
