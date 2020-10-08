@@ -12,10 +12,9 @@
                 <p class="card-text">{{ student.name ~ " " ~ student.surname }}</p>
                 <p class="card-text">{{ student.email }}</p>
                 <p class="card-text">{{ student.hobby }}</p>
-                <a href="" class="btn btn-primary">Edit</a>
+                <a href="{{ path('edit_student') }}" class="btn btn-primary">Edit</a>
                 </div>
-                <img src="{{ asset('images/profile_raul.jpg') }}" alt="profile" class="rounded"
-                     style="max-height: 200px; max-width: 200px;">
+                <img src="{{ asset('images/profile_raul.jpg') }}" alt="profile" class="rounded-circle profile__img">
             </div>
         </div>
         <div class="card w-50 m-1">

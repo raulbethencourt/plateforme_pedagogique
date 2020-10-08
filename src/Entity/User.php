@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\DiscriminatorColumn;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
@@ -61,17 +62,6 @@ class User implements UserInterface
     private $email;
 
     /**
-     * @var File|null
-     * @Vich\UploadableField(mapping="profile_image", fileNameProperty="$photo_name")
-     */
-    private $imageFile;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $photo_name;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $isVerified = false;
@@ -80,6 +70,8 @@ class User implements UserInterface
      * @ORM\Column(type="date")
      */
     private $entry_date;
+
+    private $avatar;
 
     public function getUsername(): string
     {
@@ -169,24 +161,12 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getPhotoName(): ?string
-    {
-        return $this->photo_name;
-    }
-
-    public function setPhotoName(string $photo_name): self
-    {
-        $this->photo_name = $photo_name;
-
-        return $this;
-    }
-
-    public function getEntryDate(): ?\DateTimeInterface
+    public function getEntryDate(): ?DateTimeInterface
     {
         return $this->entry_date;
     }
 
-    public function setEntryDate(\DateTimeInterface $entry_date): self
+    public function setEntryDate(DateTimeInterface $entry_date): self
     {
         $this->entry_date = $entry_date;
 

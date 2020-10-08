@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Student;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -39,21 +40,52 @@ class EditStudentType extends AbstractType
                     'label' => 'Nom d\'utilisateur',
                 ]
             )
-            ->add('password')
-            ->add('surname')
-            ->add('name')
-            ->add('email')
-            ->add('hobby')
-            ->add('imageFile', FileType::class, [
-
-            ])
-        ;
+            ->add(
+                'surname',
+                TextType::class,
+                [
+                    'purify_html' => true,
+                    'label' => 'Nom',
+                ]
+            )
+            ->add(
+                'name',
+                TextType::class,
+                [
+                    'purify_html' => true,
+                    'label' => 'Prenom',
+                ]
+            )
+            ->add(
+                'email',
+                EmailType::class,
+                [
+                    'purify_html' => true,
+                ]
+            )
+            ->add(
+                'hobby',
+                TextType::class,
+                [
+                    'purify_html' => true,
+                    'label' => 'Loisir',
+                ]
+            )
+            ->add(
+                'imageFile',
+                FileType::class,
+                [
+                    'required' => false
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'data_class' => Student::class,
-        ]);
+        $resolver->setDefaults(
+            [
+                'data_class' => Student::class,
+            ]
+        );
     }
 }

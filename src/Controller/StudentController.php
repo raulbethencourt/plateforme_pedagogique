@@ -4,7 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Pass;
 use App\Entity\Questionnaire;
+use App\Form\EditStudentType;
+use App\Form\RegistrationFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -118,6 +122,34 @@ class StudentController extends AbstractController
                 'statsPerDiff' => $statsPerDiff,
                 'spdjson' => json_encode(array_values($statsPerDiff)),
                 'numberOfQuestions' => $numberOfQuestions,
+            ]
+        );
+    }
+
+    /**
+     * @Route ("/profile/edit", name="edit_student")
+     * @param Request $request
+     * @return RedirectResponse|Response
+     */
+    public function editProfile(Request $request)
+    {
+        $student = $this->getUser();
+
+        $form = $this->createForm(EditStudentType::class, $student);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($student);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('student_profile');
+        }
+
+        return $this->render(
+            'student/edit-profile.html.twig',
+            [
+                'editForm' => $form->createView(),
             ]
         );
     }
