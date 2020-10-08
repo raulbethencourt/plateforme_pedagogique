@@ -143,6 +143,8 @@ class StudentController extends AbstractController
             $entityManager->persist($student);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Profil edité avec succès');
+
             return $this->redirectToRoute('student_profile');
         }
 
