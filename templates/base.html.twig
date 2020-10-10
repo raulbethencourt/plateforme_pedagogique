@@ -57,17 +57,17 @@
                 </li>
                 {% if is_granted('ROLE_TEACHER') %}
                     <li class="nav-item">
-                        <a class="nav-link mr-2" href="{# {{ path('teacher_profile') }} #}">
+                        <a class="nav-link mr-2" href="{{ path('teacher_profile') }}">
                             <img class="profile" src="{{ asset('images/profile.png') }}" alt="profil icon"></a>
                     </li>
                 {% elseif is_granted('ROLE_STUDENT') %}
                     <li class="nav-item">
-                        <a class="nav-link mr-2" href=" {{ path('student_profile') }} ">
+                        <a class="nav-link mr-2" href="{{ path('student_profile') }}">
                             <img class="profile" src="{{ asset('images/profile.png') }}" alt="profil icon"></a>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link mr-2" href="{# {{ path('user_profile') }} #}">
+                        <a class="nav-link mr-2" href="{{ path('user_profile') }}">
                             <img class="profile" src="{{ asset('images/profile.png') }}" alt="profil icon"></a>
                     </li>
                 {% endif %}
@@ -75,7 +75,7 @@
         </ul>
     </div>
 </nav>
-<div class="container-sm d-flex justify-content-center flex-column  p-4 mt-lg-5 mb-xl-5 bg-white border rounded-lg">
+<div class="container-sm d-flex justify-content-center flex-column  p-4 mt-5 mb-5 bg-white rounded-lg">
     {% block body %}{% endblock %}
 </div>
 {% block javascripts %}

@@ -129,4 +129,17 @@ class UserController extends AbstractController
 
         return $this->redirectToRoute('user_index');
     }
+
+    /**
+     * @Route ("/profile", name="user_profile")
+     */
+    public function teacherProfile()
+    {
+        return $this->render(
+            'user/profile.html.twig',
+            [
+                'user' => $this->getUser(),
+            ]
+        );
+    }
 }

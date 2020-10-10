@@ -6,17 +6,16 @@
     <div class="container-sm mt-5">
 
         <h1>Editer votre Profile</h1>
-
-        {{ form_start(editForm) }}
-        {{ form_row(editForm.username) }}
-        {{ form_row(editForm.name) }}
-        {{ form_row(editForm.surname) }}
-        {{ form_row(editForm.email) }}
-        {{ form_row(editForm.hobby) }}
-        {{ form_row(editForm.imageFile) }}
-
-        <button id="btnSubmit" type="submit" class="btn btn-primary mb-xl-5">Editer Profil</button>
-        {{ form_end(editForm) }}
+        <form method="post" enctype="multipart/form-data">
+            {{ form_start(editForm) }}
+            {{ form_row(editForm.username) }}
+            {{ form_row(editForm.name) }}
+            {{ form_row(editForm.surname) }}
+            {{ form_row(editForm.email) }}
+            {{ form_row(editForm.hobby) }}
+            <button id="btnSubmit" type="submit" class="btn btn-primary mb-xl-5">Editer Profil</button>
+            {{ form_end(editForm) }}
+        </form>
     </div>
 
 {% endblock %}

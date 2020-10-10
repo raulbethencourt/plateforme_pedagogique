@@ -23,13 +23,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c7a212d-3c91-4ff0-904b-dbc37de82ac8" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/vich_uploader.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/vich_uploader.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/migrations/Version20201008143234.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bundles.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/Version20201008211241.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/profile_raul.jpg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/StudentController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/TeacherController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TeacherController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/UserController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Form/EditStudentType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/EditStudentType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/student/edit-profile.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/student/edit-profile.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/student/profile.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/student/profile.html.twig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/teacher/profile.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/teacher/profile.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,6 +183,9 @@
       <path value="$PROJECT_DIR$/vendor/exercise/htmlpurifier-bundle" />
       <path value="$PROJECT_DIR$/vendor/vich/uploader-bundle" />
       <path value="$PROJECT_DIR$/vendor/jms/metadata" />
+      <path value="$PROJECT_DIR$/vendor/imagine/imagine" />
+      <path value="$PROJECT_DIR$/vendor/liip/imagine-bundle" />
+      <path value="$PROJECT_DIR$/vendor/symfony/templating" />
     </include_path>
   </component>
   <component name="ProjectId" id="1hHyHtcpK1LB2L73KA6kqbDSlI5" />
@@ -197,14 +211,14 @@
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/images" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Stagiaire\sites\plataform\plataform\templates\user\classroom" />
       <recent name="C:\Users\Stagiaire\sites\plataform\plataform\assets\css\scss\libs\custom\teacher" />
       <recent name="$PROJECT_DIR$/assets/css/scss/libs" />
       <recent name="$PROJECT_DIR$/src/Form" />
-      <recent name="$PROJECT_DIR$/public/images" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/public/images" />
     </key>
   </component>
@@ -330,6 +344,9 @@
       <workItem from="1602161707926" duration="4108000" />
       <workItem from="1602166680072" duration="1837000" />
       <workItem from="1602188404042" duration="3712000" />
+      <workItem from="1602248697966" duration="3762000" />
+      <workItem from="1602271733548" duration="5387000" />
+      <workItem from="1602332429954" duration="12811000" />
     </task>
     <servers />
   </component>
@@ -367,15 +384,15 @@
       <screen x="62" y="0" width="1858" height="1080" />
     </state>
     <state x="582" y="197" key="#com.intellij.execution.impl.EditConfigurationsDialog/62.0.1858.1080@62.0.1858.1080" timestamp="1599813950401" />
-    <state x="2203" y="320" width="704" height="403" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1601234965463">
+    <state x="2203" y="320" width="957" height="403" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1602344885929">
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
-    <state x="2203" y="320" width="704" height="403" key="#com.intellij.fileTypes.FileTypeChooser/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1601234965463" />
-    <state x="1934" y="263" width="433" height="578" key="#com.intellij.ide.util.MemberChooser" timestamp="1601583439848">
+    <state x="2203" y="320" width="957" height="403" key="#com.intellij.fileTypes.FileTypeChooser/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1602344885929" />
+    <state x="1934" y="263" width="433" height="578" key="#com.intellij.ide.util.MemberChooser" timestamp="1602250937064">
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
     <state x="334" y="252" width="433" height="548" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1036@0.0.1920.1036" timestamp="1600547087176" />
-    <state x="1934" y="263" width="433" height="578" key="#com.intellij.ide.util.MemberChooser/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1601583439848" />
+    <state x="1934" y="263" width="433" height="578" key="#com.intellij.ide.util.MemberChooser/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1602250937064" />
     <state x="385" y="263" key="#com.intellij.ide.util.MemberChooser/62.0.1858.1080@62.0.1858.1080" timestamp="1600698906494" />
     <state x="774" y="202" key="#com.intellij.openapi.keymap.impl.ui.EditKeymapsDialog" timestamp="1600153336939">
       <screen x="62" y="0" width="1858" height="1080" />
@@ -391,10 +408,10 @@
     </state>
     <state x="2292" y="267" width="526" height="509" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1599912936598" />
     <state x="732" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/62.0.1858.1080@62.0.1858.1080" timestamp="1600171049403" />
-    <state x="732" y="275" width="526" height="493" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1602161015282">
-      <screen x="62" y="0" width="1858" height="1080" />
+    <state x="2292" y="275" width="526" height="493" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1602333849192">
+      <screen x="1600" y="0" width="1920" height="1080" />
     </state>
-    <state x="2292" y="275" width="526" height="493" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600633178902" />
+    <state x="2292" y="275" width="526" height="493" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1602333849192" />
     <state x="732" y="275" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/62.0.1858.1080@62.0.1858.1080" timestamp="1602161015282" />
     <state x="2341" y="265" width="426" height="520" key="FileChooserDialogImpl" timestamp="1599682527283">
       <screen x="1600" y="0" width="1920" height="1080" />
@@ -421,10 +438,10 @@
     </state>
     <state width="247" height="457" key="HiddenNamespacesPopup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600198251950" />
     <state width="202" height="457" key="HiddenNamespacesPopup/62.0.1858.1080@62.0.1858.1080" timestamp="1599814470101" />
-    <state x="2247" y="233" width="615" height="584" key="NewPhpClassDialog" timestamp="1602190385743">
+    <state x="2247" y="233" width="615" height="591" key="NewPhpClassDialog" timestamp="1602275103689">
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
-    <state x="2247" y="233" width="615" height="584" key="NewPhpClassDialog/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1602190385743" />
+    <state x="2247" y="233" width="615" height="591" key="NewPhpClassDialog/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1602275103689" />
     <state x="865" y="233" key="NewPhpClassDialog/62.0.1858.1080@62.0.1858.1080" timestamp="1600681150917" />
     <state x="2372" y="440" width="365" height="162" key="NewPhpFileDialog" timestamp="1600518885535">
       <screen x="1600" y="0" width="1920" height="1080" />
@@ -467,11 +484,11 @@
     </state>
     <state x="2205" y="250" width="672" height="677" key="run.anything.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600977129115" />
     <state x="647" y="250" key="run.anything.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1601388797731" />
-    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1602192409766">
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1602345746865">
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
     <state x="612" y="225" width="695" height="651" key="search.everywhere.popup/0.0.1920.1036@0.0.1920.1036" timestamp="1601549790971" />
-    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1602192409766" />
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1602345746865" />
     <state x="654" y="235" width="672" height="678" key="search.everywhere.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1602161822494" />
   </component>
 </project>

@@ -34,12 +34,13 @@ class TeacherController extends AbstractController
 
     /**
      * @Route("/", name="teacher_index")
-     * @param QuestionnaireRepository $repository
+     * @param  QuestionnaireRepository  $repository
      * @return ResponseAlias
      */
     public function index(QuestionnaireRepository $repository): ResponseAlias
     {
         $teacher = $this->getUser();
+
         return $this->render(
             'teacher/index.html.twig',
             [
@@ -51,7 +52,7 @@ class TeacherController extends AbstractController
 
     /**
      * @Route("/questionnaire/create", name="questionnaire_create")
-     * @param Request $request
+     * @param  Request  $request
      * @return RedirectResponse|ResponseAlias
      */
     public function createQuestionnaire(Questionnaire $questionnaire = null, Request $request)
@@ -124,8 +125,8 @@ class TeacherController extends AbstractController
 
     /**
      * @Route ("/questionnaire/{id}", name="questionnaire_delete", methods={"DELETE"})
-     * @param Questionnaire $questionnaire
-     * @param Request $request
+     * @param  Questionnaire  $questionnaire
+     * @param  Request  $request
      * @return RedirectResponse
      */
     public function deleteQuestionnaire(Questionnaire $questionnaire, Request $request)
@@ -143,8 +144,8 @@ class TeacherController extends AbstractController
 
     /**
      * @Route("/question_create/{id}", name="question_create", methods={"GET","POST"})
-     * @param Questionnaire $questionnaire
-     * @param Request $request
+     * @param  Questionnaire  $questionnaire
+     * @param  Request  $request
      * @return RedirectResponse|ResponseAlias
      */
     public function createQuestion(Questionnaire $questionnaire, Request $request)
@@ -182,8 +183,8 @@ class TeacherController extends AbstractController
 
     /**
      * @Route("/question_edit/{id}", name="question_edit", methods={"GET","POST"})
-     * @param Question|null $question
-     * @param Request $request
+     * @param  Question|null  $question
+     * @param  Request  $request
      * @return RedirectResponse|ResponseAlias
      */
     public function editQuestion(Question $question, Request $request)
@@ -223,9 +224,9 @@ class TeacherController extends AbstractController
 
     /**
      * @Route ("/question_delete/{id}", name="question_delete", methods={"DELETE"})
-     * @param Questionnaire $questionnaire
-     * @param Question $question
-     * @param Request $request
+     * @param  Questionnaire  $questionnaire
+     * @param  Question  $question
+     * @param  Request  $request
      * @return RedirectResponse
      */
     public function deleteQuestion(Questionnaire $questionnaire, Question $question, Request $request): RedirectResponse
@@ -241,6 +242,20 @@ class TeacherController extends AbstractController
             'questionnaire_index',
             [
                 'id' => $questionnaire,
+            ]
+        );
+    }
+
+    /**
+     * @Route ("/profile", name="teacher_profile")
+     * @return ResponseAlias
+     */
+    public function teacherProfile(): ResponseAlias
+    {
+        return $this->render(
+            'teacher/profile.html.twig',
+            [
+                'teacher' => $this->getUser(),
             ]
         );
     }

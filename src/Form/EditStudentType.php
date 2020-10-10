@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\Avatar;
 use App\Entity\Student;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -12,6 +14,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class EditStudentType extends AbstractType
 {
@@ -70,27 +73,6 @@ class EditStudentType extends AbstractType
                 [
                     'purify_html' => true,
                     'label' => 'Loisir',
-                ]
-            )
-            ->add(
-                'imageFile',
-                FileType::class,
-                [
-                    'label' => 'Photo',
-                    'mapped' => false,
-                    'required' => false,
-                    'constraints' => [
-                        new Image(
-                            [
-                                'maxSize' => '2M',
-                                'mimeTypes' => [
-                                    'image/jpeg',
-                                    'image/png',
-                                ],
-                                'mimeTypesMessage' => 'Le fichier n\'est pas valide',
-                            ]
-                        ),
-                    ],
                 ]
             );
     }

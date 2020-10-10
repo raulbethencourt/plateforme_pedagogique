@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\DiscriminatorColumn;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
@@ -12,7 +14,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -20,7 +21,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @DiscriminatorColumn(name="type", type="string")
  * @DiscriminatorMap({"user" = "User", "student" = "Student", "teacher" = "Teacher"})
  * @UniqueEntity(fields={"username"}, message="There is already an account with this username")
- * @Vich\Uploadable()
  */
 class User implements UserInterface
 {
@@ -73,29 +73,13 @@ class User implements UserInterface
     private $entry_date;
 
     /**
-     * @Vich\UploadableField(mapping="profile_image", fileNameProperty="imageName", size="imageSize")
-     *
-     * @var File|null
+     * @ORM\OneToOne(targetEntity=Avatar::class, mappedBy="user", cascade={"persist", "remove"})
      */
-    private $imageFile;
-
-    /**
-     * @ORM\Column(type="string")
-     *
-     * @var string|null
-     */
-    private $imageName;
-
-    /**
-     * @ORM\Column(type="datetime")
-     *
-     * @var \DateTimeInterface|null
-     */
-    private $updatedAt;
+    private $avatar;
 
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return (string)$this->username;
     }
 
     public function setUsername(string $username): self
@@ -123,7 +107,7 @@ class User implements UserInterface
 
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return (string)$this->password;
     }
 
     public function setPassword(string $password): self
@@ -213,53 +197,20 @@ class User implements UserInterface
         // TODO: Implement eraseCredentials() method.
     }
 
-    /**
-     * @param File|UploadedFile|null $imageFile
-     */
-    public function setImageFile(?File $imageFile = null): void
+    public function getAvatar(): ?Avatar
     {
-        $this->imageFile = $imageFile;
+        return $this->avatar;
+    }
 
-        // Only change the updated af if the file is really uploaded to avoid database updates.
-        // This is needed when the file should be set when loading the entity.
-        if ($this->imageFile instanceof UploadedFile) {
-            $this->updatedAt = new \DateTime('now');
+    public function setAvatar(?Avatar $avatar): self
+    {
+        $this->avatar = $avatar;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newUser = null === $avatar ? null : $this;
+        if ($avatar->getUser() !== $newUser) {
+            $avatar->setUser($newUser);
         }
-    }
-
-    public function getImageFile(): ?File
-    {
-        return $this->imageFile;
-    }
-
-    public function setImageName(?string $imageName): void
-    {
-        $this->imageName = $imageName;
-    }
-
-    public function getImageName(): ?string
-    {
-        return $this->imageName;
-    }
-
-    public function setImageSize(?int $imageSize): void
-    {
-        $this->imageSize = $imageSize;
-    }
-
-    public function getImageSize(): ?int
-    {
-        return $this->imageSize;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }

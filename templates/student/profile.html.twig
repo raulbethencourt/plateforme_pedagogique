@@ -3,48 +3,70 @@
 {% block title %}Etudiant - {{ student.name }}{% endblock %}
 
 {% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success mr-2 mb-0">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     <div class="d-flex">
         <div class="card w-50 m-1">
             <h2 class="card-header text-white bg-dark">Informations personnelles</h2>
             <div class="card-body d-flex justify-content-between">
-                <div class="flex-column">
-                <h3 class="card-title">{{ student.username }}</h3>
-                <p class="card-text">{{ student.name ~ " " ~ student.surname }}</p>
-                <p class="card-text">{{ student.email }}</p>
-                <p class="card-text">{{ student.hobby }}</p>
-                <a href="{{ path('edit_student') }}" class="btn btn-primary">Edit</a>
+                <div class="flex-column w-75">
+                    <ul class="list-group w-100">
+                        <li class="list-group-item list-group-item-info">
+                            <span class="font-weight-bold">Nom d'utilisateur</span></li>
+                        <li class="list-group-item">{{ student.username }}</li>
+                        <li class="list-group-item list-group-item-info">
+                            <span class="font-weight-bold">Prenom et Nom</span></li>
+                        <li class="list-group-item">{{ student.name ~ " " ~ student.surname }}</li>
+                        <li class="list-group-item list-group-item-info">
+                            <span class="font-weight-bold">Email</span></li>
+                        <li class="list-group-item">{{ student.email }}</li>
+                        <li class="list-group-item list-group-item-info">
+                            <span class="font-weight-bold">Loisirs</span></li>
+                        <li class="list-group-item">{{ student.hobby }}</li>
+                    </ul>
                 </div>
-                <img src="{{ asset('images/profile_raul.jpg') }}" alt="profile" class="rounded-circle profile__img">
+                <div class="d-flex flex-column justify-content-center align-items-center h-100 ml-4">
+                    <a href="{{ path('edit_avatar') }}">
+                        {% if student.avatar is defined and student.avatar is not null %}
+                            <img src="{{ vich_uploader_asset(student.avatar) }}" alt="profile"
+                                 class="rounded-circle profile__img">
+                        {% else %}
+                            <img src="{{ asset('images/image-profile.png') }}" alt="profile"
+                                 class="rounded-circle profile__img mb-xl-5">
+                        {% endif %}
+                    </a>
+                    <a href="{{ path('edit_student') }}" class="btn btn-primary w-50 mt-4">Editer Profil</a>
+                </div>
             </div>
         </div>
         <div class="card w-50 m-1">
             <h2 class="card-header text-white bg-dark">Statistiques</h2>
             <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        Nombre de questionnaires joués :
-                        <span class="badge badge-info p-1 rounded">{{ passes|length }} -
-                            {{ passes|length <= 1 ? 'questionnaire' : 'questionnaires' }}</span>
-                    </li>
-                    <li class="list-group-item">
-                        Questions jouées :
-                        <span class="badge badge-info p-1 rounded">{{ numberOfQuestions }} -
-                            {{ numberOfQuestions <= 1 ? 'question' : 'questions' }}</span>
-                    </li>
-                    <li class="list-group-item">
-                        Score total :
-                        <span class="badge badge-info p-1 rounded">{{ sum }}</span>
-                    </li>
-                    <li class="list-group-item">
-                        Score moyen :
-                        <span class="badge badge-info p-1 rounded">{{ average }}</span>
-                    </li>
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-info">
+                        <span class="font-weight-bold">Nombre de questionnaires joués :</span></li>
+                    <li class="list-group-item">{{ passes|length }} -
+                            {{ passes|length <= 1 ? 'questionnaire' : 'questionnaires' }}</li>
+                    <li class="list-group-item list-group-item-info">
+                        <span class="font-weight-bold">Questions jouées :</span></li>
+                    <li class="list-group-item">{{ numberOfQuestions }} -
+                        {{ numberOfQuestions <= 1 ? 'question' : 'questions' }}</li>
+                    <li class="list-group-item list-group-item-info">
+                        <span class="font-weight-bold">Score total :</span></li>
+                    <li class="list-group-item">{{ sum }}</li>
+                    <li class="list-group-item list-group-item-info">
+                        <span class="font-weight-bold">Score moyen :</span></li>
+                    <li class="list-group-item">{{ average }}</li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="mr-auto ml-auto text-center mt-3 w-75">
-        <h2>Scores par difficulté :</h2>
+        <h2><span class="badge badge-dark rounded p-2">Scores par difficulté :</span></h2>
         <canvas id="studentChart"></canvas>
     </div>
 {% endblock %}

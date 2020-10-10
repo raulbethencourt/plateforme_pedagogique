@@ -122,6 +122,7 @@ class StudentController extends AbstractController
                 'statsPerDiff' => $statsPerDiff,
                 'spdjson' => json_encode(array_values($statsPerDiff)),
                 'numberOfQuestions' => $numberOfQuestions,
+                'avatar' => $this->getUser()->getAvatar()
             ]
         );
     }
