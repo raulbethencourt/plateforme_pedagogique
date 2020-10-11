@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Pass;
 use App\Entity\Questionnaire;
 use App\Form\EditStudentType;
-use App\Form\RegistrationFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -153,6 +152,7 @@ class StudentController extends AbstractController
             'student/edit-profile.html.twig',
             [
                 'editForm' => $form->createView(),
+                'student' => $this->getUser(),
             ]
         );
     }

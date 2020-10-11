@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Teacher;
+use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -11,7 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class EditTeacherType extends AbstractType
+class EditUserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -36,25 +36,7 @@ class EditTeacherType extends AbstractType
                         ),
                     ],
                     'purify_html' => true,
-                    'label' => 'Nom d\'utilisateur',
-                ]
-            )
-            ->add(
-                'surname',
-                TextType::class,
-                [
-                    'required' => false,
-                    'purify_html' => true,
-                    'label' => 'Nom',
-                ]
-            )
-            ->add(
-                'name',
-                TextType::class,
-                [
-                    'required' => false,
-                    'purify_html' => true,
-                    'label' => 'Prenom',
+                    'label' => 'Nom de l\'organisme',
                 ]
             )
             ->add(
@@ -64,22 +46,15 @@ class EditTeacherType extends AbstractType
                     'required' => false,
                     'purify_html' => true,
                 ]
-            )
-            ->add(
-                'subject',
-                TextType::class,
-                [
-                    'required' => false,
-                    'purify_html' => true,
-                    'label' => 'Matière',
-                ]
             );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'data_class' => Teacher::class,
-        ]);
+        $resolver->setDefaults(
+            [
+                'data_class' => User::class,
+            ]
+        );
     }
 }

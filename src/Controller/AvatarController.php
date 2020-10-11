@@ -14,8 +14,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class AvatarController extends AbstractController
 {
     /**
-     * @Route("/avatar", name="edit_avatar")
-     * @param  Avatar|null  $avatar
+     * @Route("/student/avatar", name="edit_student_avatar")
+     * @Route("/teacher/avatar", name="edit_teacher_avatar")
+     * @Route("/user/avatar", name="edit_user_avatar")
      * @param  EntityManagerInterface  $em
      * @param  Request  $request
      * @return RedirectResponse|Response
@@ -54,6 +55,9 @@ class AvatarController extends AbstractController
             'avatar/edit.html.twig',
             [
                 'form' => $form->createView(),
+                'student' => $this->getUser(),
+                'teacher' => $this->getUser(),
+                'user' => $this->getUser(),
             ]
         );
     }

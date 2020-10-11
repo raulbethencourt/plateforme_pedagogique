@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Etudiant - {{ teacher.name }}{% endblock %}
+{% block title %}Formateur - {{ teacher.name }}{% endblock %}
 
 {% block body %}
     {% for message in app.flashes('success') %}
@@ -24,25 +24,28 @@
                         <li class="list-group-item list-group-item-info">
                             <span class="font-weight-bold">Email</span></li>
                         <li class="list-group-item">{{ teacher.email }}</li>
+                        <li class="list-group-item list-group-item-info">
+                            <span class="font-weight-bold">Matière</span></li>
+                        <li class="list-group-item">{{ teacher.subject }}</li>
                     </ul>
                 </div>
-                <div class="d-flex flex-column justify-content-center align-items-center h-100 ml-4">
-                    <a href="{{ path('edit_avatar') }}">
-                        {% if user.avatar is defined and user.avatar is not null %}
-                            <img src="{{ vich_uploader_asset(user.avatar) }}" alt="profile"
+                <div class="d-flex flex-column justify-content-center align-items-center mr-3">
+                    <a href="{{ path('edit_teacher_avatar') }}">
+                        {% if teacher.avatar is defined and teacher.avatar is not null %}
+                            <img src="{{ vich_uploader_asset(teacher.avatar) }}" alt="profile"
                                  class="rounded-circle profile__img">
                         {% else %}
                             <img src="{{ asset('images/image-profile.png') }}" alt="profile"
-                                 class="rounded-circle profile__img mb-xl-5">
+                                 class="rounded-circle profile__img">
                         {% endif %}
                     </a>
-                    <a href="{{ path('edit_student') }}" class="btn btn-primary w-50 mt-4">Editer Profil</a>
+                    <a href="{{ path('edit_teacher') }}" class="btn btn-primary w-75 mt-4">Editer Profil</a>
                 </div>
             </div>
         </div>
     </div>
     <div class="mr-auto ml-auto text-center mt-3 w-75">
-        <h2><span class="badge badge-dark rounded p-2">Scores par difficulté :</span></h2>
-        <canvas id="studentChart"></canvas>
+        <h2><span class="badge badge-dark rounded p-2">Nombre de questionnaires créés :</span></h2>
+        <canvas id="questionnairesChart"></canvas>
     </div>
 {% endblock %}

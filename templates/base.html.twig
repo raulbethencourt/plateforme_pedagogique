@@ -58,17 +58,30 @@
                 {% if is_granted('ROLE_TEACHER') %}
                     <li class="nav-item">
                         <a class="nav-link mr-2" href="{{ path('teacher_profile') }}">
-                            <img class="profile" src="{{ asset('images/profile.png') }}" alt="profil icon"></a>
+                            {% if teacher.avatar is defined and teacher.avatar is not null %}
+                                <img class="profile rounded-circle" src="{{ vich_uploader_asset(teacher.avatar) }}"
+                                     alt="profil icon">
+                            {% else %}
+                                <img class="profile" src="{{ asset('images/image-profile.png') }}" alt="profil icon">
+                            {% endif %}
+                        </a>
                     </li>
                 {% elseif is_granted('ROLE_STUDENT') %}
                     <li class="nav-item">
                         <a class="nav-link mr-2" href="{{ path('student_profile') }}">
-                            <img class="profile" src="{{ asset('images/profile.png') }}" alt="profil icon"></a>
+                            {% if student.avatar is defined and student.avatar is not null %}
+                                <img class="profile rounded-circle" src="{{ vich_uploader_asset(student.avatar) }}"
+                                     alt="profil icon">
+                            {% else %}
+                                <img class="profile" src="{{ asset('images/image-profile.png') }}" alt="profil icon">
+                            {% endif %}
+                        </a>
                     </li>
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link mr-2" href="{{ path('user_profile') }}">
-                            <img class="profile" src="{{ asset('images/profile.png') }}" alt="profil icon"></a>
+                            <img class="profile" src="{{ asset('images/image-profile.png') }}" alt="profil icon">
+                        </a>
                     </li>
                 {% endif %}
             </div>

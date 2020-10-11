@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Question;
 use App\Entity\Questionnaire;
+use App\Form\EditTeacherType;
 use App\Form\QuestionnaireType;
 use App\Form\QuestionType;
 use App\Repository\QuestionnaireRepository;
@@ -11,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -87,6 +89,7 @@ class TeacherController extends AbstractController
             [
                 'questionnaire' => $questionnaire,
                 'form' => $form->createView(),
+                'teacher' => $this->getUser(),
             ]
         );
     }
@@ -119,6 +122,7 @@ class TeacherController extends AbstractController
             [
                 'questionnaire' => $questionnaire,
                 'form' => $form->createView(),
+                'teacher' => $this->getUser(),
             ]
         );
     }
@@ -177,6 +181,7 @@ class TeacherController extends AbstractController
             [
                 'question' => $question,
                 'form' => $form->createView(),
+                'teacher' => $this->getUser(),
             ]
         );
     }
@@ -255,6 +260,37 @@ class TeacherController extends AbstractController
         return $this->render(
             'teacher/profile.html.twig',
             [
+                'teacher' => $this->getUser(),
+            ]
+        );
+    }
+
+    /**
+     * @Route ("/profile/edit", name="edit_teacher")
+     * @param  Request  $request
+     * @return RedirectResponse|Response
+     */
+    public function editProfile(Request $request)
+    {
+        $teacher = $this->getUser();
+
+        $form = $this->createForm(EditTeacherType::class, $teacher);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($teacher);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Profil edité avec succès');
+
+            return $this->redirectToRoute('teacher_profile');
+        }
+
+        return $this->render(
+            'teacher/edit-profile.html.twig',
+            [
+                'editForm' => $form->createView(),
                 'teacher' => $this->getUser(),
             ]
         );

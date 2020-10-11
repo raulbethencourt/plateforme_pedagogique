@@ -28,20 +28,20 @@
                 <td>
                     {% for proposition in question.propositions %}
                         {% if proposition.correct %}
-                            <span class="badge badge-pill badge-success p-2">{{ proposition.text }}</span>
+                            <span class="badge badge-pill badge-success p-2 mb-2">{{ proposition.text }}</span>
                         {% else %}
-                            <span class="badge badge-pill badge-info p-2">{{ proposition.text }}</span>
+                            <span class="badge badge-pill badge-info p-2 mb-2">{{ proposition.text }}</span>
                         {% endif %}
                     {% endfor %}
                 </td>
                 <td>
-                    <a href="{{ path('question_edit', {id: question.id}) }}" class="btn btn-secondary"
+                    <a href="{{ path('question_edit', {id: question.id}) }}" class="btn btn-secondary mb-2"
                        role="button">Editer</a>
                     <form method="post" action="{{ path('question_delete', {id: question.id}) }}"
                           style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
                         <input type="hidden" name="_method" value='DELETE'>
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">
-                        <button class="btn btn-danger">Supprimer</button>
+                        <button class="btn btn-danger mb-2">Supprimer</button>
                     </form>
                 </td>
             </tr>

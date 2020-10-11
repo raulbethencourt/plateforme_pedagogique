@@ -1,11 +1,11 @@
 <div class="container">
     <div id="contact">
-        <h3>Hi! Please confirm your email!</h3>
-        <p>Please confirm your email address by clicking the following link:</p>
+        <h3>Salut, Veuillez confirmer votre email !</h3>
+        <p>Veuillez confirmer votre adresse e-mail en cliquant sur le lien suivant :</p>
         <fieldset>
-            <a href="{{ signedUrl|raw }}" class="btn">Confirm my Email</a>.
+            <a href="{{ signedUrl|raw }}" class="btn">Confirmer mon email</a>.
         </fieldset>
-        <p>This link will expire in {{ expiresAt|date('g') }} hour(s).</p>
+        <p>Ce lien expirera dans {{ expiresAt|date('g') }} heure(s).</p>
     </div>
 </div>
 

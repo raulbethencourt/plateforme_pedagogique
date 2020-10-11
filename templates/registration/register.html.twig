@@ -20,20 +20,26 @@
             <div class="d-block w-75 mr-3">
                 {{ form_row(registrationForm.plainPassword) }}
                 <div class="form-group">
-                    <label for="confpass">Confirmez le mot de passe :<span class="badge badge-danger error p-2 text-white ml-3"></span></label>
+                    <label for="confpass">Confirmez le mot de passe :<span
+                                class="badge badge-danger error p-2 text-white ml-3"></span></label>
                     <input type="password" name="confirm_password" id="confpass" class="form-control"/>
                 </div>
             </div>
 
             <ul class="list-group list-group-flush w-25 pass-list">
-                <li class="list-group-item list-group-item-warning">Votre mot de passe doit comporter entre 4 et 10 chiffres</li>
+                <li class="list-group-item list-group-item-warning">Votre mot de passe doit comporter entre 4 et 10
+                    chiffres
+                </li>
                 <li class="list-group-item list-group-item-warning">Il doit avoir dans la liste 1 lettre majuscule</li>
                 <li class="list-group-item list-group-item-warning">Au moins 1 lettre ordinaire</li>
                 <li class="list-group-item list-group-item-warning">Au moins 1 chiffre</li>
             </ul>
         </div>
 
-        {{ form_row(registrationForm.agreeTerms) }}
+        <div class="d-flex">
+            {{ form_row(registrationForm.agreeTerms) }}
+            <a href="#" class="ml-2">(Lire)</a>
+        </div>
 
         <button id="btnSubmit" type="submit" class="btn btn-primary mb-xl-5">S'enregistrer</button>
         {{ form_end(registrationForm) }}

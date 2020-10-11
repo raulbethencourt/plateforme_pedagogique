@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Etudiant - {{ student.name }}{% endblock %}
+{% block title %}Etudiant - {{ student.username }}{% endblock %}
 
 {% block body %}
     {% for message in app.flashes('success') %}
@@ -20,26 +20,36 @@
                         <li class="list-group-item">{{ student.username }}</li>
                         <li class="list-group-item list-group-item-info">
                             <span class="font-weight-bold">Prenom et Nom</span></li>
-                        <li class="list-group-item">{{ student.name ~ " " ~ student.surname }}</li>
+                        <li class="list-group-item">
+                            {% if student.name is not null or student.surname is not null %}
+                                {{ student.name ~ " " ~ student.surname }}
+                            {% else %}
+                                ...
+                            {% endif %}</li>
                         <li class="list-group-item list-group-item-info">
                             <span class="font-weight-bold">Email</span></li>
                         <li class="list-group-item">{{ student.email }}</li>
                         <li class="list-group-item list-group-item-info">
                             <span class="font-weight-bold">Loisirs</span></li>
-                        <li class="list-group-item">{{ student.hobby }}</li>
+                        <li class="list-group-item">
+                            {% if student.hobby is not null %}
+                                {{ student.hobby }}
+                            {% else %}
+                                ...
+                            {% endif %}</li>
                     </ul>
                 </div>
                 <div class="d-flex flex-column justify-content-center align-items-center h-100 ml-4">
-                    <a href="{{ path('edit_avatar') }}">
+                    <a href="{{ path('edit_student_avatar') }}">
                         {% if student.avatar is defined and student.avatar is not null %}
                             <img src="{{ vich_uploader_asset(student.avatar) }}" alt="profile"
                                  class="rounded-circle profile__img">
                         {% else %}
                             <img src="{{ asset('images/image-profile.png') }}" alt="profile"
-                                 class="rounded-circle profile__img mb-xl-5">
+                                 class="rounded-circle profile__img">
                         {% endif %}
                     </a>
-                    <a href="{{ path('edit_student') }}" class="btn btn-primary w-50 mt-4">Editer Profil</a>
+                    <a href="{{ path('edit_student') }}" class="btn btn-primary w-75 mt-3">Editer Profil</a>
                 </div>
             </div>
         </div>
@@ -50,14 +60,26 @@
                     <li class="list-group-item list-group-item-info">
                         <span class="font-weight-bold">Nombre de questionnaires joués :</span></li>
                     <li class="list-group-item">{{ passes|length }} -
-                            {{ passes|length <= 1 ? 'questionnaire' : 'questionnaires' }}</li>
+                        {{ passes|length <= 1 ? 'questionnaire' : 'questionnaires' }}</li>
                     <li class="list-group-item list-group-item-info">
                         <span class="font-weight-bold">Questions jouées :</span></li>
-                    <li class="list-group-item">{{ numberOfQuestions }} -
-                        {{ numberOfQuestions <= 1 ? 'question' : 'questions' }}</li>
+                    <li class="list-group-item">
+                        {% if numberOfQuestions is not null %}
+                            {{ numberOfQuestions }} -
+                            {{ numberOfQuestions <= 1 ? 'question' : 'questions' }}
+                        {% else %}
+                            0 - question
+                        {% endif %}
+                    </li>
                     <li class="list-group-item list-group-item-info">
                         <span class="font-weight-bold">Score total :</span></li>
-                    <li class="list-group-item">{{ sum }}</li>
+                    <li class="list-group-item">
+                        {% if sum is not null %}
+                            {{ sum }}
+                        {% else %}
+                            0
+                        {% endif %}
+                    </li>
                     <li class="list-group-item list-group-item-info">
                         <span class="font-weight-bold">Score moyen :</span></li>
                     <li class="list-group-item">{{ average }}</li>

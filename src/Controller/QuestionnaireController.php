@@ -21,8 +21,8 @@ class QuestionnaireController extends AbstractController
     /**
      * @Route ("/{id}", name="questionnaire_index")
      * @IsGranted ("ROLE_TEACHER")
-     * @param Questionnaire $questionnaire
-     * @param Request $request
+     * @param  Questionnaire  $questionnaire
+     * @param  Request  $request
      * @return Response
      */
     public function index(Questionnaire $questionnaire, Request $request): Response
@@ -31,6 +31,7 @@ class QuestionnaireController extends AbstractController
             'questionnaire/index.html.twig',
             [
                 'questionnaire' => $questionnaire,
+                'teacher' => $this->getUser(),
             ]
         );
     }
@@ -39,8 +40,8 @@ class QuestionnaireController extends AbstractController
      * This methode control the questionnaires gaming
      * @Route("/{id}/play", name="questionnaire_play")
      * @IsGranted("ROLE_STUDENT")
-     * @param Questionnaire $questionnaire
-     * @param Request $request
+     * @param  Questionnaire  $questionnaire
+     * @param  Request  $request
      * @return Response
      */
     public function play(Questionnaire $questionnaire, Request $request): Response
@@ -91,6 +92,7 @@ class QuestionnaireController extends AbstractController
                     "given" => $answers,
                     "rights" => $rights,
                 ],
+                'student' => $this->getUser(),
             ]
         );
     }

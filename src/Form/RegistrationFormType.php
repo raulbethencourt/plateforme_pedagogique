@@ -47,6 +47,7 @@ class RegistrationFormType extends AbstractType
                 'surname',
                 TextType::class,
                 [
+                    'required' => false,
                     'purify_html' => true,
                     'label' => 'Nom',
                 ]
@@ -55,6 +56,7 @@ class RegistrationFormType extends AbstractType
                 'name',
                 TextType::class,
                 [
+                    'required' => false,
                     'purify_html' => true,
                     'label' => 'Prenom',
                 ]
