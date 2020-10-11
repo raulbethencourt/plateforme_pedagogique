@@ -25,7 +25,7 @@ class QuestionType extends AbstractType
                     'label' => 'Titre',
                     'attr' => [
                         'class' => 'titleQuestionnaire',
-                        'placeholder' => "Entrée l'intitulé de la question",
+                        'placeholder' => "Entrer l'intitulé de la question",
                     ],
                     'purify_html' => true,
                 ]
@@ -62,6 +62,7 @@ class QuestionType extends AbstractType
                     'attr' => [
                         'class' => 'score',
                     ],
+                    'label' => 'Point(s)'
                 ]
             )
             ->add(

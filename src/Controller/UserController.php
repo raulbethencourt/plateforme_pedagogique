@@ -69,7 +69,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($classroom);
             $this->em->flush();
-            $this->addFlash('success', 'Bien crée avec succès');
+            $this->addFlash('success', 'Classe créée avec succès.');
 
             return $this->redirectToRoute('user_index');
         }
@@ -96,7 +96,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
-            $this->addFlash('success', 'Bien modifié avec succès');
+            $this->addFlash('success', 'Classe modifiée avec succès.');
 
             return $this->redirectToRoute('user_index');
         }
@@ -125,7 +125,7 @@ class UserController extends AbstractController
         )) {
             $this->em->remove($classroom);
             $this->em->flush();
-            $this->addFlash('success', 'Bien supprimé avec succès');
+            $this->addFlash('success', 'Classe supprimée avec succès.');
         }
 
         return $this->redirectToRoute('user_index');
@@ -163,7 +163,7 @@ class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Profil edité avec succès');
+            $this->addFlash('success', 'Profil édité avec succès.');
 
             return $this->redirectToRoute('user_profile');
         }

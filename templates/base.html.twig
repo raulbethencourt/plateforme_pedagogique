@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" type="text/css" href="../assets/css/scss/libs/custom/base.scss"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Raul Bethencourt Gonzalez">
@@ -53,7 +54,7 @@
             {% endif %}
             <div class="d-flex align-items-center nav__logout--responsive">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('app_logout') }}">Deconnexion</a>
+                    <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
                 </li>
                 {% if is_granted('ROLE_TEACHER') %}
                     <li class="nav-item">
@@ -70,8 +71,8 @@
                     <li class="nav-item">
                         <a class="nav-link mr-2" href="{{ path('student_profile') }}">
                             {% if student.avatar is defined and student.avatar is not null %}
-                                <img class="profile rounded-circle" src="{{ vich_uploader_asset(student.avatar) }}"
-                                     alt="profil icon">
+                                <img class="profile rounded-circle"
+                                     src="{{ vich_uploader_asset(student.avatar) }}" alt="profil icon">
                             {% else %}
                                 <img class="profile" src="{{ asset('images/image-profile.png') }}" alt="profil icon">
                             {% endif %}

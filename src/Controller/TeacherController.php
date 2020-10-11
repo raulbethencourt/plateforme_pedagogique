@@ -74,7 +74,7 @@ class TeacherController extends AbstractController
             $this->em->persist($questionnaire);
             $this->em->flush();
 
-            $this->addFlash('success', 'Questionnaire ajouté avec succès');
+            $this->addFlash('success', 'Questionnaire ajouté avec succès.');
 
             return $this->redirectToRoute(
                 'question_create',
@@ -107,7 +107,7 @@ class TeacherController extends AbstractController
             $this->em->persist($questionnaire);
             $this->em->flush();
 
-            $this->addFlash('success', 'Questionnaire modifié avec succès');
+            $this->addFlash('success', 'Questionnaire modifié avec succès.');
 
             return $this->redirectToRoute(
                 'teacher_index',
@@ -139,7 +139,7 @@ class TeacherController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$questionnaire->getId(), $request->get('_token'))) {
             $this->em->remove($questionnaire);
             $this->em->flush();
-            $this->addFlash('success', 'Questionnaire supprimé avec succès');
+            $this->addFlash('success', 'Questionnaire supprimé avec succès.');
         }
 
         return $this->redirectToRoute('teacher_index');
@@ -166,7 +166,7 @@ class TeacherController extends AbstractController
             $this->em->persist($question);
             $this->em->flush();
 
-            $this->addFlash('success', 'Question ajouté avec succès');
+            $this->addFlash('success', 'Question ajoutée avec succès.');
 
             return $this->redirectToRoute(
                 'question_create',
@@ -208,7 +208,7 @@ class TeacherController extends AbstractController
             $this->em->persist($question);
             $this->em->flush();
 
-            $this->addFlash('success', 'Question ajouté avec succès');
+            $this->addFlash('success', 'Question ajoutée avec succès.');
 
             return $this->redirectToRoute(
                 'questionnaire_index',
@@ -229,24 +229,29 @@ class TeacherController extends AbstractController
 
     /**
      * @Route ("/question_delete/{id}", name="question_delete", methods={"DELETE"})
-     * @param  Questionnaire  $questionnaire
      * @param  Question  $question
      * @param  Request  $request
      * @return RedirectResponse
      */
-    public function deleteQuestion(Questionnaire $questionnaire, Question $question, Request $request): RedirectResponse
+    public function deleteQuestion(Question $question, Request $request): RedirectResponse
     {
+        $questionnaire = $request->attributes->get('question');
+        $questionnaire = (array)$questionnaire;
+        $questionnaire = $questionnaire["\x00App\Entity\Question\x00questionnaire"];
+        $questionnaire_id = (array)$questionnaire;
+        $questionnaire_id = $questionnaire_id["\x00App\Entity\Questionnaire\x00id"];
+
         // Check the token for validation
         if ($this->isCsrfTokenValid('delete'.$question->getId(), $request->get('_token'))) {
             $this->em->remove($question);
             $this->em->flush();
-            $this->addFlash('succes', 'Questionnaire supprimé avec succès');
+            $this->addFlash('succes', 'Questionnaire supprimé avec succès.');
         }
 
         return $this->redirectToRoute(
             'questionnaire_index',
             [
-                'id' => $questionnaire,
+                'id' => $questionnaire_id,
             ]
         );
     }
@@ -282,7 +287,7 @@ class TeacherController extends AbstractController
             $entityManager->persist($teacher);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Profil edité avec succès');
+            $this->addFlash('success', 'Profil édité avec succès.');
 
             return $this->redirectToRoute('teacher_profile');
         }

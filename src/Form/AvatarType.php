@@ -18,8 +18,8 @@ class AvatarType extends AbstractType
                 'imageFile',
                 VichImageType::class,
                 [
-                    'label' => 'Choisissez votre image',
-                    'delete_label' => 'Supprimer l\'image',
+                    'label' => 'Choisissez votre image :',
+                    'delete_label' => 'Supprimer l\'ancienne image.',
                     'imagine_pattern' => 'thumb'
                 ]
             )

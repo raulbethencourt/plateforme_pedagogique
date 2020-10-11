@@ -35,8 +35,8 @@ class InviteType extends AbstractType
                 [
                     'label' => false,
                     'choices' => [
-                        'teacher' => 'teacher',
-                        'student' => 'student',
+                        'formateur' => 'teacher',
+                        'étudiant' => 'student',
                     ],
                 ]
             )

@@ -54,7 +54,7 @@ class EditStudentType extends AbstractType
                 [
                     'required' => false,
                     'purify_html' => true,
-                    'label' => 'Prenom',
+                    'label' => 'Prénom',
                 ]
             )
             ->add(
@@ -71,7 +71,7 @@ class EditStudentType extends AbstractType
                 [
                     'required' => false,
                     'purify_html' => true,
-                    'label' => 'Loisir',
+                    'label' => 'Loisirs',
                 ]
             );
     }

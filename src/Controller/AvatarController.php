@@ -38,7 +38,7 @@ class AvatarController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($avatar);
             $em->flush();
-            $this->addFlash('success', 'Avatar ajouté avec succès');
+            $this->addFlash('success', 'Avatar ajouté avec succès.');
 
             switch ($this->getUser()->getRoles()[0]) {
                 case 'ROLE_STUDENT':

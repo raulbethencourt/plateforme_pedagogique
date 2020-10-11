@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Etudiant - {{ student.username }}{% endblock %}
+{% block title %}Étudiant - {{ student.username }}{% endblock %}
 
 {% block body %}
     {% for message in app.flashes('success') %}
@@ -19,7 +19,7 @@
                             <span class="font-weight-bold">Nom d'utilisateur</span></li>
                         <li class="list-group-item">{{ student.username }}</li>
                         <li class="list-group-item list-group-item-info">
-                            <span class="font-weight-bold">Prenom et Nom</span></li>
+                            <span class="font-weight-bold">Prénom et nom</span></li>
                         <li class="list-group-item">
                             {% if student.name is not null or student.surname is not null %}
                                 {{ student.name ~ " " ~ student.surname }}
@@ -49,7 +49,7 @@
                                  class="rounded-circle profile__img">
                         {% endif %}
                     </a>
-                    <a href="{{ path('edit_student') }}" class="btn btn-primary w-75 mt-3">Editer Profil</a>
+                    <a href="{{ path('edit_student') }}" class="btn btn-primary w-75 mt-3">Éditer Profil</a>
                 </div>
             </div>
         </div>
@@ -72,7 +72,7 @@
                         {% endif %}
                     </li>
                     <li class="list-group-item list-group-item-info">
-                        <span class="font-weight-bold">Score total :</span></li>
+                        <span class="font-weight-bold">Résultat total :</span></li>
                     <li class="list-group-item">
                         {% if sum is not null %}
                             {{ sum }}
@@ -81,14 +81,14 @@
                         {% endif %}
                     </li>
                     <li class="list-group-item list-group-item-info">
-                        <span class="font-weight-bold">Score moyen :</span></li>
+                        <span class="font-weight-bold">Résultat moyen :</span></li>
                     <li class="list-group-item">{{ average }}</li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="mr-auto ml-auto text-center mt-3 w-75">
-        <h2><span class="badge badge-dark rounded p-2">Scores par difficulté :</span></h2>
+        <h2><span class="badge badge-dark rounded p-2">Résultats par difficulté :</span></h2>
         <canvas id="studentChart"></canvas>
     </div>
 {% endblock %}

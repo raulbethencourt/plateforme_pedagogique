@@ -8,7 +8,7 @@
     {% endfor %}
     <div class="container-sm mt-5">
 
-        <h1>Enregistrement</h1>
+        <h1>Inscription</h1>
 
         {{ form_start(registrationForm, {'attr': {'class': 'regisForm'}}) }}
         {{ form_row(registrationForm.username) }}
@@ -28,11 +28,11 @@
 
             <ul class="list-group list-group-flush w-25 pass-list">
                 <li class="list-group-item list-group-item-warning">Votre mot de passe doit comporter entre 4 et 10
-                    chiffres
+                    chiffres.
                 </li>
-                <li class="list-group-item list-group-item-warning">Il doit avoir dans la liste 1 lettre majuscule</li>
-                <li class="list-group-item list-group-item-warning">Au moins 1 lettre ordinaire</li>
-                <li class="list-group-item list-group-item-warning">Au moins 1 chiffre</li>
+                <li class="list-group-item list-group-item-warning">Il doit avoir 1 lettre majuscule.</li>
+                <li class="list-group-item list-group-item-warning">Au moins 1 lettre minuscule.</li>
+                <li class="list-group-item list-group-item-warning">Au moins 1 chiffre.</li>
             </ul>
         </div>
 
@@ -41,7 +41,7 @@
             <a href="#" class="ml-2">(Lire)</a>
         </div>
 
-        <button id="btnSubmit" type="submit" class="btn btn-primary mb-xl-5">S'enregistrer</button>
+        <button id="btnSubmit" type="submit" class="btn btn-primary mb-xl-5">S'inscrire</button>
         {{ form_end(registrationForm) }}
     </div>
 

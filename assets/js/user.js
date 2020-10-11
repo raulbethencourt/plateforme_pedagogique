@@ -11,7 +11,7 @@ if ($('#teacherStudentChart').length) {
             labels: ['Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre'],
             datasets: [{
                 data: [0, 10, 11, 10, 12, 5, 6, 2],
-                label: 'Etudiants',
+                label: 'Étudiants',
                 borderColor: '#a051d9'
             }, {
                 data: [2, 1, 0, 0, 5, 3, 0, 2],

@@ -10,20 +10,20 @@
     {% endfor %}
 
     <h1>{{ questionnaire.title }}</h1>
-    <h3>Liste de Questions</h3>
-    <table class="table">
+    <h3>Liste des questions</h3>
+    <table class="table border-bottom">
         <thead class="thead-dark">
         <tr>
             <th scope="col"></th>
             <th scope="col">Titre</th>
-            <th scope="col">Propositions</th>
+            <th scope="col">Réponses</th>
             <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
         {% for question in questionnaire.questions %}
             <tr>
-                <th scope="row">{{ question.id }}</th>
+                <th scope="row">{{ loop.index }}</th>
                 <td>{{ question.title }}</td>
                 <td>
                     {% for proposition in question.propositions %}
@@ -36,7 +36,7 @@
                 </td>
                 <td>
                     <a href="{{ path('question_edit', {id: question.id}) }}" class="btn btn-secondary mb-2"
-                       role="button">Editer</a>
+                       role="button">Éditer</a>
                     <form method="post" action="{{ path('question_delete', {id: question.id}) }}"
                           style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
                         <input type="hidden" name="_method" value='DELETE'>

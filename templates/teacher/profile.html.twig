@@ -19,13 +19,13 @@
                             <span class="font-weight-bold">Nom d'utilisateur</span></li>
                         <li class="list-group-item">{{ teacher.username }}</li>
                         <li class="list-group-item list-group-item-info">
-                            <span class="font-weight-bold">Prenom et Nom</span></li>
+                            <span class="font-weight-bold">Prénom et nom</span></li>
                         <li class="list-group-item">{{ teacher.name ~ " " ~ teacher.surname }}</li>
                         <li class="list-group-item list-group-item-info">
                             <span class="font-weight-bold">Email</span></li>
                         <li class="list-group-item">{{ teacher.email }}</li>
                         <li class="list-group-item list-group-item-info">
-                            <span class="font-weight-bold">Matière</span></li>
+                            <span class="font-weight-bold">Matière(s)</span></li>
                         <li class="list-group-item">{{ teacher.subject }}</li>
                     </ul>
                 </div>
@@ -39,7 +39,7 @@
                                  class="rounded-circle profile__img">
                         {% endif %}
                     </a>
-                    <a href="{{ path('edit_teacher') }}" class="btn btn-primary w-75 mt-4">Editer Profil</a>
+                    <a href="{{ path('edit_teacher') }}" class="btn btn-primary w-75 mt-4">Éditer Profil</a>
                 </div>
             </div>
         </div>

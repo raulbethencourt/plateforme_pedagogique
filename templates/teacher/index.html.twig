@@ -10,8 +10,8 @@
     {% endfor %}
 
     <h1>Bienvenue {{ teacher.name }}</h1>
-    <h3>Liste des Questionnaires</h3>
-    <table class="table">
+    <h3>Liste des questionnaires</h3>
+    <table class="table border-bottom">
         <thead class="thead-dark">
         <tr>
             <th scope="col"></th>
@@ -23,7 +23,7 @@
         <tbody>
         {% for questionnaire in questionnaires %}
             <tr>
-                <th scope="row">{{ questionnaire.id }}</th>
+                <th scope="row">{{ loop.index }}</th>
                 <td><a href="{{ path('questionnaire_index', {id: questionnaire.id}) }}"
                        role="button">{{ questionnaire.title }}</a></td>
                 {% if questionnaire.difficulty == 'facile' %}
@@ -34,14 +34,14 @@
                     <td><span class="badge badge-pill badge-secondary p-2">{{ questionnaire.difficulty }}</span></td>
                 {% endif %}
 
-                <td>
-                    <a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}" class="btn btn-primary"
-                       role="button">Editer</a>
+                <td class="d-flex justify-content-end">
+                    <a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}"
+                       class="btn btn-secondary mr-2" role="button">Éditer</a>
                     <form method="post" action="{{ path('questionnaire_delete', {id: questionnaire.id}) }}"
                           style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
                         <input type="hidden" name="_method" value='DELETE'>
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ questionnaire.id) }}">
-                        <button class="btn btn-danger">Supprimer</button>
+                        <button class="btn btn-danger mr-2">Supprimer</button>
                     </form>
                 </td>
             </tr>

@@ -22,7 +22,7 @@
                             <span class="font-weight-bold">Email</span></li>
                         <li class="list-group-item">{{ user.email }}</li>
                     </ul>
-                    <a href="{{ path('edit_user') }}" class="btn btn-primary mt-4">Editer Profil</a>
+                    <a href="{{ path('edit_user') }}" class="btn btn-primary mt-4">Éditer Profil</a>
                 </div>
                 <a href="{{ path('edit_user_avatar') }}" class="d-flex flex-column align-items-center justify-content-center">
                     {% if user.avatar is defined and user.avatar is not null %}
@@ -38,7 +38,7 @@
     </div>
     <div class="d-flex justify-content-between mt-4 w-100">
         <div class="d-flex flex-column align-items-center w-100">
-            <h3><span class="badge badge-dark rounded p-2">Nombre des classes créées :</span></h3>
+            <h3><span class="badge badge-dark rounded p-2">Nombre de classes créées :</span></h3>
             <canvas id="classroomsChart"></canvas>
         </div>
         <div class="d-flex flex-column align-items-center w-100">

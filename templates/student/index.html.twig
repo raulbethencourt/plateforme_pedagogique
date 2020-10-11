@@ -1,26 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Etudiant -
+{% block title %}Étudiant -
 	{{ student.name }}
 {% endblock %}
 
 {% block body %}
-	<h1>Bienvenue
-		{{ student.name }}</h1>
+	<h1>Bienvenue {{ student.name }}</h1>
 	<h3>Liste des questionnaires</h3>
-	<table class="table">
+	<table class="table border-bottom">
 		<thead class="thead-dark">
 			<tr>
 				<th scope="col"></th>
 				<th scope="col">Titre</th>
-				<th scope="col">Difficutltée</th>
+				<th scope="col">Difficulté</th>
 				<th scope="col"></th>
 			</tr>
 		</thead>
 		<tbody>
 			{% for questionnaire in questionnaires %}
 				<tr>
-					<th scope="row">{{ questionnaire.id }}</th>
+					<th scope="row">{{ loop.index }}</th>
 					<td>{{ questionnaire.title }}</td>
 					{% if questionnaire.difficulty == 'facile' %}
 						<td>
@@ -36,7 +35,8 @@
 						</td>
 					{% endif %}
 					<td>
-						<a href="{{ path('questionnaire_play', {id: questionnaire.id}) }}" class="btn btn-primary" role="button">Play</a>
+						<a href="{{ path('questionnaire_play', {id: questionnaire.id}) }}"
+						   class="btn btn-primary role="button">Jouer</a>
 					</td>
 				</tr>
 			{% endfor %}

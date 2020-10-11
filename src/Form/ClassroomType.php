@@ -36,7 +36,7 @@ class ClassroomType extends AbstractType
                         'Français' => 'français',
                         'Histoire' => 'histoire',
                         'Musique' => 'musique',
-                        'Mathematiques' => 'mathematiques',
+                        'Mathématiques' => 'mathematiques',
                         'Informatique' => 'informatique',
                         'Philosophie' => 'philosophie',
                         'Chimie' => 'chimie',

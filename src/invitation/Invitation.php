@@ -36,9 +36,9 @@ class Invitation extends AbstractController
     {
         // I creates a new email to send to the new user
         $email = (new TemplatedEmail())
-            ->from(Address::fromString('Plataform <plataform@exemple.com>'))
+            ->from(Address::fromString('Carpa <carpa@exemple.com>'))
             ->to($data->getEmail())
-            ->subject('Invitation a Plataform')
+            ->subject('Invitation à Carpa')
             ->htmlTemplate('emails/invitation.html.twig')
             ->context(
                 [

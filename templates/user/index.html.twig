@@ -7,9 +7,9 @@
         </div>
     {% endfor %}
 
-    <h1>Bienvenu {{ user.username }}</h1>
+    <h1>Bienvenue {{ user.username }}</h1>
     <h3>Liste des classes</h3>
-    <table class="table">
+    <table class="table border-bottom">
         <thead class="thead-dark">
         <tr>
             <th scope="col"></th>
@@ -20,13 +20,13 @@
         <tbody>
         {% for classroom in classrooms %}
             <tr>
-                <th scope="row">{{ classroom.id }}</th>
+                <th scope="row">{{ loop.index }}</th>
                 <td><a href="{{ path('classroom_index', {id: classroom.id}) }}">{{ classroom.name }}</a></td>
                 <td class="d-flex justify-content-between ">
                     {{ classroom.discipline }}
                     <div class="d-flex justify-content-center w-50">
                         <a href="{{ path('user_classroom_edit', {id: classroom.id}) }}" class="btn btn-secondary mr-lg-2"
-                           role="button">Editer</a>
+                           role="button">Éditer</a>
                         <form method="post" action="{{ path('user_classroom_delete', {id: classroom.id}) }}"
                               style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
                             <input type="hidden" name="_method" value='DELETE'>

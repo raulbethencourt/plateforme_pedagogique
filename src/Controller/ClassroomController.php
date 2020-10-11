@@ -41,7 +41,7 @@ class ClassroomController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $invitation->invite($invite, $classroom->getId(), $classroom->getDiscipline());
-            $this->addFlash('success', 'Votre invitation a bien été envoyé');
+            $this->addFlash('success', 'Votre invitation a bien été envoyée.');
             return $this->redirectToRoute('classroom_index', [
                 'id' => $classroom->getId()
             ]);

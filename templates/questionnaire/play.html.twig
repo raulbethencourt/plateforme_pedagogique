@@ -25,7 +25,7 @@
     <form method="post">
         {% for question in questions %}
             <article class="container">
-                <h5 class="pt-3 mb-0">{{ question.title }}</h5>
+                <h5 class="pt-3 mb-0">{{ loop.index }} - {{ question.title }}</h5>
                 <small class="text-muted">{{ question.score }} {{ question.score > 1 ? "points" : "point" }}</small>
 
                 <ul class="list-group">
