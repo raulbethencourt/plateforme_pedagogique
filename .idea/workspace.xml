@@ -23,52 +23,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c7a212d-3c91-4ff0-904b-dbc37de82ac8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/css/scss/libs/custom/base.scss" beforeDir="false" afterPath="$PROJECT_DIR$/assets/css/scss/libs/custom/base.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/js/password_confirm.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/password_confirm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/js/question_create.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/question_create.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/js/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/assets/js/user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/translation.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/translation.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/services.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/services.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/profile/logo-carpa-5f83230d55089536063152.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/profile/profile-3-5f8319aeb0ee1507583759.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/AvatarController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/AvatarController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ClassroomController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ClassroomController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/RegistrationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/RegistrationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/StudentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/StudentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/TeacherController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TeacherController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Teacher.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Teacher.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/AvatarType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/AvatarType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/ClassroomType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/ClassroomType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/EditStudentType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/EditStudentType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/EditTeacherType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/EditTeacherType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/InviteType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/InviteType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/PropositionType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/PropositionType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/QuestionType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/QuestionType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Form/RegistrationFormType.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Form/RegistrationFormType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/invitation/Invitation.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/invitation/Invitation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/images/profile/profile-3-5f83622fb26e7743071913.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/emails/invitation.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/emails/invitation.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/question/edit.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/question/edit.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/question/new.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/question/new.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/questionnaire/edit.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/questionnaire/edit.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/questionnaire/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/questionnaire/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/questionnaire/new.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/questionnaire/new.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/questionnaire/play.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/questionnaire/play.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/registration/confirm.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration/confirm.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/registration/confirmation_email.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration/confirmation_email.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/registration/register.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration/register.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/student/edit-profile.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/student/edit-profile.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/student/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/student/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/student/profile.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/student/profile.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/teacher/edit-profile.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/teacher/edit-profile.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/teacher/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/teacher/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/teacher/profile.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/teacher/profile.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/user/classroom/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/classroom/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/user/edit-profile.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/edit-profile.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/user/index.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/index.html.twig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/user/profile.html.twig" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user/profile.html.twig" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -380,6 +336,7 @@
       <workItem from="1602419068435" duration="4846000" />
       <workItem from="1602424169569" duration="6857000" />
       <workItem from="1602432114295" duration="14033000" />
+      <workItem from="1602498673439" duration="176000" />
     </task>
     <servers />
   </component>
@@ -517,11 +474,11 @@
     </state>
     <state x="2205" y="250" width="672" height="677" key="run.anything.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1600977129115" />
     <state x="647" y="250" key="run.anything.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1601388797731" />
-    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1602452922376">
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup" timestamp="1602498708266">
       <screen x="1600" y="0" width="1920" height="1080" />
     </state>
     <state x="612" y="225" width="695" height="651" key="search.everywhere.popup/0.0.1920.1036@0.0.1920.1036" timestamp="1601549790971" />
-    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1602452922376" />
+    <state x="2223" y="228" width="672" height="678" key="search.everywhere.popup/1600.0.1920.1080/0.103.1600.900@1600.0.1920.1080" timestamp="1602498708266" />
     <state x="654" y="235" width="672" height="678" key="search.everywhere.popup/62.0.1858.1080@62.0.1858.1080" timestamp="1602161822494" />
   </component>
 </project>

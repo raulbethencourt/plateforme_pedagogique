@@ -60,7 +60,7 @@
                     <li class="nav-item">
                         <a class="nav-link mr-2" href="{{ path('teacher_profile') }}">
                             {% if teacher.avatar is defined and teacher.avatar is not null %}
-                                <img class="profile rounded-circle" src="{{ vich_uploader_asset(teacher.avatar) }}"
+                                <img class="profile rounded-circle bg-black" src="{{ vich_uploader_asset(teacher.avatar) }}"
                                      alt="profil icon">
                             {% else %}
                                 <img class="profile" src="{{ asset('images/image-profile.png') }}" alt="profil icon">
@@ -71,7 +71,7 @@
                     <li class="nav-item">
                         <a class="nav-link mr-2" href="{{ path('student_profile') }}">
                             {% if student.avatar is defined and student.avatar is not null %}
-                                <img class="profile rounded-circle"
+                                <img class="profile rounded-circle bg-black"
                                      src="{{ vich_uploader_asset(student.avatar) }}" alt="profil icon">
                             {% else %}
                                 <img class="profile" src="{{ asset('images/image-profile.png') }}" alt="profil icon">
