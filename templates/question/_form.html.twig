@@ -1,6 +1,7 @@
 {{ form_start(form) }}
     {{ form_row(form.title) }}
     {{ form_row(form.score) }}
+    {{ form_row(form.imageFile) }}
 <ul class="propositions w-75 mr-auto ml-auto" style="list-style: none;"
     data-prototype="{{ form_widget(form.propositions.vars.prototype)|e('html_attr') }}">
     {% for prop in form.propositions %}

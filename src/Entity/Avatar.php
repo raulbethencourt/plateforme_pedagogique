@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\AvatarRepository;
-use Doctrine\ORM\Mapping as ORM;
 use Serializable;
+use Doctrine\ORM\Mapping as ORM;
+use App\Repository\AvatarRepository;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AvatarRepository", repositoryClass=AvatarRepository::class)

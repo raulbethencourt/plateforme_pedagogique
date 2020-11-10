@@ -2,15 +2,20 @@
 
 namespace App\Entity;
 
-use App\Repository\QuestionnaireRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Serializable;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\QuestionnaireRepository;
+use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\QuestionnaireRepository", repositoryClass=QuestionnaireRepository::class)
+ * @Vich\Uploadable
  */
-class Questionnaire
+class Questionnaire implements Serializable
 {
     /**
      * @ORM\Id
@@ -50,6 +55,27 @@ class Questionnaire
      * @ORM\Column(type="date")
      */
     private $date_creation;
+
+    /**
+     * @Vich\UploadableField(mapping="questionnaire_image", fileNameProperty="imageName")
+     *
+     * @var File|null
+     */
+    private $imageFile;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     *
+     * @var string|null
+     */
+    private $imageName;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     *
+     * @var \DateTimeInterface|null
+     */
+    private $updatedAt;
 
     public const DIFFICULTIES = ["facile", "moyen", "difficile"];
 
@@ -195,5 +221,64 @@ class Questionnaire
         return $this->questions->forAll(function($key, $question) {
             return count($question->getPropositions()) >= 2;
         });
+    }
+
+    /**
+     * @param  File|UploadedFile|null  $imageFile
+     */
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        // Only change the updated af if the file is really uploaded to avoid database updates.
+        // This is needed when the file should be set when loading the entity.
+        if ($this->imageFile instanceof UploadedFile) {
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->imageName,
+        ));
+    }
+
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->imageName,
+            ) = unserialize($serialized, array('allowed_classes' => false));
     }
 }

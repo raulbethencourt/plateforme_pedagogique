@@ -10,3 +10,21 @@ vich_uploader:
             inject_on_load: false
             delete_on_update: true
             delete_on_remove: true
+
+        questionnaire_image:
+            uri_prefix: /images/questionnaire
+            upload_destination: '%kernel.project_dir%/public/images/questionnaire'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true
+
+        question_image:
+            uri_prefix: /images/question
+            upload_destination: '%kernel.project_dir%/public/images/question'
+            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true
