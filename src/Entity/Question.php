@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=QuestionRepository::class)
@@ -47,6 +48,10 @@ class Question implements Serializable
     private $questionnaire;
 
     /**
+     * @Assert\File(
+     *  mimeTypes = {"image/jpeg", "image/png", "image/svg+xml"},
+     *  mimeTypesMessage = "Chargé un image correct - jpeg, png -"    
+     * )
      * @Vich\UploadableField(mapping="question_image", fileNameProperty="imageName")
      *
      * @var File|null
@@ -73,7 +78,8 @@ class Question implements Serializable
     }
 
     public function getId(): ?int
-    {        return $this->id;
+    {
+        return $this->id;
     }
 
     public function getTitle(): ?string
@@ -144,9 +150,9 @@ class Question implements Serializable
      * Method to get the right propositions in a question
      * @return ArrayCollection
      */
-    public function getRightPropositions() :ArrayCollection
+    public function getRightPropositions(): ArrayCollection
     {
-        return $this->propositions->filter(function($proposition){
+        return $this->propositions->filter(function ($proposition) {
             return $proposition->getCorrect() == true;
         });
     }
@@ -204,9 +210,9 @@ class Question implements Serializable
     /** @see \Serializable::unserialize() */
     public function unserialize($serialized)
     {
-        list (
+        list(
             $this->id,
             $this->imageName,
-            ) = unserialize($serialized, array('allowed_classes' => false));
+        ) = unserialize($serialized, array('allowed_classes' => false));
     }
 }

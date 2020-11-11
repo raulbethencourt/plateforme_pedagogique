@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Serializable;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\AvatarRepository;
@@ -23,6 +24,10 @@ class Avatar implements Serializable
     private $id;
 
     /**
+     * @Assert\File(
+     *  mimeTypes = {"image/jpeg", "image/png", "image/svg+xml"},
+     *  mimeTypesMessage = "Chargé un image correct - jpeg, png -"    
+     * )
      * @Vich\UploadableField(mapping="profile_image", fileNameProperty="imageName")
      *
      * @var File|null

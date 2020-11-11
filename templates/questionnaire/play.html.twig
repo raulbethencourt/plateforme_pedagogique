@@ -6,23 +6,24 @@
 
 {% block body %}
 	<header>
-		<h3>
+		<h2 class="m-3">
 			{{ questionnaire.title }}
 			<span class="badge badge-pill
-												{% if questionnaire.difficulty == " difficile" %}
-													badge-danger
-												{% elseif questionnaire.difficulty ==  " facile" %}
-													badge-success
-												{% else %}
-													badge-info
-												{% endif %}
-												">{{ questionnaire.difficulty }}</span>
-		</h3>
-		<div class="text-center">
-			{% if questionnaire.imageName is defined and questionnaire.imageName is not null %}
+				{% if questionnaire.difficulty == " difficile" %}
+					badge-danger
+				{% elseif questionnaire.difficulty ==  " facile" %}
+					badge-success
+				{% else %}
+					badge-info
+				{% endif %}
+				">{{ questionnaire.difficulty }}</span>
+		</h2>
+
+		{% if questionnaire.imageName is not same as "" %}
+			<div class="m-3 text-center">
 				<img src="{{ vich_uploader_asset(questionnaire, 'imageFile') }}" alt="profile" class="play__img">
-			{% endif %}
-		</div>
+			</div>
+		{% endif %}
 	</header>
 
 	{% if finalResults['given'] is not null %}
@@ -33,11 +34,9 @@
 	<form method="post">
 		{% for question in questions %}
 			<article class="container">
-				<h5 class="pt-3 mb-0">{{ loop.index }}
-					-
-					{{ question.title }}</h5>
+				<h5 class="pt-3 mb-0">{{ loop.index }} - {{ question.title }}</h5>
 
-				<div class="text-center">
+				<div class="m-3 text-center">
 					{% if question.imageName is defined and question.imageName is not null %}
 						<img src="{{ vich_uploader_asset(question, 'imageFile') }}" alt="profile" class="play__question-img">
 					{% endif %}

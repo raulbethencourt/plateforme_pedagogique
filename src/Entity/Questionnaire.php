@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Serializable;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\QuestionnaireRepository;
@@ -57,6 +58,10 @@ class Questionnaire implements Serializable
     private $date_creation;
 
     /**
+     * @Assert\File(
+     *  mimeTypes = {"image/jpeg", "image/png", "image/svg+xml"},
+     *  mimeTypesMessage = "Chargé un image correct - jpeg, png -"    
+     * )
      * @Vich\UploadableField(mapping="questionnaire_image", fileNameProperty="imageName")
      *
      * @var File|null

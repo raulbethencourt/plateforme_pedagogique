@@ -59,7 +59,7 @@ class QuestionnaireController extends AbstractController
         $points = null;
 
         if ($request->isMethod("post")) {
-            $answers = $request->request;//equivalent à $_POST
+            $answers = $request->request; //equivalent à $_POST
 
             $eval = $this->evaluateQuestionnaire($answers, $questionnaire);
             $rights = $eval['corrects'];
@@ -77,7 +77,7 @@ class QuestionnaireController extends AbstractController
             }
 
             $pass->setPoints($points);
-            $pass->setDateRealisation(new\ DateTime());
+            $pass->setDateRealisation(new \DateTime());
             $em->persist($pass);
             $em->flush();
         }
@@ -115,6 +115,7 @@ class QuestionnaireController extends AbstractController
 
             foreach ($rightPropositions as $rightProposition) {
                 $rightProposition = $rightProposition->getId();
+
                 if ($answers->get($question->getId()) == $rightProposition) {
                     $correctPropositions[] = $rightProposition;
                     $points += $question->getScore();
@@ -125,4 +126,3 @@ class QuestionnaireController extends AbstractController
         return ["corrects" => $correctPropositions, "points" => $points];
     }
 }
-

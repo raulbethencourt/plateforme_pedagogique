@@ -1,4 +1,18 @@
 {{ form_start(form) }}
-        {{ form_rest(form) }}
-        <button type="submit" class="btn btn-primary">{{ button|default('Create') }}</button>
+
+{{ form_row(form.title) }}
+
+{% set error_flag = form_errors(form.imageFile) %}
+<label class=" {% if error_flag %}has-error{% endif %}">
+	Image
+</label>
+{{ form_widget(form.imageFile) }}
+{% if error_flag %}
+	<div class="has-error">
+		{{ form_errors(form.imageFile) }}
+	</div>
+{% endif %}
+
+{{ form_row(form.difficulty) }}
+<button type="submit" class="btn btn-primary">{{ button|default('Create') }}</button>
 {{ form_end(form) }}
