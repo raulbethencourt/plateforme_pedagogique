@@ -50,7 +50,7 @@ class EventsController extends AbstractController
     }
 
     /**
-     * @Route("/{id_events}", name="events_show", methods={"GET"})
+     * @Route("/{id_events}/event", name="events_show", methods={"GET"})
      * @ParamConverter("events", options={"mapping": {"id_events"   : "id"}})
      */
     public function show(Events $event): Response
@@ -81,7 +81,7 @@ class EventsController extends AbstractController
     }
 
     /**
-     * @Route("/{id_events}", name="events_delete", methods={"DELETE"})
+     * @Route("/{id_events}/delete", name="events_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Events $event): Response
     {
@@ -95,10 +95,12 @@ class EventsController extends AbstractController
     }
 
     /**
-     * @Route("/events/calendar",name="events_calendar", methods={"GET"})
+     * @Route("/calendar_view",name="events_calendar", methods={"GET"})
      */
     public function calendar(): Response
     {
-        return $this->render('events/calendar.html.twig');
+        return $this->render('events/calendar.html.twig', [
+            'user' => $this->getUser()
+        ]);
     }
 }

@@ -10,3 +10,7 @@
 .fc th {
     font-weight: inherit;
 }
+
+.fc table{
+    background-color: #fcf9ef;
+}

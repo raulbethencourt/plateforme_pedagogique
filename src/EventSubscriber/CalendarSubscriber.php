@@ -59,8 +59,10 @@ class CalendarSubscriber implements EventSubscriberInterface
              */
 
             $eventAction->setOptions([
-                'backgroundColor' => 'blue',
-                'borderColor' => 'red',
+                'textColor' => '#080808',
+                'backgroundColor' => '#75aaae',
+                'borderColor' => '#75aaae',
+                'classNames' => 'pl-2'
             ]);
 
             $event = $event->getId_events();
