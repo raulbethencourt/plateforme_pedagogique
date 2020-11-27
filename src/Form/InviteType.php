@@ -52,6 +52,17 @@ class InviteType extends AbstractType
                 ]
             )
             ->add(
+                'surname',
+                TextType::class,
+                [
+                    'label' => false,
+                    'attr' => [
+                        'placeholder' => 'nom...',
+                    ],
+                    'purify_html' => true,
+                ]
+            )
+            ->add(
                 'submit',
                 SubmitType::class,
                 [

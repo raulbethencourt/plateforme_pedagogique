@@ -4,11 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Pass;
 use App\Entity\Questionnaire;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class QuestionnaireController
@@ -39,7 +40,7 @@ class QuestionnaireController extends AbstractController
     /**
      * This methode control the questionnaires gaming
      * @Route("/{id}/play", name="questionnaire_play")
-     * @IsGranted("ROLE_STUDENT")
+     * @Security("is_granted('ROLE_STUDENT') or is_granted('ROLE_TEACHER')")
      * @param  Questionnaire  $questionnaire
      * @param  Request  $request
      * @return Response
@@ -50,7 +51,13 @@ class QuestionnaireController extends AbstractController
         if (!$questionnaire->isPlayable()) {
             $this->addFlash('error', 'Questionnaire indisponible !');
 
+            if (condition) {
+                # code...
+            } else {
+                # code...
+            }
             return $this->redirectToRoute('student_index');
+            // TODO mirar si es un estudiante o un profesor que juega 
         }
 
         // Creates the variables that I'm gonna need later on
@@ -93,6 +100,7 @@ class QuestionnaireController extends AbstractController
                     "rights" => $rights,
                 ],
                 'student' => $this->getUser(),
+                'teacher' => $this->getUser()
             ]
         );
     }

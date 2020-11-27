@@ -6,6 +6,7 @@ use App\Entity\Classroom;
 use App\Entity\Invite;
 use App\Form\InviteType;
 use App\invitation\Invitation;
+use App\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ClassroomController extends AbstractController
 {
     /**
-     * This methode shows the students and teacher that belongs to the classroom
+     * This method shows the students and teacher that belongs to the classroom
      * and It allows us to invite new Teachers or students
      * @Route("/{id}", name="classroom_index")
      * @IsGranted ("ROLE_USER")
@@ -32,15 +33,25 @@ class ClassroomController extends AbstractController
      * @return Response
      * @throws TransportExceptionInterface
      */
-    public function index(Classroom $classroom, Request $request, Invitation $invitation): Response
+    public function index(Classroom $classroom, Request $request, Invitation $invitation, UserRepository $user): Response
     {
-        $invite = new Invite(); // New teacher or student
+        $invite = new Invite(); // We invite a new teacher or student
 
         $form = $this->createForm(InviteType::class, $invite);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $invitation->invite($invite, $classroom->getId(), $classroom->getDiscipline());
+            // Check if user is in the data base already
+            $userAlready = $user->findOneBy([
+                "name" => $invite->getName(),
+                "surname" => $invite->getSurname()
+            ]);
+            if (isset($userAlready)) {
+                $invitation->invite($invite, $classroom, $userAlready);
+            } else {
+                $invitation->invite($invite, $classroom);
+            }
+
             $this->addFlash('success', 'Votre invitation a bien été envoyée.');
             return $this->redirectToRoute('classroom_index', [
                 'id' => $classroom->getId()

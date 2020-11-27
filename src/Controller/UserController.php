@@ -134,7 +134,7 @@ class UserController extends AbstractController
     /**
      * @Route ("/profile", name="user_profile")
      */
-    public function teacherProfile()
+    public function userProfile()
     {
         return $this->render(
             'user/profile.html.twig',

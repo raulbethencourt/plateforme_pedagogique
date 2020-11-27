@@ -51,7 +51,8 @@ class StudentController extends AbstractController
     public function profile(): Response
     {
         // Get each time that the student has passed q questionnaire
-        $passes = $this->getDoctrine()->getRepository(Pass::class)
+        $passes = $this->getDoctrine()
+            ->getRepository(Pass::class)
             ->findBy(['student' => $this->getUser()]);
 
         $sum = array_reduce(
@@ -63,6 +64,7 @@ class StudentController extends AbstractController
 
         $numberOfQuestions = array_reduce(
             $passes,
+
             function ($i, $pass) {
                 return $i += count($pass->getQuestionnaire()->getQuestions());
             }
@@ -106,7 +108,7 @@ class StudentController extends AbstractController
         );
 
         if ($sumMax) {
-            $average = (round($sum / $sumMax, 2) * 100)."%";
+            $average = (round($sum / $sumMax, 2) * 100) . "%";
         } else {
             $average = 0;
         }
