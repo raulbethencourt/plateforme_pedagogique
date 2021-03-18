@@ -51,11 +51,11 @@ class QuestionnaireController extends AbstractController
         if (!$questionnaire->isPlayable()) {
             $this->addFlash('error', 'Questionnaire indisponible !');
 
-            if (condition) {
-                # code...
-            } else {
-                # code...
-            }
+            // if (condition) {
+            //     # code...
+            // } else {
+            //     # code...
+            // }
             return $this->redirectToRoute('student_index');
             // TODO mirar si es un estudiante o un profesor que juega 
         }

@@ -57,22 +57,31 @@ Encore
         config.corejs = 3;
     })
 
+    
     // enables Sass/SCSS support
     .enableSassLoader()
-
+    
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
-
+    
     // uncomment to get integrity="..." attributes on your script & link tags
     // requires WebpackEncoreBundle 1.4 or higher
     //.enableIntegrityHashes(Encore.isProduction())
-
+    
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
-
+    
     // uncomment if you use API Platform Admin (composer req api-admin)
     //.enableReactPreset()
     //.addEntry('admin', './assets/js/admin.js')
+    // DevServer websocket
+    // .configureDevServerOptions(options => {
+    //     options.client = {
+    //         host: '0.0.0.0'
+    //     };
+    //     options.firewall = false;
+    //     options.https = true;
+    // })
 ;
 
 module.exports = Encore.getWebpackConfig();
