@@ -42,12 +42,6 @@ class Questionnaire implements Serializable
     private $questions;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Teacher::class, inversedBy="questionnaires")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $teacher;
-
-    /**
      * @ORM\OneToMany(targetEntity=Pass::class, mappedBy="questionnaire", orphanRemoval=true)
      */
     private $pass;
@@ -82,12 +76,18 @@ class Questionnaire implements Serializable
      */
     private $updatedAt;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Lesson::class, mappedBy="questionnaires")
+     */
+    private $lessons;
+
     public const DIFFICULTIES = ["facile", "moyen", "difficile"];
 
     public function __construct()
     {
         $this->questions = new ArrayCollection();
         $this->pass = new ArrayCollection();
+        $this->lessons = new ArrayCollection();
     }
 
     public function __toString()
@@ -148,18 +148,6 @@ class Questionnaire implements Serializable
                 $question->setQuestionnaire(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getTeacher(): ?Teacher
-    {
-        return $this->teacher;
-    }
-
-    public function setTeacher(?Teacher $teacher): self
-    {
-        $this->teacher = $teacher;
 
         return $this;
     }
@@ -285,5 +273,32 @@ class Questionnaire implements Serializable
             $this->id,
             $this->imageName,
             ) = unserialize($serialized, array('allowed_classes' => false));
+    }
+
+    /**
+     * @return Collection|Lesson[]
+     */
+    public function getLessons(): Collection
+    {
+        return $this->lessons;
+    }
+
+    public function addLesson(Lesson $lesson): self
+    {
+        if (!$this->lessons->contains($lesson)) {
+            $this->lessons[] = $lesson;
+            $lesson->addQuestionnaire($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLesson(Lesson $lesson): self
+    {
+        if ($this->lessons->removeElement($lesson)) {
+            $lesson->removeQuestionnaire($this);
+        }
+
+        return $this;
     }
 }

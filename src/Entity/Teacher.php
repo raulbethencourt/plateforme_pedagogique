@@ -13,11 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Teacher extends User
 {
     /**
-     * @ORM\OneToMany(targetEntity=Questionnaire::class, mappedBy="teacher")
-     */
-    private $questionnaires;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $subject;
@@ -27,10 +22,15 @@ class Teacher extends User
      */
     private $classrooms;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Lesson::class, mappedBy="Teacher", cascade={"persist"})
+     */
+    private $lessons;
+
     public function __construct()
     {
-        $this->questionnaires = new ArrayCollection();
         $this->classrooms = new ArrayCollection();
+        $this->lessons = new ArrayCollection();
     }
 
     public function getClassrooms(): Collection
@@ -70,29 +70,47 @@ class Teacher extends User
         return $this;
     }
 
-    public function getQuestionnaires(): Collection
+    /**
+     * @return Collection|Lesson[]
+     */
+    public function getLessons(): Collection
     {
-        return $this->questionnaires;
+        return $this->lessons;
     }
 
-    public function addQuestionnaire(Questionnaire $questionnaire): self
+    public function addLesson(Lesson $lesson): self
     {
-        if (!$this->questionnaires->contains($questionnaire)) {
-            $this->questionnaires[] = $questionnaire;
-            $questionnaire->setTeacher($this);
+        if (!$this->lessons->contains($lesson)) {
+            $this->lessons[] = $lesson;
+            $lesson->addTeacher($this);
         }
 
         return $this;
     }
 
-    public function removeQuestionnaire(Questionnaire $questionnaire): self
+    public function removeLesson(Lesson $lesson): self
     {
-        if ($this->questionnaires->contains($questionnaire)) {
-            $this->questionnaires->removeElement($questionnaire);
-            // set the owning side to null (unless already changed)
-            if ($questionnaire->getTeacher() === $this) {
-                $questionnaire->setTeacher(null);
-            }
+        if ($this->lessons->removeElement($lesson)) {
+            $lesson->removeTeacher($this);
+        }
+
+        return $this;
+    }
+
+    public function addClassroom(Classroom $classroom): self
+    {
+        if (!$this->classrooms->contains($classroom)) {
+            $this->classrooms[] = $classroom;
+            $classroom->addTeacher($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClassroom(Classroom $classroom): self
+    {
+        if ($this->classrooms->removeElement($classroom)) {
+            $classroom->removeTeacher($this);
         }
 
         return $this;

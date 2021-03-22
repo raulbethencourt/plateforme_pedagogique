@@ -72,4 +72,9 @@ class Events
 
         return $this;
     }
+
+    public function getIdEvents(): ?int
+    {
+        return $this->id_events;
+    }
 }
