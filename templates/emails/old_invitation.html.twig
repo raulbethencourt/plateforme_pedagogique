@@ -1,0 +1,78 @@
+<div class="container">
+    <div id="contact">
+        <h3>Bonjour {{ data.name }}</h3>
+        <h4>Vous avez été invité à rejoindre la classe :</h4>
+        <p class="classroom-id">{{ data.discipline }}</p>
+    </div>
+</div>
+
+<style>
+    @import url(https://fonts.googleapis.com/css?family=Roboto:400,300,600,400italic);
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+        -moz-font-smoothing: antialiased;
+        -o-font-smoothing: antialiased;
+        font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+
+    body {
+        font-family: "Roboto", Helvetica, Arial, sans-serif;
+        font-weight: 100;
+        font-size: 12px;
+        line-height: 30px;
+        color: #777;
+        background: #d6d6d6;
+    }
+
+    .container {
+        max-width: 400px;
+        width: 100%;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    #contact {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: #F9F9F9;
+        padding: 25px;
+        margin: 150px 0;
+        border-radius: 10px;
+    }
+
+    #contact h3 {
+        text-align: center;
+        display: block;
+        font-size: 30px;
+        font-weight: 300;
+        margin-bottom: 10px;
+    }
+
+    #contact h4 {
+        text-align: center;
+        margin: 5px 0 10px;
+        display: block;
+        font-size: 16px;
+        font-weight: 400;
+    }
+
+    .classroom-id {
+        width: 75%;
+        font-size: 20px;
+        font-weight: bolder;
+        color: #f8f9fa;
+        background-color: #343a40;
+    }
+
+    p {
+        text-align: center;
+    }
+</style>

@@ -13,9 +13,11 @@ import $ from "jquery";
 
 let data = null;
 
-import './chartJS';
+import './student';
 import './question_create';
 import './password_confirm';
 import './invite';
 import './bootstrap';
+import './user';
+import './teacher';
 

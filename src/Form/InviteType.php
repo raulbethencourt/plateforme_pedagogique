@@ -35,8 +35,8 @@ class InviteType extends AbstractType
                 [
                     'label' => false,
                     'choices' => [
-                        'teacher' => 'teacher',
-                        'student' => 'student',
+                        'formateur' => 'teacher',
+                        'étudiant' => 'student',
                     ],
                 ]
             )
@@ -46,7 +46,18 @@ class InviteType extends AbstractType
                 [
                     'label' => false,
                     'attr' => [
-                        'placeholder' => 'name...',
+                        'placeholder' => 'prenom...',
+                    ],
+                    'purify_html' => true,
+                ]
+            )
+            ->add(
+                'surname',
+                TextType::class,
+                [
+                    'label' => false,
+                    'attr' => [
+                        'placeholder' => 'nom...',
                     ],
                     'purify_html' => true,
                 ]

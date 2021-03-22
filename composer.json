@@ -12,6 +12,7 @@
         "doctrine/orm": "^2.7",
         "exercise/htmlpurifier-bundle": "^3.0",
         "friendsofsymfony/rest-bundle": "^3.0",
+        "liip/imagine-bundle": "^2.3",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/apache-pack": "^1.0",
@@ -38,11 +39,13 @@
         "symfony/twig-bundle": "5.1.*",
         "symfony/validator": "5.1.*",
         "symfony/web-link": "5.1.*",
-        "symfony/webpack-encore-bundle": "^1.7",
+        "symfony/webpack-encore-bundle": "^1.8",
         "symfony/yaml": "5.1.*",
         "symfonycasts/verify-email-bundle": "^1.0",
+        "tattali/calendar-bundle": "^1.2",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0"
+        "twig/twig": "^2.12|^3.0",
+        "vich/uploader-bundle": "^1.15"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.3",

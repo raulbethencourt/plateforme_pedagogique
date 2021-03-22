@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Classroom;
 use App\Form\ClassroomType;
+use App\Form\EditUserType;
 use App\Repository\ClassroomRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -68,7 +69,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($classroom);
             $this->em->flush();
-            $this->addFlash('success', 'Bien crée avec succès');
+            $this->addFlash('success', 'Classe créée avec succès.');
 
             return $this->redirectToRoute('user_index');
         }
@@ -83,7 +84,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route ("/classroom/{id}", name="user_classroom_edit", methods={"GET","POST"})
+     * @Route ("/classroom/{id}/edit", name="user_classroom_edit", methods={"GET","POST"})
      * @param  Classroom  $classroom
      * @param  Request  $request
      * @return RedirectResponse|ResponseAlias
@@ -95,7 +96,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
-            $this->addFlash('success', 'Bien modifié avec succès');
+            $this->addFlash('success', 'Classe modifiée avec succès.');
 
             return $this->redirectToRoute('user_index');
         }
@@ -110,7 +111,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route ("/classroom/{id}", name="user_classroom_delete", methods={"DELETE"})
+     * @Route ("/classroom/{id}/delete", name="user_classroom_delete", methods={"DELETE"})
      * @param  Classroom  $classroom
      * @param  Request  $request
      * @return RedirectResponse
@@ -124,9 +125,54 @@ class UserController extends AbstractController
         )) {
             $this->em->remove($classroom);
             $this->em->flush();
-            $this->addFlash('success', 'Bien supprimé avec succès');
+            $this->addFlash('success', 'Classe supprimée avec succès.');
         }
 
         return $this->redirectToRoute('user_index');
+    }
+
+    /**
+     * @Route ("/profile", name="user_profile")
+     */
+    public function userProfile()
+    {
+        return $this->render(
+            'user/profile.html.twig',
+            [
+                'user' => $this->getUser(),
+            ]
+        );
+    }
+
+
+
+    /**
+     * @Route ("/profile/edit", name="edit_user")
+     * @param Request $request
+     * @return RedirectResponse|Response
+     */
+    public function editProfile(Request $request)
+    {
+        $user = $this->getUser();
+
+        $form = $this->createForm(EditUserType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Profil édité avec succès.');
+
+            return $this->redirectToRoute('user_profile');
+        }
+
+        return $this->render(
+            'user/edit-profile.html.twig',
+            [
+                'editForm' => $form->createView(),
+            ]
+        );
     }
 }

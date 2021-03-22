@@ -1,0 +1,23 @@
+{# templates/booking/calendar.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <a href="{{ path('events_new') }}" class="btn btn-primary w-25 mr-auto ml-auto mb-5">Ajouter événement</a>
+
+    <div 
+        id="calendar-holder"
+        data-events-url="{{ path('fc_load_events') }}"
+        class="w-75"
+    ></div>
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('calendar') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('calendar') }}
+{% endblock %}

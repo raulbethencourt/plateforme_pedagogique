@@ -2,27 +2,8 @@
 
 {% block title %}Créer Questionnaire{% endblock %}
 
-{% block logo %}
-    <a class="navbar-brand ml-4" href="{{ path('teacher_index') }}">
-        <img src="{{ asset('images/logo-carpa.svg') }}" class="logo-carpa" alt="logo ubuntu">
-    </a>
-{% endblock %}
-
-{% block home %}
-    <li class="nav-item">
-        <a class="nav-link" href="{{ path('teacher_index') }}">Home</a>
-    </li>
-{% endblock %}
-
-{% block profile %}
-    <li class="nav-item">
-        <a class="nav-link mr-2" href="{#{{ path('teacher_profile') }}#}">
-            <img class="profile" src="{{ asset('images/profile.png') }}" alt="profile icon"></a>
-    </li>
-{% endblock %}
-
 {% block body %}
-    <h1>Créer Questionnaire</h1>
+    <h1>Créer un questionnaire</h1>
     {{ include('questionnaire/_form.html.twig', {form: form, button: 'Créer'}) }}
 {% endblock %}
 

@@ -7,23 +7,29 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Invite
 {
     /**
-     * @var string|null
+     * @var string
      * @Assert\NotBlank
      * @Assert\Email
      */
     private $email;
 
     /**
-     * @var string|null
+     * @var string
      * @Assert\NotBlank
      */
     private $type;
 
     /**
-     * @var string|null
+     * @var string
      * @Assert\NotBlank
      */
     private $name;
+
+    /**
+     * @var string 
+     * @Assert\NotBlank
+     */
+    private $surname;
 
     public function getType(): ?string
     {
@@ -54,4 +60,23 @@ class Invite
     {
         $this->name = $name;
     }
+
+	/**
+	 * @return  string
+	 */
+	public function getSurname(): string
+	{
+		return $this->surname;
+	}
+
+	/**
+	 * @param   string  $surname  
+	 * @return  self
+	 */
+	public function setSurname(string $surname): self 
+	{
+		$this->surname = $surname;
+
+		return $this;
+	}
 }

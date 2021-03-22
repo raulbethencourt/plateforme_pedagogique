@@ -3,11 +3,16 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\DiscriminatorColumn;
 use Doctrine\ORM\Mapping\DiscriminatorMap;
 use Doctrine\ORM\Mapping\InheritanceType;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -58,11 +63,6 @@ class User implements UserInterface
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $photo_name;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $isVerified = false;
@@ -72,9 +72,14 @@ class User implements UserInterface
      */
     private $entry_date;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Avatar::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $avatar;
+
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return (string)$this->username;
     }
 
     public function setUsername(string $username): self
@@ -102,7 +107,7 @@ class User implements UserInterface
 
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return (string)$this->password;
     }
 
     public function setPassword(string $password): self
@@ -160,24 +165,12 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getPhotoName(): ?string
-    {
-        return $this->photo_name;
-    }
-
-    public function setPhotoName(string $photo_name): self
-    {
-        $this->photo_name = $photo_name;
-
-        return $this;
-    }
-
-    public function getEntryDate(): ?\DateTimeInterface
+    public function getEntryDate(): ?DateTimeInterface
     {
         return $this->entry_date;
     }
 
-    public function setEntryDate(\DateTimeInterface $entry_date): self
+    public function setEntryDate(DateTimeInterface $entry_date): self
     {
         $this->entry_date = $entry_date;
 
@@ -202,5 +195,23 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
+    }
+
+    public function getAvatar(): ?Avatar
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?Avatar $avatar): self
+    {
+        $this->avatar = $avatar;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newUser = null === $avatar ? null : $this;
+        if ($avatar->getUser() !== $newUser) {
+            $avatar->setUser($newUser);
+        }
+
+        return $this;
     }
 }

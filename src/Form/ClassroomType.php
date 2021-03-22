@@ -23,6 +23,7 @@ class ClassroomType extends AbstractType
                 'name',
                 TextType::class,
                 [
+                    'label' => 'Nom',
                     'purify_html' => true,
                 ]
             )
@@ -35,7 +36,7 @@ class ClassroomType extends AbstractType
                         'Français' => 'français',
                         'Histoire' => 'histoire',
                         'Musique' => 'musique',
-                        'Mathematiques' => 'mathematiques',
+                        'Mathématiques' => 'mathematiques',
                         'Informatique' => 'informatique',
                         'Philosophie' => 'philosophie',
                         'Chimie' => 'chimie',

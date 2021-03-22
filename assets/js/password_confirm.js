@@ -16,7 +16,7 @@ $('#confpass').keyup(function (e) {
         allowsubmit = true;
     } else {
         //if not matching show error and not allow to submit
-        $('.error').text('Password not matching');
+        $('.error').text('Mot de passe invalide');
     }
 });
 

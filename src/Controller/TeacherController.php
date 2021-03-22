@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Question;
 use App\Entity\Questionnaire;
+use App\Form\EditTeacherType;
 use App\Form\QuestionnaireType;
 use App\Form\QuestionType;
 use App\Repository\QuestionnaireRepository;
@@ -11,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -34,12 +36,13 @@ class TeacherController extends AbstractController
 
     /**
      * @Route("/", name="teacher_index")
-     * @param QuestionnaireRepository $repository
+     * @param  QuestionnaireRepository  $repository
      * @return ResponseAlias
      */
     public function index(QuestionnaireRepository $repository): ResponseAlias
     {
         $teacher = $this->getUser();
+
         return $this->render(
             'teacher/index.html.twig',
             [
@@ -51,7 +54,7 @@ class TeacherController extends AbstractController
 
     /**
      * @Route("/questionnaire/create", name="questionnaire_create")
-     * @param Request $request
+     * @param  Request  $request
      * @return RedirectResponse|ResponseAlias
      */
     public function createQuestionnaire(Questionnaire $questionnaire = null, Request $request)
@@ -71,7 +74,7 @@ class TeacherController extends AbstractController
             $this->em->persist($questionnaire);
             $this->em->flush();
 
-            $this->addFlash('success', 'questionnaire ajouté avec succès');
+            $this->addFlash('success', 'Questionnaire ajouté avec succès.');
 
             return $this->redirectToRoute(
                 'question_create',
@@ -86,6 +89,7 @@ class TeacherController extends AbstractController
             [
                 'questionnaire' => $questionnaire,
                 'form' => $form->createView(),
+                'teacher' => $this->getUser(),
             ]
         );
     }
@@ -103,7 +107,7 @@ class TeacherController extends AbstractController
             $this->em->persist($questionnaire);
             $this->em->flush();
 
-            $this->addFlash('success', 'questionnaire modifié avec succès');
+            $this->addFlash('success', 'Questionnaire modifié avec succès.');
 
             return $this->redirectToRoute(
                 'teacher_index',
@@ -118,14 +122,15 @@ class TeacherController extends AbstractController
             [
                 'questionnaire' => $questionnaire,
                 'form' => $form->createView(),
+                'teacher' => $this->getUser(),
             ]
         );
     }
 
     /**
      * @Route ("/questionnaire/{id}", name="questionnaire_delete", methods={"DELETE"})
-     * @param Questionnaire $questionnaire
-     * @param Request $request
+     * @param  Questionnaire  $questionnaire
+     * @param  Request  $request
      * @return RedirectResponse
      */
     public function deleteQuestionnaire(Questionnaire $questionnaire, Request $request)
@@ -134,7 +139,7 @@ class TeacherController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$questionnaire->getId(), $request->get('_token'))) {
             $this->em->remove($questionnaire);
             $this->em->flush();
-            $this->addFlash('succes', 'questionnaire supprimé avec succès');
+            $this->addFlash('success', 'Questionnaire supprimé avec succès.');
         }
 
         return $this->redirectToRoute('teacher_index');
@@ -143,8 +148,8 @@ class TeacherController extends AbstractController
 
     /**
      * @Route("/question_create/{id}", name="question_create", methods={"GET","POST"})
-     * @param Questionnaire $questionnaire
-     * @param Request $request
+     * @param  Questionnaire  $questionnaire
+     * @param  Request  $request
      * @return RedirectResponse|ResponseAlias
      */
     public function createQuestion(Questionnaire $questionnaire, Request $request)
@@ -161,7 +166,7 @@ class TeacherController extends AbstractController
             $this->em->persist($question);
             $this->em->flush();
 
-            $this->addFlash('success', 'question ajouté avec succès');
+            $this->addFlash('success', 'Question ajoutée avec succès.');
 
             return $this->redirectToRoute(
                 'question_create',
@@ -176,14 +181,15 @@ class TeacherController extends AbstractController
             [
                 'question' => $question,
                 'form' => $form->createView(),
+                'teacher' => $this->getUser(),
             ]
         );
     }
 
     /**
      * @Route("/question_edit/{id}", name="question_edit", methods={"GET","POST"})
-     * @param Question|null $question
-     * @param Request $request
+     * @param  Question|null  $question
+     * @param  Request  $request
      * @return RedirectResponse|ResponseAlias
      */
     public function editQuestion(Question $question, Request $request)
@@ -202,7 +208,7 @@ class TeacherController extends AbstractController
             $this->em->persist($question);
             $this->em->flush();
 
-            $this->addFlash('success', 'question ajouté avec succès');
+            $this->addFlash('success', 'Question ajoutée avec succès.');
 
             return $this->redirectToRoute(
                 'questionnaire_index',
@@ -223,24 +229,74 @@ class TeacherController extends AbstractController
 
     /**
      * @Route ("/question_delete/{id}", name="question_delete", methods={"DELETE"})
-     * @param Questionnaire $questionnaire
-     * @param Question $question
-     * @param Request $request
+     * @param  Question  $question
+     * @param  Request  $request
      * @return RedirectResponse
      */
-    public function deleteQuestion(Questionnaire $questionnaire, Question $question, Request $request): RedirectResponse
+    public function deleteQuestion(Question $question, Request $request): RedirectResponse
     {
+        $questionnaire = $request->attributes->get('question');
+        $questionnaire = (array)$questionnaire;
+        $questionnaire = $questionnaire["\x00App\Entity\Question\x00questionnaire"];
+        $questionnaire_id = (array)$questionnaire;
+        $questionnaire_id = $questionnaire_id["\x00App\Entity\Questionnaire\x00id"];
+
         // Check the token for validation
         if ($this->isCsrfTokenValid('delete'.$question->getId(), $request->get('_token'))) {
             $this->em->remove($question);
             $this->em->flush();
-            $this->addFlash('succes', 'questionnaire supprimé avec succès');
+            $this->addFlash('succes', 'Questionnaire supprimé avec succès.');
         }
 
         return $this->redirectToRoute(
             'questionnaire_index',
             [
-                'id' => $questionnaire,
+                'id' => $questionnaire_id,
+            ]
+        );
+    }
+
+    /**
+     * @Route ("/profile", name="teacher_profile")
+     * @return ResponseAlias
+     */
+    public function teacherProfile(): ResponseAlias
+    {
+        return $this->render(
+            'teacher/profile.html.twig',
+            [
+                'teacher' => $this->getUser(),
+            ]
+        );
+    }
+
+    /**
+     * @Route ("/profile/edit", name="edit_teacher")
+     * @param  Request  $request
+     * @return RedirectResponse|Response
+     */
+    public function editProfile(Request $request)
+    {
+        $teacher = $this->getUser();
+
+        $form = $this->createForm(EditTeacherType::class, $teacher);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($teacher);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Profil édité avec succès.');
+
+            return $this->redirectToRoute('teacher_profile');
+        }
+
+        return $this->render(
+            'teacher/edit-profile.html.twig',
+            [
+                'editForm' => $form->createView(),
+                'teacher' => $this->getUser(),
             ]
         );
     }

@@ -4,11 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Pass;
 use App\Entity\Questionnaire;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class QuestionnaireController
@@ -21,8 +22,8 @@ class QuestionnaireController extends AbstractController
     /**
      * @Route ("/{id}", name="questionnaire_index")
      * @IsGranted ("ROLE_TEACHER")
-     * @param Questionnaire $questionnaire
-     * @param Request $request
+     * @param  Questionnaire  $questionnaire
+     * @param  Request  $request
      * @return Response
      */
     public function index(Questionnaire $questionnaire, Request $request): Response
@@ -31,6 +32,7 @@ class QuestionnaireController extends AbstractController
             'questionnaire/index.html.twig',
             [
                 'questionnaire' => $questionnaire,
+                'teacher' => $this->getUser(),
             ]
         );
     }
@@ -38,9 +40,9 @@ class QuestionnaireController extends AbstractController
     /**
      * This methode control the questionnaires gaming
      * @Route("/{id}/play", name="questionnaire_play")
-     * @IsGranted("ROLE_STUDENT")
-     * @param Questionnaire $questionnaire
-     * @param Request $request
+     * @Security("is_granted('ROLE_STUDENT') or is_granted('ROLE_TEACHER')")
+     * @param  Questionnaire  $questionnaire
+     * @param  Request  $request
      * @return Response
      */
     public function play(Questionnaire $questionnaire, Request $request): Response
@@ -48,8 +50,8 @@ class QuestionnaireController extends AbstractController
         // Check if we can play the questionnaire or not
         if (!$questionnaire->isPlayable()) {
             $this->addFlash('error', 'Questionnaire indisponible !');
-
             return $this->redirectToRoute('student_index');
+            // TODO mirar si es un estudiante o un profesor que juega 
         }
 
         // Creates the variables that I'm gonna need later on
@@ -58,7 +60,7 @@ class QuestionnaireController extends AbstractController
         $points = null;
 
         if ($request->isMethod("post")) {
-            $answers = $request->request;//equivalent à $_POST
+            $answers = $request->request; //equivalent à $_POST
 
             $eval = $this->evaluateQuestionnaire($answers, $questionnaire);
             $rights = $eval['corrects'];
@@ -76,7 +78,7 @@ class QuestionnaireController extends AbstractController
             }
 
             $pass->setPoints($points);
-            $pass->setDateRealisation(new\ DateTime());
+            $pass->setDateRealisation(new \DateTime());
             $em->persist($pass);
             $em->flush();
         }
@@ -91,6 +93,8 @@ class QuestionnaireController extends AbstractController
                     "given" => $answers,
                     "rights" => $rights,
                 ],
+                'student' => $this->getUser(),
+                'teacher' => $this->getUser()
             ]
         );
     }
@@ -113,6 +117,7 @@ class QuestionnaireController extends AbstractController
 
             foreach ($rightPropositions as $rightProposition) {
                 $rightProposition = $rightProposition->getId();
+
                 if ($answers->get($question->getId()) == $rightProposition) {
                     $correctPropositions[] = $rightProposition;
                     $points += $question->getScore();
@@ -123,4 +128,3 @@ class QuestionnaireController extends AbstractController
         return ["corrects" => $correctPropositions, "points" => $points];
     }
 }
-

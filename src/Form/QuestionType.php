@@ -4,12 +4,15 @@ namespace App\Form;
 
 use App\Entity\Question;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Vich\UploaderBundle\Form\Type\VichImageType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\LessThanOrEqual;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 
 class QuestionType extends AbstractType
 {
@@ -20,11 +23,22 @@ class QuestionType extends AbstractType
                 'title',
                 TextType::class,
                 [
+                    'label' => 'Titre',
                     'attr' => [
                         'class' => 'titleQuestionnaire',
-                        'placeholder' => "Entrée l'intitulé de la question",
+                        'placeholder' => "Entrer l'intitulé de la question",
                     ],
                     'purify_html' => true,
+                ]
+            )
+            ->add(
+                'imageFile',
+                VichImageType::class,
+                [
+                    'label' => 'Choisissez votre image :',
+                    'delete_label' => 'Supprimer l\'ancienne image.',
+                    'imagine_pattern' => 'thumb',
+                    'required' => false,
                 ]
             )
             ->add(
@@ -42,9 +56,24 @@ class QuestionType extends AbstractType
                 'score',
                 NumberType::class,
                 [
+                    "constraints" => [
+                        new GreaterThanOrEqual(
+                            [
+                                'value' => "0",
+                                'message' => 'votre score doit être supérieur à 0',
+                            ]
+                        ),
+                        new LessThanOrEqual(
+                            [
+                                'value' => "10",
+                                'message' => 'votre score doit être inférieur à 10',
+                            ]
+                        ),
+                    ],
                     'attr' => [
                         'class' => 'score',
                     ],
+                    'label' => 'Point(s)'
                 ]
             )
             ->add(

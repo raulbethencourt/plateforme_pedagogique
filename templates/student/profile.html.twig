@@ -1,68 +1,94 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Student - {{ student.name }}{% endblock %}
-
-{% block logo %}
-    <a class="navbar-brand ml-4" href="{{ path('student_index') }}">
-        <img src="{{ asset('images/logo-carpa.png') }}" width="55" height="55" alt="logo ubuntu">
-    </a>
-{% endblock %}
-
-{% block home %}
-    <li class="nav-item">
-        <a class="nav-link" href="{{ path('student_index') }}">Home</a>
-    </li>
-{% endblock %}
-
-{% block profile %}
-    <li class="nav-item">
-        <a class="nav-link mr-2" href="{# {{ path('student_profile') }} #}">
-            <img class="profile" src="{{ asset('images/profile.png') }}" alt="profile icon"></a>
-    </li>
-{% endblock %}
+{% block title %}Étudiant - {{ student.username }}{% endblock %}
 
 {% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success mr-2 mb-0">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     <div class="d-flex">
         <div class="card w-50 m-1">
-            <h2 class="card-header text-white bg-dark">Profile</h2>
+            <h2 class="card-header text-white bg-dark">Informations personnelles</h2>
             <div class="card-body d-flex justify-content-between">
-                <div class="flex-column">
-                <h3 class="card-title">{{ student.username }}</h3>
-                <p class="card-text">{{ student.name ~ " " ~ student.surname }}</p>
-                <p class="card-text">{{ student.email }}</p>
-                <p class="card-text">{{ student.hobby }}</p>
-                <a href="" class="btn btn-primary">Edit</a>
+                <div class="flex-column w-75">
+                    <ul class="list-group w-100">
+                        <li class="list-group-item list-group-item-info">
+                            <span class="font-weight-bold">Nom d'utilisateur</span></li>
+                        <li class="list-group-item">{{ student.username }}</li>
+                        <li class="list-group-item list-group-item-info">
+                            <span class="font-weight-bold">Prénom et nom</span></li>
+                        <li class="list-group-item">
+                            {% if student.name is not null or student.surname is not null %}
+                                {{ student.name ~ " " ~ student.surname }}
+                            {% else %}
+                                ...
+                            {% endif %}</li>
+                        <li class="list-group-item list-group-item-info">
+                            <span class="font-weight-bold">Email</span></li>
+                        <li class="list-group-item">{{ student.email }}</li>
+                        <li class="list-group-item list-group-item-info">
+                            <span class="font-weight-bold">Loisirs</span></li>
+                        <li class="list-group-item">
+                            {% if student.hobby is not null %}
+                                {{ student.hobby }}
+                            {% else %}
+                                ...
+                            {% endif %}</li>
+                    </ul>
                 </div>
-                <img src="{{ asset('images/profile_raul.jpg') }}" alt="profile" class="rounded"
-                     style="max-height: 200px; max-width: 200px;">
+                <div class="d-flex flex-column justify-content-center align-items-center h-100 ml-4">
+                    <a href="{{ path('edit_student_avatar') }}">
+                        {% if student.avatar is defined and student.avatar is not null %}
+                            <img src="{{ vich_uploader_asset(student.avatar) }}" alt="profile"
+                                 class="rounded-circle profile__img">
+                        {% else %}
+                            <img src="{{ asset('images/image-profile.png') }}" alt="profile"
+                                 class="rounded-circle profile__img">
+                        {% endif %}
+                    </a>
+                    <a href="{{ path('edit_student') }}" class="btn btn-primary w-75 mt-3">Éditer Profil</a>
+                </div>
             </div>
         </div>
         <div class="card w-50 m-1">
-            <h2 class="card-header text-white bg-dark">Stats</h2>
+            <h2 class="card-header text-white bg-dark">Statistiques</h2>
             <div class="card-body">
-                <ul class="list-group list-group-flush">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-info">
+                        <span class="font-weight-bold">Nombre de questionnaires joués :</span></li>
+                    <li class="list-group-item">{{ passes|length }} -
+                        {{ passes|length <= 1 ? 'questionnaire' : 'questionnaires' }}</li>
+                    <li class="list-group-item list-group-item-info">
+                        <span class="font-weight-bold">Questions jouées :</span></li>
                     <li class="list-group-item">
-                        Nombre de quiz joués :
-                        <span class="badge badge-info p-1 rounded">{{ passes|length }} - questionnaires</span>
+                        {% if numberOfQuestions is not null %}
+                            {{ numberOfQuestions }} -
+                            {{ numberOfQuestions <= 1 ? 'question' : 'questions' }}
+                        {% else %}
+                            0 - question
+                        {% endif %}
                     </li>
+                    <li class="list-group-item list-group-item-info">
+                        <span class="font-weight-bold">Résultat total :</span></li>
                     <li class="list-group-item">
-                        Questions jouées :
-                        <span class="badge badge-info p-1 rounded">{{ numberOfQuestions }} -  questions</span>
+                        {% if sum is not null %}
+                            {{ sum }}
+                        {% else %}
+                            0
+                        {% endif %}
                     </li>
-                    <li class="list-group-item">
-                        Score total :
-                        <span class="badge badge-info p-1 rounded">{{ sum }}</span>
-                    </li>
-                    <li class="list-group-item">
-                        Score moyen :
-                        <span class="badge badge-info p-1 rounded">{{ average }}</span>
-                    </li>
+                    <li class="list-group-item list-group-item-info">
+                        <span class="font-weight-bold">Résultat moyen :</span></li>
+                    <li class="list-group-item">{{ average }}</li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="mr-auto ml-auto text-center mt-3 w-75">
-        <h2>Scores par diffculté :</h2>
+        <h2><span class="badge badge-dark rounded p-2">Résultats par difficulté :</span></h2>
         <canvas id="studentChart"></canvas>
     </div>
 {% endblock %}

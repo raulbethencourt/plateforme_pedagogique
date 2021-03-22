@@ -1,37 +1,11 @@
 /* My personal CSS */
-@import "responsive/base.scss";
-@import "responsive/classroom.scss";
+@import "custom/base.scss";
+@import "custom/classroom.scss";
+@import "custom/profile.scss";
+@import "custom/teacher/index.scss";
+@import "custom/play.scss";
+@import "custom/register.scss";
 
-/* Classroom CSS*/
 
-.invite-form--responsive {
-  display: flex;
-}
 
-.profile {
-  width: 35px;
-  color: white;
-}
 
-.dropdown-menu-sw {
-  right: 0;
-  left: auto;
-}
-
-.wrong {
-  background-color: #d07d70;
-  color: #FFFFFF;
-}
-
-.correct {
-  background-color: #dde7c7;
-}
-
-.pass-list {
-  font-size: 0.75rem;
-}
-
-.logo-carpa {
-  width: 55px;
-  height: 55px;
-}

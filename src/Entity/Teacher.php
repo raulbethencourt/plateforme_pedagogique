@@ -97,24 +97,4 @@ class Teacher extends User
 
         return $this;
     }
-
-    public function addClassroom(Classroom $classroom): self
-    {
-        if (!$this->classrooms->contains($classroom)) {
-            $this->classrooms[] = $classroom;
-            $classroom->addTeacher($this);
-        }
-
-        return $this;
-    }
-
-    public function removeClassroom(Classroom $classroom): self
-    {
-        if ($this->classrooms->contains($classroom)) {
-            $this->classrooms->removeElement($classroom);
-            $classroom->removeTeacher($this);
-        }
-
-        return $this;
-    }
 }

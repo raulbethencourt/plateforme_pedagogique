@@ -2,13 +2,14 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Log in!{% endblock %}</title>
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
         <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}?v=2"/>
     {% endblock %}
+    <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
+
 {% block body %}{% endblock %}
 
 {% block javascripts %}

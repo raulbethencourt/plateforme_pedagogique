@@ -19,6 +19,7 @@ class PropositionType extends AbstractType
                 TextType::class,
                 [
                     'purify_html' => true,
+                    'label' => 'Réponse :',
                 ]
             )
             ->add(
