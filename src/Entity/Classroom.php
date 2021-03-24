@@ -39,6 +39,12 @@ class Classroom
      */
     private $discipline;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=School::class, inversedBy="classrooms")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $school;
+
     public function __construct()
     {
         $this->teachers = new ArrayCollection();
@@ -116,6 +122,18 @@ class Classroom
     public function setDiscipline(?string $discipline): self
     {
         $this->discipline = $discipline;
+
+        return $this;
+    }
+    
+    public function getSchool(): ?School
+    {
+        return $this->school;
+    }
+
+    public function setSchool(?School $school): self
+    {
+        $this->school = $school;
 
         return $this;
     }
