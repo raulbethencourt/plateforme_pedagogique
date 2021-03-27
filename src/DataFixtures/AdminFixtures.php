@@ -24,7 +24,7 @@ class AdminFixtures extends Fixture
         $admin = new User();
         $admin->setUsername("admin");
         $admin->setEmail("admin@test.mail");
-        $admin->setRoles(["ROLE_ADMIN"]);
+        $admin->setRoles(["ROLE_SUPER_ADMIN"]);
         $admin->setPassword(
            $this->passwordEncoder->encodePassword($admin, "admin")
         );

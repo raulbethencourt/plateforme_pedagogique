@@ -1,7 +1,7 @@
 <div class="container">
     <div id="contact">
         <h3>{{ data.name }}, bienvenue à</h3>
-        <h3>CARPA !</h3>
+        <h3>Contact et Promotion !</h3>
         <h4>Vous avez été invité à rejoindre la classe :</h4>
         <p class="classroom-id">{{ data.discipline }}</p>
 
@@ -9,7 +9,8 @@
             {% if data.type == "teacher" %}
                 <a href="http://plataform.loc/register?type=teacher&classroom={{ data.classroom }}"
                    class="btn">Enregistrement</a>
-            {% else %}
+            {% else if %}
+            //TODO add possibility of creates amdin
                 <a href="http://plataform.loc/register?type=student&classroom={{ data.classroom }}"
                    class="btn">Enregistrement</a>
             {% endif %}

@@ -1,45 +1,49 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success mr-2 mb-0">
-            {{ message }}
-        </div>
-    {% endfor %}
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success mr-2 mb-0">
+			{{ message }}
+		</div>
+	{% endfor %}
 
-    <h1>Bienvenue {{ user.username }}</h1>
-    <h3>Liste des classes</h3>
-    <table class="table border-bottom">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col"></th>
-            <th scope="col">Nom</th>
-            <th scope="col">Discipline</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for classroom in classrooms %}
-            <tr>
-                <th scope="row">{{ loop.index }}</th>
-                <td><a href="{{ path('classroom_index', {id: classroom.id}) }}">{{ classroom.name }}</a></td>
-                <td class="d-flex justify-content-between ">
-                    {{ classroom.discipline }}
-                    <div class="d-flex justify-content-center w-50">
-                        <a href="{{ path('user_classroom_edit', {id: classroom.id}) }}" class="btn btn-secondary mr-lg-2"
-                           role="button">Éditer</a>
-                        <form method="post" action="{{ path('user_classroom_delete', {id: classroom.id}) }}"
-                              style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-                            <input type="hidden" name="_method" value='DELETE'>
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ classroom.id) }}">
-                            <button class="btn btn-danger">Supprimer</button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <div class="text-right">
-        <a href="{{ path('user_classroom_create') }}" class="btn btn-primary">Créer classe</a>
-    </div>
+	<h1>Bienvenue
+		{{ user.username }}</h1>
+	<h3>Liste des classes</h3>
+	<div class="table-responsive">
+		<table class="table border-bottom">
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col"></th>
+					<th scope="col">Nom</th>
+					<th scope="col">Discipline</th>
+				</tr>
+			</thead>
+			   <!-- TODO add possibility of add admin -->
+			<tbody>
+				{% for classroom in classrooms %}
+					<tr>
+						<th scope="row">{{ loop.index }}</th>
+						<td>
+							<a href="{{ path('classroom_index', {id: classroom.id}) }}">{{ classroom.name }}</a>
+						</td>
+						<td class="d-flex justify-content-between ">
+							{{ classroom.discipline }}
+							<div class="d-flex justify-content-center w-50">
+								<a href="{{ path('user_classroom_edit', {id: classroom.id}) }}" class="btn btn-secondary mr-lg-2" role="button">Éditer</a>
+								<form method="post" action="{{ path('user_classroom_delete', {id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+									<input type="hidden" name="_method" value='DELETE'>
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ classroom.id) }}">
+									<button class="btn btn-danger">Supprimer</button>
+								</form>
+							</div>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div class="text-right">
+		<a href="{{ path('user_classroom_create') }}" class="btn btn-primary">Créer classe</a>
+	</div>
 {% endblock %}

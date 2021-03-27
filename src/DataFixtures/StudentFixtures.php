@@ -25,6 +25,7 @@ class StudentFixtures extends Fixture
         $student = new Student();
         $student->setUsername('student');
         $student->setEmail('student@test.mail');
+        $student->setRoles(["ROLE_STUDENT"]);
         $student->setPassword(
             $this->passwordEncoder->encodePassword($student, "student")
         );

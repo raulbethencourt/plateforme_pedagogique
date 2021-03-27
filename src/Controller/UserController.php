@@ -6,6 +6,7 @@ use App\Entity\Classroom;
 use App\Form\ClassroomType;
 use App\Form\EditUserType;
 use App\Repository\ClassroomRepository;
+use App\Repository\SchoolRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -56,12 +57,15 @@ class UserController extends AbstractController
      * @param Classroom|null $classroom
      * @return RedirectResponse|ResponseAlias
      */
-    public function createClassroom(Request $request, Classroom $classroom = null)
+    public function createClassroom(Request $request, Classroom $classroom = null, SchoolRepository $repository)
     {
         // Check if the classroom already exist
         if (!$classroom) {
             $classroom = new Classroom();
         }
+        
+        $school = $repository->findOneBy(['id' => '3']);
+        $classroom->setSchool($school);
 
         $form = $this->createForm(ClassroomType::class, $classroom);
         $form->handleRequest($request);

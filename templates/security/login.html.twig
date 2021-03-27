@@ -4,10 +4,10 @@
 
 {% block body %}
     <div class="container-sm d-flex flex-column align-items-center pt-5 mt-5">
-        <img src="{{ asset('images/logo-carpa.svg') }}" alt="logo ubuntu" class="mb-2" style="width: 100px; height: auto">
-        <h2 class="font-weight-bold">CARPA</h2>
-        <div class="d-flex flex-column  my-auto" style="max-width: 280px">
-            <form method="post" class="border rounded p-4 bg-white shadow">
+        <img src="{{ asset('images/cp-logo.webp') }}" alt="logo ubuntu" class="mb-2" style="width: 100px; height: auto">
+        <h2 class="login__title">CONTACT <span class="text--red">et</span> PROMOTION</h2>
+        <div class="login-form__container">
+            <form method="post" class="border rounded p-4 shadow">
                 {% if error %}
                     <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                 {% endif %}
@@ -18,17 +18,17 @@
                     </div>
                 {% endif %}
 
-                <label for="inputUsername" class="font-weight-bold">Nom d'utilisateur</label>
+                <label for="inputUsername" class="font-weight-bold text-white">Nom d'utilisateur</label>
                 <input type="text" value="{{ last_username }}" name="username" id="inputUsername"
                        class="form-control" required autofocus>
-                <label for="inputPassword" class="font-weight-bold mt-2">Mot de passe</label>
+                <label for="inputPassword" class="font-weight-bold mt-2 text-white">Mot de passe</label>
                 <input type="password" name="password" id="inputPassword" class="form-control" required>
 
                 <input type="hidden"
                        name="_csrf_token"
                        value="{{ csrf_token('authenticate') }}">
 
-                <button class="btn btn-sm btn-primary rounded-pill w-100 mt-3" type="submit">
+                <button class="btn btn-sm btn-warning rounded-pill w-100 mt-3" type="submit">
                     Se connecter
                 </button>
             </form>
