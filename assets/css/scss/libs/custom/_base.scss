@@ -1,25 +1,24 @@
 /* base.html.twig */
 .logo-carpa {
-  width: 55px;
-  height: 55px;
+	width: 100%;
+	height: auto;
 }
 
 .profile {
-  width: 40px;
-  height: auto;
-  color: white;
+	width: 40px;
+	height: auto;
+	color: white;
 }
 
 @media #{$large-down} {
-  .collapse {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
+	.collapse {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+	}
 
-  .nav__logout--responsive {
-    flex-direction: column;
-    justify-content: space-between;
-  }
+	.nav__logout--responsive {
+		flex-direction: column;
+		justify-content: space-between;
+	}
 }
-

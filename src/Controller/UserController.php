@@ -2,17 +2,23 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Entity\Invite;
+use App\Form\InviteType;
 use App\Entity\Classroom;
-use App\Form\ClassroomType;
 use App\Form\EditUserType;
+use App\Form\ClassroomType;
+use App\invitation\Invitation;
+use App\Repository\UserRepository;
+use App\Repository\SchoolRepository;
 use App\Repository\ClassroomRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class UserController
@@ -36,18 +42,52 @@ class UserController extends AbstractController
      * @param  ClassroomRepository  $repository
      * @return ResponseAlias
      */
-    public function index(ClassroomRepository $repository): Response
+    public function index(ClassroomRepository $classroomRepository, UserRepository $adminsRepository,  Request $request, Invitation $invitation): Response
     {
-        $classrooms = $repository->findAll();
+        $classrooms = $classroomRepository->findAll();
+        $admins = $adminsRepository->findByRoleAdmin('ROLE_ADMIN');
         $user = $this->getUser();
+        $invite = new Invite(); // We invite a new teacher or student
+
+        $form = $this->createForm(InviteType::class, $invite);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $invitation->invite($invite);
+
+            $this->addFlash('success', 'Votre invitation a bien été envoyée.');
+            return $this->redirectToRoute('user_index');
+        }
 
         return $this->render(
             'user/index.html.twig',
             [
+                'admins' => $admins,
                 'classrooms' => $classrooms,
                 'user' => $user,
+                'form' => $form->createView()
             ]
         );
+    }
+
+    /**
+     * @Route ("/{id}/delete", name="user_admin_delete", methods={"DELETE"})
+     * @param  Request  $request
+     * @return RedirectResponse
+     */
+    public function deleteAdmin(User $admin, Request $request): RedirectResponse
+    {
+        // Check the token
+        if ($this->isCsrfTokenValid(
+            'delete' . $admin->getId(),
+            $request->get('_token')
+        )) {
+            $this->em->remove($admin);
+            $this->em->flush();
+            $this->addFlash('success', 'Administrateur supprimée avec succès.');
+        }
+
+        return $this->redirectToRoute('user_index');
     }
 
     /**
@@ -56,12 +96,15 @@ class UserController extends AbstractController
      * @param Classroom|null $classroom
      * @return RedirectResponse|ResponseAlias
      */
-    public function createClassroom(Request $request, Classroom $classroom = null)
+    public function createClassroom(Request $request, Classroom $classroom = null, SchoolRepository $repository)
     {
         // Check if the classroom already exist
         if (!$classroom) {
             $classroom = new Classroom();
         }
+
+        $school = $repository->findOneBy(['id' => '3']);
+        $classroom->setSchool($school);
 
         $form = $this->createForm(ClassroomType::class, $classroom);
         $form->handleRequest($request);
@@ -116,11 +159,11 @@ class UserController extends AbstractController
      * @param  Request  $request
      * @return RedirectResponse
      */
-    public function delete(Classroom $classroom, Request $request): RedirectResponse
+    public function deleteClassroom(Classroom $classroom, Request $request): RedirectResponse
     {
         // Check the token
         if ($this->isCsrfTokenValid(
-            'delete'.$classroom->getId(),
+            'delete' . $classroom->getId(),
             $request->get('_token')
         )) {
             $this->em->remove($classroom);

@@ -35,11 +35,12 @@ class Invitation extends AbstractController
      * @param Teacher|Student $user
      * @throws TransportExceptionInterface
      */
-    public function invite($data, Classroom $classroom, $user = null): void
+    public function invite($data, Classroom $classroom = null, $user = null): void
     {
         if (isset($user)) {
-            
-            $user = $user->addClassrooms($classroom);
+            if ($user->getRoles()[0] === 'ROLE_TEACHER' || $user->getRoles()[0] === 'ROLE_STUDENT') {
+                $user = $user->addClassrooms($classroom);
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -51,23 +52,31 @@ class Invitation extends AbstractController
         }
     }
 
-    public function email($template, $data, Classroom $classroom)
+    public function email($template, $data, ?Classroom $classroom)
     {
         $email = (new TemplatedEmail())
-                ->from(Address::fromString('Carpa <carpa@exemple.com>'))
-                ->to($data->getEmail())
-                ->subject('Invitation à Carpa')
-                ->htmlTemplate($template)
-                ->context(
-                    [
-                        'data' => [
-                            'type' => $data->getType(),
-                            'name' => $data->getName(),
-                            'classroom' => $classroom->getId(),
-                            'discipline' => $classroom->getDiscipline(),
-                        ],
+            ->from(Address::fromString('Carpa <carpa@exemple.com>'))
+            ->to($data->getEmail())
+            ->subject('Invitation à Carpa')
+            ->htmlTemplate($template);
+        if (isset($classroom)) {
+            $email->context(
+                [
+                    'data' => [
+                        'type' => $data->getType(),
+                        'name' => $data->getName(),
+                        'classroom' => $classroom->getId(),
+                        'discipline' => $classroom->getDiscipline(),
                     ]
-                );
-            return $this->mailer->send($email);
+                ]
+            );
+        } else {
+            $email->context(
+                [
+                    'data' => ['name' => $data->getName()]
+                ]
+            );
+        }
+        return $this->mailer->send($email);
     }
 }

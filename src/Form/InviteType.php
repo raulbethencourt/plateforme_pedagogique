@@ -3,8 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Invite;
-use App\Entity\Student;
-use App\Entity\Teacher;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -37,7 +35,7 @@ class InviteType extends AbstractType
                     'choices' => [
                         'formateur' => 'teacher',
                         'étudiant' => 'student',
-                    ],
+                    ]
                 ]
             )
             ->add(

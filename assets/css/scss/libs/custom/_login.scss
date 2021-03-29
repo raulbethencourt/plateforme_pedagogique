@@ -1,0 +1,19 @@
+.login__title {
+	margin: 25px 0;
+	font-weight: bold;
+
+	.text--red {
+		color: $red;
+	}
+}
+
+.login-form__container {
+	display: flex;
+	flex-direction: column;
+	margin: auto 0;
+	max-width: 280px;
+
+	form {
+		background-color: $gray-800;
+	}
+}

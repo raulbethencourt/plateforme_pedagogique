@@ -25,6 +25,7 @@ class TeacherFixtures extends Fixture
         $teacher = new Teacher();
         $teacher->setUsername('teacher');
         $teacher->setEmail('teacher@test.mail');
+        $teacher->setRoles(["ROLE_TEACHER"]);
         $teacher->setPassword(
             $this->passwordEncoder->encodePassword($teacher, "teacher")
         );

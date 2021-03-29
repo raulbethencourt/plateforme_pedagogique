@@ -15,87 +15,73 @@
 		{% endblock %}
 	</head>
 	<body>
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<nav class="navbar navbar-expand-lg sticky-top bg-white">
 			{% if is_granted('ROLE_TEACHER') %}
 				<a class="navbar-brand ml-4" href="{{ path('teacher_index') }}">
-					<img src="{{ asset('images/logo-carpa.svg') }}" class="logo-carpa" alt="logo carpa">
-				</a>
-			{% elseif is_granted('ROLE_STUDENT') %}
-				<a class="navbar-brand ml-4" href="{{ path('student_index') }}">
-					<img src="{{ asset('images/logo-carpa.svg') }}" class="logo-carpa" alt="logo carpa">
-				</a>
-			{% else %}
-				<a class="navbar-brand ml-4" href="{{ path('user_index') }}">
-					<img src="{{ asset('images/logo-carpa.svg') }}" width="55" height="55" alt="logo carpa">
-				</a>
-			{% endif %}
-
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<form class="form-inline my-2 my-lg-0">
-					<input class="form-control mr-sm-2 bg-dark text-white" type="search" placeholder="Chercher..." aria-label="Search">
-				</form>
-				<ul class="navbar-nav justify-content-between align-items-center w-100">
-					<div class="d-flex justify-content-around w-25">
-						{% if is_granted('ROLE_TEACHER') %}
-							<li class="nav-item">
-								<a class="nav-link" href="{{ path('teacher_index') }}">Accueil</a>
-							</li>
-						{% elseif is_granted('ROLE_STUDENT') %}
-							<li class="nav-item">
-								<a class="nav-link" href="{{ path('student_index') }}">Accueil</a>
-							</li>
-						{% else %}
-							<li class="nav-item">
-								<a class="nav-link" href="{{ path('user_index') }}">Accueil</a>
-							</li>
+				{% elseif is_granted('ROLE_STUDENT') %}
+					<a class="navbar-brand ml-4" href="{{ path('student_index') }}">
+					{% else %}
+						<a class="navbar-brand ml-4" href="{{ path('user_index') }}">
 						{% endif %}
-						<li class="nav-item">
-							<a class="nav-link" href="{{ path('events_calendar') }}">Calendrier</a>
-						</li>
-					</div>
-					<div class="d-flex align-items-center nav__logout--responsive">
-						<li class="nav-item">
-							<a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
-						</li>
-						{% if is_granted('ROLE_TEACHER') %}
+						<img src="{{ asset('images/cp-logo-big.webp') }}" class="logo-carpa" alt="logo carpa">
+					</a>
+
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav justify-content-center w-100">
 							<li class="nav-item">
-								<a class="nav-link mr-2" href="{{ path('teacher_profile') }}">
+								{% if is_granted('ROLE_TEACHER') %}
+									<a class="nav-link" href="{{ path('teacher_index') }}">MES CLASSES</a>
+								{% elseif is_granted('ROLE_STUDENT') %}
+									<a class="nav-link" href="{{ path('student_index') }}">MES CLASSES</a>
+								{% else %}
+									<a class="nav-link" href="{{ path('user_index') }}">CLASSES</a>
+								{% endif %}
+							</li>
+							<li class="nav-item ml-4 mr-4">
+								<a class="nav-link" href="{{ path('events_calendar') }}">BOÎTE À OUTILS</a>
+							</li>
+							<li class="nav-item d-flex justify-content-center">
+								{% if is_granted('ROLE_TEACHER') %}
+									<a class="nav-link mr-2" href="{{ path('teacher_profile') }}">Mon Profile</a>
 									{% if teacher.avatar is defined and teacher.avatar is not null %}
 										<img class="profile rounded-circle bg-black" src="{{ vich_uploader_asset(teacher.avatar) }}" alt="profil icon">
 									{% else %}
 										<img class="profile" src="{{ asset('images/image-profile.png') }}" alt="profil icon">
 									{% endif %}
-								</a>
-							</li>
-						{% elseif is_granted('ROLE_STUDENT') %}
-							<li class="nav-item">
-								<a class="nav-link mr-2" href="{{ path('student_profile') }}">
+								{% elseif is_granted('ROLE_STUDENT') %}
+									<a class="nav-link mr-2" href="{{ path('student_profile') }}">Mon Profile</a>
 									{% if student.avatar is defined and student.avatar is not null %}
 										<img class="profile rounded-circle bg-black" src="{{ vich_uploader_asset(student.avatar) }}" alt="profil icon">
 									{% else %}
 										<img class="profile" src="{{ asset('images/image-profile.png') }}" alt="profil icon">
 									{% endif %}
-								</a>
-							</li>
-						{% else %}
-							<li class="nav-item">
-								<a class="nav-link mr-2" href="{{ path('user_profile') }}">
+								{% else %}
+									<a class="nav-link mr-2" href="{{ path('user_profile') }}">Mon Profile</a>
 									<img class="profile" src="{{ asset('images/image-profile.png') }}" alt="profil icon">
-								</a>
+								{% endif %}
 							</li>
-						{% endif %}
+						</ul>
+
+						<div class="d-flex align-items-center nav__logout--responsive">
+							<div class="nav-item d-flex flex-column">
+								{{ app.user.username }}
+								<a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+							</div>
+						</div>
 					</div>
-				</ul>
-			</div>
-		</nav>
-		<div class="container-sm d-flex justify-content-center flex-column  p-4 mt-5 mb-5 bg-white rounded-lg"> {% block body %}{% endblock %}
-			</div>
-			{% block javascripts %}
-				{{ encore_entry_script_tags('app') }}
-			{% endblock %}
+				</nav>
+
+				<div class="container-sm d-flex justify-content-center flex-column  p-4 mt-5 mb-5 bg-white rounded-lg"> {% block body %}{% endblock %}
+					</div>
+					{% block javascripts %}
+						{{ encore_entry_script_tags('app') }}
+					{% endblock %}
+				</body>
+			</body>
 		</body>
 	</html>
+</body></html>

@@ -16,20 +16,24 @@ class StudentFixtures extends Fixture
 {
     private $passwordEncoder;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder) {
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
         $this->passwordEncoder = $passwordEncoder;
     }
 
     public function load(ObjectManager $manager)
     {
-        $student = new Student();
-        $student->setUsername('student');
-        $student->setEmail('student@test.mail');
-        $student->setPassword(
-            $this->passwordEncoder->encodePassword($student, "student")
-        );
-        $student->setEntryDate(new \DateTime());
-        $manager->persist($student);
+        for ($i = 0; $i < 50; $i++) {
+            $student = new Student();
+            $student->setUsername('student');
+            $student->setEmail('student@test.mail');
+            $student->setRoles(["ROLE_STUDENT"]);
+            $student->setPassword(
+                $this->passwordEncoder->encodePassword($student, "student")
+            );
+            $student->setEntryDate(new \DateTime());
+            $manager->persist($student);
+        }
 
         $manager->flush();
     }

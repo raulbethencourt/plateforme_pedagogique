@@ -1,10 +1,11 @@
 // Invite form for User
-import $ from "jquery";
+import $ from 'jquery';
 
 if ($('#inviterBtn').length) {
-    $('#inviterBtn').click(function (e) {
-        e.preventDefault();
-        $('#inviteForm').fadeIn();
-        $('#inviterBtn').hide();
-    });
+	$('#inviterBtn').on('click', (e) => {
+		console.log(e);
+		e.preventDefault();
+		$('#inviterForm').fadeIn();
+		$('#inviterBtn').hide();
+	});
 }
