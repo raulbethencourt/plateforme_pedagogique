@@ -6,9 +6,63 @@
 			{{ message }}
 		</div>
 	{% endfor %}
+	{# {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+		<pre>
+			{{ dump(app.user) }}
+		</pre>
+	{% endif %} #}
 
-	<h1>Bienvenue
-		{{ user.username }}</h1>
+	<div class="d-flex justify-content-center">
+		<div id="inviterForm" {% if not form.vars.submitted %} style="display: none;" {% endif %} class="w-100">
+			{{ form_start(form) }}
+			<div class="invite-form--responsive justify-content-sm-around align-items-center ">
+				<div class="form-group m-2">
+					{{ form_errors(form.name) }}
+					{{ form_widget(form.name) }}
+					{{ form_help(form.name) }}
+				</div>
+				<div class="form-group m-2">
+					{{ form_errors(form.surname) }}
+					{{ form_widget(form.surname) }}
+					{{ form_help(form.surname) }}
+				</div>
+				<div class="form-group m-2">
+					{{ form_errors(form.email) }}
+					{{ form_widget(form.email) }}
+					{{ form_help(form.email) }}
+				</div>
+				{% if is_granted('ROLE_SUPER_ADMIN') %}
+					<div class="form-group m-2 d-none">
+						{{ form_errors(form.type) }}
+						{{ form_widget(form.type) }}
+						{{ form_help(form.type) }}
+					</div>
+				{% endif %}
+				<div class="form-group m-2">
+					{{ form_widget(form.submit) }}
+				</div>
+			</div>
+			{{ form_end(form) }}
+		</div>
+	</div>
+
+	{% if is_granted('ROLE_SUPER_ADMIN') %}
+		<a id="inviterBtn" class="nav-link btn btn-secondary w-25 align-self-center" href="#" role="button">Ajuter Admin</a>
+		<ul class="list-group">
+			{% for admin in admins %}
+				<li class="list-group-item d-flex justify-content-between align-items-center">
+					{{ admin.name}}
+					{{admin.surname}}
+					<form method="post" action="{{ path('user_admin_delete', {id: admin.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+						<input type="hidden" name="_method" value='DELETE'>
+						<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ admin.id) }}">
+						<button class="btn btn-danger">Supprimer Admin</button>
+					</form>
+				</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+
 	<h3>Liste des classes</h3>
 	<div class="table-responsive">
 		<table class="table border-bottom">
@@ -19,7 +73,6 @@
 					<th scope="col">Discipline</th>
 				</tr>
 			</thead>
-			   <!-- TODO add possibility of add admin -->
 			<tbody>
 				{% for classroom in classrooms %}
 					<tr>

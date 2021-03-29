@@ -1,48 +1,48 @@
 {% extends 'security/security_base.html.twig' %}
 
-{% block title %}Register !{% endblock %}
+{% block title %}Register !
+{% endblock %}
 
 {% block body %}
-    {% for flashError in app.flashes('verify_email_error') %}
-        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
-    {% endfor %}
-    <div class="container-sm mt-5">
+	{% for flashError in app.flashes('verify_email_error') %}
+		<div class="alert alert-danger" role="alert">{{ flashError }}</div>
+	{% endfor %}
+	<div class="container-sm mt-5">
 
-        <h1>Inscription</h1>
+		<h1>Inscription</h1>
 
-        {{ form_start(registrationForm, {'attr': {'class': 'regisForm'}}) }}
-        {{ form_row(registrationForm.username) }}
-        {{ form_row(registrationForm.name) }}
-        {{ form_row(registrationForm.surname) }}
-        {{ form_row(registrationForm.email) }}
+		{{ form_start(registrationForm, {'attr': {'class': 'regisForm'}}) }}
+		{{ form_row(registrationForm.username) }}
+		{{ form_row(registrationForm.name) }}
+		{{ form_row(registrationForm.surname) }}
+		{{ form_row(registrationForm.email) }}
 
-        <div class="d-flex align-items-baseline">
-            <div class="d-block w-75 mr-3">
-                {{ form_row(registrationForm.plainPassword) }}
-                <div class="form-group">
-                    <label for="confpass">Confirmez le mot de passe :<span
-                                class="badge badge-danger error p-2 text-white ml-3"></span></label>
-                    <input type="password" name="confirm_password" id="confpass" class="form-control"/>
-                </div>
-            </div>
+		<div class="d-flex align-items-baseline">
+			<div class="d-block w-75 mr-3">
+				{{ form_row(registrationForm.plainPassword) }}
+				<div class="form-group">
+					<label for="confpass">Confirmez le mot de passe :<span class="badge badge-danger error p-2 text-white ml-3"></span>
+					</label>
+					<input type="password" name="confirm_password" id="confpass" class="form-control"/>
+				</div>
+			</div>
 
-            <ul class="list-group list-group-flush w-25 pass-list">
-                <li class="list-group-item list-group-item-warning">Votre mot de passe doit comporter entre 4 et 10
-                    chiffres.
-                </li>
-                <li class="list-group-item list-group-item-warning">Il doit avoir 1 lettre majuscule.</li>
-                <li class="list-group-item list-group-item-warning">Au moins 1 lettre minuscule.</li>
-                <li class="list-group-item list-group-item-warning">Au moins 1 chiffre.</li>
-            </ul>
-        </div>
+			<ul class="list-group list-group-flush w-25 pass-list">
+				<li class="list-group-item list-group-item-warning">Votre mot de passe doit comporter entre 4 et 10 chiffres.
+				</li>
+				<li class="list-group-item list-group-item-warning">Il doit avoir 1 lettre majuscule.</li>
+				<li class="list-group-item list-group-item-warning">Au moins 1 lettre minuscule.</li>
+				<li class="list-group-item list-group-item-warning">Au moins 1 chiffre.</li>
+			</ul>
+		</div>
 
-        <div class="d-flex">
-            {{ form_row(registrationForm.agreeTerms) }}
-            <a href="#" class="ml-2">(Lire)</a>
-        </div>
+		<div class="d-flex">
+			{{ form_row(registrationForm.agreeTerms) }}
+			<a href="#" class="ml-2">(Lire)</a>
+		</div>
 
-        <button id="btnSubmit" type="submit" class="btn btn-primary mb-xl-5">S'inscrire</button>
-        {{ form_end(registrationForm) }}
-    </div>
+		<button id="btnSubmit" type="submit" class="btn btn-primary mb-xl-5">S'inscrire</button>
+		{{ form_end(registrationForm) }}
+	</div>
 
 {% endblock %}

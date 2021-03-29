@@ -67,7 +67,9 @@ class RegistrationController extends AbstractController
                 $user->setRoles(['ROLE_ADMIN']);
         }
 
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form = $this->createForm(RegistrationFormType::class, $user, [
+            'method' => 'POST',
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
