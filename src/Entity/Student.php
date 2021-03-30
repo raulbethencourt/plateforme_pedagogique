@@ -108,8 +108,7 @@ class Student extends User
 
     public function removeClassroom(Classroom $classroom): self
     {
-        if ($this->classrooms->contains($classroom)) {
-            $this->classrooms->removeElement($classroom);
+        if ($this->classrooms->removeElement($classroom)) {
             $classroom->removeStudent($this);
         }
 

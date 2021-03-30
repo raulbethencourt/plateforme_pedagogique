@@ -39,12 +39,6 @@ class Lesson
      */
     private $questionnaires;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=School::class, inversedBy="lessons")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $school;
-
     public function __construct()
     {
         $this->teachers = new ArrayCollection();
@@ -124,18 +118,6 @@ class Lesson
     public function removeQuestionnaire(Questionnaire $questionnaire): self
     {
         $this->questionnaires->removeElement($questionnaire);
-
-        return $this;
-    }
-
-    public function getSchool(): ?School
-    {
-        return $this->school;
-    }
-
-    public function setSchool(?School $school): self
-    {
-        $this->school = $school;
 
         return $this;
     }

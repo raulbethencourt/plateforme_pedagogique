@@ -96,15 +96,12 @@ class UserController extends AbstractController
      * @param Classroom|null $classroom
      * @return RedirectResponse|ResponseAlias
      */
-    public function createClassroom(Request $request, Classroom $classroom = null, SchoolRepository $repository)
+    public function createClassroom(Request $request, Classroom $classroom = null)
     {
         // Check if the classroom already exist
         if (!$classroom) {
             $classroom = new Classroom();
         }
-
-        $school = $repository->findOneBy(['id' => '3']);
-        $classroom->setSchool($school);
 
         $form = $this->createForm(ClassroomType::class, $classroom);
         $form->handleRequest($request);
