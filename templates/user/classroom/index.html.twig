@@ -16,50 +16,56 @@
 			<strong>Erreur fatal</strong>
 		</div>
 	{% endif %}
+	<div class="row">
+		<div class="col-12 d-flex justify-content-center">
+			<h1>{{ classroom.name }}
+				-
+				<span class="badge badge-pill badge-info text-white">{{ classroom.discipline }}</span>
+			</h1>
 
-	<h1>{{ classroom.name }}
-		-
-		<span class="badge badge-pill badge-info text-white">{{ classroom.discipline }}</span>
-	</h1>
-	<div class="d-flex align-items-center">
-		<div class="d-block">
-			<h2>Liste des participants</h2>
-			<h3>
-				<span class="badge badge-pill badge-secondary text-white">Formateur(s)</span>
-			</h3>
 		</div>
-		<div class="d-flex justify-content-end w-75">
-			<div id="inviterForm" {% if not form.vars.submitted %} style="display: none;" {% endif %} class="w-100">
-				{{ form_start(form) }}
-				<div class="invite-form--responsive justify-content-sm-around align-items-center ">
-					<div class="form-group m-2">
-						{{ form_errors(form.name) }}
-						{{ form_widget(form.name) }}
-						{{ form_help(form.name) }}
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<div class="d-flex justify-content-center">
+				<a id="inviterBtn" class="btn btn-primary w-25" href="#" role="button" {% if form.vars.submitted %} style="display:none;" {% endif %}>Inviter Utilisateur</a>
+				<div id="inviterForm" {% if not form.vars.submitted %} style="display: none;" {% endif %} class="w-100">
+					{{ form_start(form) }}
+					<div class="invite-form--responsive justify-content-sm-around align-items-center ">
+						<div class="form-group m-2">
+							{{ form_errors(form.name) }}
+							{{ form_widget(form.name) }}
+							{{ form_help(form.name) }}
+						</div>
+						<div class="form-group m-2">
+							{{ form_errors(form.surname) }}
+							{{ form_widget(form.surname) }}
+							{{ form_help(form.surname) }}
+						</div>
+						<div class="form-group m-2">
+							{{ form_errors(form.email) }}
+							{{ form_widget(form.email) }}
+							{{ form_help(form.email) }}
+						</div>
+						<div class="form-group m-2">
+							{{ form_errors(form.type) }}
+							{{ form_widget(form.type) }}
+							{{ form_help(form.type) }}
+						</div>
+						<div class="form-group m-2">
+							{{ form_widget(form.submit) }}
+						</div>
 					</div>
-					<div class="form-group m-2">
-						{{ form_errors(form.surname) }}
-						{{ form_widget(form.surname) }}
-						{{ form_help(form.surname) }}
-					</div>
-					<div class="form-group m-2">
-						{{ form_errors(form.email) }}
-						{{ form_widget(form.email) }}
-						{{ form_help(form.email) }}
-					</div>
-					<div class="form-group m-2">
-						{{ form_errors(form.type) }}
-						{{ form_widget(form.type) }}
-						{{ form_help(form.type) }}
-					</div>
-					<div class="form-group m-2">
-						{{ form_widget(form.submit) }}
-					</div>
+					{{ form_end(form) }}
 				</div>
-				{{ form_end(form) }}
 			</div>
-			<a id="inviterBtn" class="btn btn-primary h-50" href="#" role="button" {% if form.vars.submitted %} style="display:none;" {% endif %}>Inviter</a>
 		</div>
+
+	</div>
+	<div class="d-flex align-items-center">
+		<h3>
+			<span class="badge badge-pill badge-secondary text-white">Formateur(s)</span>
+		</h3>
 	</div>
 	<table class="table border-bottom">
 		<thead class="thead-dark">
