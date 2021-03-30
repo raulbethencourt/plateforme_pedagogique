@@ -10,7 +10,6 @@ use App\Form\EditUserType;
 use App\Form\ClassroomType;
 use App\invitation\Invitation;
 use App\Repository\UserRepository;
-use App\Repository\SchoolRepository;
 use App\Repository\ClassroomRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;

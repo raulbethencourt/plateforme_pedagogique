@@ -2,17 +2,20 @@
 
 namespace App\Controller;
 
-use App\Entity\Classroom;
+use App\Entity\User;
 use App\Entity\Invite;
 use App\Form\InviteType;
+use App\Entity\Classroom;
 use App\invitation\Invitation;
 use App\Repository\UserRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
  * Class ClassroomController
@@ -22,6 +25,16 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ClassroomController extends AbstractController
 {
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
     /**
      * This method shows the students and teacher that belongs to the classroom
      * and It allows us to invite new Teachers or students
@@ -67,5 +80,25 @@ class ClassroomController extends AbstractController
                 'teachers' => $classroom->getTeachers(),
             ]
         );
+    }
+
+    /**
+     * @Route ("/user/{id}/{classroom}/delete", name="user_user_delete", methods={"DELETE"})
+     * @param  Request  $request
+     * @return RedirectResponse
+     */
+    public function deleteUser(User $user, Request $request): RedirectResponse
+    {
+        // Check the token
+        if ($this->isCsrfTokenValid(
+            'delete' . $user->getId(),
+            $request->get('_token')
+        )) {
+            $this->em->remove($user);
+            $this->em->flush();
+            $this->addFlash('success', 'Utilisateur supprimée avec succès.');
+        }
+
+        return $this->redirectToRoute('classroom_index', ['id' => $request->attributes->get('classroom')]);
     }
 }
