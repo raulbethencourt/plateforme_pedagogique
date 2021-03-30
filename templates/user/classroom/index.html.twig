@@ -11,11 +11,18 @@
 		</div>
 	{% endfor %}
 
-	{% if not form.vars.valid %}
+	{% if not formInvite.vars.valid %}
 		<div class="alert alert-danger mr-2 mb-0" role="alert">
 			<strong>Erreur fatal</strong>
 		</div>
 	{% endif %}
+
+	{% if not formNotify.vars.valid %}
+		<div class="alert alert-danger mr-2 mb-0" role="alert">
+			<strong>Erreur fatal</strong>
+		</div>
+	{% endif %}
+
 	<div class="row">
 		<div class="col-12 d-flex justify-content-center">
 			<h1>{{ classroom.name }}
@@ -25,43 +32,60 @@
 
 		</div>
 	</div>
+
 	<div class="row">
 		<div class="col-12">
 			<div class="d-flex justify-content-center">
-				<a id="inviterBtn" class="btn btn-primary w-25" href="#" role="button" {% if form.vars.submitted %} style="display:none;" {% endif %}>Inviter Utilisateur</a>
-				<div id="inviterForm" {% if not form.vars.submitted %} style="display: none;" {% endif %} class="w-100">
-					{{ form_start(form) }}
+				<a id="inviterBtn" class="btn btn-primary w-25" href="#" role="button" {% if formInvite.vars.submitted %} style="display:none;" {% endif %}>Inviter Utilisateur</a>
+				<div id="inviterForm" {% if not formInvite.vars.submitted %} style="display: none;" {% endif %} class="w-100">
+					{{ form_start(formInvite) }}
 					<div class="invite-form--responsive justify-content-sm-around align-items-center ">
 						<div class="form-group m-2">
-							{{ form_errors(form.name) }}
-							{{ form_widget(form.name) }}
-							{{ form_help(form.name) }}
+							{{ form_errors(formInvite.name) }}
+							{{ form_widget(formInvite.name) }}
+							{{ form_help(formInvite.name) }}
 						</div>
 						<div class="form-group m-2">
-							{{ form_errors(form.surname) }}
-							{{ form_widget(form.surname) }}
-							{{ form_help(form.surname) }}
+							{{ form_errors(formInvite.surname) }}
+							{{ form_widget(formInvite.surname) }}
+							{{ form_help(formInvite.surname) }}
 						</div>
 						<div class="form-group m-2">
-							{{ form_errors(form.email) }}
-							{{ form_widget(form.email) }}
-							{{ form_help(form.email) }}
+							{{ form_errors(formInvite.email) }}
+							{{ form_widget(formInvite.email) }}
+							{{ form_help(formInvite.email) }}
 						</div>
 						<div class="form-group m-2">
-							{{ form_errors(form.type) }}
-							{{ form_widget(form.type) }}
-							{{ form_help(form.type) }}
+							{{ form_errors(formInvite.type) }}
+							{{ form_widget(formInvite.type) }}
+							{{ form_help(formInvite.type) }}
 						</div>
 						<div class="form-group m-2">
-							{{ form_widget(form.submit) }}
+							{{ form_widget(formInvite.submit) }}
 						</div>
 					</div>
-					{{ form_end(form) }}
+					{{ form_end(formInvite) }}
 				</div>
 			</div>
 		</div>
-
 	</div>
+
+	<div class="row">
+		<div class="col-12">
+			<h3>ESPACE ANNONCE</h3>
+			{{ form_start(formNotify) }}
+			<div class="input-group m-2">
+				{{ form_errors(formNotify.text) }}
+				{{ form_widget(formNotify.text) }}
+				{{ form_help(formNotify.text) }}
+				<div class="input-group-append m-2">
+					{{ form_widget(formNotify.submit) }}
+				</div>
+			</div>
+			{{ form_end(formNotify) }}
+		</div>
+	</div>
+
 	<div class="d-flex align-items-center">
 		<h3>
 			<span class="badge badge-pill badge-secondary text-white">Formateur(s)</span>

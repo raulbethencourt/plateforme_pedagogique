@@ -39,6 +39,11 @@ class Classroom
      */
     private $discipline;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Notification::class, mappedBy="classroom", cascade={"persist", "remove"})
+     */
+    private $notification;
+
     public function __construct()
     {
         $this->teachers = new ArrayCollection();
@@ -116,6 +121,23 @@ class Classroom
     public function setDiscipline(?string $discipline): self
     {
         $this->discipline = $discipline;
+
+        return $this;
+    }
+
+    public function getNotification(): ?Notification
+    {
+        return $this->notification;
+    }
+
+    public function setNotification(Notification $notification): self
+    {
+        // set the owning side of the relation if necessary
+        if ($notification->getClassroom() !== $this) {
+            $notification->setClassroom($this);
+        }
+
+        $this->notification = $notification;
 
         return $this;
     }
