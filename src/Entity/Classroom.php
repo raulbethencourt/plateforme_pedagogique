@@ -40,15 +40,21 @@ class Classroom
     private $discipline;
 
     /**
-     * @ORM\ManyToOne(targetEntity=School::class, inversedBy="classrooms")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="classroom", orphanRemoval=true)
      */
-    private $school;
+    private $notifications;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Lesson::class, mappedBy="classrooms")
+     */
+    private $lessons;
 
     public function __construct()
     {
         $this->teachers = new ArrayCollection();
         $this->students = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
+        $this->lessons = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -125,15 +131,60 @@ class Classroom
 
         return $this;
     }
-    
-    public function getSchool(): ?School
+
+    /**
+     * @return Collection|Notification[]
+     */
+    public function getNotifications(): Collection
     {
-        return $this->school;
+        return $this->notifications;
     }
 
-    public function setSchool(?School $school): self
+    public function addNotification(Notification $notification): self
     {
-        $this->school = $school;
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications[] = $notification;
+            $notification->setClassroom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getClassroom() === $this) {
+                $notification->setClassroom(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Lesson[]
+     */
+    public function getLessons(): Collection
+    {
+        return $this->lessons;
+    }
+
+    public function addLesson(Lesson $lesson): self
+    {
+        if (!$this->lessons->contains($lesson)) {
+            $this->lessons[] = $lesson;
+            $lesson->addClassroom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLesson(Lesson $lesson): self
+    {
+        if ($this->lessons->removeElement($lesson)) {
+            $lesson->removeClassroom($this);
+        }
 
         return $this;
     }

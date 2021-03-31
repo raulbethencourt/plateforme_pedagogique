@@ -22,7 +22,7 @@ class Lesson
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -30,25 +30,32 @@ class Lesson
     private $level;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Teacher::class, inversedBy="lessons")
-     */
-    private $teachers;
-
-    /**
      * @ORM\ManyToMany(targetEntity=Questionnaire::class, inversedBy="lessons", cascade={"persist"})
      */
     private $questionnaires;
 
     /**
-     * @ORM\ManyToOne(targetEntity=School::class, inversedBy="lessons")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="lessons")
      */
-    private $school;
+    private $users;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $date_creation;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Classroom::class, inversedBy="lessons")
+     */
+    private $classrooms;
+
 
     public function __construct()
     {
         $this->teachers = new ArrayCollection();
         $this->questionnaires = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->classrooms = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -56,14 +63,14 @@ class Lesson
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -76,30 +83,6 @@ class Lesson
     public function setLevel(?string $level): self
     {
         $this->level = $level;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Teacher[]
-     */
-    public function getTeacher(): Collection
-    {
-        return $this->teachers;
-    }
-
-    public function addTeacher(Teacher $teachers): self
-    {
-        if (!$this->teachers->contains($teachers)) {
-            $this->teachers[] = $teachers;
-        }
-
-        return $this;
-    }
-
-    public function removeTeacher(Teacher $teachers): self
-    {
-        $this->teachers->removeElement($teachers);
 
         return $this;
     }
@@ -128,23 +111,63 @@ class Lesson
         return $this;
     }
 
-    public function getSchool(): ?School
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
     {
-        return $this->school;
+        return $this->users;
     }
 
-    public function setSchool(?School $school): self
+    public function addUser(User $user): self
     {
-        $this->school = $school;
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        $this->users->removeElement($user);
+
+        return $this;
+    }
+
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->date_creation;
+    }
+
+    public function setDateCreation(\DateTimeInterface $date_creation): self
+    {
+        $this->date_creation = $date_creation;
 
         return $this;
     }
 
     /**
-     * @return Collection|Teacher[]
+     * @return Collection|Classroom[]
      */
-    public function getTeachers(): Collection
+    public function getClassrooms(): Collection
     {
-        return $this->teachers;
+        return $this->classrooms;
+    }
+
+    public function addClassroom(Classroom $classroom): self
+    {
+        if (!$this->classrooms->contains($classroom)) {
+            $this->classrooms[] = $classroom;
+        }
+
+        return $this;
+    }
+
+    public function removeClassroom(Classroom $classroom): self
+    {
+        $this->classrooms->removeElement($classroom);
+
+        return $this;
     }
 }

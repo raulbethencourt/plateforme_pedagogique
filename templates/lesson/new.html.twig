@@ -1,0 +1,8 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Créer Module{% endblock %}
+
+{% block body %}
+    <h1>Créer un module</h1>
+    {{ include('lesson/_form.html.twig', {form: form, button: 'Créer'}) }}
+{% endblock %}

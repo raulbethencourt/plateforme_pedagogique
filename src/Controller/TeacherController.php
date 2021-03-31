@@ -12,7 +12,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -39,7 +38,7 @@ class TeacherController extends AbstractController
      * @param  QuestionnaireRepository  $repository
      * @return ResponseAlias
      */
-    public function index(QuestionnaireRepository $repository): ResponseAlias
+    public function index(): ResponseAlias
     {
         $teacher = $this->getUser();
 
@@ -54,8 +53,8 @@ class TeacherController extends AbstractController
 
     /**
      * @Route("/questionnaire/create", name="questionnaire_create")
-     * @param  Request  $request
-     * @return RedirectResponse|ResponseAlias
+     * @param \App\Entity\Questionnaire $questionnaire
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function createQuestionnaire(Questionnaire $questionnaire = null, Request $request)
     {
@@ -66,7 +65,6 @@ class TeacherController extends AbstractController
 
         // Add actual date/time and the Teacher in the creation
         $questionnaire->setDateCreation(new \DateTime());
-        $questionnaire->setTeacher($this->getUser());
         $form = $this->createForm(QuestionnaireType::class, $questionnaire);
 
         $form->handleRequest($request);

@@ -1,105 +1,186 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Admin - {{ classroom.name }}{% endblock %}
-
-{% block body %}
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success mr-2 mb-0">
-            {{ message }}
-        </div>
-    {% endfor %}
-
-    {% if not form.vars.valid %}
-        <div class="alert alert-danger mr-2 mb-0" role="alert">
-            <strong>Erreur fatal</strong>
-        </div>
-    {% endif %}
-
-    <h1>{{ classroom.name }} - <span class="badge badge-pill badge-info text-white">{{ classroom.discipline }}</span></h1>
-    <div class="d-flex align-items-center">
-        <div class="d-block">
-            <h2>Liste des participants</h2>
-            <h3><span class="badge badge-pill badge-secondary text-white">Formateur(s)</span></h3>
-        </div>
-        <div class="d-flex justify-content-end w-75">
-            <div id="inviterForm"
-                {% if not form.vars.submitted %} 
-                    style="display: none;" 
-                {% endif %} 
-                class="w-100">
-                {{ form_start(form) }}
-                <div class="invite-form--responsive justify-content-sm-around align-items-center ">
-                    <div class="form-group m-2">
-                        {{ form_errors(form.name) }}
-                        {{ form_widget(form.name) }}
-                        {{ form_help(form.name) }}
-                    </div>
-                    <div class="form-group m-2">
-                        {{ form_errors(form.surname) }}
-                        {{ form_widget(form.surname) }}
-                        {{ form_help(form.surname) }}
-                    </div>
-                    <div class="form-group m-2">
-                        {{ form_errors(form.email) }}
-                        {{ form_widget(form.email) }}
-                        {{ form_help(form.email) }}
-                    </div>
-                    <div class="form-group m-2">
-                        {{ form_errors(form.type) }}
-                        {{ form_widget(form.type) }}
-                        {{ form_help(form.type) }}
-                    </div>
-                    <div class="form-group m-2">
-                        {{ form_widget(form.submit) }}
-                    </div>
-                </div>
-                {{ form_end(form) }}
-            </div>
-            <a id="inviterBtn" class="btn btn-primary h-50" href="#" role="button" {% if form.vars.submitted %}
-                style="display:none;" {% endif %}>Inviter</a>
-        </div>
-    </div>
-    <table class="table border-bottom">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col"></th>
-            <th scope="col">Prénom</th>
-            <th scope="col">Nom</th>
-            <th scope="col">Matière(s)</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for teacher in teachers %}
-            <tr>
-                <th scope="row">{{ loop.index }}</th>
-                <td>{{ teacher.name }}</td>
-                <td>{{ teacher.surname }}</td>
-                <td>{{ teacher.subject }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <h3><span class="badge badge-pill badge-secondary text-white">Étudiant(s)</span></h3>
-    <table class="table border-bottom">
-        <thead class="thead-dark ">
-        <tr>
-            <th scope="col"></th>
-            <th scope="col">Prénom</th>
-            <th scope="col">Nom</th>
-            <th scope="col">Loisirs</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for student in students %}
-            <tr>
-                <th scope="row">{{ loop.index }}</th>
-                <td>{{ student.name }}</td>
-                <td>{{ student.surname }}</td>
-                <td>{{ student.hobby }}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
+{% block title %}Admin -
+	{{ classroom.name }}
 {% endblock %}
 
+{% block body %}
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success mr-2 mb-0">
+			{{ message }}
+		</div>
+	{% endfor %}
+
+	{% if not formInvite.vars.valid %}
+		<div class="alert alert-danger mr-2 mb-0" role="alert">
+			<strong>Erreur fatal</strong>
+		</div>
+	{% endif %}
+
+	{% if not formNotify.vars.valid %}
+		<div class="alert alert-danger mr-2 mb-0" role="alert">
+			<strong>Erreur fatal</strong>
+		</div>
+	{% endif %}
+
+	<div class="row">
+		<div class="col-12 d-flex justify-content-center">
+			<h1>{{ classroom.name }}
+				-
+				<span class="badge badge-pill badge-info text-white">{{ classroom.discipline }}</span>
+			</h1>
+
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-12">
+			<div class="d-flex justify-content-center">
+				<a id="inviterBtn" class="btn btn-primary w-25" href="#" role="button" {% if formInvite.vars.submitted %} style="display:none;" {% endif %}>Inviter Utilisateur</a>
+				<div id="inviterForm" {% if not formInvite.vars.submitted %} style="display: none;" {% endif %} class="w-100">
+					{{ form_start(formInvite) }}
+					<div class="invite-form--responsive justify-content-sm-around align-items-center ">
+						<div class="form-group m-2">
+							{{ form_errors(formInvite.name) }}
+							{{ form_widget(formInvite.name) }}
+							{{ form_help(formInvite.name) }}
+						</div>
+						<div class="form-group m-2">
+							{{ form_errors(formInvite.surname) }}
+							{{ form_widget(formInvite.surname) }}
+							{{ form_help(formInvite.surname) }}
+						</div>
+						<div class="form-group m-2">
+							{{ form_errors(formInvite.email) }}
+							{{ form_widget(formInvite.email) }}
+							{{ form_help(formInvite.email) }}
+						</div>
+						<div class="form-group m-2">
+							{{ form_errors(formInvite.type) }}
+							{{ form_widget(formInvite.type) }}
+							{{ form_help(formInvite.type) }}
+						</div>
+						<div class="form-group m-2">
+							{{ form_widget(formInvite.submit) }}
+						</div>
+					</div>
+					{{ form_end(formInvite) }}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-12">
+			<h3>ESPACE ANNONCE</h3>
+			{% if notification %}
+				<p>{{ notification.text }}</p>
+			{% endif %}
+			{{ form_start(formNotify) }}
+			<div class="input-group m-2">
+				{{ form_errors(formNotify.text) }}
+				{{ form_widget(formNotify.text) }}
+				{{ form_help(formNotify.text) }}
+				<div class="input-group-append m-2">
+					{{ form_widget(formNotify.submit) }}
+				</div>
+			</div>
+			{{ form_end(formNotify) }}
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-12">
+			<div class="d-flex align-items-center">
+				<h3>
+					<span class="badge badge-pill badge-secondary text-white">Formateur(s)</span>
+				</h3>
+			</div>
+			<table class="table border-bottom">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col"></th>
+						<th scope="col">Prénom</th>
+						<th scope="col">Nom</th>
+						<th scope="col">Matière(s)</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for teacher in teachers %}
+						<tr>
+							<th scope="row">{{ loop.index }}</th>
+							<td>{{ teacher.name }}</td>
+							<td>{{ teacher.surname }}</td>
+							<td>{{ teacher.subject }}</td>
+							<td>
+								<form method="post" action="{{ path('user_user_delete', {id: teacher.id, classroom: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+									<input type="hidden" name="_method" value='DELETE'>
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ teacher.id) }}">
+									<button class="btn btn-danger">Supprimer</button>
+								</form>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-12">
+			<h3>
+				<span class="badge badge-pill badge-secondary text-white">Étudiant(s)</span>
+			</h3>
+			<table class="table border-bottom">
+				<thead class="thead-dark ">
+					<tr>
+						<th scope="col"></th>
+						<th scope="col">Prénom</th>
+						<th scope="col">Nom</th>
+						<th scope="col">Loisirs</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for student in students %}
+						<tr>
+							<th scope="row">{{ loop.index }}</th>
+							<td>{{ student.name }}</td>
+							<td>{{ student.surname }}</td>
+							<td>{{ student.hobby }}</td>
+							<td>
+								<form method="post" action="{{ path('user_user_delete', {id: student.id, classroom: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+									<input type="hidden" name="_method" value='DELETE'>
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ student.id) }}">
+									<button class="btn btn-danger">Supprimer</button>
+								</form>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-12 d-flex flex-column align-items-center">
+			<a href="{{ path('lesson_create', {classroom: classroom.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter Module</a>
+			<div class="d-flex flex-wrap">
+				{% for lesson in lessons %}
+					<div class="card">
+						<div class="card-body">
+							<h4 class="card-title">{{lesson.title}}</h4>
+							<a href="{{ path('lesson_edit', {id: lesson.id, classroom: classroom.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+							<form method="post" action="{{ path('lesson_delete', {id: lesson.id, classroom: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+								<input type="hidden" name="_method" value='DELETE'>
+								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
+								<button class="btn btn-danger">Supprimer</button>
+							</form>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+{% endblock %}

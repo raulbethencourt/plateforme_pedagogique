@@ -7,96 +7,114 @@
 		</div>
 	{% endfor %}
 	{# {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-		<pre>
-			{{ dump(app.user) }}
-		</pre>
-	{% endif %} #}
+											<pre>
+												{{ dump(app.user) }}
+											</pre>
+										{% endif %} #}
 
-	<div class="d-flex justify-content-center">
-		<div id="inviterForm" {% if not form.vars.submitted %} style="display: none;" {% endif %} class="w-100">
-			{{ form_start(form) }}
-			<div class="invite-form--responsive justify-content-sm-around align-items-center ">
-				<div class="form-group m-2">
-					{{ form_errors(form.name) }}
-					{{ form_widget(form.name) }}
-					{{ form_help(form.name) }}
-				</div>
-				<div class="form-group m-2">
-					{{ form_errors(form.surname) }}
-					{{ form_widget(form.surname) }}
-					{{ form_help(form.surname) }}
-				</div>
-				<div class="form-group m-2">
-					{{ form_errors(form.email) }}
-					{{ form_widget(form.email) }}
-					{{ form_help(form.email) }}
-				</div>
-				{% if is_granted('ROLE_SUPER_ADMIN') %}
-					<div class="form-group m-2 d-none">
-						{{ form_errors(form.type) }}
-						{{ form_widget(form.type) }}
-						{{ form_help(form.type) }}
+	<div class="row">
+		<div class="col-12">
+			<div id="inviterForm" {% if not form.vars.submitted %} style="display: none;" {% endif %} class="w-100">
+				{{ form_start(form) }}
+				<div class="invite-form--responsive justify-content-sm-around align-items-center ">
+					<div class="form-group m-2">
+						{{ form_errors(form.name) }}
+						{{ form_widget(form.name) }}
+						{{ form_help(form.name) }}
 					</div>
-				{% endif %}
-				<div class="form-group m-2">
-					{{ form_widget(form.submit) }}
+					<div class="form-group m-2">
+						{{ form_errors(form.surname) }}
+						{{ form_widget(form.surname) }}
+						{{ form_help(form.surname) }}
+					</div>
+					<div class="form-group m-2">
+						{{ form_errors(form.email) }}
+						{{ form_widget(form.email) }}
+						{{ form_help(form.email) }}
+					</div>
+					{% if is_granted('ROLE_SUPER_ADMIN') %}
+						<div class="form-group m-2 d-none">
+							{{ form_errors(form.type) }}
+							{{ form_widget(form.type) }}
+							{{ form_help(form.type) }}
+						</div>
+					{% endif %}
+					<div class="form-group m-2">
+						{{ form_widget(form.submit) }}
+					</div>
 				</div>
+				{{ form_end(form) }}
 			</div>
-			{{ form_end(form) }}
 		</div>
 	</div>
 
+
 	{% if is_granted('ROLE_SUPER_ADMIN') %}
-		<a id="inviterBtn" class="nav-link btn btn-secondary w-25 align-self-center" href="#" role="button">Ajuter Admin</a>
-		<ul class="list-group">
-			{% for admin in admins %}
-				<li class="list-group-item d-flex justify-content-between align-items-center">
-					{{ admin.name}}
-					{{admin.surname}}
-					<form method="post" action="{{ path('user_admin_delete', {id: admin.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-						<input type="hidden" name="_method" value='DELETE'>
-						<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ admin.id) }}">
-						<button class="btn btn-danger">Supprimer Admin</button>
-					</form>
-				</li>
-			{% endfor %}
-		</ul>
+		<div class="row">
+			<div class="col-12 d-flex flex-column align-items-center">
+				<a id="inviterBtn" class="nav-link btn btn-secondary w-25" href="#" role="button">Ajuter Admin</a>
+				<ul class="list-group w-75">
+					{% for admin in admins %}
+						<li class="list-group-item d-flex justify-content-between align-items-center">
+							{{ admin.name}}
+							{{admin.surname}}
+							<form method="post" action="{{ path('user_admin_delete', {id: admin.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+								<input type="hidden" name="_method" value='DELETE'>
+								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ admin.id) }}">
+								<button class="btn btn-danger">Supprimer Admin</button>
+							</form>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
 	{% endif %}
 
-	<h3>Liste des classes</h3>
-	<div class="table-responsive">
-		<table class="table border-bottom">
-			<thead class="thead-dark">
-				<tr>
-					<th scope="col"></th>
-					<th scope="col">Nom</th>
-					<th scope="col">Discipline</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for classroom in classrooms %}
-					<tr>
-						<th scope="row">{{ loop.index }}</th>
-						<td>
-							<a href="{{ path('classroom_index', {id: classroom.id}) }}">{{ classroom.name }}</a>
-						</td>
-						<td class="d-flex justify-content-between ">
-							{{ classroom.discipline }}
-							<div class="d-flex justify-content-center w-50">
-								<a href="{{ path('user_classroom_edit', {id: classroom.id}) }}" class="btn btn-secondary mr-lg-2" role="button">Éditer</a>
-								<form method="post" action="{{ path('user_classroom_delete', {id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-									<input type="hidden" name="_method" value='DELETE'>
-									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ classroom.id) }}">
-									<button class="btn btn-danger">Supprimer</button>
-								</form>
-							</div>
-						</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-	</div>
-	<div class="text-right">
-		<a href="{{ path('user_classroom_create') }}" class="btn btn-primary">Créer classe</a>
+	<div class="row">
+		<div class="col-12 d-flex flex-column align-items-center">
+			<a href="{{ path('user_classroom_create') }}" class="btn btn-secondary w-25 align-self-center">Créer classe</a>
+			<h3>Liste des classes</h3>
+			<div class="table-responsive">
+				<table class="table border-bottom">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col"></th>
+							<th scope="col">Nom</th>
+							<th scope="col">Discipline</th>
+							<th scope="col">Formateurs</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for classroom in classrooms %}
+							<tr>
+								<th scope="row">{{ loop.index }}</th>
+								<td>
+									<a href="{{ path('classroom_index', {id: classroom.id}) }}">{{ classroom.name }}</a>
+								</td>
+								<td>
+									<div class="d-flex justify-content-between ">
+										{{ classroom.discipline }}</div>
+								</td>
+								<td>
+									<div class="d-flex justify-content-between">
+										{% for teacher in classroom.teachers %}
+											{{ teacher.name }}
+										{% endfor %}
+										<div class="d-flex justify-content-center w-50">
+											<a href="{{ path('user_classroom_edit', {id: classroom.id}) }}" class="btn btn-secondary mr-lg-2" role="button">Éditer</a>
+											<form method="post" action="{{ path('user_classroom_delete', {id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+												<input type="hidden" name="_method" value='DELETE'>
+												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ classroom.id) }}">
+												<button class="btn btn-danger">Supprimer</button>
+											</form>
+										</div>
+									</div>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 {% endblock %}

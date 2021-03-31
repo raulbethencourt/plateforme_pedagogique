@@ -2,9 +2,10 @@
 
 namespace App\DataFixtures;
 
+use Faker\Factory;
 use App\Entity\Student;
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
@@ -23,10 +24,13 @@ class StudentFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        for ($i = 0; $i < 50; $i++) {
+        $faker = Factory::create('fr_FR');
+        for ($i = 0; $i < 30; $i++) {
             $student = new Student();
-            $student->setUsername('student');
-            $student->setEmail('student@test.mail');
+            $student->setUsername($faker->userName);
+            $student->setEmail($faker->safeEmail);
+            $student->setName($faker->name);
+            $student->setSurname($faker->firstNameMale);
             $student->setRoles(["ROLE_STUDENT"]);
             $student->setPassword(
                 $this->passwordEncoder->encodePassword($student, "student")

@@ -1,7 +1,15 @@
 /* base.html.twig */
-.logo-carpa {
-	width: 100%;
-	height: auto;
+.navbar {
+	padding: 0;
+
+	.navbar-brand {
+		padding: 0;
+
+		.logo-contact {
+			width: 250px;
+			height: auto;
+		}
+	}
 }
 
 .profile {
