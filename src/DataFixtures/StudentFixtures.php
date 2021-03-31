@@ -25,7 +25,7 @@ class StudentFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create('fr_FR');
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 30; $i++) {
             $student = new Student();
             $student->setUsername($faker->userName);
             $student->setEmail($faker->safeEmail);

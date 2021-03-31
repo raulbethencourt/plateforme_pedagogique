@@ -23,7 +23,7 @@ class Notification
     private $text;
 
     /**
-     * @ORM\OneToOne(targetEntity=Classroom::class, inversedBy="notification", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Classroom::class, inversedBy="notifications")
      * @ORM\JoinColumn(nullable=false)
      */
     private $classroom;
@@ -50,7 +50,7 @@ class Notification
         return $this->classroom;
     }
 
-    public function setClassroom(Classroom $classroom): self
+    public function setClassroom(?Classroom $classroom): self
     {
         $this->classroom = $classroom;
 

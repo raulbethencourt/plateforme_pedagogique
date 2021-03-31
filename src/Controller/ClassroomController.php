@@ -2,22 +2,23 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
-use App\Entity\Invite;
-use App\Form\InviteType;
 use App\Entity\Classroom;
+use App\Entity\Invite;
 use App\Entity\Notification;
+use App\Entity\User;
+use App\Form\InviteType;
 use App\Form\NotificationType;
 use App\invitation\Invitation;
+use App\Repository\NotificationRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 /**
  * Class ClassroomController
@@ -42,26 +43,29 @@ class ClassroomController extends AbstractController
      * and It allows us to invite new Teachers or students
      * @Route("/{id}", name="classroom_index")
      * @IsGranted ("ROLE_USER")
-     * @param Classroom $classroom
-     * @param Request $request
-     * @param Invitation $invitation
-     * @return Response
-     * @throws TransportExceptionInterface
+     * @param \App\Entity\Classroom $classroom
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \App\invitation\Invitation $invitation
+     * @param \App\Repository\UserRepository $user
+     * @param \App\Repository\NotificationRepository $notificationRepository
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function index(Classroom $classroom, Request $request, Invitation $invitation, UserRepository $user): Response
+    public function index(Classroom $classroom, Request $request, Invitation $invitation, UserRepository $user, NotificationRepository $notificationRepository): Response
     {
+        $notificationOld = $notificationRepository->findOneBy(["classroom" => $classroom]);
         $notification = new Notification(); // I create the admin notification
         $notification->setClassroom($classroom);
         $formNotify = $this->createForm(NotificationType::class, $notification);
-        $this->notify($classroom, $request, $formNotify, $notification);
+        $this->notify($classroom, $request, $formNotify, $notification, $notificationOld);
 
-        $invite = new Invite(); // We invite a new teacher or student    
+        $invite = new Invite(); // We invite a new teacher or student
         $formInvite = $this->createForm(InviteType::class, $invite);
         $this->invite($classroom, $request, $invitation, $user, $formInvite, $invite);
 
         return $this->render(
             'user/classroom/index.html.twig',
             [
+                'notification' => $notificationRepository->findOneBy(["classroom" => $classroom]),
                 'formInvite' => $formInvite->createView(),
                 'formNotify' => $formNotify->createView(),
                 'classroom' => $classroom,
@@ -108,7 +112,7 @@ class ClassroomController extends AbstractController
             // Check if user is in the data base already
             $userAlready = $user->findOneBy([
                 "name" => $invite->getName(),
-                "surname" => $invite->getSurname()
+                "surname" => $invite->getSurname(),
             ]);
             if (isset($userAlready)) {
                 $invitation->invite($invite, $classroom, $userAlready);
@@ -120,7 +124,7 @@ class ClassroomController extends AbstractController
         }
 
         return $this->redirectToRoute('classroom_index', [
-            'id' => $classroom->getId()
+            'id' => $classroom->getId(),
         ]);
     }
 
@@ -128,23 +132,27 @@ class ClassroomController extends AbstractController
      * with this function the admin can send a notification to classroom students
      * @param \App\Entity\Classroom $classroom
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param [type] $formNotify
+     * @param Form $formNotify
      * @param \App\Entity\Notification $notification
+     * @param \App\Entity\Notification $notificationOld
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    private function notify(Classroom $classroom, Request $request, $formNotify, Notification $notification): RedirectResponse
+    private function notify(Classroom $classroom, Request $request, Form $formNotify, Notification $notification, ?Notification $notificationOld): RedirectResponse
     {
         $formNotify->handleRequest($request);
 
         if ($formNotify->isSubmitted() && $formNotify->isValid()) {
+            if ($notificationOld) {
+                $classroom->removeNotification($notificationOld);
+            }
+
             $this->em->persist($notification);
             $this->em->flush();
-
             $this->addFlash('success', 'Notification ajouté avec succès.');
         }
 
         return $this->redirectToRoute('classroom_index', [
-            'id' => $classroom->getId()
+            'id' => $classroom->getId(),
         ]);
     }
 }

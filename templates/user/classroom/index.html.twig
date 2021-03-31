@@ -73,6 +73,9 @@
 	<div class="row">
 		<div class="col-12">
 			<h3>ESPACE ANNONCE</h3>
+			{% if notification %}
+				<p>{{ notification.text }}</p>
+			{% endif %}
 			{{ form_start(formNotify) }}
 			<div class="input-group m-2">
 				{{ form_errors(formNotify.text) }}

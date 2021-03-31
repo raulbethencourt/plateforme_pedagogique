@@ -40,14 +40,15 @@ class Classroom
     private $discipline;
 
     /**
-     * @ORM\OneToOne(targetEntity=Notification::class, mappedBy="classroom", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="classroom", orphanRemoval=true)
      */
-    private $notification;
+    private $notifications;
 
     public function __construct()
     {
         $this->teachers = new ArrayCollection();
         $this->students = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -125,19 +126,32 @@ class Classroom
         return $this;
     }
 
-    public function getNotification(): ?Notification
+    /**
+     * @return Collection|Notification[]
+     */
+    public function getNotifications(): Collection
     {
-        return $this->notification;
+        return $this->notifications;
     }
 
-    public function setNotification(Notification $notification): self
+    public function addNotification(Notification $notification): self
     {
-        // set the owning side of the relation if necessary
-        if ($notification->getClassroom() !== $this) {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications[] = $notification;
             $notification->setClassroom($this);
         }
 
-        $this->notification = $notification;
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getClassroom() === $this) {
+                $notification->setClassroom(null);
+            }
+        }
 
         return $this;
     }
