@@ -30,19 +30,25 @@ class Lesson
     private $level;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Teacher::class, inversedBy="lessons")
-     */
-    private $teachers;
-
-    /**
      * @ORM\ManyToMany(targetEntity=Questionnaire::class, inversedBy="lessons", cascade={"persist"})
      */
     private $questionnaires;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="lessons")
+     */
+    private $users;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $date_creation;
 
     public function __construct()
     {
         $this->teachers = new ArrayCollection();
         $this->questionnaires = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -75,30 +81,6 @@ class Lesson
     }
 
     /**
-     * @return Collection|Teacher[]
-     */
-    public function getTeacher(): Collection
-    {
-        return $this->teachers;
-    }
-
-    public function addTeacher(Teacher $teachers): self
-    {
-        if (!$this->teachers->contains($teachers)) {
-            $this->teachers[] = $teachers;
-        }
-
-        return $this;
-    }
-
-    public function removeTeacher(Teacher $teachers): self
-    {
-        $this->teachers->removeElement($teachers);
-
-        return $this;
-    }
-
-    /**
      * @return Collection|Questionnaire[]
      */
     public function getQuestionnaires(): Collection
@@ -123,10 +105,38 @@ class Lesson
     }
 
     /**
-     * @return Collection|Teacher[]
+     * @return Collection|User[]
      */
-    public function getTeachers(): Collection
+    public function getUsers(): Collection
     {
-        return $this->teachers;
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        $this->users->removeElement($user);
+
+        return $this;
+    }
+
+    public function getDateCreation(): ?\DateTimeInterface
+    {
+        return $this->date_creation;
+    }
+
+    public function setDateCreation(\DateTimeInterface $date_creation): self
+    {
+        $this->date_creation = $date_creation;
+
+        return $this;
     }
 }

@@ -89,69 +89,83 @@
 		</div>
 	</div>
 
-	<div class="d-flex align-items-center">
-		<h3>
-			<span class="badge badge-pill badge-secondary text-white">Formateur(s)</span>
-		</h3>
+	<div class="row">
+		<div class="col-12">
+			<div class="d-flex align-items-center">
+				<h3>
+					<span class="badge badge-pill badge-secondary text-white">Formateur(s)</span>
+				</h3>
+			</div>
+			<table class="table border-bottom">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col"></th>
+						<th scope="col">Prénom</th>
+						<th scope="col">Nom</th>
+						<th scope="col">Matière(s)</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for teacher in teachers %}
+						<tr>
+							<th scope="row">{{ loop.index }}</th>
+							<td>{{ teacher.name }}</td>
+							<td>{{ teacher.surname }}</td>
+							<td>{{ teacher.subject }}</td>
+							<td>
+								<form method="post" action="{{ path('user_user_delete', {id: teacher.id, classroom: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+									<input type="hidden" name="_method" value='DELETE'>
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ teacher.id) }}">
+									<button class="btn btn-danger">Supprimer</button>
+								</form>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
 	</div>
-	<table class="table border-bottom">
-		<thead class="thead-dark">
-			<tr>
-				<th scope="col"></th>
-				<th scope="col">Prénom</th>
-				<th scope="col">Nom</th>
-				<th scope="col">Matière(s)</th>
-				<th scope="col"></th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for teacher in teachers %}
-				<tr>
-					<th scope="row">{{ loop.index }}</th>
-					<td>{{ teacher.name }}</td>
-					<td>{{ teacher.surname }}</td>
-					<td>{{ teacher.subject }}</td>
-					<td>
-						<form method="post" action="{{ path('user_user_delete', {id: teacher.id, classroom: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-							<input type="hidden" name="_method" value='DELETE'>
-							<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ teacher.id) }}">
-							<button class="btn btn-danger">Supprimer</button>
-						</form>
-					</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-	<h3>
-		<span class="badge badge-pill badge-secondary text-white">Étudiant(s)</span>
-	</h3>
-	<table class="table border-bottom">
-		<thead class="thead-dark ">
-			<tr>
-				<th scope="col"></th>
-				<th scope="col">Prénom</th>
-				<th scope="col">Nom</th>
-				<th scope="col">Loisirs</th>
-				<th scope="col"></th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for student in students %}
-				<tr>
-					<th scope="row">{{ loop.index }}</th>
-					<td>{{ student.name }}</td>
-					<td>{{ student.surname }}</td>
-					<td>{{ student.hobby }}</td>
-					<td>
-						<form method="post" action="{{ path('user_user_delete', {id: student.id, classroom: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-							<input type="hidden" name="_method" value='DELETE'>
-							<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ student.id) }}">
-							<button class="btn btn-danger">Supprimer</button>
-						</form>
-					</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
 
+	<div class="row">
+		<div class="col-12">
+			<h3>
+				<span class="badge badge-pill badge-secondary text-white">Étudiant(s)</span>
+			</h3>
+			<table class="table border-bottom">
+				<thead class="thead-dark ">
+					<tr>
+						<th scope="col"></th>
+						<th scope="col">Prénom</th>
+						<th scope="col">Nom</th>
+						<th scope="col">Loisirs</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for student in students %}
+						<tr>
+							<th scope="row">{{ loop.index }}</th>
+							<td>{{ student.name }}</td>
+							<td>{{ student.surname }}</td>
+							<td>{{ student.hobby }}</td>
+							<td>
+								<form method="post" action="{{ path('user_user_delete', {id: student.id, classroom: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+									<input type="hidden" name="_method" value='DELETE'>
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ student.id) }}">
+									<button class="btn btn-danger">Supprimer</button>
+								</form>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-12 d-flex flex-column align-items-center">
+			<a href="{{ path('lesson_create') }}" class="btn btn-secondary mb-2" role="button">Ajouter Module</a>
+		</div>
+	</div>
 {% endblock %}

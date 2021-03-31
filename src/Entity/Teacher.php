@@ -22,11 +22,6 @@ class Teacher extends User
      */
     private $classrooms;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Lesson::class, mappedBy="Teacher", cascade={"persist"})
-     */
-    private $lessons;
-
     public function __construct()
     {
         $this->classrooms = new ArrayCollection();
@@ -66,33 +61,6 @@ class Teacher extends User
     public function setSubject(?string $subject): self
     {
         $this->subject = $subject;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Lesson[]
-     */
-    public function getLessons(): Collection
-    {
-        return $this->lessons;
-    }
-
-    public function addLesson(Lesson $lesson): self
-    {
-        if (!$this->lessons->contains($lesson)) {
-            $this->lessons[] = $lesson;
-            $lesson->addTeacher($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLesson(Lesson $lesson): self
-    {
-        if ($this->lessons->removeElement($lesson)) {
-            $lesson->removeTeacher($this);
-        }
 
         return $this;
     }

@@ -52,11 +52,10 @@ class ClassroomController extends AbstractController
      */
     public function index(Classroom $classroom, Request $request, Invitation $invitation, UserRepository $user, NotificationRepository $notificationRepository): Response
     {
-        $notificationOld = $notificationRepository->findOneBy(["classroom" => $classroom]);
         $notification = new Notification(); // I create the admin notification
         $notification->setClassroom($classroom);
         $formNotify = $this->createForm(NotificationType::class, $notification);
-        $this->notify($classroom, $request, $formNotify, $notification, $notificationOld);
+        $this->notify($classroom, $request, $formNotify, $notification, $notificationRepository);
 
         $invite = new Invite(); // We invite a new teacher or student
         $formInvite = $this->createForm(InviteType::class, $invite);
@@ -137,15 +136,15 @@ class ClassroomController extends AbstractController
      * @param \App\Entity\Notification $notificationOld
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    private function notify(Classroom $classroom, Request $request, Form $formNotify, Notification $notification, ?Notification $notificationOld): RedirectResponse
+    private function notify(Classroom $classroom, Request $request, Form $formNotify, Notification $notification, NotificationRepository $repository): RedirectResponse
     {
+        $notificationOld = $repository->findOneBy(["classroom" => $classroom]);
         $formNotify->handleRequest($request);
 
         if ($formNotify->isSubmitted() && $formNotify->isValid()) {
             if ($notificationOld) {
                 $classroom->removeNotification($notificationOld);
             }
-
             $this->em->persist($notification);
             $this->em->flush();
             $this->addFlash('success', 'Notification ajouté avec succès.');
