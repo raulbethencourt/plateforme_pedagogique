@@ -22,7 +22,7 @@ class Lesson
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -44,11 +44,18 @@ class Lesson
      */
     private $date_creation;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Classroom::class, inversedBy="lessons")
+     */
+    private $classrooms;
+
+
     public function __construct()
     {
         $this->teachers = new ArrayCollection();
         $this->questionnaires = new ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->classrooms = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -56,14 +63,14 @@ class Lesson
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getTitle(): ?string
     {
-        return $this->name;
+        return $this->title;
     }
 
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -136,6 +143,30 @@ class Lesson
     public function setDateCreation(\DateTimeInterface $date_creation): self
     {
         $this->date_creation = $date_creation;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Classroom[]
+     */
+    public function getClassrooms(): Collection
+    {
+        return $this->classrooms;
+    }
+
+    public function addClassroom(Classroom $classroom): self
+    {
+        if (!$this->classrooms->contains($classroom)) {
+            $this->classrooms[] = $classroom;
+        }
+
+        return $this;
+    }
+
+    public function removeClassroom(Classroom $classroom): self
+    {
+        $this->classrooms->removeElement($classroom);
 
         return $this;
     }

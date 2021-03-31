@@ -15,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  * Class QuestionnaireController
  * This class manage the questionnaires plays
  * @Route ("/questionnaire")
+ * @Security("is_granted('ROLE_STUDENT') or is_granted('ROLE_TEACHER')")
  * @package App\Controller
  */
 class QuestionnaireController extends AbstractController
@@ -40,7 +41,6 @@ class QuestionnaireController extends AbstractController
     /**
      * This methode control the questionnaires gaming
      * @Route("/{id}/play", name="questionnaire_play")
-     * @Security("is_granted('ROLE_STUDENT') or is_granted('ROLE_TEACHER')")
      * @param  Questionnaire  $questionnaire
      * @param  Request  $request
      * @return Response

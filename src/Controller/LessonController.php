@@ -3,17 +3,22 @@
 namespace App\Controller;
 
 use App\Entity\Lesson;
+use App\Form\LessonType;
+use App\Repository\ClassroomRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * Class LessonController
- * This class manage the classrooms
+ * This class manage the lessons
  * @Route("/lesson")
+ * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
  * @package App\Controller
  */
 class LessonController extends AbstractController
@@ -29,27 +34,30 @@ class LessonController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="lesson_index")
+     * @Route("/{id}", name="lesson_index", requirements={"id":"\d+"})
+     * @param \App\Entity\Lesson $lesson
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index(): Response
+    public function index(Lesson $lesson): Response
     {
         return $this->render('lesson/index.html.twig', [
-            'controller_name' => 'LessonController',
+            'lesson' => $lesson,
         ]);
     }
 
     /**
      * Lesson creation
      * @Route("/create", name="lesson_create")
-     * @param Lesson|null $lesson
-     * @param Request $request
-     * @return Response
+     * @ParamConverter("lesson", class="\App\Entity\Lesson")
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function createLesson(?Lesson $lesson, Request $request): Response
+    public function createLesson(Request $request, ClassroomRepository $repository): Response
     {
-        // Check if lesson already exist
-        if (!$lesson) {
-            $lesson = new Lesson();
+        $lesson = new Lesson();
+        $classroom = $repository->findOneById($request->query->get('classroom'));
+        if ($classroom) {
+            $lesson->addClassroom($classroom);
         }
 
         // Add actual date and the user
@@ -64,7 +72,7 @@ class LessonController extends AbstractController
             $this->addFlash('success', 'Module ajouté avec succès.');
 
             return $this->redirectToRoute(
-                'lesson_create',
+                'lesson_index',
                 [
                     'id' => $lesson->getId(),
                 ]
@@ -77,6 +85,64 @@ class LessonController extends AbstractController
                 'lesson' => $lesson,
                 'form' => $form->createView(),
                 'user' => $this->getUser(),
+            ]
+        );
+    }
+
+    /**
+     * @Route ("/lesson/{id}/edit", name="lesson_edit", methods={"GET","POST"})
+     * @param \App\Entity\Lesson $lesson
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function editLesson(Lesson $lesson, Request $request): RedirectResponse
+    {
+        $form = $this->createForm(LessonType::class, $lesson);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->flush();
+            $this->addFlash('success', 'Module modifiée avec succès.');
+
+            return $this->redirectToRoute(
+                'classroom_index',
+                [
+                    'id' => $request->query->get('classroom')
+                ]
+            );
+        }
+
+        return $this->render(
+            'lesson/edit.html.twig',
+            [
+                'lesson' => $lesson,
+                'form' => $form->createView()
+            ]
+        );
+    }
+
+    /**
+     * @Route ("/lesson/{id}/delete", name="lesson_delete", methods={"DELETE"})
+     * @param \App\Entity\Lesson $lesson
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deleteLesson(Lesson $lesson, Request $request): RedirectResponse
+    {
+        // Check the token
+        if ($this->isCsrfTokenValid(
+            'delete' . $lesson->getId(),
+            $request->get('_token')
+        )) {
+            $this->em->remove($lesson);
+            $this->em->flush();
+            $this->addFlash('success', 'Module supprimée avec succès.');
+        }
+
+        return $this->redirectToRoute(
+            'classroom_index',
+            [
+                'id' => $request->query->get('classroom')
             ]
         );
     }

@@ -2,23 +2,23 @@
 
 namespace App\Controller;
 
-use App\Entity\Classroom;
-use App\Entity\Invite;
-use App\Entity\Notification;
 use App\Entity\User;
+use App\Entity\Invite;
 use App\Form\InviteType;
+use App\Entity\Classroom;
+use App\Entity\Notification;
 use App\Form\NotificationType;
 use App\invitation\Invitation;
-use App\Repository\NotificationRepository;
+use Symfony\Component\Form\Form;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Form;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\Repository\NotificationRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class ClassroomController
@@ -41,8 +41,8 @@ class ClassroomController extends AbstractController
     /**
      * This method shows the students and teacher that belongs to the classroom
      * and It allows us to invite new Teachers or students
-     * @Route("/{id}", name="classroom_index")
-     * @IsGranted ("ROLE_USER")
+     * @Route("/{id}", name="classroom_index", requirements={"id":"\d+"})
+     * @IsGranted ("ROLE_ADMIN")
      * @param \App\Entity\Classroom $classroom
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \App\invitation\Invitation $invitation
@@ -50,8 +50,13 @@ class ClassroomController extends AbstractController
      * @param \App\Repository\NotificationRepository $notificationRepository
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function index(Classroom $classroom, Request $request, Invitation $invitation, UserRepository $user, NotificationRepository $notificationRepository): Response
-    {
+    public function index(
+        Classroom $classroom,
+        Request $request,
+        Invitation $invitation,
+        UserRepository $user,
+        NotificationRepository $notificationRepository
+    ): Response {
         $notification = new Notification(); // I create the admin notification
         $notification->setClassroom($classroom);
         $formNotify = $this->createForm(NotificationType::class, $notification);
@@ -70,6 +75,7 @@ class ClassroomController extends AbstractController
                 'classroom' => $classroom,
                 'students' => $classroom->getStudents(),
                 'teachers' => $classroom->getTeachers(),
+                'lessons' => $classroom->getLessons(),
             ]
         );
     }

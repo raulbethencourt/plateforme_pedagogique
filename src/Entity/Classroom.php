@@ -44,11 +44,17 @@ class Classroom
      */
     private $notifications;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Lesson::class, mappedBy="classrooms")
+     */
+    private $lessons;
+
     public function __construct()
     {
         $this->teachers = new ArrayCollection();
         $this->students = new ArrayCollection();
         $this->notifications = new ArrayCollection();
+        $this->lessons = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -151,6 +157,33 @@ class Classroom
             if ($notification->getClassroom() === $this) {
                 $notification->setClassroom(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Lesson[]
+     */
+    public function getLessons(): Collection
+    {
+        return $this->lessons;
+    }
+
+    public function addLesson(Lesson $lesson): self
+    {
+        if (!$this->lessons->contains($lesson)) {
+            $this->lessons[] = $lesson;
+            $lesson->addClassroom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLesson(Lesson $lesson): self
+    {
+        if ($this->lessons->removeElement($lesson)) {
+            $lesson->removeClassroom($this);
         }
 
         return $this;

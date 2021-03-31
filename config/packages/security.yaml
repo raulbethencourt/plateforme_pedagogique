@@ -35,12 +35,15 @@ security:
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
-
             # https://symfony.com/doc/current/security/impersonating_user.html
+
+    # Give ROLE_SUPER_ADMIN same rights as ROLE_ADMIN
+    role_hierarchy:
+        ROLE_SUPER_ADMIN: ROLE_ADMIN
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/user, roles: [ROLE_SUPER_ADMIN, ROLE_ADMIN] }
+        - { path: ^/user, roles: [ROLE_ADMIN] }
         - { path: ^/teacher, roles: ROLE_TEACHER }
         - { path: ^/student, roles: ROLE_STUDENT }
