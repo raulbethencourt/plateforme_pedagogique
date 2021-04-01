@@ -1,8 +1,21 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Créer Module{% endblock %}
+{% block title %}Créer Module
+{% endblock %}
 
 {% block body %}
-    <h1>Créer un module</h1>
-    {{ include('lesson/_form.html.twig', {form: form, button: 'Créer'}) }}
+	{% if classroom %}
+		<div class="row">
+			<div class="col-12 d-flex justify-content-center">
+				<a href="{{ path('list_module', {classroom: classroom.id}) }}" class="btn btn-secondary">importer module existante</a>
+			</div>
+		</div>
+	{% endif %}
+
+	<div class="row">
+		<div class="col-12">
+			<h1>Créer un module</h1>
+			{{ include('lesson/_form.html.twig', {form: form, button: 'Créer'}) }}
+		</div>
+	</div>
 {% endblock %}

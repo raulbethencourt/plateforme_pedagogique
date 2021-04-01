@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Lesson;
 use App\Form\LessonType;
 use App\Repository\ClassroomRepository;
+use App\Repository\LessonRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,11 +43,28 @@ class LessonController extends AbstractController
     {
         return $this->render('lesson/index.html.twig', [
             'lesson' => $lesson,
+            'questionnaires' => $lesson->getQuestionnaires()
         ]);
     }
 
     /**
-     * Lesson creation
+     * @Route("/list", name="list_module")
+     * @param \App\Repository\LessonRepository $repository
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listLesson(LessonRepository $repository, Request $request): Response
+    {
+        $classroom_id = $request->query->get('classroom');
+        $lessons = $repository->findAll();
+
+        return $this->render('lesson/list.html.twig', [
+            'lessons' => $lessons,
+            'classroom_id' => $classroom_id,
+        ]);
+    }
+
+    /**
      * @Route("/create", name="lesson_create")
      * @ParamConverter("lesson", class="\App\Entity\Lesson")
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -82,6 +100,7 @@ class LessonController extends AbstractController
         return $this->render(
             'lesson/new.html.twig',
             [
+                'classroom' => $classroom,
                 'lesson' => $lesson,
                 'form' => $form->createView(),
                 'user' => $this->getUser(),
@@ -90,12 +109,43 @@ class LessonController extends AbstractController
     }
 
     /**
-     * @Route ("/lesson/{id}/edit", name="lesson_edit", methods={"GET","POST"})
-     * @param \App\Entity\Lesson $lesson
+     * Add lesson direct to a class
+     * @Route("/add", name="add_lesson")
+     * @ParamConverter("lesson", class="\App\Entity\Lesson")
+     * @param \App\Repository\LessonRepository $lessonRepo
+     * @param \App\Repository\ClassroomRepository $classroomRepo
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function editLesson(Lesson $lesson, Request $request): RedirectResponse
+    public function addLesson(LessonRepository $lessonRepo, ClassroomRepository $classroomRepo, Request $request): RedirectResponse
+    {
+        // find lesson
+        $lesson_id = $request->query->get('lesson');
+        $lesson = $lessonRepo->findOneById($lesson_id);
+        // find classroom
+        $classroom_id = $request->query->get('classroom');
+        $classroom = $classroomRepo->findOneById($classroom_id);
+
+        $classroom->addLesson($lesson);
+        $this->em->persist($classroom);
+        $this->em->flush();
+        $this->addFlash('success', 'Module ajouté avec succès.');
+
+        return $this->redirectToRoute(
+            'classroom_index',
+            [
+                'id' => $classroom->getId()
+            ]
+        );
+    }
+
+    /**
+     * @Route ("/edit/{id}", name="lesson_edit", methods={"GET","POST"})
+     * @param \App\Entity\Lesson|null $lesson
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editLesson(Lesson $lesson, Request $request): Response
     {
         $form = $this->createForm(LessonType::class, $lesson);
         $form->handleRequest($request);
@@ -122,7 +172,7 @@ class LessonController extends AbstractController
     }
 
     /**
-     * @Route ("/lesson/{id}/delete", name="lesson_delete", methods={"DELETE"})
+     * @Route ("/delete/{id}", name="lesson_delete", methods={"DELETE"})
      * @param \App\Entity\Lesson $lesson
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse

@@ -1,0 +1,9 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Éditer module{% endblock %}
+
+{% block body %}
+    <h1>Éditer le module</h1>
+    {{ include('lesson/_form.html.twig', {form: form, button: 'Éditer'}) }}
+{% endblock %}
+

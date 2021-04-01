@@ -9,8 +9,10 @@ use App\Entity\Classroom;
 use App\Entity\Notification;
 use App\Form\NotificationType;
 use App\invitation\Invitation;
+use App\Repository\ClassroomRepository;
 use Symfony\Component\Form\Form;
 use App\Repository\UserRepository;
+use App\Repository\LessonRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\NotificationRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -155,6 +157,32 @@ class ClassroomController extends AbstractController
             $this->em->flush();
             $this->addFlash('success', 'Notification ajouté avec succès.');
         }
+
+        return $this->redirectToRoute('classroom_index', [
+            'id' => $classroom->getId(),
+        ]);
+    }
+
+    /**
+     * @Route ("/user/{id}/{classroom}/delete", name="user_user_delete", methods={"DELETE"})
+     * @param \App\Repository\LessonRepository $lessonRepo
+     * @param \App\Repository\ClassroomRepository $classroomRepo
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deleteModuleFromClass(LessonRepository $lessonRepo, ClassroomRepository $classroomRepo, Request $request): RedirectResponse
+    {
+        // find lesson
+        $lesson_id = $request->query->get('lesson');
+        $lesson = $lessonRepo->findOneById($lesson_id);
+        // find classroom
+        $classroom_id = $request->query->get('classroom');
+        $classroom = $classroomRepo->findOneById($classroom_id);
+
+        $classroom->removeLesson($lesson);
+        $this->em->persist($classroom);
+        $this->em->flush();
+        $this->addFlash('success', 'Module supprimé avec succès.');
 
         return $this->redirectToRoute('classroom_index', [
             'id' => $classroom->getId(),
