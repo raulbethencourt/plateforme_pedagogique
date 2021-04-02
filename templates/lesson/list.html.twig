@@ -23,7 +23,7 @@
 							<td>{{ lesson.title }}</td>
 							<td>{{ lesson.level}}</td>
 							<td>
-								<a href="{{ path('add_lesson', {lesson: lesson.id, classroom: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+								<a href="{{ path('add_lesson_classroom', {lesson: lesson.id, classroom: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
 							</td>
 						</tr>
 					{% endfor %}

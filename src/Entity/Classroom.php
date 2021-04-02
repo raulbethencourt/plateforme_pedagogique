@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
-use App\Entity\Student;use App\Entity\Teacher;use App\Repository\ClassroomRepository;
+use App\Entity\Student;
+use App\Entity\Teacher;
+use App\Repository\ClassroomRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -45,7 +47,7 @@ class Classroom
     private $notifications;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Lesson::class, mappedBy="classrooms")
+     * @ORM\ManyToMany(targetEntity=Lesson::class, mappedBy="classrooms", cascade={"persist"})
      */
     private $lessons;
 

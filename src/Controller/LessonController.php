@@ -81,6 +81,7 @@ class LessonController extends AbstractController
         // Add actual date and the user
         $lesson->setDateCreation(new \DateTime());
         $lesson->addUser($this->getUser());
+        $lesson->setCreator($this->getUser()->getUsername());
         $form = $this->createForm(LessonType::class, $lesson);
 
         $form->handleRequest($request);
@@ -107,38 +108,7 @@ class LessonController extends AbstractController
             ]
         );
     }
-
-    /**
-     * Add lesson direct to a class
-     * @Route("/add", name="add_lesson")
-     * @ParamConverter("lesson", class="\App\Entity\Lesson")
-     * @param \App\Repository\LessonRepository $lessonRepo
-     * @param \App\Repository\ClassroomRepository $classroomRepo
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     */
-    public function addLesson(LessonRepository $lessonRepo, ClassroomRepository $classroomRepo, Request $request): RedirectResponse
-    {
-        // find lesson
-        $lesson_id = $request->query->get('lesson');
-        $lesson = $lessonRepo->findOneById($lesson_id);
-        // find classroom
-        $classroom_id = $request->query->get('classroom');
-        $classroom = $classroomRepo->findOneById($classroom_id);
-
-        $classroom->addLesson($lesson);
-        $this->em->persist($classroom);
-        $this->em->flush();
-        $this->addFlash('success', 'Module ajouté avec succès.');
-
-        return $this->redirectToRoute(
-            'classroom_index',
-            [
-                'id' => $classroom->getId()
-            ]
-        );
-    }
-
+    
     /**
      * @Route ("/edit/{id}", name="lesson_edit", methods={"GET","POST"})
      * @param \App\Entity\Lesson|null $lesson

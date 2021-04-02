@@ -4,15 +4,17 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Invite;
+use App\Entity\Lesson;
 use App\Form\InviteType;
 use App\Entity\Classroom;
 use App\Entity\Notification;
 use App\Form\NotificationType;
 use App\invitation\Invitation;
-use App\Repository\ClassroomRepository;
+use function DeepCopy\deep_copy;
 use Symfony\Component\Form\Form;
 use App\Repository\UserRepository;
 use App\Repository\LessonRepository;
+use App\Repository\ClassroomRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\NotificationRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * Class ClassroomController
@@ -83,7 +86,7 @@ class ClassroomController extends AbstractController
     }
 
     /**
-     * @Route ("/user/{id}/{classroom}/delete", name="user_user_delete", methods={"DELETE"})
+     * @Route ("/user/{id}/delete", name="user_user_delete", methods={"DELETE"})
      * @param  Request  $request
      * @return RedirectResponse
      */
@@ -99,7 +102,7 @@ class ClassroomController extends AbstractController
             $this->addFlash('success', 'Utilisateur supprimée avec succès.');
         }
 
-        return $this->redirectToRoute('classroom_index', ['id' => $request->attributes->get('classroom')]);
+        return $this->redirectToRoute('classroom_index', ['id' => $request->query->get('classroom')]);
     }
 
     /**
@@ -164,7 +167,40 @@ class ClassroomController extends AbstractController
     }
 
     /**
-     * @Route ("/user/{id}/{classroom}/delete", name="user_user_delete", methods={"DELETE"})
+     * Add lesson direct to a class
+     * @Route("/add", name="add_lesson_classroom")
+     * @ParamConverter("lesson", class="\App\Entity\Lesson")
+     * @param \App\Repository\LessonRepository $lessonRepo
+     * @param \App\Repository\ClassroomRepository $classroomRepo
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function addLessonToClass(LessonRepository $lessonRepo, ClassroomRepository $classroomRepo, Request $request): RedirectResponse
+    {
+        // find lesson
+        $lesson_id = $request->query->get('lesson');
+        $lesson = $lessonRepo->findOneById($lesson_id);
+
+        // find classroom
+        $classroom_id = $request->query->get('classroom');
+        $classroom = $classroomRepo->findOneById($classroom_id);
+        
+        $classroom->addLesson($lesson);
+        $this->em->persist($classroom);
+        $this->em->flush();
+        $this->addFlash('success', 'Module ajouté avec succès.');
+
+        return $this->redirectToRoute(
+            'classroom_index',
+            [
+                'id' => $classroom->getId()
+            ]
+        );
+    }
+
+
+    /**
+     * @Route ("/lesson/{id}/delete", name="delete_lesson_classroom")
      * @param \App\Repository\LessonRepository $lessonRepo
      * @param \App\Repository\ClassroomRepository $classroomRepo
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -173,19 +209,25 @@ class ClassroomController extends AbstractController
     public function deleteModuleFromClass(LessonRepository $lessonRepo, ClassroomRepository $classroomRepo, Request $request): RedirectResponse
     {
         // find lesson
-        $lesson_id = $request->query->get('lesson');
+        $lesson_id = $request->attributes->get('id');
         $lesson = $lessonRepo->findOneById($lesson_id);
         // find classroom
         $classroom_id = $request->query->get('classroom');
         $classroom = $classroomRepo->findOneById($classroom_id);
 
-        $classroom->removeLesson($lesson);
-        $this->em->persist($classroom);
-        $this->em->flush();
-        $this->addFlash('success', 'Module supprimé avec succès.');
+        // Check the token
+        if ($this->isCsrfTokenValid(
+            'delete' . $lesson_id,
+            $request->get('_token')
+        )) {
+            $classroom->removeLesson($lesson);
+            $this->em->persist($classroom);
+            $this->em->flush();
+            $this->addFlash('success', 'Module supprimé avec succès.');
+        }
 
         return $this->redirectToRoute('classroom_index', [
-            'id' => $classroom->getId(),
+            'id' => $classroom_id,
         ]);
     }
 }

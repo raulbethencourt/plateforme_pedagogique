@@ -81,6 +81,11 @@ class Questionnaire implements Serializable
      */
     private $lessons;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $creator;
+
     public const DIFFICULTIES = ["facile", "moyen", "difficile"];
 
     public function __construct()
@@ -298,6 +303,18 @@ class Questionnaire implements Serializable
         if ($this->lessons->removeElement($lesson)) {
             $lesson->removeQuestionnaire($this);
         }
+
+        return $this;
+    }
+
+    public function getCreator(): ?string
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(string $creator): self
+    {
+        $this->creator = $creator;
 
         return $this;
     }
