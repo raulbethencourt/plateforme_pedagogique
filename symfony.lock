@@ -163,9 +163,6 @@
     "monolog/monolog": {
         "version": "2.1.1"
     },
-    "myclabs/deep-copy": {
-        "version": "1.10.2"
-    },
     "nikic/php-parser": {
         "version": "v4.9.1"
     },

@@ -14,7 +14,6 @@
         "friendsofsymfony/rest-bundle": "^3.0",
         "fzaninotto/faker": "^1.5",
         "liip/imagine-bundle": "^2.3",
-        "myclabs/deep-copy": "^1.10",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/apache-pack": "^1.0",
