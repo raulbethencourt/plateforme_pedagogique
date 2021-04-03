@@ -4,9 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Lesson;
 use App\Form\LessonType;
-use App\Repository\ClassroomRepository;
 use App\Repository\LessonRepository;
+use App\Repository\ClassroomRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\QuestionnaireRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,24 +37,31 @@ class LessonController extends AbstractController
 
     /**
      * @Route("/{id}", name="lesson_index", requirements={"id":"\d+"})
+     * @param \App\Repository\ClassroomRepository $repository
+     * @param \Symfony\Component\HttpFoundation\Request $request
      * @param \App\Entity\Lesson $lesson
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index(Lesson $lesson): Response
+    public function index(ClassroomRepository $repository, Request $request, Lesson $lesson): Response
     {
+        $classroom_id = $request->query->get('classroom');
+        $classroom = $repository->findOneById($classroom_id);
+
+
         return $this->render('lesson/index.html.twig', [
             'lesson' => $lesson,
-            'questionnaires' => $lesson->getQuestionnaires()
+            'questionnaires' => $lesson->getQuestionnaires(),
+            'classroom' => $classroom
         ]);
     }
 
     /**
-     * @Route("/list", name="list_module")
+     * @Route("/list", name="list_lessons")
      * @param \App\Repository\LessonRepository $repository
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listLesson(LessonRepository $repository, Request $request): Response
+    public function listLessons(LessonRepository $repository, Request $request): Response
     {
         $classroom_id = $request->query->get('classroom');
         $lessons = $repository->findAll();
@@ -62,6 +70,47 @@ class LessonController extends AbstractController
             'lessons' => $lessons,
             'classroom_id' => $classroom_id,
         ]);
+    }
+
+    /**
+     * Add questionnaire direct to a lesson
+     * @Route("/add", name="add_questionnaire_lesson")
+     * @ParamConverter("questionnaire", class="\App\Entity\Questionnaire")
+     * @param \App\Repository\LessonRepository $lessonRepo
+     * @param \App\Repository\ClassroomRepository $classroomRepo
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function addQuestionnaireToLesson(
+        LessonRepository $lessonRepo,
+        QuestionnaireRepository $questionnaireRepo,
+        ClassroomRepository $classroomRepo,
+        Request $request
+    ): RedirectResponse {
+        // find lesson
+        $lesson_id = $request->query->get('lesson');
+        $lesson = $lessonRepo->findOneById($lesson_id);
+
+        // find questionnaire
+        $questionnaire_id = $request->query->get('questionnaire');
+        $questionnaire = $questionnaireRepo->findOneById($questionnaire_id);
+
+        // find classroom
+        $classroom_id = $request->query->get('classroom');
+        $classroom = $classroomRepo->findOneById($classroom_id);
+
+        $lesson->addQuestionnaire($questionnaire);
+        $this->em->persist($lesson);
+        $this->em->flush();
+        $this->addFlash('success', 'Module ajouté avec succès.');
+
+        return $this->redirectToRoute(
+            'lesson_index',
+            [
+                'id' => $lesson_id,
+                'classroom' => $classroom
+            ]
+        );
     }
 
     /**
@@ -108,7 +157,7 @@ class LessonController extends AbstractController
             ]
         );
     }
-    
+
     /**
      * @Route ("/edit/{id}", name="lesson_edit", methods={"GET","POST"})
      * @param \App\Entity\Lesson|null $lesson

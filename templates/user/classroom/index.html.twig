@@ -170,16 +170,20 @@
 				{% for lesson in lessons %}
 					<div class="card">
 						<div class="card-body">
-							<a href="{{ path('lesson_index', {id: lesson.id}) }}">
+							<a href="{{ path('lesson_index', {id: lesson.id, classroom: classroom.id}) }}">
 								<h4 class="card-title">{{lesson.title}}</h4>
 							</a>
+
 							<h6 class="card-subtitle mb-2 text-muted">{{lesson.level}}</h6>
-							<a href="{{ path('lesson_edit', {id: lesson.id, classroom: classroom.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-							<form method="post" action="{{ path('delete_lesson_classroom', {id: lesson.id, classroom: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-								<input type="hidden" name="_method" value='DELETE'>
-								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
-								<button class="btn btn-danger">Supprimer</button>
-							</form>
+							{% if is_granted('ROLE_ADMIN', app.user) or app.user.username == lesson.creator %}
+								<a href="{{ path('lesson_edit', {id: lesson.id, classroom: classroom.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+
+								<form method="post" action="{{ path('delete_lesson_classroom', {id: lesson.id, classroom: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+									<input type="hidden" name="_method" value='DELETE'>
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
+									<button class="btn btn-danger">Supprimer</button>
+								</form>
+							{% endif %}
 						</div>
 					</div>
 				{% endfor %}

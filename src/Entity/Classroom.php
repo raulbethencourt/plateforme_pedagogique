@@ -50,7 +50,7 @@ class Classroom
      * @ORM\ManyToMany(targetEntity=Lesson::class, mappedBy="classrooms", cascade={"persist"})
      */
     private $lessons;
-
+    
     public function __construct()
     {
         $this->teachers = new ArrayCollection();

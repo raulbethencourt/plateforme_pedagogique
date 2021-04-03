@@ -7,6 +7,7 @@ use App\Entity\Questionnaire;
 use App\Form\QuestionnaireType;
 use App\Repository\LessonRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\QuestionnaireRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -51,21 +52,38 @@ class QuestionnaireController extends AbstractController
     }
 
     /**
+     * @Route("/list", name="list_questionnaires")
+     * @param \App\Repository\QuestionnaireRepository $repository
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listQuestionnaires(QuestionnaireRepository $repository, Request $request): Response
+    {
+        return $this->render('questionnaire/list.html.twig', [
+            'questionnaires' => $repository->findAll(),
+            'lesson_id' =>  $request->query->get('lesson_id'),
+            'classroom' => $request->query->get('classroom_id') 
+        ]);
+    }
+
+    /**
      * @Route("/create", name="questionnaire_create")
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      * @ParamConverter("questionnaire", class="\App\Entity\Questionnaire")
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function createQuestionnaire(Request $request, LessonRepository $repository): Response
+    public function createQuestionnaire(Request $request, LessonRepository $lessonRepo): Response
     {
         $questionnaire = new Questionnaire();
-        
+
         // Add actual date/time and the Lesson in the creation
         // Get the lesson
-        $lesson = $repository->findOneBy(['id' => $request->query->get('lesson')]);
+        $lesson_id = $request->query->get('lesson');
+        $lesson = $lessonRepo->findOneById($lesson_id);
         $questionnaire->addLesson($lesson);
         $questionnaire->setDateCreation(new \DateTime());
+        $questionnaire->setCreator($this->getUser()->getUsername());
         $form = $this->createForm(QuestionnaireType::class, $questionnaire);
 
         $form->handleRequest($request);
@@ -89,6 +107,8 @@ class QuestionnaireController extends AbstractController
                 'questionnaire' => $questionnaire,
                 'form' => $form->createView(),
                 'user' => $this->getUser(),
+                'lesson_id' => $lesson_id,
+                'classroom_id' => $request->query->get('classroom')
             ]
         );
     }
@@ -96,10 +116,10 @@ class QuestionnaireController extends AbstractController
     /**
      * @Route ("/{id}", name="questionnaire_edit", methods={"GET","POST"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
-      * @param \App\Entity\Questionnaire $questionnaire
-      * @param \Symfony\Component\HttpFoundation\Request $request
-      * @return \Symfony\Component\HttpFoundation\Response
-      */
+     * @param \App\Entity\Questionnaire $questionnaire
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function editQuestionnaire(Questionnaire $questionnaire, Request $request): Response
     {
         $questionnaire->addLesson($this->getUser());
@@ -146,7 +166,7 @@ class QuestionnaireController extends AbstractController
             $this->addFlash('success', 'Questionnaire supprimé avec succès.');
         }
 
-        return $this->redirectToRoute('teacher_index');
+        return $this->redirectToRoute('lesson_index');
     }
 
 

@@ -61,5 +61,5 @@
 	</table>
 
 	<div class="text-right">
-		<a href="{{ path('questionnaire_create', {lesson: lesson.id}) }}" class="btn btn-primary">Créer activité</a>
+		<a href="{{ path('questionnaire_create', {lesson: lesson.id, classroom: classroom.id}) }}" class="btn btn-primary">Créer activité</a>
 	{% endblock %}

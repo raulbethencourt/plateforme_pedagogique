@@ -184,7 +184,7 @@ class ClassroomController extends AbstractController
         // find classroom
         $classroom_id = $request->query->get('classroom');
         $classroom = $classroomRepo->findOneById($classroom_id);
-        
+
         $classroom->addLesson($lesson);
         $this->em->persist($classroom);
         $this->em->flush();
@@ -193,7 +193,7 @@ class ClassroomController extends AbstractController
         return $this->redirectToRoute(
             'classroom_index',
             [
-                'id' => $classroom->getId()
+                'id' => $classroom_id
             ]
         );
     }
@@ -206,7 +206,7 @@ class ClassroomController extends AbstractController
      * @param \Symfony\Component\HttpFoundation\Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteModuleFromClass(LessonRepository $lessonRepo, ClassroomRepository $classroomRepo, Request $request): RedirectResponse
+    public function deleteLessonFromClass(LessonRepository $lessonRepo, ClassroomRepository $classroomRepo, Request $request): RedirectResponse
     {
         // find lesson
         $lesson_id = $request->attributes->get('id');
