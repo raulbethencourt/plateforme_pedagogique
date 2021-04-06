@@ -26,14 +26,21 @@
 									{{ lesson.title }}
 								</a>
 							</td>
-
-							{# TODO suprimmer lesson #}
 							<td>{{ lesson.level}}</td>
-							{% if classroom_id is defined and classroom_id is not null %}
-								<td>
+							<td>
+								{% if is_granted('ROLE_ADMIN') or app.user.username == lesson.creator %}
+									<a href="{{ path('lesson_edit', {id: lesson.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+									<form method="post" action="{{ path('lesson_delete', {id: lesson.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+										<input type="hidden" name="_method" value='DELETE'>
+										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
+										<button class="btn btn-danger">Supprimer</button>
+									</form>
+								{% endif %}
+
+								{% if classroom_id is defined and classroom_id is not null %}
 									<a href="{{ path('add_lesson_classroom', {lesson: lesson.id, classroom: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
-								</td>
-							{% endif %}
+								{% endif %}
+							</td>
 						</tr>
 					{% endfor %}
 				</tbody>
