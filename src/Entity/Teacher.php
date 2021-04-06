@@ -25,7 +25,6 @@ class Teacher extends User
     public function __construct()
     {
         $this->classrooms = new ArrayCollection();
-        $this->lessons = new ArrayCollection();
     }
 
     public function getClassrooms(): Collection

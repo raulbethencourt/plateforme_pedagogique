@@ -1,55 +1,54 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ questionnaire.title }}{% endblock %}
+{% block title %}
+	{{ questionnaire.title }}
+{% endblock %}
 
 {% block body %}
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success mr-2 mb-0">
-            {{ message }}
-        </div>
-    {% endfor %}
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success mr-2 mb-0">
+			{{ message }}
+		</div>
+	{% endfor %}
 
-    <h1>{{ questionnaire.title }}</h1>
-    <h3>Liste des questions</h3>
-    <table class="table border-bottom">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col"></th>
-            <th scope="col">Titre</th>
-            <th scope="col">Réponses</th>
-            <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for question in questionnaire.questions %}
-            <tr>
-                <th scope="row">{{ loop.index }}</th>
-                <td>{{ question.title }}</td>
-                <td>
-                    {% for proposition in question.propositions %}
-                        {% if proposition.correct %}
-                            <span class="badge badge-pill badge-success p-2 mb-2">{{ proposition.text }}</span>
-                        {% else %}
-                            <span class="badge badge-pill badge-info p-2 mb-2">{{ proposition.text }}</span>
-                        {% endif %}
-                    {% endfor %}
-                </td>
-                <td>
-                    <a href="{{ path('question_edit', {id: question.id}) }}" class="btn btn-secondary mb-2"
-                       role="button">Éditer</a>
-                    <form method="post" action="{{ path('question_delete', {id: question.id}) }}"
-                          style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-                        <input type="hidden" name="_method" value='DELETE'>
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">
-                        <button class="btn btn-danger mb-2">Supprimer</button>
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <div class="text-right">
-        <a href="{{ path('question_create', {id: questionnaire.id}) }}"
-           class="btn btn-primary">Ajouter question</a>
-    </div>
+	<h1>{{ questionnaire.title }}</h1>
+	<h3>Liste des questions</h3>
+	<table class="table border-bottom">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col"></th>
+				<th scope="col">Titre</th>
+				<th scope="col">Réponses</th>
+				<th scope="col"></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for question in questionnaire.questions %}
+				<tr>
+					<th scope="row">{{ loop.index }}</th>
+					<td>{{ question.title }}</td>
+					<td>
+						{% for proposition in question.propositions %}
+							{% if proposition.correct %}
+								<span class="badge badge-pill badge-success p-2 mb-2">{{ proposition.text }}</span>
+							{% else %}
+								<span class="badge badge-pill badge-info p-2 mb-2">{{ proposition.text }}</span>
+							{% endif %}
+						{% endfor %}
+					</td>
+					<td>
+						<a href="{{ path('question_edit', {id: question.id, questionnaire: questionnaire.id}) }}" class="btn btn-secondary mb-2" role="button">Éditer</a>
+						<form method="post" action="{{ path('question_delete', {id: question.id, questionnaire: questionnaire.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+							<input type="hidden" name="_method" value='DELETE'>
+							<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">
+							<button class="btn btn-danger mb-2">Supprimer</button>
+						</form>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<div class="text-right">
+		<a href="{{ path('question_create', {id: questionnaire.id}) }}" class="btn btn-primary">Ajouter question</a>
+	</div>
 {% endblock %}

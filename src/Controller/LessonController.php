@@ -2,24 +2,27 @@
 
 namespace App\Controller;
 
+use App\Entity\Classroom;
 use App\Entity\Lesson;
 use App\Form\LessonType;
 use App\Repository\ClassroomRepository;
+use App\Repository\LessonRepository;
+use App\Repository\QuestionnaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * Class LessonController
- * This class manage the lessons
+ * This class manage the lessons.
+ *
  * @Route("/lesson")
  * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
- * @package App\Controller
  */
 class LessonController extends AbstractController
 {
@@ -34,35 +37,52 @@ class LessonController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="lesson_index", requirements={"id":"\d+"})
-     * @param \App\Entity\Lesson $lesson
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/{id}", name="lesson_index", requirements={"id": "\d+"})
      */
-    public function index(Lesson $lesson): Response
+    public function index(ClassroomRepository $repository, Request $request, Lesson $lesson, Classroom $classroom = null): Response
     {
+        $this->em->find('Classroom', )
+        $classroom_id = $request->query->get('classroom_id');
+        $classroom = $repository->findOneById($classroom_id);
+
         return $this->render('lesson/index.html.twig', [
             'lesson' => $lesson,
+            'questionnaires' => $lesson->getQuestionnaires(),
+            'classroom' => $classroom,
         ]);
     }
 
     /**
-     * Lesson creation
+     * @Route("/list", name="list_lessons")
+     */
+    public function listLessons(LessonRepository $repository, Request $request): Response
+    {
+        $classroom_id = $request->query->get('classroom_id');
+        $lessons = $repository->findAll();
+
+        return $this->render('lesson/list.html.twig', [
+            'lessons' => $lessons,
+            'classroom_id' => $classroom_id,
+        ]);
+    }
+
+    /**
      * @Route("/create", name="lesson_create")
      * @ParamConverter("lesson", class="\App\Entity\Lesson")
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function createLesson(Request $request, ClassroomRepository $repository): Response
     {
         $lesson = new Lesson();
-        $classroom = $repository->findOneById($request->query->get('classroom'));
-        if ($classroom) {
+        $classroom_id = $request->query->get('classroom_id');
+        $classroom = $repository->findOneById($classroom_id);
+        if (isset($classroom)) {
             $lesson->addClassroom($classroom);
         }
 
         // Add actual date and the user
         $lesson->setDateCreation(new \DateTime());
         $lesson->addUser($this->getUser());
+        $lesson->setCreator($this->getUser()->getUsername());
         $form = $this->createForm(LessonType::class, $lesson);
 
         $form->handleRequest($request);
@@ -71,17 +91,23 @@ class LessonController extends AbstractController
             $this->em->flush();
             $this->addFlash('success', 'Module ajouté avec succès.');
 
-            return $this->redirectToRoute(
-                'lesson_index',
-                [
-                    'id' => $lesson->getId(),
-                ]
-            );
+            if (isset($classroom)) {
+                return $this->redirectToRoute(
+                    'lesson_index',
+                    [
+                        'id' => $lesson->getId(),
+                        'classroom' => $classroom_id,
+                    ]
+                );
+            }
+
+            return $this->redirectToRoute('toolbox_index');
         }
 
         return $this->render(
             'lesson/new.html.twig',
             [
+                'classroom' => $classroom,
                 'lesson' => $lesson,
                 'form' => $form->createView(),
                 'user' => $this->getUser(),
@@ -90,12 +116,12 @@ class LessonController extends AbstractController
     }
 
     /**
-     * @Route ("/lesson/{id}/edit", name="lesson_edit", methods={"GET","POST"})
-     * @param \App\Entity\Lesson $lesson
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @Route("/edit/{id}", name="lesson_edit", methods={"GET", "POST"})
+     * @ParamConverter("lesson", class="\App\Entity\Lesson")
+     *
+     * @param \App\Entity\Lesson|null $lesson
      */
-    public function editLesson(Lesson $lesson, Request $request): RedirectResponse
+    public function editLesson(Lesson $lesson, Request $request): Response
     {
         $form = $this->createForm(LessonType::class, $lesson);
         $form->handleRequest($request);
@@ -104,34 +130,27 @@ class LessonController extends AbstractController
             $this->em->flush();
             $this->addFlash('success', 'Module modifiée avec succès.');
 
-            return $this->redirectToRoute(
-                'classroom_index',
-                [
-                    'id' => $request->query->get('classroom')
-                ]
-            );
+            return $this->redirectToRoute('toolbox_index');
         }
 
         return $this->render(
             'lesson/edit.html.twig',
             [
                 'lesson' => $lesson,
-                'form' => $form->createView()
+                'form' => $form->createView(),
             ]
         );
     }
 
     /**
-     * @Route ("/lesson/{id}/delete", name="lesson_delete", methods={"DELETE"})
-     * @param \App\Entity\Lesson $lesson
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @Route("/delete/{id}", name="lesson_delete", methods={"DELETE"})
+     * @ParamConverter("lesson", class="\App\Entity\Lesson")
      */
     public function deleteLesson(Lesson $lesson, Request $request): RedirectResponse
     {
         // Check the token
         if ($this->isCsrfTokenValid(
-            'delete' . $lesson->getId(),
+            'delete'.$lesson->getId(),
             $request->get('_token')
         )) {
             $this->em->remove($lesson);
@@ -139,11 +158,76 @@ class LessonController extends AbstractController
             $this->addFlash('success', 'Module supprimée avec succès.');
         }
 
+        return $this->redirectToRoute('list_lesson');
+    }
+
+    /**
+     * Add questionnaire direct to a lesson.
+     *
+     * @Route("/questionnaire/add", name="add_questionnaire_lesson")
+     * @ParamConverter("questionnaire", class="\App\Entity\Questionnaire")
+     */
+    public function addQuestionnaireToLesson(
+        LessonRepository $lessonRepo,
+        QuestionnaireRepository $questionnaireRepo,
+        ClassroomRepository $classroomRepo,
+        Request $request
+    ): RedirectResponse {
+        // find lesson
+        $lesson_id = $request->query->get('lesson');
+        $lesson = $lessonRepo->findOneById($lesson_id);
+
+        // find questionnaire
+        $questionnaire_id = $request->query->get('questionnaire');
+        $questionnaire = $questionnaireRepo->findOneById($questionnaire_id);
+
+        // find classroom
+        $classroom_id = $request->query->get('classroom');
+
+        $lesson->addQuestionnaire($questionnaire);
+        $this->em->persist($lesson);
+        $this->em->flush();
+        $this->addFlash('success', 'Module ajouté avec succès.');
+
         return $this->redirectToRoute(
-            'classroom_index',
+            'lesson_index',
             [
-                'id' => $request->query->get('classroom')
+                'id' => $lesson_id,
+                'classroom' => $classroom_id,
             ]
         );
+    }
+
+    /**
+     * @Route("/questionnaire/{id}/delete", name="delete_questionnaire_lesson", methods={"DELETE"})
+     */
+    public function deleteQuestionnaireFromLesson(LessonRepository $lessonRepo, QuestionnaireRepository $questionnaireRepo, Request $request): RedirectResponse
+    {
+        // find questionnaire
+        $questionnaire_id = $request->attributes->get('id');
+        $questionnaire = $questionnaireRepo->findOneById($questionnaire_id);
+
+        // find lesson
+        $lesson_id = $request->query->get('lesson_id');
+        $lesson = $lessonRepo->findOneById($lesson_id);
+
+        // find classroom
+        $classroom_id = $request->query->get('classroom_id');
+
+        // Check the token
+        if ($this->isCsrfTokenValid(
+            'delete'.$lesson_id,
+            $request->get('_token')
+        )) {
+            $lesson->removeQuestionnaire($questionnaire);
+            $this->em->persist($lesson);
+            $this->em->flush();
+            $this->addFlash('success', 'Activité supprimé avec succès.');
+        }
+
+        return $this->redirectToRoute('lesson_index', [
+            'id' => $lesson_id,
+            'classroom_id' => $classroom_id,
+        ]);
     }
 }

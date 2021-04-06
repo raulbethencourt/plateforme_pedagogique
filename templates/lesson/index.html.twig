@@ -1,48 +1,69 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{lesson.title}}{% endblock %}
+{% block title %}
+	{{lesson.title}}
+{% endblock %}
 
 {% block body %}
-{% for message in app.flashes('success') %}
-        <div class="alert alert-success mr-2 mb-0">
-            {{ message }}
-        </div>
-    {% endfor %}
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success mr-2 mb-0">
+			{{ message }}
+		</div>
+	{% endfor %}
 
-    <h1>{{ lesson.title }}</h1>
-    <h3>Liste des activites</h3>
-    <table class="table border-bottom">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col"></th>
-            <th scope="col">Titre</th>
-            <th scope="col">Réponses</th>
-            <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for questionnaire in lesson.questionnaires %}
-            <tr>
-                <th scope="row">{{ loop.index }}</th>
-                <td>{{ questionnaire.title }}</td>
-                <td>
-                </td>
-                <td>
-                    {# <a href="{{ path('question_edit', {id: question.id}) }}" class="btn btn-secondary mb-2"
-                       role="button">Éditer</a>
-                    <form method="post" action="{{ path('question_delete', {id: question.id}) }}"
-                          style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-                        <input type="hidden" name="_method" value='DELETE'>
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">
-                        <button class="btn btn-danger mb-2">Supprimer</button>
-                    </form> #}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    {# <div class="text-right">
-        <a href="{{ path('question_create', {id: questionnaire.id}) }}"
-           class="btn btn-primary">Ajouter question</a>
-    </div> #}
+	<h1>{{ lesson.title }}</h1>
+
+	<h3>Liste des activites</h3>
+
+	<table class="table border-bottom">
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col"></th>
+				<th scope="col">Titre</th>
+				<th scope="col">Niveau</th>
+				<th scope="col"></th>
+			</tr>
+		</thead>
+
+		<tbody>
+			{% for questionnaire in questionnaires %}
+				<tr>
+					<th scope="row">{{ loop.index }}</th>
+					<td>
+						<a href="{{ path('questionnaire_index', {id: questionnaire.id}) }}" role="button">{{ questionnaire.title }}</a>
+					</td>
+					{% if questionnaire.difficulty == 'facile' %}
+						<td>
+							<span class="badge badge-pill badge-success p-2">{{ questionnaire.difficulty }}</span>
+						</td>
+					{% elseif questionnaire.difficulty == 'difficile' %}
+						<td>
+							<span class="badge badge-pill badge-difficile p-2">{{ questionnaire.difficulty }}</span>
+						</td>
+					{% else %}
+						<td>
+							<span class="badge badge-pill badge-secondary p-2">{{ questionnaire.difficulty }}</span>
+						</td>
+					{% endif %}
+
+					<td class="d-flex justify-content-end">
+						{% if classroom is null %}
+							<a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+							<form method="post" action="{{ path('questionnaire_delete', {id: questionnaire.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+								<input type="hidden" name="_method" value='DELETE'>
+								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ questionnaire.id) }}">
+								<button class="btn btn-danger mr-2">Supprimer</button>
+							</form>
+						{% endif %}
+						<a href="{{ path('questionnaire_play', {id: questionnaire.id}) }}" class="btn btn-success mr-2" role="button">Jouer</a>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	{% if classroom is null %}
+		<div class="text-right">
+			<a href="{{ path('questionnaire_create', {lesson_id: lesson.id}) }}" class="btn btn-primary">Créer activité</a>
+		</div>
+	{% endif %}
 {% endblock %}

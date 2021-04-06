@@ -49,10 +49,14 @@ class Lesson
      */
     private $classrooms;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $creator;
+
 
     public function __construct()
     {
-        $this->teachers = new ArrayCollection();
         $this->questionnaires = new ArrayCollection();
         $this->users = new ArrayCollection();
         $this->classrooms = new ArrayCollection();
@@ -167,6 +171,18 @@ class Lesson
     public function removeClassroom(Classroom $classroom): self
     {
         $this->classrooms->removeElement($classroom);
+
+        return $this;
+    }
+
+    public function getCreator(): ?string
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(string $creator): self
+    {
+        $this->creator = $creator;
 
         return $this;
     }

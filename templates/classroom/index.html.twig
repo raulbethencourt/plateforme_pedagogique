@@ -114,7 +114,7 @@
 							<td>{{ teacher.surname }}</td>
 							<td>{{ teacher.subject }}</td>
 							<td>
-								<form method="post" action="{{ path('user_user_delete', {id: teacher.id, classroom: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+								<form method="post" action="{{ path('delete_user_classroom', {id: teacher.id, classroom_id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 									<input type="hidden" name="_method" value='DELETE'>
 									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ teacher.id) }}">
 									<button class="btn btn-danger">Supprimer</button>
@@ -150,7 +150,7 @@
 							<td>{{ student.surname }}</td>
 							<td>{{ student.hobby }}</td>
 							<td>
-								<form method="post" action="{{ path('user_user_delete', {id: student.id, classroom: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+								<form method="post" action="{{ path('delete_user_classroom', {id: student.id, classroom_id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 									<input type="hidden" name="_method" value='DELETE'>
 									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ student.id) }}">
 									<button class="btn btn-danger">Supprimer</button>
@@ -165,14 +165,17 @@
 
 	<div class="row">
 		<div class="col-12 d-flex flex-column align-items-center">
-			<a href="{{ path('lesson_create', {classroom: classroom.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter Module</a>
+			<a href="{{ path('lesson_create', {classroom_id: classroom.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter Module</a>
 			<div class="d-flex flex-wrap">
 				{% for lesson in lessons %}
 					<div class="card">
 						<div class="card-body">
-							<h4 class="card-title">{{lesson.title}}</h4>
-							<a href="{{ path('lesson_edit', {id: lesson.id, classroom: classroom.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-							<form method="post" action="{{ path('lesson_delete', {id: lesson.id, classroom: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+							<a href="{{ path('lesson_index', {id: lesson.id, classroom_id: classroom.id}) }}">
+								<h4 class="card-title">{{lesson.title}}</h4>
+							</a>
+
+							<h6 class="card-subtitle mb-2 text-muted">{{lesson.level}}</h6>
+							<form method="post" action="{{ path('delete_lesson_classroom', {id: lesson.id, classroom_id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 								<input type="hidden" name="_method" value='DELETE'>
 								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
 								<button class="btn btn-danger">Supprimer</button>
