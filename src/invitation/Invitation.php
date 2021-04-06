@@ -7,6 +7,7 @@ use App\Entity\Student;
 use App\Entity\Teacher;
 use App\Entity\Classroom;
 use Symfony\Component\Mime\Address;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,9 +25,15 @@ class Invitation extends AbstractController
      */
     private $mailer;
 
-    public function __construct(MailerInterface $mailer)
+    /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+
+    public function __construct(MailerInterface $mailer, EntityManagerInterface $em)
     {
         $this->mailer = $mailer;
+        $this->em = $em;
     }
 
     /**
@@ -38,12 +45,14 @@ class Invitation extends AbstractController
     public function invite($data, Classroom $classroom = null, $user = null): void
     {
         if (isset($user)) {
-            if ($user->getRoles()[0] === 'ROLE_TEACHER' || $user->getRoles()[0] === 'ROLE_STUDENT') {
-                $user = $user->addClassrooms($classroom);
+            if ($user->getRoles()[0] === 'ROLE_STUDENT') {
+                $classroom->addStudent($user);
+            } else {
+                $classroom->addTeacher($user);
             }
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $this->em->persist($classroom);
+            $this->em->flush();
+            $this->addFlash('success', 'Utilisateur ajouté dans la classe avec succès.');
             $this->email('emails/old_invitation.html.twig', $data, $classroom);
         } else {
             // If the user is not in the data base

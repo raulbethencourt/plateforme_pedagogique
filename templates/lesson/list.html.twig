@@ -16,15 +16,24 @@
 						<th scope="col"></th>
 					</tr>
 				</thead>
+
 				<tbody>
 					{% for lesson in lessons %}
 						<tr>
 							<th scope="row">{{ loop.index }}</th>
-							<td>{{ lesson.title }}</td>
-							<td>{{ lesson.level}}</td>
 							<td>
-								<a href="{{ path('add_lesson_classroom', {lesson: lesson.id, classroom: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+								<a href="{{ path('lesson_index', {id: lesson.id, classroom_id: classroom_id}) }}">
+									{{ lesson.title }}
+								</a>
 							</td>
+
+							{# TODO suprimmer lesson #}
+							<td>{{ lesson.level}}</td>
+							{% if classroom_id is defined and classroom_id is not null %}
+								<td>
+									<a href="{{ path('add_lesson_classroom', {lesson: lesson.id, classroom: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+								</td>
+							{% endif %}
 						</tr>
 					{% endfor %}
 				</tbody>

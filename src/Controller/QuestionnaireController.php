@@ -59,10 +59,11 @@ class QuestionnaireController extends AbstractController
      */
     public function listQuestionnaires(QuestionnaireRepository $repository, Request $request): Response
     {
+        //TODO organaise add questionnaire to lesson
         return $this->render('questionnaire/list.html.twig', [
             'questionnaires' => $repository->findAll(),
-            'lesson_id' =>  $request->query->get('lesson_id'),
-            'classroom' => $request->query->get('classroom_id') 
+            'lesson_id' => $request->query->get('lesson_id'),
+            'classroom' => $request->query->get('classroom_id')
         ]);
     }
 
@@ -133,7 +134,7 @@ class QuestionnaireController extends AbstractController
             $this->addFlash('success', 'Questionnaire modifié avec succès.');
 
             return $this->redirectToRoute(
-                'teacher_index',
+                'lesson_index',
                 [
                     'id' => $questionnaire->getId(),
                 ]
@@ -169,7 +170,6 @@ class QuestionnaireController extends AbstractController
         return $this->redirectToRoute('lesson_index');
     }
 
-
     /**
      * This methode control the questionnaires gaming
      * @Route("/{id}/play", name="questionnaire_play")
@@ -184,7 +184,7 @@ class QuestionnaireController extends AbstractController
         if (!$questionnaire->isPlayable()) {
             $this->addFlash('error', 'Questionnaire indisponible !');
             return $this->redirectToRoute('student_index');
-            // TODO mirar si es un estudiante o un profesor que juega 
+            // TODO mirar si es un estudiante o un profesor que juega
         }
 
         // Creates the variables that I'm gonna need later on
@@ -192,7 +192,7 @@ class QuestionnaireController extends AbstractController
         $rights = null;
         $points = null;
 
-        if ($request->isMethod("post")) {
+        if ($request->isMethod('post')) {
             $answers = $request->request; //equivalent à $_POST
 
             $eval = $this->evaluateQuestionnaire($answers, $questionnaire);
@@ -201,7 +201,7 @@ class QuestionnaireController extends AbstractController
 
             $em = $this->getDoctrine()->getManager();
             $pass = $em->getRepository(Pass::class)->findOneBy(
-                ['student' => $this->getUser(), "questionnaire" => $questionnaire]
+                ['student' => $this->getUser(), 'questionnaire' => $questionnaire]
             );
 
             if (!$pass) {
@@ -219,12 +219,12 @@ class QuestionnaireController extends AbstractController
         return $this->render(
             'questionnaire/play.html.twig',
             [
-                "questionnaire" => $questionnaire,
-                "questions" => $questionnaire->getQuestions(),
-                "points" => $points,
-                "finalResults" => [
-                    "given" => $answers,
-                    "rights" => $rights,
+                'questionnaire' => $questionnaire,
+                'questions' => $questionnaire->getQuestions(),
+                'points' => $points,
+                'finalResults' => [
+                    'given' => $answers,
+                    'rights' => $rights,
                 ],
                 'user' => $this->getUser(),
             ]
@@ -257,6 +257,6 @@ class QuestionnaireController extends AbstractController
             }
         }
 
-        return ["corrects" => $correctPropositions, "points" => $points];
+        return ['corrects' => $correctPropositions, 'points' => $points];
     }
 }

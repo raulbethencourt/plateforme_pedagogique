@@ -41,10 +41,14 @@ class UserController extends AbstractController
      * @param  ClassroomRepository  $repository
      * @return ResponseAlias
      */
-    public function index(ClassroomRepository $classroomRepository, UserRepository $adminsRepository,  Request $request, Invitation $invitation): Response
-    {
+    public function index(
+        ClassroomRepository $classroomRepository,
+        UserRepository $adminsRepository,
+        Request $request,
+        Invitation $invitation
+    ): Response {
         $classrooms = $classroomRepository->findAll();
-        $admins = $adminsRepository->findByRoleAdmin('ROLE_ADMIN');
+        $admins = $adminsRepository->findByRole('ROLE_ADMIN');
         $user = $this->getUser();
         $invite = new Invite(); // We invite a new teacher or student
 
@@ -67,6 +71,40 @@ class UserController extends AbstractController
                 'form' => $form->createView()
             ]
         );
+    }
+
+    /**
+     * @Route("/list", name="user_list")
+     */
+    public function listUser(UserRepository $userRepo): Response
+    {
+        $teachers = $userRepo->findByRole('ROLE_TEACHER');
+        $students = $userRepo->findByRole('ROLE_STUDENT');
+
+        return $this->render('user/list.html.twig', [
+            'teachers' => $teachers,
+            'students' => $students
+        ]);
+    }
+
+    /**
+     * @Route ("/{id}/delete", name="user_delete", methods={"DELETE"})
+     * @param  Request  $request
+     * @return RedirectResponse
+     */
+    public function deleteUser(User $user, Request $request): RedirectResponse
+    {
+        // Check the token
+        if ($this->isCsrfTokenValid(
+            'delete' . $user->getId(),
+            $request->get('_token')
+        )) {
+            $this->em->remove($user);
+            $this->em->flush();
+            $this->addFlash('success', 'Utilisateur supprimée avec succès.');
+        }
+
+        return $this->redirectToRoute('user_list');
     }
 
     /**
@@ -114,7 +152,7 @@ class UserController extends AbstractController
         }
 
         return $this->render(
-            'user/classroom/create.html.twig',
+            'classroom/create.html.twig',
             [
                 'classrooms' => $classroom,
                 'form' => $form->createView(),
@@ -141,7 +179,7 @@ class UserController extends AbstractController
         }
 
         return $this->render(
-            'user/classroom/edit.html.twig',
+            'classroom/edit.html.twig',
             [
                 'classroom' => $classroom,
                 'form' => $form->createView(),

@@ -1,0 +1,92 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Liste des utilisateurs
+{% endblock %}
+
+{% block body %}
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success mr-2 mb-0">
+			{{ message }}
+		</div>
+	{% endfor %}
+
+	<div class="row">
+		<div class="col-12">
+			<h1>Liste des utilisateurs</h1>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-12">
+			<div class="d-flex align-items-center">
+				<h3>
+					<span class="badge badge-pill badge-secondary text-white">Formateur(s)</span>
+				</h3>
+			</div>
+			<table class="table border-bottom">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col"></th>
+						<th scope="col">Prénom</th>
+						<th scope="col">Nom</th>
+						<th scope="col">Matière(s)</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for teacher in teachers %}
+						<tr>
+							<th scope="row">{{ loop.index }}</th>
+							<td>{{ teacher.name }}</td>
+							<td>{{ teacher.surname }}</td>
+							<td>{{ teacher.subject }}</td>
+							<td>
+								<form method="post" action="{{ path('user_delete', {id: teacher.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+									<input type="hidden" name="_method" value='DELETE'>
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ teacher.id) }}">
+									<button class="btn btn-danger">Supprimer</button>
+								</form>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-12">
+			<h3>
+				<span class="badge badge-pill badge-secondary text-white">Étudiant(s)</span>
+			</h3>
+			<table class="table border-bottom">
+				<thead class="thead-dark ">
+					<tr>
+						<th scope="col"></th>
+						<th scope="col">Prénom</th>
+						<th scope="col">Nom</th>
+						<th scope="col">Loisirs</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for student in students %}
+						<tr>
+							<th scope="row">{{ loop.index }}</th>
+							<td>{{ student.name }}</td>
+							<td>{{ student.surname }}</td>
+							<td>{{ student.hobby }}</td>
+							<td>
+								<form method="post" action="{{ path('user_delete', {id: student.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+									<input type="hidden" name="_method" value='DELETE'>
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ student.id) }}">
+									<button class="btn btn-danger">Supprimer</button>
+								</form>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+{% endblock %}

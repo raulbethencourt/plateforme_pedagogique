@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}boîte à outils
+{% endblock %}
+
+{% block body %}
+	<div class="row">
+		<div class="col-12 d-flex justify-content-center">
+			<h1>
+				<span class="badge badge-pill badge-info text-white">Boîte à outils</span>
+			</h1>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-12">
+			<a href="{{path('list_lessons')}}" class="btn btn-secondary">List des Modules</a>
+			<a href="{{path('list_questionnaires')}}" class="btn btn-secondary">List des activites</a>
+		</div>
+	</div>
+{% endblock %}

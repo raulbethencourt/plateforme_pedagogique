@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Lesson;
 use App\Form\LessonType;
+use App\Entity\Classroom;
 use App\Repository\LessonRepository;
 use App\Repository\ClassroomRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -42,11 +43,10 @@ class LessonController extends AbstractController
      * @param \App\Entity\Lesson $lesson
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index(ClassroomRepository $repository, Request $request, Lesson $lesson): Response
+    public function index(ClassroomRepository $repository, Request $request, Lesson $lesson, Classroom $classroom = null): Response
     {
-        $classroom_id = $request->query->get('classroom');
+        $classroom_id = $request->query->get('classroom_id');
         $classroom = $repository->findOneById($classroom_id);
-
 
         return $this->render('lesson/index.html.twig', [
             'lesson' => $lesson,
@@ -63,54 +63,13 @@ class LessonController extends AbstractController
      */
     public function listLessons(LessonRepository $repository, Request $request): Response
     {
-        $classroom_id = $request->query->get('classroom');
+        $classroom_id = $request->query->get('classroom_id');
         $lessons = $repository->findAll();
 
         return $this->render('lesson/list.html.twig', [
             'lessons' => $lessons,
             'classroom_id' => $classroom_id,
         ]);
-    }
-
-    /**
-     * Add questionnaire direct to a lesson
-     * @Route("/add", name="add_questionnaire_lesson")
-     * @ParamConverter("questionnaire", class="\App\Entity\Questionnaire")
-     * @param \App\Repository\LessonRepository $lessonRepo
-     * @param \App\Repository\ClassroomRepository $classroomRepo
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     */
-    public function addQuestionnaireToLesson(
-        LessonRepository $lessonRepo,
-        QuestionnaireRepository $questionnaireRepo,
-        ClassroomRepository $classroomRepo,
-        Request $request
-    ): RedirectResponse {
-        // find lesson
-        $lesson_id = $request->query->get('lesson');
-        $lesson = $lessonRepo->findOneById($lesson_id);
-
-        // find questionnaire
-        $questionnaire_id = $request->query->get('questionnaire');
-        $questionnaire = $questionnaireRepo->findOneById($questionnaire_id);
-
-        // find classroom
-        $classroom_id = $request->query->get('classroom');
-        $classroom = $classroomRepo->findOneById($classroom_id);
-
-        $lesson->addQuestionnaire($questionnaire);
-        $this->em->persist($lesson);
-        $this->em->flush();
-        $this->addFlash('success', 'Module ajouté avec succès.');
-
-        return $this->redirectToRoute(
-            'lesson_index',
-            [
-                'id' => $lesson_id,
-                'classroom' => $classroom
-            ]
-        );
     }
 
     /**
@@ -122,8 +81,9 @@ class LessonController extends AbstractController
     public function createLesson(Request $request, ClassroomRepository $repository): Response
     {
         $lesson = new Lesson();
-        $classroom = $repository->findOneById($request->query->get('classroom'));
-        if ($classroom) {
+        $classroom_id = $request->query->get('classroom_id');
+        $classroom = $repository->findOneById($classroom_id);
+        if (isset($classroom)) {
             $lesson->addClassroom($classroom);
         }
 
@@ -139,12 +99,17 @@ class LessonController extends AbstractController
             $this->em->flush();
             $this->addFlash('success', 'Module ajouté avec succès.');
 
-            return $this->redirectToRoute(
-                'lesson_index',
-                [
-                    'id' => $lesson->getId(),
-                ]
-            );
+            if (isset($classroom)) {
+                return $this->redirectToRoute(
+                    'lesson_index',
+                    [
+                        'id' => $lesson->getId(),
+                        'classroom' => $classroom_id
+                    ]
+                );
+            } else {
+                return $this->redirectToRoute('toolbox_index');
+            }
         }
 
         return $this->render(
@@ -173,12 +138,7 @@ class LessonController extends AbstractController
             $this->em->flush();
             $this->addFlash('success', 'Module modifiée avec succès.');
 
-            return $this->redirectToRoute(
-                'classroom_index',
-                [
-                    'id' => $request->query->get('classroom')
-                ]
-            );
+            return $this->redirectToRoute('toolbox_index');
         }
 
         return $this->render(
@@ -208,11 +168,83 @@ class LessonController extends AbstractController
             $this->addFlash('success', 'Module supprimée avec succès.');
         }
 
+        return $this->redirectToRoute('toolbox_index');
+    }
+
+    /**
+     * Add questionnaire direct to a lesson
+     * @Route("/questionnaire/add", name="add_questionnaire_lesson")
+     * @ParamConverter("questionnaire", class="\App\Entity\Questionnaire")
+     * @param \App\Repository\LessonRepository $lessonRepo
+     * @param \App\Repository\ClassroomRepository $classroomRepo
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function addQuestionnaireToLesson(
+        LessonRepository $lessonRepo,
+        QuestionnaireRepository $questionnaireRepo,
+        ClassroomRepository $classroomRepo,
+        Request $request
+    ): RedirectResponse {
+        // find lesson
+        $lesson_id = $request->query->get('lesson');
+        $lesson = $lessonRepo->findOneById($lesson_id);
+
+        // find questionnaire
+        $questionnaire_id = $request->query->get('questionnaire');
+        $questionnaire = $questionnaireRepo->findOneById($questionnaire_id);
+
+        // find classroom
+        $classroom_id = $request->query->get('classroom');
+
+        $lesson->addQuestionnaire($questionnaire);
+        $this->em->persist($lesson);
+        $this->em->flush();
+        $this->addFlash('success', 'Module ajouté avec succès.');
+
         return $this->redirectToRoute(
-            'classroom_index',
+            'lesson_index',
             [
-                'id' => $request->query->get('classroom')
+                'id' => $lesson_id,
+                'classroom' => $classroom_id
             ]
         );
+    }
+
+    /**
+     * @Route ("/questionnaire/{id}/delete", name="delete_questionnaire_lesson", methods={"DELETE"})
+     * @param \App\Repository\LessonRepository $lessonRepo
+     * @param \App\Repository\QuestionnaireRepository $questionnaireRepo
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deleteQuestionnaireFromLesson(LessonRepository $lessonRepo, QuestionnaireRepository $questionnaireRepo, Request $request): RedirectResponse
+    {
+        // find questionnaire
+        $questionnaire_id = $request->attributes->get('id');
+        $questionnaire = $questionnaireRepo->findOneById($questionnaire_id);
+
+        // find lesson
+        $lesson_id = $request->query->get('lesson_id');
+        $lesson = $lessonRepo->findOneById($lesson_id);
+
+        // find classroom
+        $classroom_id = $request->query->get('classroom_id');
+
+        // Check the token
+        if ($this->isCsrfTokenValid(
+            'delete' . $lesson_id,
+            $request->get('_token')
+        )) {
+            $lesson->removeQuestionnaire($questionnaire);
+            $this->em->persist($lesson);
+            $this->em->flush();
+            $this->addFlash('success', 'Activité supprimé avec succès.');
+        }
+
+        return $this->redirectToRoute('lesson_index', [
+            'id' => $lesson_id,
+            'classroom_id' => $classroom_id, 
+        ]);
     }
 }

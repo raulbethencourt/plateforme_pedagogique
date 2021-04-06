@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Entity\Invite;
 use App\Entity\Lesson;
 use App\Form\InviteType;
@@ -10,7 +9,6 @@ use App\Entity\Classroom;
 use App\Entity\Notification;
 use App\Form\NotificationType;
 use App\invitation\Invitation;
-use function DeepCopy\deep_copy;
 use Symfony\Component\Form\Form;
 use App\Repository\UserRepository;
 use App\Repository\LessonRepository;
@@ -72,7 +70,7 @@ class ClassroomController extends AbstractController
         $this->invite($classroom, $request, $invitation, $user, $formInvite, $invite);
 
         return $this->render(
-            'user/classroom/index.html.twig',
+            'classroom/index.html.twig',
             [
                 'notification' => $notificationRepository->findOneBy(["classroom" => $classroom]),
                 'formInvite' => $formInvite->createView(),
@@ -86,23 +84,35 @@ class ClassroomController extends AbstractController
     }
 
     /**
-     * @Route ("/user/{id}/delete", name="user_user_delete", methods={"DELETE"})
-     * @param  Request  $request
-     * @return RedirectResponse
+     * @Route ("/user/{id}/delete", name="delete_user_classroom", methods={"DELETE"})
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    public function deleteUser(User $user, Request $request): RedirectResponse
+    public function deleteUserFromClassroom(UserRepository $userRepo, ClassroomRepository $classroomRepo, Request $request): RedirectResponse
     {
-        // Check the token
-        if ($this->isCsrfTokenValid(
-            'delete' . $user->getId(),
-            $request->get('_token')
-        )) {
-            $this->em->remove($user);
-            $this->em->flush();
-            $this->addFlash('success', 'Utilisateur supprimée avec succès.');
+        // find classroom
+        $classroom_id = $request->query->get('classroom_id');
+        $classroom = $classroomRepo->findOneById($classroom_id);
+
+        // find user
+        $user_id = $request->attributes->get('id');
+        $user = $userRepo->findOneById($user_id);
+
+        if ($user->getRoles()[0] === 'ROLE_STUDENT') {
+            $classroom->removeStudent($user);
+        } else {
+            $classroom->removeTeacher($user);
         }
 
-        return $this->redirectToRoute('classroom_index', ['id' => $request->query->get('classroom')]);
+        $this->em->persist($classroom);
+        $this->em->flush();
+        $this->addFlash('success', 'Utilisateur supprimée de la classe avec succès.');
+
+        return $this->redirectToRoute(
+            'classroom_index',
+            [
+                'id' => $classroom_id
+            ]
+        );
     }
 
     /**
@@ -115,15 +125,16 @@ class ClassroomController extends AbstractController
      * @param \App\Entity\Invite $invite
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    private function invite(Classroom $classroom, Request $request, Invitation $invitation, UserRepository $user, $form, Invite $invite): RedirectResponse
+    private function invite(Classroom $classroom, Request $request, Invitation $invitation, UserRepository $userRepo, $form, Invite $invite): RedirectResponse
     {
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             // Check if user is in the data base already
-            $userAlready = $user->findOneBy([
+            $userAlready = $userRepo->findOneBy([
                 "name" => $invite->getName(),
                 "surname" => $invite->getSurname(),
             ]);
+
             if (isset($userAlready)) {
                 $invitation->invite($invite, $classroom, $userAlready);
             } else {
@@ -200,7 +211,7 @@ class ClassroomController extends AbstractController
 
 
     /**
-     * @Route ("/lesson/{id}/delete", name="delete_lesson_classroom")
+     * @Route ("/lesson/{id}/delete", name="delete_lesson_classroom", methods={"DELETE"})
      * @param \App\Repository\LessonRepository $lessonRepo
      * @param \App\Repository\ClassroomRepository $classroomRepo
      * @param \Symfony\Component\HttpFoundation\Request $request
@@ -212,7 +223,7 @@ class ClassroomController extends AbstractController
         $lesson_id = $request->attributes->get('id');
         $lesson = $lessonRepo->findOneById($lesson_id);
         // find classroom
-        $classroom_id = $request->query->get('classroom');
+        $classroom_id = $request->query->get('classroom_id');
         $classroom = $classroomRepo->findOneById($classroom_id);
 
         // Check the token

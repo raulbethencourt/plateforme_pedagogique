@@ -22,6 +22,7 @@
 							<th scope="row">{{ loop.index }}</th>
 							<td>{{ questionnaire.title }}</td>
 							<td>{{ questionnaire.difficulty}}</td>
+							{# TODO supprimer activité #}
 							<td>
 								<a href="{{ path('add_questionnaire_lesson', {questionnaire: questionnaire.id, lesson: lesson_id, classroom: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
 							</td>

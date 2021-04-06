@@ -19,12 +19,6 @@
 ### Example user template template
 ### Example user template
 
-# IntelliJ project files
-.idea
-*.iml
-out
-gen
-
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/build/
