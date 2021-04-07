@@ -2,20 +2,20 @@
 
 namespace App\Controller;
 
-use App\Entity\Classroom;
 use App\Entity\Lesson;
 use App\Form\LessonType;
-use App\Repository\ClassroomRepository;
+use App\Service\FindEntity;
 use App\Repository\LessonRepository;
-use App\Repository\QuestionnaireRepository;
+use App\Repository\ClassroomRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\Repository\QuestionnaireRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * Class LessonController
@@ -39,11 +39,10 @@ class LessonController extends AbstractController
     /**
      * @Route("/{id}", name="lesson_index", requirements={"id": "\d+"})
      */
-    public function index(ClassroomRepository $repository, Request $request, Lesson $lesson, Classroom $classroom = null): Response
+    public function index(FindEntity $find): Response
     {
-        $this->em->find('Classroom', )
-        $classroom_id = $request->query->get('classroom_id');
-        $classroom = $repository->findOneById($classroom_id);
+        $classroom = $find->findClassroom();
+        $lesson = $find->findLesson();
 
         return $this->render('lesson/index.html.twig', [
             'lesson' => $lesson,
