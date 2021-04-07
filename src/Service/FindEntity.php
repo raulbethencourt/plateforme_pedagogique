@@ -4,8 +4,10 @@ namespace App\Service;
 
 use App\Entity\Classroom;
 use App\Entity\Lesson;
+use App\Entity\User;
 use App\Repository\ClassroomRepository;
 use App\Repository\LessonRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class FindEntity
@@ -14,13 +16,16 @@ class FindEntity
 
     private $lessonRepo;
 
+    private $userRepo;
+
     private $request;
 
-    public function __construct(ClassroomRepository $classroomRepo, LessonRepository $lessonRepo, RequestStack $query)
+    public function __construct(ClassroomRepository $classroomRepo, LessonRepository $lessonRepo, RequestStack $query, UserRepository $userRepo)
     {
         $this->classroomRepo = $classroomRepo;
         $this->lessonRepo = $lessonRepo;
         $this->request = $query;
+        $this->userRepo = $userRepo;
     }
 
     /**
@@ -28,7 +33,11 @@ class FindEntity
      */
     public function findClassroom(): Classroom
     {
-        $classroom_id = $this->request->getCurrentRequest()->query->get('classroom_id');
+        if (null !== $this->request->getCurrentRequest()->query->get('classroom_id')) {
+            $classroom_id = $this->request->getCurrentRequest()->query->get('classroom_id');
+        } else {
+            $classroom_id = $this->request->getCurrentRequest()->attributes->get('id');
+        }
 
         return $this->classroomRepo->findOneById($classroom_id);
     }
@@ -38,8 +47,46 @@ class FindEntity
      */
     public function findLesson(): Lesson
     {
-        $lesson_id = $this->request->getCurrentRequest()->attributes->get('id');
+        if (null !== $this->request->getCurrentRequest()->query->get('lesson_id')) {
+            $classroom_id = $this->request->getCurrentRequest()->query->get('lesson_id');
+        } else {
+            $lesson_id = $this->request->getCurrentRequest()->attributes->get('id');
+        }
 
         return $this->lessonRepo->findOneById($lesson_id);
+    }
+
+    /**
+     * find all lessons.
+     */
+    public function findAllLessons(): array
+    {
+        return $this->lessonRepo->findAll();
+    }
+
+    /**
+     * find all classrooms.
+     */
+    public function findAllClassrooms(): array
+    {
+        return $this->classroomRepo->findAll();
+    }
+
+    /**
+     * find users by role.
+     */
+    public function findUsersByRole(string $role): array
+    {
+        return $this->userRepo->findByRole($role);
+    }
+
+    /**
+     * find user by id.
+     */
+    public function findUser(): User
+    {
+        $user_id = $this->request->getCurrentRequest()->attributes->get('id');
+
+        return $this->userRepo->findOneById($user_id);
     }
 }

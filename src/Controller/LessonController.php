@@ -54,10 +54,10 @@ class LessonController extends AbstractController
     /**
      * @Route("/list", name="list_lessons")
      */
-    public function listLessons(LessonRepository $repository, Request $request): Response
+    public function listLessons(FindEntity $find, Request $request): Response
     {
         $classroom_id = $request->query->get('classroom_id');
-        $lessons = $repository->findAll();
+        $lessons = $find->findAllLessons();
 
         return $this->render('lesson/list.html.twig', [
             'lessons' => $lessons,

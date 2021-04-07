@@ -1,33 +1,25 @@
 <?php
 
+namespace App\Service;
 
-namespace App\invitation;
-
+use App\Entity\Classroom;
 use App\Entity\Student;
 use App\Entity\Teacher;
-use App\Entity\Classroom;
-use Symfony\Component\Mime\Address;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 
 /**
  * Class Invitation
- * This class manage email invitation for nex users
- * @package App\invitation
+ * This class manage email invitation for new users.
  */
-class Invitation extends AbstractController
+class Invitations
 {
-    /**
-     * @var MailerInterface
-     */
     private $mailer;
 
-    /**
-     * @var EntityManagerInterface
-     */
     private $em;
 
     public function __construct(MailerInterface $mailer, EntityManagerInterface $em)
@@ -37,15 +29,46 @@ class Invitation extends AbstractController
     }
 
     /**
+     * with this function I invite different users.
+     *
+     * @param \App\Repository\UserRepository $user
+     * @param mixed                          $form
+     */
+    public function invitation(Classroom $classroom, Request $request, Invitation $invitation, UserRepository $userRepo, $form, Invite $invite): RedirectResponse
+    {
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Check if user is in the data base already
+            $userAlready = $userRepo->findOneBy([
+                'name' => $invite->getName(),
+                'surname' => $invite->getSurname(),
+            ]);
+
+            if (isset($userAlready)) {
+                $this->invite($invite, $classroom, $userAlready);
+            } else {
+                $this->invite($invite, $classroom);
+            }
+
+            $this->addFlash('success', 'Votre invitation a bien été envoyée.');
+        }
+
+        return $this->redirectToRoute('classroom_index', [
+            'id' => $classroom->getId(),
+        ]);
+    }
+
+    /**
      * @param $data
      * @param $classroom
      * @param Teacher|Student $user
+     *
      * @throws TransportExceptionInterface
      */
     public function invite($data, Classroom $classroom = null, $user = null): void
     {
         if (isset($user)) {
-            if ($user->getRoles()[0] === 'ROLE_STUDENT') {
+            if ('ROLE_STUDENT' === $user->getRoles()[0]) {
                 $classroom->addStudent($user);
             } else {
                 $classroom->addTeacher($user);
@@ -67,7 +90,8 @@ class Invitation extends AbstractController
             ->from(Address::fromString('Carpa <carpa@exemple.com>'))
             ->to($data->getEmail())
             ->subject('Invitation à Carpa')
-            ->htmlTemplate($template);
+            ->htmlTemplate($template)
+        ;
         if (isset($classroom)) {
             $email->context(
                 [
@@ -76,16 +100,17 @@ class Invitation extends AbstractController
                         'name' => $data->getName(),
                         'classroom' => $classroom->getId(),
                         'discipline' => $classroom->getDiscipline(),
-                    ]
+                    ],
                 ]
             );
         } else {
             $email->context(
                 [
-                    'data' => ['name' => $data->getName()]
+                    'data' => ['name' => $data->getName()],
                 ]
             );
         }
+
         return $this->mailer->send($email);
     }
 }
