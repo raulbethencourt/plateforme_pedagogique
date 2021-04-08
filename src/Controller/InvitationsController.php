@@ -1,48 +1,51 @@
 <?php
 
-namespace App\Service;
+namespace App\Controller;
 
+use App\Entity\User;
+use App\Entity\Invite;
 use App\Entity\Classroom;
-use App\Entity\Student;
-use App\Entity\Teacher;
+use App\Service\FindEntity;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Mime\Address;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class Invitation
  * This class manage email invitation for new users.
  */
-class Invitations
+class InvitationsController extends AbstractController
 {
     private $mailer;
 
     private $em;
 
-    public function __construct(MailerInterface $mailer, EntityManagerInterface $em)
+    private $request;
+
+    private $find;
+
+    public function __construct(MailerInterface $mailer, EntityManagerInterface $em, RequestStack $requestStack, FindEntity $find)
     {
         $this->mailer = $mailer;
         $this->em = $em;
+        $this->request = $requestStack;
+        $this->find = $find;
     }
 
     /**
      * with this function I invite different users.
-     *
-     * @param \App\Repository\UserRepository $user
-     * @param mixed                          $form
      */
-    public function invitation(Classroom $classroom, Request $request, Invitation $invitation, UserRepository $userRepo, $form, Invite $invite): RedirectResponse
+    public function invitation(Classroom $classroom, Form $form, Invite $invite): RedirectResponse
     {
-        $form->handleRequest($request);
+        $form->handleRequest($this->request->getCurrentRequest());
         if ($form->isSubmitted() && $form->isValid()) {
             // Check if user is in the data base already
-            $userAlready = $userRepo->findOneBy([
-                'name' => $invite->getName(),
-                'surname' => $invite->getSurname(),
-            ]);
+            $userAlready = $this->find->findUserAlready($invite->getName(), $invite->getSurname());
 
             if (isset($userAlready)) {
                 $this->invite($invite, $classroom, $userAlready);
@@ -59,13 +62,9 @@ class Invitations
     }
 
     /**
-     * @param $data
-     * @param $classroom
-     * @param Teacher|Student $user
-     *
-     * @throws TransportExceptionInterface
+     * send invitation to user.
      */
-    public function invite($data, Classroom $classroom = null, $user = null): void
+    public function invite(Invite $data, ?Classroom $classroom, User $user = null): void
     {
         if (isset($user)) {
             if ('ROLE_STUDENT' === $user->getRoles()[0]) {
@@ -84,7 +83,10 @@ class Invitations
         }
     }
 
-    public function email($template, $data, ?Classroom $classroom)
+    /**
+     * this function prepare the email.
+     */
+    public function email(string $template, Invite $data, ?Classroom $classroom)
     {
         $email = (new TemplatedEmail())
             ->from(Address::fromString('Carpa <carpa@exemple.com>'))

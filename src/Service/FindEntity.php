@@ -4,9 +4,11 @@ namespace App\Service;
 
 use App\Entity\Classroom;
 use App\Entity\Lesson;
+use App\Entity\Notification;
 use App\Entity\User;
 use App\Repository\ClassroomRepository;
 use App\Repository\LessonRepository;
+use App\Repository\NotificationRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -20,12 +22,15 @@ class FindEntity
 
     private $request;
 
-    public function __construct(ClassroomRepository $classroomRepo, LessonRepository $lessonRepo, RequestStack $query, UserRepository $userRepo)
+    private $notificationRepo;
+
+    public function __construct(ClassroomRepository $classroomRepo, LessonRepository $lessonRepo, RequestStack $query, UserRepository $userRepo, NotificationRepository $notificationRepo)
     {
         $this->classroomRepo = $classroomRepo;
         $this->lessonRepo = $lessonRepo;
         $this->request = $query;
         $this->userRepo = $userRepo;
+        $this->notificationRepo = $notificationRepo;
     }
 
     /**
@@ -88,5 +93,24 @@ class FindEntity
         $user_id = $this->request->getCurrentRequest()->attributes->get('id');
 
         return $this->userRepo->findOneById($user_id);
+    }
+
+    /**
+     * find user that its already in the db.
+     */
+    public function findUserAlready(string $name, string $surname): ?User
+    {
+        return $this->userRepo->findOneBy([
+            'name' => $name,
+            'surname' => $surname,
+        ]);
+    }
+
+    /**
+     * find notification in classroom.
+     */
+    public function findNotification(Classroom $classroom): Notification
+    {
+        return $this->notificationRepo->findOneBy(['classroom' => $classroom]);
     }
 }

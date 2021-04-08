@@ -2,19 +2,19 @@
 
 namespace App\Controller;
 
-use App\Entity\Classroom;
 use App\Entity\Invite;
-use App\Form\ClassroomType;
-use App\Form\EditUserType;
 use App\Form\InviteType;
-use App\invitation\Invitation;
+use App\Entity\Classroom;
+use App\Form\EditUserType;
+use App\Form\ClassroomType;
 use App\Service\FindEntity;
+use App\Controller\InvitationsController;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class UserController.
@@ -36,10 +36,11 @@ class UserController extends AbstractController
         $this->request = $requestStack;
     }
 
+    // TODO continuar por aqui
     /**
      * @Route("/", name="user_index")
      */
-    public function index(Invitation $invitation): Response
+    public function index(InvitationsController $invitation): Response
     {
         $classrooms = $this->find->findAllClassrooms();
         $admins = $this->find->findUsersByRole('ROLE_ADMIN');
