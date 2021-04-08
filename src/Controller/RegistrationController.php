@@ -2,21 +2,23 @@
 
 namespace App\Controller;
 
-use App\Entity\Classroom;
+use App\Entity\User;
 use App\Entity\Student;
 use App\Entity\Teacher;
-use App\Entity\User;
-use App\Form\RegistrationFormType;
+use App\Entity\Classroom;
+use App\Service\FindEntity;
 use App\Security\EmailVerifier;
+use App\Form\RegistrationFormType;
+use Symfony\Component\Mime\Address;
 use App\Security\LoginFormAuthenticator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 /**
@@ -28,9 +30,15 @@ class RegistrationController extends AbstractController
 {
     private $emailVerifier;
 
-    public function __construct(EmailVerifier $emailVerifier)
+    private $find;
+
+    private $request;
+
+    public function __construct(EmailVerifier $emailVerifier, FindEntity $find, RequestStack $requestStack)
     {
         $this->emailVerifier = $emailVerifier;
+        $this->find = $find;
+        $this->request = $requestStack;
     }
 
     /**
@@ -42,15 +50,13 @@ class RegistrationController extends AbstractController
      * @return Response
      */
     public function register(
-        Request $request,
         UserPasswordEncoderInterface $passwordEncoder,
         GuardAuthenticatorHandler $guardHandler,
         LoginFormAuthenticator $authenticator
     ): Response {
         // I get User type property to change the registration way
-        $type = $request->query->get("type");
-        $classroom = $request->query->get("classroom");
-        $classroom = $this->getDoctrine()->getRepository(Classroom::class)->findOneById($classroom);
+        $type = $this->request->getCurrentRequest()->query->get("type");
+        $classroom = $this->find->findClassroom();
 
         // In depends of type we creates different user
         switch ($type) {
@@ -70,7 +76,7 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user, [
             'method' => 'POST',
         ]);
-        $form->handleRequest($request);
+        $form->handleRequest($this->request->getCurrentRequest());
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
@@ -103,7 +109,7 @@ class RegistrationController extends AbstractController
 
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
-                $request,
+                $this->request->getCurrentRequest(),
                 $authenticator,
                 'main' // firewall name in security.yaml
             );
@@ -120,20 +126,20 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/verify/email", name="app_verify_email")
      */
-    public function verifyUserEmail(Request $request): Response
+    public function verifyUserEmail(): Response
     {
 
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
-            $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
+            $this->emailVerifier->handleEmailConfirmation($this->request->getCurrentRequest(), $this->getUser());
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $exception->getReason());
 
             return $this->redirectToRoute('app_register');
         }
 
-        return $this->redirectToRoute('app_logout');
+        return $this->render('registration/user_verify.html.twig');
     }
 
     /**

@@ -41,7 +41,8 @@ class CalendarSubscriber implements EventSubscriberInterface
             ->setParameter('start', $start->format('Y-m-d H:i:s'))
             ->setParameter('end', $end->format('Y-m-d H:i:s'))
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
 
         foreach ($events as $event) {
             // this create the events with your data (here event data) to fill calendar
@@ -62,7 +63,7 @@ class CalendarSubscriber implements EventSubscriberInterface
                 'textColor' => '#080808',
                 'backgroundColor' => '#75aaae',
                 'borderColor' => '#75aaae',
-                'classNames' => 'pl-2'
+                'classNames' => 'pl-2',
             ]);
 
             $event = $event->getId_events();

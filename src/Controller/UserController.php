@@ -2,63 +2,58 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Entity\Invite;
 use App\Form\InviteType;
 use App\Entity\Classroom;
 use App\Form\EditUserType;
 use App\Form\ClassroomType;
-use App\invitation\Invitation;
-use App\Repository\UserRepository;
-use App\Repository\ClassroomRepository;
+use App\Service\FindEntity;
+use App\Controller\InvitationsController;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * Class UserController
- * @package App\Controller
+ * Class UserController.
+ *
  * @Route("/user")
  */
 class UserController extends AbstractController
 {
-    /**
-     * @var EntityManagerInterface
-     */
     private $em;
 
-    public function __construct(EntityManagerInterface $em)
+    private $find;
+
+    private $request;
+
+    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack)
     {
         $this->em = $em;
+        $this->find = $find;
+        $this->request = $requestStack;
     }
 
+    // TODO continuar por aqui
     /**
-     * @Route ("/", name="user_index")
-     * @param  ClassroomRepository  $repository
-     * @return ResponseAlias
+     * @Route("/", name="user_index")
      */
-    public function index(
-        ClassroomRepository $classroomRepository,
-        UserRepository $adminsRepository,
-        Request $request,
-        Invitation $invitation
-    ): Response {
-        $classrooms = $classroomRepository->findAll();
-        $admins = $adminsRepository->findByRole('ROLE_ADMIN');
+    public function index(InvitationsController $invitation): Response
+    {
+        $classrooms = $this->find->findAllClassrooms();
+        $admins = $this->find->findUsersByRole('ROLE_ADMIN');
         $user = $this->getUser();
         $invite = new Invite(); // We invite a new teacher or student
-
         $form = $this->createForm(InviteType::class, $invite);
 
-        $form->handleRequest($request);
+        $form->handleRequest($this->request->getCurrentRequest());
         if ($form->isSubmitted() && $form->isValid()) {
             $invitation->invite($invite);
 
             $this->addFlash('success', 'Votre invitation a bien été envoyée.');
+
             return $this->redirectToRoute('user_index');
         }
 
@@ -68,7 +63,7 @@ class UserController extends AbstractController
                 'admins' => $admins,
                 'classrooms' => $classrooms,
                 'user' => $user,
-                'form' => $form->createView()
+                'form' => $form->createView(),
             ]
         );
     }
@@ -76,72 +71,52 @@ class UserController extends AbstractController
     /**
      * @Route("/list", name="user_list")
      */
-    public function listUser(UserRepository $userRepo): Response
+    public function listUser(): Response
     {
-        $teachers = $userRepo->findByRole('ROLE_TEACHER');
-        $students = $userRepo->findByRole('ROLE_STUDENT');
+        $teachers = $this->find->findUsersByRole('ROLE_TEACHER');
+        $students = $this->find->findUsersByRole('ROLE_STUDENT');
 
         return $this->render('user/list.html.twig', [
             'teachers' => $teachers,
-            'students' => $students
+            'students' => $students,
         ]);
     }
 
     /**
-     * @Route ("/{id}/delete", name="user_delete", methods={"DELETE"})
-     * @param  Request  $request
-     * @return RedirectResponse
+     * @Route("/{id}/delete", name="user_delete", methods={"DELETE"})
      */
-    public function deleteUser(User $user, Request $request): RedirectResponse
+    public function deleteUser(): RedirectResponse
     {
+        $user = $this->find->findUser();
         // Check the token
         if ($this->isCsrfTokenValid(
-            'delete' . $user->getId(),
-            $request->get('_token')
+            'delete'.$user->getId(),
+            $this->request->getCurrentRequest()->get('_token')
         )) {
             $this->em->remove($user);
             $this->em->flush();
-            $this->addFlash('success', 'Utilisateur supprimée avec succès.');
+            if ('ROLE_TEACHER' === $user->getRoles()[0] || 'ROLE_STUDENT' === $user->getRoles()[0]) {
+                $this->addFlash('success', 'Utilisateur supprimée avec succès.');
+            } else {
+                $this->addFlash('success', 'Administrateur supprimée avec succès.');
+            }
         }
 
-        return $this->redirectToRoute('user_list');
-    }
-
-    /**
-     * @Route ("/{id}/delete", name="user_admin_delete", methods={"DELETE"})
-     * @param  Request  $request
-     * @return RedirectResponse
-     */
-    public function deleteAdmin(User $admin, Request $request): RedirectResponse
-    {
-        // Check the token
-        if ($this->isCsrfTokenValid(
-            'delete' . $admin->getId(),
-            $request->get('_token')
-        )) {
-            $this->em->remove($admin);
-            $this->em->flush();
-            $this->addFlash('success', 'Administrateur supprimée avec succès.');
+        if ('ROLE_TEACHER' === $user->getRoles()[0] || 'ROLE_STUDENT' === $user->getRoles()[0]) {
+            return $this->redirectToRoute('user_list');
         }
 
         return $this->redirectToRoute('user_index');
     }
 
     /**
-     * @Route ("/classroom/create", name="user_classroom_create")
-     * @param Request $request
-     * @param Classroom|null $classroom
-     * @return RedirectResponse|ResponseAlias
+     * @Route("/classroom/create", name="user_classroom_create")
      */
-    public function createClassroom(Request $request, Classroom $classroom = null)
+    public function createClassroom(): Response
     {
-        // Check if the classroom already exist
-        if (!$classroom) {
-            $classroom = new Classroom();
-        }
-
+        $classroom = new Classroom();
         $form = $this->createForm(ClassroomType::class, $classroom);
-        $form->handleRequest($request);
+        $form->handleRequest($this->request->getCurrentRequest());
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($classroom);
@@ -154,22 +129,19 @@ class UserController extends AbstractController
         return $this->render(
             'classroom/create.html.twig',
             [
-                'classrooms' => $classroom,
                 'form' => $form->createView(),
             ]
         );
     }
 
     /**
-     * @Route ("/classroom/{id}/edit", name="user_classroom_edit", methods={"GET","POST"})
-     * @param  Classroom  $classroom
-     * @param  Request  $request
-     * @return RedirectResponse|ResponseAlias
+     * @Route("/classroom/{id}/edit", name="user_classroom_edit", methods={"GET", "POST"})
      */
-    public function editClassroom(Classroom $classroom, Request $request)
+    public function editClassroom(): Response
     {
+        $classroom = $this->find->findClassroom();
         $form = $this->createForm(ClassroomType::class, $classroom);
-        $form->handleRequest($request);
+        $form->handleRequest($this->request->getCurrentRequest());
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
@@ -181,24 +153,21 @@ class UserController extends AbstractController
         return $this->render(
             'classroom/edit.html.twig',
             [
-                'classroom' => $classroom,
                 'form' => $form->createView(),
             ]
         );
     }
 
     /**
-     * @Route ("/classroom/{id}/delete", name="user_classroom_delete", methods={"DELETE"})
-     * @param  Classroom  $classroom
-     * @param  Request  $request
-     * @return RedirectResponse
+     * @Route("/classroom/{id}/delete", name="user_classroom_delete", methods={"DELETE"})
      */
-    public function deleteClassroom(Classroom $classroom, Request $request): RedirectResponse
+    public function deleteClassroom(): RedirectResponse
     {
+        $classroom = $this->find->findClassroom();
         // Check the token
         if ($this->isCsrfTokenValid(
-            'delete' . $classroom->getId(),
-            $request->get('_token')
+            'delete'.$classroom->getId(),
+            $this->request->getCurrentRequest()->get('_token')
         )) {
             $this->em->remove($classroom);
             $this->em->flush();
@@ -209,9 +178,9 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route ("/profile", name="user_profile")
+     * @Route("/profile", name="user_profile")
      */
-    public function userProfile()
+    public function userProfile(): Response
     {
         return $this->render(
             'user/profile.html.twig',
@@ -221,19 +190,15 @@ class UserController extends AbstractController
         );
     }
 
-
-
     /**
-     * @Route ("/profile/edit", name="edit_user")
-     * @param Request $request
-     * @return RedirectResponse|Response
+     * @Route("/profile/edit", name="edit_user")
      */
-    public function editProfile(Request $request)
+    public function editProfile(): Response
     {
         $user = $this->getUser();
 
         $form = $this->createForm(EditUserType::class, $user);
-        $form->handleRequest($request);
+        $form->handleRequest($this->request->getCurrentRequest());
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
