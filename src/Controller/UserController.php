@@ -8,7 +8,6 @@ use App\Entity\Classroom;
 use App\Form\EditUserType;
 use App\Form\ClassroomType;
 use App\Service\FindEntity;
-use App\Controller\InvitationsController;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,7 +35,6 @@ class UserController extends AbstractController
         $this->request = $requestStack;
     }
 
-    // TODO continuar por aqui
     /**
      * @Route("/", name="user_index")
      */
@@ -45,17 +43,11 @@ class UserController extends AbstractController
         $classrooms = $this->find->findAllClassrooms();
         $admins = $this->find->findUsersByRole('ROLE_ADMIN');
         $user = $this->getUser();
-        $invite = new Invite(); // We invite a new teacher or student
+
+        // admin invitation
+        $invite = new Invite();
         $form = $this->createForm(InviteType::class, $invite);
-
-        $form->handleRequest($this->request->getCurrentRequest());
-        if ($form->isSubmitted() && $form->isValid()) {
-            $invitation->invite($invite);
-
-            $this->addFlash('success', 'Votre invitation a bien été envoyée.');
-
-            return $this->redirectToRoute('user_index');
-        }
+        $invitation->invitation($form, $invite);
 
         return $this->render(
             'user/index.html.twig',
@@ -65,7 +57,7 @@ class UserController extends AbstractController
                 'user' => $user,
                 'form' => $form->createView(),
             ]
-        );
+            );
     }
 
     /**

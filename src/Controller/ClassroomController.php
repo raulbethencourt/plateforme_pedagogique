@@ -2,21 +2,21 @@
 
 namespace App\Controller;
 
+use App\Controller\InvitationsController as Invitations;
+use App\Controller\NotificationsController as Notify;
 use App\Entity\Invite;
-use App\Form\InviteType;
-use App\Service\FindEntity;
 use App\Entity\Notification;
+use App\Form\InviteType;
 use App\Form\NotificationType;
+use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\RequestStack;
-use App\Controller\NotificationsController as Notify;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use App\Controller\InvitationsController as Invitations;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * Class ClassroomController
@@ -68,7 +68,7 @@ class ClassroomController extends AbstractController
         // here i handle invitations
         $invite = new Invite(); // We invite a new teacher or student
         $formInvite = $this->createForm(InviteType::class, $invite);
-        $this->invitations->invitation($classroom, $formInvite, $invite);
+        $this->invitations->invitation($formInvite, $invite, $classroom);
 
         return $this->render(
             'classroom/index.html.twig',

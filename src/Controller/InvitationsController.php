@@ -2,18 +2,18 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
-use App\Entity\Invite;
 use App\Entity\Classroom;
+use App\Entity\Invite;
+use App\Entity\User;
 use App\Service\FindEntity;
-use Symfony\Component\Form\Form;
-use Symfony\Component\Mime\Address;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 
 /**
  * Class Invitation
@@ -40,7 +40,7 @@ class InvitationsController extends AbstractController
     /**
      * with this function I invite different users.
      */
-    public function invitation(Classroom $classroom, Form $form, Invite $invite): RedirectResponse
+    public function invitation(Form $form, Invite $invite, Classroom $classroom = null): RedirectResponse
     {
         $form->handleRequest($this->request->getCurrentRequest());
         if ($form->isSubmitted() && $form->isValid()) {
@@ -56,9 +56,13 @@ class InvitationsController extends AbstractController
             $this->addFlash('success', 'Votre invitation a bien été envoyée.');
         }
 
-        return $this->redirectToRoute('classroom_index', [
-            'id' => $classroom->getId(),
-        ]);
+        if (null !== $classroom) {
+            return $this->redirectToRoute('classroom_index', [
+                'id' => $classroom->getId(),
+            ]);
+        }
+
+        return $this->redirectToRoute('user_index');
     }
 
     /**
