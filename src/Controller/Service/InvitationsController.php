@@ -33,7 +33,7 @@ class InvitationsController extends AbstractController
     {
         $this->mailer = $mailer;
         $this->em = $em;
-        $this->request = $requestStack;
+        $this->request = $requestStack->getCurrentRequest();
         $this->find = $find;
     }
 
@@ -42,7 +42,7 @@ class InvitationsController extends AbstractController
      */
     public function invitation(Form $form, Invite $invite, Classroom $classroom = null): RedirectResponse
     {
-        $form->handleRequest($this->request->getCurrentRequest());
+        $form->handleRequest($this->request);
         if ($form->isSubmitted() && $form->isValid()) {
             // Check if user is in the data base already
             $userAlready = $this->find->findUserAlready($invite->getName(), $invite->getSurname());

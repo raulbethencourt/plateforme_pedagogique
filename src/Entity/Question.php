@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use Serializable;
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\QuestionRepository;
-use Doctrine\Common\Collections\Collection;
-use Symfony\Component\HttpFoundation\File\File;
 use Doctrine\Common\Collections\ArrayCollection;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Serializable;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=QuestionRepository::class)
@@ -37,7 +37,7 @@ class Question implements Serializable
 
     /**
      * @ORM\OneToMany(targetEntity=Proposition::class, mappedBy="question",
-     *     orphanRemoval=true, cascade={"persist", "remove"})
+     * orphanRemoval=true, cascade={"persist", "remove"})
      */
     private $propositions;
 
@@ -49,8 +49,8 @@ class Question implements Serializable
 
     /**
      * @Assert\File(
-     *  mimeTypes = {"image/jpeg", "image/png", "image/svg+xml"},
-     *  mimeTypesMessage = "Chargé un image correct - jpeg, png -"    
+     *     mimeTypes={"image/jpeg", "image/png", "image/svg+xml"},
+     *     mimeTypesMessage="Chargé un image correct - jpeg, png -"
      * )
      * @Vich\UploadableField(mapping="question_image", fileNameProperty="imageName")
      *
@@ -147,18 +147,17 @@ class Question implements Serializable
     }
 
     /**
-     * Method to get the right propositions in a question
-     * @return ArrayCollection
+     * Method to get the right propositions in a question.
      */
     public function getRightPropositions(): ArrayCollection
     {
         return $this->propositions->filter(function ($proposition) {
-            return $proposition->getCorrect() == true;
+            return true == $proposition->getCorrect();
         });
     }
 
     /**
-     * @param  File|UploadedFile|null  $imageFile
+     * @param File|UploadedFile|null $imageFile
      */
     public function setImageFile(?File $imageFile = null): void
     {
@@ -201,10 +200,10 @@ class Question implements Serializable
     /** @see \Serializable::serialize() */
     public function serialize()
     {
-        return serialize(array(
+        return serialize([
             $this->id,
             $this->imageName,
-        ));
+        ]);
     }
 
     /** @see \Serializable::unserialize() */
@@ -212,7 +211,6 @@ class Question implements Serializable
     {
         list(
             $this->id,
-            $this->imageName,
-        ) = unserialize($serialized, array('allowed_classes' => false));
+            $this->imageName) = unserialize($serialized, ['allowed_classes' => false]);
     }
 }

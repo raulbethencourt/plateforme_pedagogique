@@ -43,7 +43,7 @@ class ClassroomController extends AbstractController
     {
         $this->em = $em;
         $this->find = $find;
-        $this->request = $requestStack;
+        $this->request = $requestStack->getCurrentRequest();
         $this->notifications = $notifications;
         $this->invitations = $invitations;
     }
@@ -151,7 +151,7 @@ class ClassroomController extends AbstractController
         // Check the token
         if ($this->isCsrfTokenValid(
             'delete'.$lesson->getId(),
-            $this->request->getCurrentRequest()->get('_token')
+            $this->request->get('_token')
         )) {
             $classroom->removeLesson($lesson);
             $this->em->persist($classroom);

@@ -4,6 +4,12 @@
 {% endblock %}
 
 {% block body %}
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success mr-2 mb-0">
+			{{ message }}
+		</div>
+	{% endfor %}
+	
 	<div class="row">
 		<div class="col-12">
 			<h1>Liste des modules</h1>

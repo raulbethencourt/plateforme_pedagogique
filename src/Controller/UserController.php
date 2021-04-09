@@ -33,7 +33,7 @@ class UserController extends AbstractController
     {
         $this->em = $em;
         $this->find = $find;
-        $this->request = $requestStack;
+        $this->request = $requestStack->getCurrentRequest();
     }
 
     /**
@@ -84,7 +84,7 @@ class UserController extends AbstractController
         // Check the token
         if ($this->isCsrfTokenValid(
             'delete'.$user->getId(),
-            $this->request->getCurrentRequest()->get('_token')
+            $this->request->get('_token')
         )) {
             $this->em->remove($user);
             $this->em->flush();
@@ -109,7 +109,7 @@ class UserController extends AbstractController
     {
         $classroom = new Classroom();
         $form = $this->createForm(ClassroomType::class, $classroom);
-        $form->handleRequest($this->request->getCurrentRequest());
+        $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($classroom);
@@ -134,7 +134,7 @@ class UserController extends AbstractController
     {
         $classroom = $this->find->findClassroom();
         $form = $this->createForm(ClassroomType::class, $classroom);
-        $form->handleRequest($this->request->getCurrentRequest());
+        $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
@@ -160,7 +160,7 @@ class UserController extends AbstractController
         // Check the token
         if ($this->isCsrfTokenValid(
             'delete'.$classroom->getId(),
-            $this->request->getCurrentRequest()->get('_token')
+            $this->request->get('_token')
         )) {
             $this->em->remove($classroom);
             $this->em->flush();
@@ -190,7 +190,7 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
         $form = $this->createForm(EditUserType::class, $user);
-        $form->handleRequest($this->request->getCurrentRequest());
+        $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
