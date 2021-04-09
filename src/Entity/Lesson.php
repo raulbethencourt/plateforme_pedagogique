@@ -54,7 +54,6 @@ class Lesson
      */
     private $creator;
 
-
     public function __construct()
     {
         $this->questionnaires = new ArrayCollection();

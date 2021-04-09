@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Service;
 
 use App\Entity\User;
 use App\Entity\Invite;
@@ -33,16 +33,16 @@ class InvitationsController extends AbstractController
     {
         $this->mailer = $mailer;
         $this->em = $em;
-        $this->request = $requestStack;
+        $this->request = $requestStack->getCurrentRequest();
         $this->find = $find;
     }
 
     /**
      * with this function I invite different users.
      */
-    public function invitation(Classroom $classroom, Form $form, Invite $invite): RedirectResponse
+    public function invitation(Form $form, Invite $invite, Classroom $classroom = null): RedirectResponse
     {
-        $form->handleRequest($this->request->getCurrentRequest());
+        $form->handleRequest($this->request);
         if ($form->isSubmitted() && $form->isValid()) {
             // Check if user is in the data base already
             $userAlready = $this->find->findUserAlready($invite->getName(), $invite->getSurname());
@@ -56,9 +56,13 @@ class InvitationsController extends AbstractController
             $this->addFlash('success', 'Votre invitation a bien été envoyée.');
         }
 
-        return $this->redirectToRoute('classroom_index', [
-            'id' => $classroom->getId(),
-        ]);
+        if (null !== $classroom) {
+            return $this->redirectToRoute('classroom_index', [
+                'id' => $classroom->getId(),
+            ]);
+        }
+
+        return $this->redirectToRoute('user_index');
     }
 
     /**

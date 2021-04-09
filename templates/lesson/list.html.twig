@@ -4,6 +4,12 @@
 {% endblock %}
 
 {% block body %}
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success mr-2 mb-0">
+			{{ message }}
+		</div>
+	{% endfor %}
+	
 	<div class="row">
 		<div class="col-12">
 			<h1>Liste des modules</h1>
@@ -38,7 +44,7 @@
 								{% endif %}
 
 								{% if classroom_id is defined and classroom_id is not null %}
-									<a href="{{ path('add_lesson_classroom', {lesson: lesson.id, classroom: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+									<a href="{{ path('add_lesson_classroom', {lesson_id: lesson.id, classroom_id: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
 								{% endif %}
 							</td>
 						</tr>

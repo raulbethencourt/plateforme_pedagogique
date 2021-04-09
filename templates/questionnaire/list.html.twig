@@ -24,7 +24,7 @@
 							<td>{{ questionnaire.difficulty}}</td>
 							{# TODO supprimer activité #}
 							<td>
-								<a href="{{ path('add_questionnaire_lesson', {questionnaire: questionnaire.id, lesson: lesson_id, classroom: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+								<a href="{{ path('add_questionnaire_lesson', {questionnaire_id: questionnaire.id, lesson_id: lesson_id, classroom_id: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
 							</td>
 						</tr>
 					{% endfor %}

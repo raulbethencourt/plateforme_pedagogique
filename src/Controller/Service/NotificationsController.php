@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Service;
 
 use App\Entity\Classroom;
 use App\Service\FindEntity;
@@ -21,7 +21,7 @@ class NotificationsController extends AbstractController
     public function __construct(FindEntity $find, RequestStack $requestStack, EntityManagerInterface $em)
     {
         $this->find = $find;
-        $this->request = $requestStack;
+        $this->request = $requestStack->getCurrentRequest();
         $this->em = $em;
     }
 
@@ -31,7 +31,7 @@ class NotificationsController extends AbstractController
     public function notify(Notification $notification, Classroom $classroom, Form  $formNotify): void
     {
         $notification_old = $this->find->findNotification($classroom);
-        $formNotify->handleRequest($this->request->getCurrentRequest());
+        $formNotify->handleRequest($this->request);
 
         if ($formNotify->isSubmitted() && $formNotify->isValid()) {
             if ($notification_old) {

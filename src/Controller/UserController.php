@@ -8,10 +8,10 @@ use App\Entity\Classroom;
 use App\Form\EditUserType;
 use App\Form\ClassroomType;
 use App\Service\FindEntity;
-use App\Controller\InvitationsController;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Controller\Service\InvitationsController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,10 +33,9 @@ class UserController extends AbstractController
     {
         $this->em = $em;
         $this->find = $find;
-        $this->request = $requestStack;
+        $this->request = $requestStack->getCurrentRequest();
     }
 
-    // TODO continuar por aqui
     /**
      * @Route("/", name="user_index")
      */
@@ -45,17 +44,11 @@ class UserController extends AbstractController
         $classrooms = $this->find->findAllClassrooms();
         $admins = $this->find->findUsersByRole('ROLE_ADMIN');
         $user = $this->getUser();
-        $invite = new Invite(); // We invite a new teacher or student
+
+        // admin invitation
+        $invite = new Invite();
         $form = $this->createForm(InviteType::class, $invite);
-
-        $form->handleRequest($this->request->getCurrentRequest());
-        if ($form->isSubmitted() && $form->isValid()) {
-            $invitation->invite($invite);
-
-            $this->addFlash('success', 'Votre invitation a bien été envoyée.');
-
-            return $this->redirectToRoute('user_index');
-        }
+        $invitation->invitation($form, $invite);
 
         return $this->render(
             'user/index.html.twig',
@@ -65,7 +58,7 @@ class UserController extends AbstractController
                 'user' => $user,
                 'form' => $form->createView(),
             ]
-        );
+            );
     }
 
     /**
@@ -91,7 +84,7 @@ class UserController extends AbstractController
         // Check the token
         if ($this->isCsrfTokenValid(
             'delete'.$user->getId(),
-            $this->request->getCurrentRequest()->get('_token')
+            $this->request->get('_token')
         )) {
             $this->em->remove($user);
             $this->em->flush();
@@ -116,7 +109,7 @@ class UserController extends AbstractController
     {
         $classroom = new Classroom();
         $form = $this->createForm(ClassroomType::class, $classroom);
-        $form->handleRequest($this->request->getCurrentRequest());
+        $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($classroom);
@@ -141,7 +134,7 @@ class UserController extends AbstractController
     {
         $classroom = $this->find->findClassroom();
         $form = $this->createForm(ClassroomType::class, $classroom);
-        $form->handleRequest($this->request->getCurrentRequest());
+        $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
@@ -167,7 +160,7 @@ class UserController extends AbstractController
         // Check the token
         if ($this->isCsrfTokenValid(
             'delete'.$classroom->getId(),
-            $this->request->getCurrentRequest()->get('_token')
+            $this->request->get('_token')
         )) {
             $this->em->remove($classroom);
             $this->em->flush();
@@ -196,9 +189,8 @@ class UserController extends AbstractController
     public function editProfile(): Response
     {
         $user = $this->getUser();
-
         $form = $this->createForm(EditUserType::class, $user);
-        $form->handleRequest($this->request->getCurrentRequest());
+        $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();

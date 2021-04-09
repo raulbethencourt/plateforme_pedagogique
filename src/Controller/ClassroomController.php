@@ -11,10 +11,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
-use App\Controller\NotificationsController as Notify;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use App\Controller\InvitationsController as Invitations;
+use App\Controller\Service\NotificationsController as Notify;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Controller\Service\InvitationsController as Invitations;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
@@ -43,7 +43,7 @@ class ClassroomController extends AbstractController
     {
         $this->em = $em;
         $this->find = $find;
-        $this->request = $requestStack;
+        $this->request = $requestStack->getCurrentRequest();
         $this->notifications = $notifications;
         $this->invitations = $invitations;
     }
@@ -68,7 +68,7 @@ class ClassroomController extends AbstractController
         // here i handle invitations
         $invite = new Invite(); // We invite a new teacher or student
         $formInvite = $this->createForm(InviteType::class, $invite);
-        $this->invitations->invitation($classroom, $formInvite, $invite);
+        $this->invitations->invitation($formInvite, $invite, $classroom);
 
         return $this->render(
             'classroom/index.html.twig',
@@ -151,7 +151,7 @@ class ClassroomController extends AbstractController
         // Check the token
         if ($this->isCsrfTokenValid(
             'delete'.$lesson->getId(),
-            $this->request->getCurrentRequest()->get('_token')
+            $this->request->get('_token')
         )) {
             $classroom->removeLesson($lesson);
             $this->em->persist($classroom);

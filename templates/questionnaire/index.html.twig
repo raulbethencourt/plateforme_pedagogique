@@ -37,8 +37,8 @@
 						{% endfor %}
 					</td>
 					<td>
-						<a href="{{ path('question_edit', {id: question.id, questionnaire: questionnaire.id}) }}" class="btn btn-secondary mb-2" role="button">Éditer</a>
-						<form method="post" action="{{ path('question_delete', {id: question.id, questionnaire: questionnaire.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+						<a href="{{ path('question_edit', {id: question.id, questionnaire_id: questionnaire.id}) }}" class="btn btn-secondary mb-2" role="button">Éditer</a>
+						<form method="post" action="{{ path('question_delete', {id: question.id, questionnaire_id: questionnaire.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 							<input type="hidden" name="_method" value='DELETE'>
 							<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">
 							<button class="btn btn-danger mb-2">Supprimer</button>

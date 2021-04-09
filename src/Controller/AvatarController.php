@@ -5,28 +5,33 @@ namespace App\Controller;
 use App\Entity\Avatar;
 use App\Form\AvatarType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AvatarController extends AbstractController
 {
+    private $em;
+
+    private $request;
+
+    public function __construct(EntityManagerInterface $em, RequestStack $requestStack)
+    {
+        $this->em = $em;
+        $this->request = $requestStack->getCurrentRequest();
+    }
+
     /**
      * @Route("/student/avatar", name="edit_student_avatar")
      * @Route("/teacher/avatar", name="edit_teacher_avatar")
      * @Route("/user/avatar", name="edit_user_avatar")
-     * @param  EntityManagerInterface  $em
-     * @param  Request  $request
-     * @return RedirectResponse|Response
      */
-    public function createAvatar(EntityManagerInterface $em, Request $request)
+    public function createAvatar(): Response
     {
         $avatar = $this->getUser()->getAvatar();
         // Check if the image already exist
-        if (!$avatar)
-        {
+        if (!$avatar) {
             $avatar = new Avatar();
             $avatar->setUpdatedAt(new \DateTime());
             $avatar->setUser($this->getUser());
@@ -34,10 +39,10 @@ class AvatarController extends AbstractController
 
         $form = $this->createForm(AvatarType::class, $avatar);
 
-        $form->handleRequest($request);
+        $form->handleRequest($this->request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($avatar);
-            $em->flush();
+            $this->em->persist($avatar);
+            $this->em->flush();
             $this->addFlash('success', 'Avatar ajouté avec succès.');
 
             switch ($this->getUser()->getRoles()[0]) {
@@ -48,7 +53,6 @@ class AvatarController extends AbstractController
                 default:
                     return $this->redirectToRoute('user_profile');
             }
-
         }
 
         return $this->render(

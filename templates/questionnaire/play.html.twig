@@ -19,9 +19,9 @@
 				">{{ questionnaire.difficulty }}</span>
 		</h2>
 
-		{% if questionnaire.imageName is not same as "" %}
+		{% if questionnaire.imageName is not null %}
 			<div class="m-3 text-center">
-				<img src="{{ vich_uploader_asset(questionnaire, 'imageFile') }}" alt="profile" class="play__img">
+				<img src="{{ vich_uploader_asset(questionnaire, 'imageFile') }}" alt="Image" class="play__img">
 			</div>
 		{% endif %}
 	</header>
