@@ -2,21 +2,21 @@
 
 namespace App\Controller;
 
-use App\Controller\InvitationsController as Invitations;
-use App\Controller\NotificationsController as Notify;
 use App\Entity\Invite;
-use App\Entity\Notification;
 use App\Form\InviteType;
-use App\Form\NotificationType;
 use App\Service\FindEntity;
+use App\Entity\Notification;
+use App\Form\NotificationType;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\Controller\Service\NotificationsController as Notify;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Controller\Service\InvitationsController as Invitations;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * Class ClassroomController

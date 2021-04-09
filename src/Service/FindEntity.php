@@ -2,14 +2,16 @@
 
 namespace App\Service;
 
-use App\Entity\Classroom;
-use App\Entity\Lesson;
-use App\Entity\Notification;
 use App\Entity\User;
-use App\Repository\ClassroomRepository;
-use App\Repository\LessonRepository;
-use App\Repository\NotificationRepository;
+use App\Entity\Lesson;
+use App\Entity\Classroom;
+use App\Entity\Notification;
+use App\Entity\Questionnaire;
 use App\Repository\UserRepository;
+use App\Repository\LessonRepository;
+use App\Repository\ClassroomRepository;
+use App\Repository\NotificationRepository;
+use App\Repository\QuestionnaireRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class FindEntity
@@ -24,19 +26,22 @@ class FindEntity
 
     private $notificationRepo;
 
-    public function __construct(ClassroomRepository $classroomRepo, LessonRepository $lessonRepo, RequestStack $query, UserRepository $userRepo, NotificationRepository $notificationRepo)
+    private $questionnaireRepo;
+
+    public function __construct(ClassroomRepository $classroomRepo, LessonRepository $lessonRepo, RequestStack $query, UserRepository $userRepo, NotificationRepository $notificationRepo, QuestionnaireRepository $questionnaireRepo)
     {
         $this->classroomRepo = $classroomRepo;
         $this->lessonRepo = $lessonRepo;
         $this->request = $query;
         $this->userRepo = $userRepo;
         $this->notificationRepo = $notificationRepo;
+        $this->questionnaireRepo = $questionnaireRepo;
     }
 
     /**
      * Find a classroom.
      */
-    public function findClassroom(): Classroom
+    public function findClassroom(): ?Classroom
     {
         if (null !== $this->request->getCurrentRequest()->query->get('classroom_id')) {
             $classroom_id = $this->request->getCurrentRequest()->query->get('classroom_id');
@@ -50,7 +55,7 @@ class FindEntity
     /**
      * Find a lesson.
      */
-    public function findLesson(): Lesson
+    public function findLesson(): ?Lesson
     {
         if (null !== $this->request->getCurrentRequest()->query->get('lesson_id')) {
             $classroom_id = $this->request->getCurrentRequest()->query->get('lesson_id');
@@ -60,6 +65,21 @@ class FindEntity
 
         return $this->lessonRepo->findOneById($lesson_id);
     }
+
+    /**
+     * Find a Questionnaire.
+     */
+    public function findQuestionnaire(): ?Questionnaire
+    {
+        if (null !== $this->request->getCurrentRequest()->query->get('questionnaire_id')) {
+            $classroom_id = $this->request->getCurrentRequest()->query->get('questionnaire_id');
+        } else {
+            $questionnaire_id = $this->request->getCurrentRequest()->attributes->get('id');
+        }
+
+        return $this->questionnaireRepo->findOneById($questionnaire_id);
+    }
+
 
     /**
      * find all lessons.

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Service;
 
 use App\Entity\Classroom;
 use App\Service\FindEntity;

@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Service;
 
-use App\Entity\Classroom;
-use App\Entity\Invite;
 use App\Entity\User;
+use App\Entity\Invite;
+use App\Entity\Classroom;
 use App\Service\FindEntity;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Mime\Address;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Form;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class Invitation

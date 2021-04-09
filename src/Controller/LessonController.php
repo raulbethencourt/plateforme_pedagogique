@@ -5,17 +5,13 @@ namespace App\Controller;
 use App\Entity\Lesson;
 use App\Form\LessonType;
 use App\Service\FindEntity;
-use App\Repository\LessonRepository;
-use App\Repository\ClassroomRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\QuestionnaireRepository;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class LessonController
@@ -31,18 +27,27 @@ class LessonController extends AbstractController
      */
     private $em;
 
-    public function __construct(EntityManagerInterface $em)
+    private $find;
+
+    private $request;
+
+    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $request)
     {
         $this->em = $em;
+        $this->find = $find;
+        $this->request = $request;
     }
 
     /**
      * @Route("/{id}", name="lesson_index", requirements={"id": "\d+"})
      */
-    public function index(FindEntity $find): Response
+    public function index(): Response
     {
-        $classroom = $find->findClassroom();
-        $lesson = $find->findLesson();
+        $classroom = $this->find->findClassroom();
+        if (!isset($classroom)) {
+            $classroom = null;
+        }
+        $lesson = $this->find->findLesson();
 
         return $this->render('lesson/index.html.twig', [
             'lesson' => $lesson,
@@ -54,10 +59,10 @@ class LessonController extends AbstractController
     /**
      * @Route("/list", name="list_lessons")
      */
-    public function listLessons(FindEntity $find, Request $request): Response
+    public function listLessons(): Response
     {
-        $classroom_id = $request->query->get('classroom_id');
-        $lessons = $find->findAllLessons();
+        $classroom_id = $this->request->getCurrentRequest()->query->get('classroom_id');
+        $lessons = $this->find->findAllLessons();
 
         return $this->render('lesson/list.html.twig', [
             'lessons' => $lessons,
@@ -67,24 +72,20 @@ class LessonController extends AbstractController
 
     /**
      * @Route("/create", name="lesson_create")
-     * @ParamConverter("lesson", class="\App\Entity\Lesson")
      */
-    public function createLesson(Request $request, ClassroomRepository $repository): Response
+    public function createLesson(): Response
     {
+        $classroom = $this->find->findClassroom();
         $lesson = new Lesson();
-        $classroom_id = $request->query->get('classroom_id');
-        $classroom = $repository->findOneById($classroom_id);
         if (isset($classroom)) {
             $lesson->addClassroom($classroom);
         }
-
-        // Add actual date and the user
         $lesson->setDateCreation(new \DateTime());
         $lesson->addUser($this->getUser());
         $lesson->setCreator($this->getUser()->getUsername());
         $form = $this->createForm(LessonType::class, $lesson);
 
-        $form->handleRequest($request);
+        $form->handleRequest($this->request->getCurrentRequest());
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($lesson);
             $this->em->flush();
@@ -95,7 +96,7 @@ class LessonController extends AbstractController
                     'lesson_index',
                     [
                         'id' => $lesson->getId(),
-                        'classroom' => $classroom_id,
+                        'classroom' => $classroom->getId(),
                     ]
                 );
             }
@@ -116,14 +117,12 @@ class LessonController extends AbstractController
 
     /**
      * @Route("/edit/{id}", name="lesson_edit", methods={"GET", "POST"})
-     * @ParamConverter("lesson", class="\App\Entity\Lesson")
-     *
-     * @param \App\Entity\Lesson|null $lesson
      */
-    public function editLesson(Lesson $lesson, Request $request): Response
+    public function editLesson(): Response
     {
+        $lesson = $this->find->findLesson();
         $form = $this->createForm(LessonType::class, $lesson);
-        $form->handleRequest($request);
+        $form->handleRequest($this->request->getCurrentRequest());
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
@@ -143,14 +142,14 @@ class LessonController extends AbstractController
 
     /**
      * @Route("/delete/{id}", name="lesson_delete", methods={"DELETE"})
-     * @ParamConverter("lesson", class="\App\Entity\Lesson")
      */
-    public function deleteLesson(Lesson $lesson, Request $request): RedirectResponse
+    public function deleteLesson(): RedirectResponse
     {
+        $lesson = $this->find->findLesson();
         // Check the token
         if ($this->isCsrfTokenValid(
             'delete'.$lesson->getId(),
-            $request->get('_token')
+            $this->request->getCurrentRequest()->get('_token')
         )) {
             $this->em->remove($lesson);
             $this->em->flush();
@@ -164,24 +163,15 @@ class LessonController extends AbstractController
      * Add questionnaire direct to a lesson.
      *
      * @Route("/questionnaire/add", name="add_questionnaire_lesson")
-     * @ParamConverter("questionnaire", class="\App\Entity\Questionnaire")
      */
-    public function addQuestionnaireToLesson(
-        LessonRepository $lessonRepo,
-        QuestionnaireRepository $questionnaireRepo,
-        ClassroomRepository $classroomRepo,
-        Request $request
-    ): RedirectResponse {
+    public function addQuestionnaireToLesson(): RedirectResponse
+    {
         // find lesson
-        $lesson_id = $request->query->get('lesson');
-        $lesson = $lessonRepo->findOneById($lesson_id);
-
+        $lesson = $this->find->findLesson();
         // find questionnaire
-        $questionnaire_id = $request->query->get('questionnaire');
-        $questionnaire = $questionnaireRepo->findOneById($questionnaire_id);
-
+        $questionnaire = $this->find->findQuestionnaire();
         // find classroom
-        $classroom_id = $request->query->get('classroom');
+        $classroom_id = $this->request->getCurrentRequest()->query->get('classroom');
 
         $lesson->addQuestionnaire($questionnaire);
         $this->em->persist($lesson);
@@ -191,32 +181,30 @@ class LessonController extends AbstractController
         return $this->redirectToRoute(
             'lesson_index',
             [
-                'id' => $lesson_id,
+                'id' => $lesson->getId(),
                 'classroom' => $classroom_id,
             ]
         );
     }
 
     /**
+     * Delete a questionnaire from a lesson and not in database.
+     * 
      * @Route("/questionnaire/{id}/delete", name="delete_questionnaire_lesson", methods={"DELETE"})
      */
-    public function deleteQuestionnaireFromLesson(LessonRepository $lessonRepo, QuestionnaireRepository $questionnaireRepo, Request $request): RedirectResponse
+    public function deleteQuestionnaireFromLesson(): RedirectResponse
     {
-        // find questionnaire
-        $questionnaire_id = $request->attributes->get('id');
-        $questionnaire = $questionnaireRepo->findOneById($questionnaire_id);
-
         // find lesson
-        $lesson_id = $request->query->get('lesson_id');
-        $lesson = $lessonRepo->findOneById($lesson_id);
-
+        $lesson = $this->find->findLesson();
+        // find questionnaire
+        $questionnaire = $this->find->findQuestionnaire();
         // find classroom
-        $classroom_id = $request->query->get('classroom_id');
+        $classroom_id = $this->request->getCurrentRequest()->query->get('classroom');
 
         // Check the token
         if ($this->isCsrfTokenValid(
-            'delete'.$lesson_id,
-            $request->get('_token')
+            'delete'.$lesson->getId(),
+            $this->request->getCurrentRequest()->get('_token')
         )) {
             $lesson->removeQuestionnaire($questionnaire);
             $this->em->persist($lesson);
@@ -225,7 +213,7 @@ class LessonController extends AbstractController
         }
 
         return $this->redirectToRoute('lesson_index', [
-            'id' => $lesson_id,
+            'id' => $lesson->getId(),
             'classroom_id' => $classroom_id,
         ]);
     }

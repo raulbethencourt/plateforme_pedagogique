@@ -5,11 +5,10 @@ namespace App\Controller;
 use App\Entity\Avatar;
 use App\Form\AvatarType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AvatarController extends AbstractController
 {
@@ -17,16 +16,12 @@ class AvatarController extends AbstractController
      * @Route("/student/avatar", name="edit_student_avatar")
      * @Route("/teacher/avatar", name="edit_teacher_avatar")
      * @Route("/user/avatar", name="edit_user_avatar")
-     * @param  EntityManagerInterface  $em
-     * @param  Request  $request
-     * @return RedirectResponse|Response
      */
-    public function createAvatar(EntityManagerInterface $em, Request $request)
+    public function createAvatar(EntityManagerInterface $em, Request $request): Response
     {
         $avatar = $this->getUser()->getAvatar();
         // Check if the image already exist
-        if (!$avatar)
-        {
+        if (!$avatar) {
             $avatar = new Avatar();
             $avatar->setUpdatedAt(new \DateTime());
             $avatar->setUser($this->getUser());
@@ -48,7 +43,6 @@ class AvatarController extends AbstractController
                 default:
                     return $this->redirectToRoute('user_profile');
             }
-
         }
 
         return $this->render(
