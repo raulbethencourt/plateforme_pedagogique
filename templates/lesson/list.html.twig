@@ -9,7 +9,11 @@
 			{{ message }}
 		</div>
 	{% endfor %}
-	
+
+	{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and classroom_id is null %}
+		<a href="{{ path('lesson_create') }}" class="btn btn-secondary mb-2" role="button">Ajouter Module</a>
+	{% endif %}
+
 	<div class="row">
 		<div class="col-12">
 			<h1>Liste des modules</h1>
@@ -18,6 +22,7 @@
 					<tr>
 						<th scope="col"></th>
 						<th scope="col">Titre</th>
+						<th scope="col">Author</th>
 						<th scope="col">Niveau</th>
 						<th scope="col"></th>
 					</tr>
@@ -32,9 +37,10 @@
 									{{ lesson.title }}
 								</a>
 							</td>
+							<td>{{ lesson.creator }}</td>
 							<td>{{ lesson.level}}</td>
 							<td>
-								{% if is_granted('ROLE_ADMIN') or app.user.username == lesson.creator %}
+								{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) and classroom_id is null %}
 									<a href="{{ path('lesson_edit', {id: lesson.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
 									<form method="post" action="{{ path('lesson_delete', {id: lesson.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 										<input type="hidden" name="_method" value='DELETE'>

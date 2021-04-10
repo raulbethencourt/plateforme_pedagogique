@@ -52,6 +52,7 @@ class QuestionnaireController extends AbstractController
             [
                 'questionnaire' => $questionnaire,
                 'questions' => $questionnaire->getQuestions(),
+                'lesson_id' => $this->request->query->get('lesson_id')
             ]
         );
     }
@@ -92,6 +93,7 @@ class QuestionnaireController extends AbstractController
                 'question_create',
                 [
                     'id' => $questionnaire->getId(),
+                    'lesson_id' => $lesson->getId(),
                 ]
             );
         }

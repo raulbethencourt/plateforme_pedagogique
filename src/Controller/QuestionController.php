@@ -72,6 +72,7 @@ class QuestionController extends AbstractController
                 'question' => $question,
                 'form' => $form->createView(),
                 'user' => $this->getUser(),
+                'lesson_id' => $this->request->query->get('lesson_id')
             ]
         );
     }

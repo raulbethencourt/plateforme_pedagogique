@@ -2,24 +2,22 @@
 
 namespace App\Controller;
 
-use App\Entity\Question;
 use App\Entity\Questionnaire;
 use App\Form\EditTeacherType;
-use App\Form\QuestionnaireType;
-use App\Form\QuestionType;
 use App\Repository\QuestionnaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class TeacherController
- * This class manage questionnaire creation by the teachers
+ * This class manage questionnaire creation by the teachers.
+ *
  * @Route("/teacher")
- * @package App\Controller
  */
 class TeacherController extends AbstractController
 {
@@ -35,8 +33,8 @@ class TeacherController extends AbstractController
 
     /**
      * @Route("/", name="teacher_index")
-     * @param  QuestionnaireRepository  $repository
-     * @return ResponseAlias
+     *
+     * @param QuestionnaireRepository $repository
      */
     public function index(): ResponseAlias
     {
@@ -45,15 +43,14 @@ class TeacherController extends AbstractController
         return $this->render(
             'teacher/index.html.twig',
             [
-                'questionnaires' => $teacher->getQuestionnaires(),
+                'questionnaires' => $teacher->getClassrooms(),
                 'teacher' => $teacher,
             ]
         );
     }
 
     /**
-     * @Route ("/profile", name="teacher_profile")
-     * @return ResponseAlias
+     * @Route("/profile", name="teacher_profile")
      */
     public function teacherProfile(): ResponseAlias
     {
@@ -66,11 +63,9 @@ class TeacherController extends AbstractController
     }
 
     /**
-     * @Route ("/profile/edit", name="edit_teacher")
-     * @param  Request  $request
-     * @return RedirectResponse|Response
+     * @Route("/profile/edit", name="edit_teacher")
      */
-    public function editProfile(Request $request)
+    public function editProfile(Request $request): Response
     {
         $teacher = $this->getUser();
 

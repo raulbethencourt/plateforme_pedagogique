@@ -20,6 +20,7 @@
 			<tr>
 				<th scope="col"></th>
 				<th scope="col">Titre</th>
+				<th scope="col">Author</th>
 				<th scope="col">Niveau</th>
 				<th scope="col"></th>
 			</tr>
@@ -30,8 +31,9 @@
 				<tr>
 					<th scope="row">{{ loop.index }}</th>
 					<td>
-						<a href="{{ path('questionnaire_index', {id: questionnaire.id}) }}" role="button">{{ questionnaire.title }}</a>
+						<a href="{{ path('questionnaire_index', {id: questionnaire.id, lesson_id: lesson.id}) }}" role="button">{{ questionnaire.title }}</a>
 					</td>
+					<td>{{ questionnaire.creator }}</td>
 					{% if questionnaire.difficulty == 'facile' %}
 						<td>
 							<span class="badge badge-pill badge-success p-2">{{ questionnaire.difficulty }}</span>
@@ -47,20 +49,15 @@
 					{% endif %}
 
 					<td class="d-flex justify-content-end">
-						{% if classroom is null %}
-							<a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-							<form method="post" action="{{ path('questionnaire_delete', {id: questionnaire.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-								<input type="hidden" name="_method" value='DELETE'>
-								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ questionnaire.id) }}">
-								<button class="btn btn-danger mr-2">Supprimer</button>
-							</form>
-						{% endif %}
 						<a href="{{ path('questionnaire_play', {id: questionnaire.id}) }}" class="btn btn-success mr-2" role="button">Jouer</a>
 					</td>
 				</tr>
 			{% endfor %}
 		</tbody>
 	</table>
+	<pre>
+		{{ dump(classroom) }}
+	</pre>
 	{% if classroom is null %}
 		<div class="text-right">
 			<a href="{{ path('questionnaire_create', {lesson_id: lesson.id}) }}" class="btn btn-primary">Créer activité</a>
