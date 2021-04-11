@@ -196,10 +196,11 @@ class LessonController extends AbstractController
         $questionnaire = $this->find->findQuestionnaire();
         $classroom_id = $this->request->query->get('classroom');
 
+        
         if ($this->isCsrfTokenValid(
             'delete'.$lesson->getId(),
             $this->request->get('_token')
-        )) {
+            )) {
             $lesson->removeQuestionnaire($questionnaire);
             $this->em->persist($lesson);
             $this->em->flush();

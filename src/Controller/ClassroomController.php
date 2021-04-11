@@ -89,7 +89,6 @@ class ClassroomController extends AbstractController
      */
     public function deleteUserFromClassroom(): RedirectResponse
     {
-        //TODO correct FindEntity
         // find classroom
         $classroom = $this->find->findClassroom();
         // find user
