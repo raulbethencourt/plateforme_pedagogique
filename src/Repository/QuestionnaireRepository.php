@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\Classroom;
 use App\Entity\Questionnaire;
 use App\Entity\Teacher;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -23,8 +22,8 @@ class QuestionnaireRepository extends ServiceEntityRepository
     }
 
     /**
-     * This method allows to find a questionnaire by a teacher
-     * @param Teacher $value
+     * This method allows to find a questionnaire by a teacher.
+     *
      * @return questionnaire[] Returns an array of questionnaire objects
      */
     public function findByTeacher(Teacher $value): array
@@ -35,22 +34,21 @@ class QuestionnaireRepository extends ServiceEntityRepository
             ->orderBy('q.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     /**
-     * This method allows to find a questionnaire by an Id
-     * @param $id
-     * @return Questionnaire|null
+     * This method allows to find a questionnaire by an Id.
      * @throws NonUniqueResultException
      */
-    public function findOneById($id): ?questionnaire
+    public function findOneById(string $id): ?questionnaire
     {
         return $this->createQueryBuilder('q')
             ->andWhere('q.id = :val')
             ->setParameter('val', $id)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
     }
 }
-

@@ -6,12 +6,12 @@ use App\Entity\Lesson;
 use App\Form\LessonType;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class LessonController
@@ -43,8 +43,9 @@ class LessonController extends AbstractController
      */
     public function index(): Response
     {
-        $classroom = $this->find->findClassroom();
-        if (!isset($classroom)) {
+        if (null !== $this->request->query->get('classroom_id')) {
+            $classroom = $this->find->findClassroom();
+        } else {
             $classroom = null;
         }
         $lesson = $this->find->findLesson();
@@ -195,10 +196,11 @@ class LessonController extends AbstractController
         $questionnaire = $this->find->findQuestionnaire();
         $classroom_id = $this->request->query->get('classroom');
 
+        
         if ($this->isCsrfTokenValid(
             'delete'.$lesson->getId(),
             $this->request->get('_token')
-        )) {
+            )) {
             $lesson->removeQuestionnaire($questionnaire);
             $this->em->persist($lesson);
             $this->em->flush();

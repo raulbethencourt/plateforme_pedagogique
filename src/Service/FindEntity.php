@@ -72,7 +72,7 @@ class FindEntity
         } else {
             $lesson_id = $this->request->attributes->get('id');
         }
-        
+
         return $this->lessonRepo->findOneById($lesson_id);
     }
 
@@ -105,7 +105,7 @@ class FindEntity
     }
 
     /**
-     * find pass
+     * find pass.
      */
     public function findPass(User $user, Questionnaire $questionnaire): ?Pass
     {
@@ -168,7 +168,7 @@ class FindEntity
     /**
      * find notification in classroom.
      */
-    public function findNotification(Classroom $classroom): Notification
+    public function findNotification(Classroom $classroom): ?Notification
     {
         return $this->notificationRepo->findOneBy(['classroom' => $classroom]);
     }
