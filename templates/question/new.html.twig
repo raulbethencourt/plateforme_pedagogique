@@ -12,8 +12,11 @@
 
 	<div class="d-flex justify-content-between">
 		<h1>Créer une question</h1>
+		<pre>
+			{{ dump(lesson_id) }}
+		</pre>
 		<div class="text-right">
-			<a class="btn btn-primary" href="{{ path('lesson_index', {id: questionnaire.id, lesson_id: lesson_id}) }}" role="button">{{ button|default('Questionnaire terminé') }}</a>
+			<a class="btn btn-primary" href="{{ path('lesson_index', {id: questionnaire.id, lesson_id: lesson_id}) }}" role="button">{{ button|default('Activité terminé') }}</a>
 		</div>
 	</div>
 

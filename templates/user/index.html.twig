@@ -81,7 +81,7 @@
 						<tr>
 							<th scope="col"></th>
 							<th scope="col">Nom</th>
-							<th scope="col">Discipline</th>
+							<th scope="col">Niveau</th>
 							<th scope="col">Formateurs</th>
 						</tr>
 					</thead>
@@ -99,7 +99,7 @@
 								<td>
 									<div class="d-flex justify-content-between">
 										{% for teacher in classroom.teachers %}
-											{{ teacher.name }}
+											{{ teacher.name }} /
 										{% endfor %}
 										<div class="d-flex justify-content-center w-50">
 											<a href="{{ path('user_classroom_edit', {id: classroom.id}) }}" class="btn btn-secondary mr-lg-2" role="button">Éditer</a>

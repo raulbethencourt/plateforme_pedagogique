@@ -126,12 +126,7 @@ class QuestionnaireController extends AbstractController
 
             $this->addFlash('success', 'Questionnaire modifié avec succès.');
 
-            return $this->redirectToRoute(
-                'lesson_index',
-                [
-                    'id' => $questionnaire->getId(),
-                ]
-            );
+            return $this->redirectToRoute('list_questionnaires');
         }
 
         return $this->render(
@@ -158,7 +153,7 @@ class QuestionnaireController extends AbstractController
             $this->addFlash('success', 'Questionnaire supprimé avec succès.');
         }
 
-        return $this->redirectToRoute('lesson_index');
+        return $this->redirectToRoute('list_questionnaires');
     }
 
     /**

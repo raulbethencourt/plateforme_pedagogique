@@ -49,12 +49,7 @@
 					{% endif %}
 
 					<td class="d-flex justify-content-end">
-
-					<pre>
-						{{ dump(classroom) }}
-					</pre>
-					{# TODO trouver solution to questionnaire in lesson index#}
-						{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) and classroom is defined and classroom is null %}
+						{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
 							<form method="post" action="{{ path('delete_questionnaire_lesson', {id: questionnaire.id, lesson_id: lesson.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 								<input type="hidden" name="_method" value='DELETE'>
 								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
