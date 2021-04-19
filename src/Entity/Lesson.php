@@ -54,6 +54,16 @@ class Lesson
      */
     private $creator;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $visibility;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $playable;
+
     public function __construct()
     {
         $this->questionnaires = new ArrayCollection();
@@ -182,6 +192,30 @@ class Lesson
     public function setCreator(string $creator): self
     {
         $this->creator = $creator;
+
+        return $this;
+    }
+
+    public function getVisibility(): ?bool
+    {
+        return $this->visibility;
+    }
+
+    public function setVisibility(bool $visibility): self
+    {
+        $this->visibility = $visibility;
+
+        return $this;
+    }
+
+    public function getPlayable(): ?bool
+    {
+        return $this->playable;
+    }
+
+    public function setPlayable(bool $playable): self
+    {
+        $this->playable = $playable;
 
         return $this;
     }
