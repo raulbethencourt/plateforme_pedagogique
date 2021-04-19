@@ -2,19 +2,19 @@
 
 namespace App\Controller;
 
-use App\Entity\Invite;
-use App\Form\InviteType;
+use App\Controller\Service\InvitationsController;
 use App\Entity\Classroom;
-use App\Form\EditUserType;
+use App\Entity\Invite;
 use App\Form\ClassroomType;
+use App\Form\EditUserType;
+use App\Form\InviteType;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Controller\Service\InvitationsController;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class UserController.
@@ -116,7 +116,12 @@ class UserController extends AbstractController
             $this->em->flush();
             $this->addFlash('success', 'Classe créée avec succès.');
 
-            return $this->redirectToRoute('user_index');
+            return $this->redirectToRoute(
+                'classroom_index',
+                [
+                    'id' => $classroom->getId(),
+                ]
+            );
         }
 
         return $this->render(
@@ -140,7 +145,12 @@ class UserController extends AbstractController
             $this->em->flush();
             $this->addFlash('success', 'Classe modifiée avec succès.');
 
-            return $this->redirectToRoute('user_index');
+            return $this->redirectToRoute(
+                'classroom_index',
+                [
+                    'id' => $classroom->getId(),
+                ]
+            );
         }
 
         return $this->render(

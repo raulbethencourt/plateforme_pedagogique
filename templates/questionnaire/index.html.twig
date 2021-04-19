@@ -37,7 +37,7 @@
 						{% endfor %}
 					</td>
 					<td>
-						{% if lesson_id is null %}
+						{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
 							<a href="{{ path('question_edit', {id: question.id, questionnaire_id: questionnaire.id}) }}" class="btn btn-secondary mb-2" role="button">Éditer</a>
 							<form method="post" action="{{ path('question_delete', {id: question.id, questionnaire_id: questionnaire.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 								<input type="hidden" name="_method" value='DELETE'>
@@ -50,9 +50,10 @@
 			{% endfor %}
 		</tbody>
 	</table>
-	<div class="text-right">
-		{% if lesson_id is null %}
+
+	{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
+		<div class="text-right">
 			<a href="{{ path('question_create', {id: questionnaire.id}) }}" class="btn btn-primary">Ajouter question</a>
-		{% endif %}
-	</div>
+		</div>
+	{% endif %}
 {% endblock %}

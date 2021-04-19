@@ -4,6 +4,16 @@
 {% endblock %}
 
 {% block body %}
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success mr-2 mb-0">
+			{{ message }}
+		</div>
+	{% endfor %}
+
+	{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and classroom_id is null %}
+		<a href="{{ path('questionnaire_create') }}" class="btn btn-secondary mb-2" role="button">Ajouter Activité</a>
+	{% endif %}
+
 	<div class="row">
 		<div class="col-12">
 			<h1>Liste des Activites</h1>
@@ -21,9 +31,11 @@
 					{% for questionnaire in questionnaires %}
 						<tr>
 							<th scope="row">{{ loop.index }}</th>
-							<td><a href="{{ path('questionnaire_index', {id: questionnaire.id, lesson_id: lesson_id}) }}">
+							<td>
+								<a href="{{ path('questionnaire_index', {id: questionnaire.id, lesson_id: lesson_id}) }}">
 									{{ questionnaire.title }}
-								</a></td>
+								</a>
+							</td>
 							<td>{{ questionnaire.creator }}</td>
 							<td>{{ questionnaire.difficulty }}</td>
 							<td>

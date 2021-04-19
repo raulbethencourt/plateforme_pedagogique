@@ -3,17 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Question;
+use App\Entity\Questionnaire;
 use App\Form\QuestionType;
 use App\Service\FindEntity;
-use App\Entity\Questionnaire;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class QuestionController
@@ -45,6 +45,7 @@ class QuestionController extends AbstractController
     {
         $questionnaire = $this->find->findQuestionnaire();
         $questionnaire_id = $questionnaire->getId();
+        $lesson_id = $this->request->query->get('lesson_id');
         $question = new Question();
 
         // Link question to his questionnaire
@@ -61,6 +62,7 @@ class QuestionController extends AbstractController
                 'question_create',
                 [
                     'id' => $questionnaire_id,
+                    'lesson_id' => $lesson_id,
                 ]
             );
         }
@@ -72,7 +74,7 @@ class QuestionController extends AbstractController
                 'question' => $question,
                 'form' => $form->createView(),
                 'user' => $this->getUser(),
-                'lesson_id' => $this->request->query->get('lesson_id')
+                'lesson_id' => $this->request->query->get('lesson_id'),
             ]
         );
     }

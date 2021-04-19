@@ -71,7 +71,7 @@
 	</div>
 
 	<div class="row">
-		<div class="col-12">			
+		<div class="col-12">
 			<h3>ESPACE ANNONCE</h3>
 			{% if notification %}
 				<p>{{ notification.text }}</p>
@@ -89,43 +89,47 @@
 		</div>
 	</div>
 
-	<div class="row">
-		<div class="col-12">
-			<div class="d-flex align-items-center">
-				<h3>
-					<span class="badge badge-pill badge-secondary text-white">Formateur(s)</span>
-				</h3>
-			</div>
-			<table class="table border-bottom">
-				<thead class="thead-dark">
-					<tr>
-						<th scope="col"></th>
-						<th scope="col">Prénom</th>
-						<th scope="col">Nom</th>
-						<th scope="col">Matière(s)</th>
-						<th scope="col"></th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for teacher in teachers %}
+{# TODO continuar la organizacion de roles#}
+	{% if is_granted('ROLE_ADMIN') %}
+		<div class="row">
+			<div class="col-12">
+				<div class="d-flex align-items-center">
+					<h3>
+						<span class="badge badge-pill badge-secondary text-white">Formateur(s)</span>
+					</h3>
+				</div>
+				<table class="table border-bottom">
+					<thead class="thead-dark">
 						<tr>
-							<th scope="row">{{ loop.index }}</th>
-							<td>{{ teacher.name }}</td>
-							<td>{{ teacher.surname }}</td>
-							<td>{{ teacher.subject }}</td>
-							<td>
-								<form method="post" action="{{ path('delete_user_classroom', {id: teacher.id, classroom_id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-									<input type="hidden" name="_method" value='DELETE'>
-									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ teacher.id) }}">
-									<button class="btn btn-danger">Supprimer</button>
-								</form>
-							</td>
+							<th scope="col"></th>
+							<th scope="col">Prénom</th>
+							<th scope="col">Nom</th>
+							<th scope="col">Matière(s)</th>
+							<th scope="col"></th>
 						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						{% for teacher in teachers %}
+							<tr>
+								<th scope="row">{{ loop.index }}</th>
+								<td>{{ teacher.name }}</td>
+								<td>{{ teacher.surname }}</td>
+								<td>{{ teacher.subject }}</td>
+								<td>
+									<form method="post" action="{{ path('delete_user_classroom', {id: teacher.id, classroom_id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+										<input type="hidden" name="_method" value='DELETE'>
+										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ teacher.id) }}">
+										<button class="btn btn-danger">Supprimer</button>
+									</form>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
 		</div>
-	</div>
+	{% endif %}
+
 
 	<div class="row">
 		<div class="col-12">

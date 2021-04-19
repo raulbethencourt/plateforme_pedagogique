@@ -52,7 +52,7 @@ class QuestionnaireController extends AbstractController
             [
                 'questionnaire' => $questionnaire,
                 'questions' => $questionnaire->getQuestions(),
-                'lesson_id' => $this->request->query->get('lesson_id')
+                'lesson_id' => $this->request->query->get('lesson_id'),
             ]
         );
     }
@@ -77,7 +77,12 @@ class QuestionnaireController extends AbstractController
     {
         $lesson = $this->find->findLesson();
         $questionnaire = new Questionnaire();
-        $questionnaire->addLesson($lesson);
+        if (isset($lesson)) {
+            $questionnaire->addLesson($lesson);
+            $lesson_id = $lesson->getId();
+        } else {
+            $lesson_id = null;
+        }
         $questionnaire->setDateCreation(new \DateTime());
         $questionnaire->setCreator($this->getUser()->getUsername());
         $form = $this->createForm(QuestionnaireType::class, $questionnaire);
@@ -104,7 +109,7 @@ class QuestionnaireController extends AbstractController
                 'questionnaire' => $questionnaire,
                 'form' => $form->createView(),
                 'user' => $this->getUser(),
-                'lesson_id' => $lesson->getId(),
+                'lesson_id' => $lesson_id,
                 'classroom_id' => $this->request->query->get('classroom'),
             ]
         );
