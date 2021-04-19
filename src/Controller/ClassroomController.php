@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\Controller\Service\NotificationsController as Notify;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use App\Controller\Service\InvitationsController as Invitations;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -53,7 +53,7 @@ class ClassroomController extends AbstractController
      * and It allows us to invite new Teachers or students.
      *
      * @Route("/{id}", name="classroom_index", requirements={"id": "\d+"})
-     * @IsGranted("ROLE_ADMIN")
+     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
     public function index(): Response
     {
