@@ -11,59 +11,50 @@
 			{{ message }}
 		</div>
 	{% endfor %}
-	{% if is_granted('IS_AUTHENTICATED_FULLY') %}
-		<pre>
-			{{ dump(app.user) }}
-		</pre>
-	{% endif %}
-	<h1>Bienvenue
-		{{ teacher.name }}</h1>
-	<h3>Liste des questionnaires</h3>
-	<table class="table border-bottom">
-		<thead class="thead-dark">
-			<tr>
-				<th scope="col"></th>
-				<th scope="col">Titre</th>
-				<th scope="col">Difficulté</th>
-				<th scope="col"></th>
-			</tr>
-		</thead>
-		<tbody>
 
-			{% for questionnaire in questionnaires %}
-				<tr>
-					<th scope="row">{{ loop.index }}</th>
-					<td>
-						<a href="{{ path('questionnaire_index', {id: questionnaire.id}) }}" role="button">{{ questionnaire.title }}</a>
-					</td>
-					{% if questionnaire.difficulty == 'facile' %}
-						<td>
-							<span class="badge badge-pill badge-success p-2">{{ questionnaire.difficulty }}</span>
-						</td>
-					{% elseif questionnaire.difficulty == 'difficile' %}
-						<td>
-							<span class="badge badge-pill badge-difficile p-2">{{ questionnaire.difficulty }}</span>
-						</td>
-					{% else %}
-						<td>
-							<span class="badge badge-pill badge-secondary p-2">{{ questionnaire.difficulty }}</span>
-						</td>
-					{% endif %}
+	{% for message in app.flashes('error') %}
+		<div class="alert alert-danger mr-2 mb-0">
+			{{ message }}
+		</div>
+	{% endfor %}
 
-					<td class="d-flex justify-content-end">
-						<a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-						<form method="post" action="{{ path('questionnaire_delete', {id: questionnaire.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-							<input type="hidden" name="_method" value='DELETE'>
-							<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ questionnaire.id) }}">
-							<button class="btn btn-danger mr-2">Supprimer</button>
-						</form>
-						<a href="{{ path('questionnaire_play', {id: questionnaire.id}) }}" class="btn btn-success mr-2" role="button">Jouer</a>
-					</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-	<div class="text-right">
-		<a href="{{ path('questionnaire_create') }}" class="btn btn-primary">Créer questionnaire</a>
+	<div class="row">
+		<div class="col-12 d-flex flex-column align-items-center">
+			<h3>Liste des classes</h3>
+			<div class="table-responsive">
+				<table class="table border-bottom">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col"></th>
+							<th scope="col">Nom</th>
+							<th scope="col">Niveau</th>
+							<th scope="col">Formateurs</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for classroom in teacher.classrooms %}
+							<tr>
+								<th scope="row">{{ loop.index }}</th>
+								<td>
+									<a href="{{ path('classroom_index', {id: classroom.id}) }}">{{ classroom.name }}</a>
+								</td>
+								<td>
+									<div class="d-flex justify-content-between ">
+										{{ classroom.discipline }}</div>
+								</td>
+								<td>
+									<div class="d-flex justify-content-between">
+										{% for teacher in classroom.teachers %}
+											/
+											{{ teacher.name }}
+										{% endfor %}
+									</div>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 {% endblock %}

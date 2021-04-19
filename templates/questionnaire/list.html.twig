@@ -47,7 +47,7 @@
 								<td>{{ questionnaire.creator }}</td>
 								<td>{{ questionnaire.difficulty }}</td>
 								<td>
-									{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) and lesson_id is null %}
+									{% if (is_granted('ROLE_ADMIN') or app.user.username == questionnaire.creator) and lesson_id is null %}
 										<a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
 										<form method="post" action="{{ path('questionnaire_delete', {id: questionnaire.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 											<input type="hidden" name="_method" value='DELETE'>
