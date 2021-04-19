@@ -40,7 +40,7 @@
 							<td>{{ lesson.creator }}</td>
 							<td>{{ lesson.level}}</td>
 							<td>
-								{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) and classroom_id is null %}
+								{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
 									<a href="{{ path('lesson_edit', {id: lesson.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
 									<form method="post" action="{{ path('lesson_delete', {id: lesson.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 										<input type="hidden" name="_method" value='DELETE'>

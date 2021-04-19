@@ -43,17 +43,11 @@ class LessonController extends AbstractController
      */
     public function index(): Response
     {
-        if (null !== $this->request->query->get('classroom_id')) {
-            $classroom = $this->find->findClassroom();
-        } else {
-            $classroom = null;
-        }
         $lesson = $this->find->findLesson();
 
         return $this->render('lesson/index.html.twig', [
             'lesson' => $lesson,
             'questionnaires' => $lesson->getQuestionnaires(),
-            'classroom' => $classroom,
         ]);
     }
 
@@ -102,7 +96,12 @@ class LessonController extends AbstractController
                 );
             }
 
-            return $this->redirectToRoute('list_lessons');
+            return $this->redirectToRoute(
+                'lesson_index',
+                    [
+                        'id' => $lesson->getId(),
+                    ]
+            );
         }
 
         return $this->render(
@@ -196,7 +195,6 @@ class LessonController extends AbstractController
         $questionnaire = $this->find->findQuestionnaire();
         $classroom_id = $this->request->query->get('classroom');
 
-        
         if ($this->isCsrfTokenValid(
             'delete'.$lesson->getId(),
             $this->request->get('_token')
