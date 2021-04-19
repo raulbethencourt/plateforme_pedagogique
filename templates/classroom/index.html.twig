@@ -178,11 +178,15 @@
 							</a>
 
 							<h6 class="card-subtitle mb-2 text-muted">{{lesson.level}}</h6>
-							<form method="post" action="{{ path('delete_lesson_classroom', {id: lesson.id, classroom_id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-								<input type="hidden" name="_method" value='DELETE'>
-								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
-								<button class="btn btn-danger">Supprimer</button>
-							</form>
+							
+							<div class="d-flex">
+								<a href="{{ path('lesson_edit', {id: lesson.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+								<form method="post" action="{{ path('delete_lesson_classroom', {id: lesson.id, classroom_id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+									<input type="hidden" name="_method" value='DELETE'>
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
+									<button class="btn btn-danger">Supprimer</button>
+								</form>
+							</div>
 						</div>
 					</div>
 				{% endfor %}
