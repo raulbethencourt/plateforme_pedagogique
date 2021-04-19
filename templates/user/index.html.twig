@@ -7,6 +7,12 @@
 		</div>
 	{% endfor %}
 
+	{% for message in app.flashes('error') %}
+		<div class="alert alert-danger mr-2 mb-0">
+			{{ message }}
+		</div>
+	{% endfor %}
+
 	{% if is_granted('ROLE_SUPER_ADMIN') %}
 		<div class="row">
 			<div class="col-12">

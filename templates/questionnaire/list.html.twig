@@ -10,8 +10,15 @@
 		</div>
 	{% endfor %}
 
-	{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and classroom_id is null %}
-		<a href="{{ path('questionnaire_create') }}" class="btn btn-secondary mb-2" role="button">Ajouter Activité</a>
+	{% for message in app.flashes('error') %}
+		<div class="alert alert-danger mr-2 mb-0">
+			{{ message }}
+		</div>
+	{% endfor %}
+
+
+	{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and lesson_id is null %}
+		<a href="{{ path('questionnaire_create') }}" class="btn btn-secondary mb-2" role="button">Créer Activité</a>
 	{% endif %}
 
 	<div class="row">
@@ -29,29 +36,32 @@
 				</thead>
 				<tbody>
 					{% for questionnaire in questionnaires %}
-						<tr>
-							<th scope="row">{{ loop.index }}</th>
-							<td>
-								<a href="{{ path('questionnaire_index', {id: questionnaire.id, lesson_id: lesson_id}) }}">
-									{{ questionnaire.title }}
-								</a>
-							</td>
-							<td>{{ questionnaire.creator }}</td>
-							<td>{{ questionnaire.difficulty }}</td>
-							<td>
-								{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) and lesson_id is null %}
-									<a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-									<form method="post" action="{{ path('questionnaire_delete', {id: questionnaire.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-										<input type="hidden" name="_method" value='DELETE'>
-										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ questionnaire.id) }}">
-										<button class="btn btn-danger mr-2">Supprimer</button>
-									</form>
-								{% endif %}
-								{% if lesson_id is defined and lesson_id is not null %}
-									<a href="{{ path('add_questionnaire_lesson', {questionnaire_id: questionnaire.id, lesson_id: lesson_id, classroom_id: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
-								{% endif %}
-							</td>
-						</tr>
+						{% if questionnaire.visibility or app.user.username == questionnaire.creator %}
+							<tr>
+								<th scope="row">{{ loop.index }}</th>
+								<td>
+									<a href="{{ path('questionnaire_index', {id: questionnaire.id, lesson_id: lesson_id}) }}">
+										{{ questionnaire.title }}
+									</a>
+								</td>
+								<td>{{ questionnaire.creator }}</td>
+								<td>{{ questionnaire.difficulty }}</td>
+								<td>
+									{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) and lesson_id is null %}
+										<a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+										<form method="post" action="{{ path('questionnaire_delete', {id: questionnaire.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+											<input type="hidden" name="_method" value='DELETE'>
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ questionnaire.id) }}">
+											<button class="btn btn-danger mr-2">Supprimer</button>
+										</form>
+									{% endif %}
+									<a href="{{ path('questionnaire_play', {id: questionnaire.id}) }}" class="btn btn-success mr-2" role="button">Jouer</a>
+									{% if lesson_id is defined and lesson_id is not null %}
+										<a href="{{ path('add_questionnaire_lesson', {questionnaire_id: questionnaire.id, lesson_id: lesson_id, classroom_id: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+									{% endif %}
+								</td>
+							</tr>
+						{% endif %}
 					{% endfor %}
 				</tbody>
 			</table>

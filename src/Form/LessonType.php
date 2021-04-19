@@ -4,10 +4,10 @@ namespace App\Form;
 
 use App\Entity\Lesson;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class LessonType extends AbstractType
 {
@@ -19,7 +19,7 @@ class LessonType extends AbstractType
                 TextType::class,
                 [
                     'purify_html' => true,
-                    'label' => 'Titre'
+                    'label' => 'Titre',
                 ]
             )
             ->add(
@@ -30,10 +30,33 @@ class LessonType extends AbstractType
                         'Grammaire' => 'grammaire',
                         'Sintaxe' => 'sintaxe',
                         'Comprension' => 'comprension',
-                        'Expression' => 'expression'
-                    ]
+                        'Expression' => 'expression',
+                    ],
                 ]
-            );
+            )
+            ->add(
+                'visibility',
+                ChoiceType::class,
+                [
+                    'choices' => [
+                        'Oui' => true,
+                        'Non' => false,
+                    ],
+                    'label' => 'Rendre visible',
+                ]
+            )
+            ->add(
+                'playable',
+                ChoiceType::class,
+                [
+                    'choices' => [
+                        'Oui' => true,
+                        'Non' => false,
+                    ],
+                    'label' => 'Rendre juable',
+                ]
+            )
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
