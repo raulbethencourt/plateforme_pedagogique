@@ -84,7 +84,6 @@ class QuestionController extends AbstractController
      */
     public function editQuestion(): Response
     {
-        $questionnaire_id = $this->request->query->get('questionnaire');
         $questionnaire = $this->find->findQuestionnaire();
         $question = $this->find->findQuestion();
         $question->setQuestionnaire($questionnaire);
@@ -95,12 +94,12 @@ class QuestionController extends AbstractController
             $this->em->persist($question);
             $this->em->flush();
 
-            $this->addFlash('success', 'Question ajoutée avec succès.');
+            $this->addFlash('success', 'Question editée avec succès.');
 
             return $this->redirectToRoute(
                 'questionnaire_index',
                 [
-                    'id' => $questionnaire_id,
+                    'id' => $this->request->query->get('questionnaire_id'),
                 ]
             );
         }
@@ -133,7 +132,7 @@ class QuestionController extends AbstractController
         return $this->redirectToRoute(
             'questionnaire_index',
             [
-                'id' => $this->request->query->get('questionnaire'),
+                'id' => $this->request->query->get('questionnaire_id'),
             ]
         );
     }

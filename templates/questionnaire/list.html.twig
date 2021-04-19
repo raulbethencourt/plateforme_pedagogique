@@ -10,8 +10,15 @@
 		</div>
 	{% endfor %}
 
-	{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and classroom_id is null %}
-		<a href="{{ path('questionnaire_create') }}" class="btn btn-secondary mb-2" role="button">Ajouter Activité</a>
+	{% for message in app.flashes('error') %}
+		<div class="alert alert-danger mr-2 mb-0">
+			{{ message }}
+		</div>
+	{% endfor %}
+
+
+	{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and lesson_id is null %}
+		<a href="{{ path('questionnaire_create') }}" class="btn btn-secondary mb-2" role="button">Créer Activité</a>
 	{% endif %}
 
 	<div class="row">
@@ -47,6 +54,7 @@
 										<button class="btn btn-danger mr-2">Supprimer</button>
 									</form>
 								{% endif %}
+								<a href="{{ path('questionnaire_play', {id: questionnaire.id}) }}" class="btn btn-success mr-2" role="button">Jouer</a>
 								{% if lesson_id is defined and lesson_id is not null %}
 									<a href="{{ path('add_questionnaire_lesson', {questionnaire_id: questionnaire.id, lesson_id: lesson_id, classroom_id: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
 								{% endif %}

@@ -11,7 +11,7 @@
 	{% endfor %}
 
 	{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and classroom_id is null %}
-		<a href="{{ path('lesson_create') }}" class="btn btn-secondary mb-2" role="button">Ajouter Module</a>
+		<a href="{{ path('lesson_create') }}" class="btn btn-secondary mb-2" role="button">Créer Module</a>
 	{% endif %}
 
 	<div class="row">

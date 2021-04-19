@@ -92,13 +92,13 @@ class QuestionnaireController extends AbstractController
             $this->em->persist($questionnaire);
             $this->em->flush();
 
-            $this->addFlash('success', 'Questionnaire ajouté avec succès.');
+            $this->addFlash('success', 'Activité ajouté avec succès.');
 
             return $this->redirectToRoute(
                 'question_create',
                 [
                     'id' => $questionnaire->getId(),
-                    'lesson_id' => $lesson->getId(),
+                    'lesson_id' => $lesson_id,
                 ]
             );
         }
@@ -116,22 +116,27 @@ class QuestionnaireController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="questionnaire_edit", methods={"GET", "POST"})
+     * @Route("/{id}/edit", name="questionnaire_edit", methods={"GET", "POST"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
     public function editQuestionnaire(): Response
     {
         $questionnaire = $this->find->findQuestionnaire();
         $form = $this->createForm(QuestionnaireType::class, $questionnaire);
-
         $form->handleRequest($this->request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($questionnaire);
             $this->em->flush();
 
-            $this->addFlash('success', 'Questionnaire modifié avec succès.');
+            $this->addFlash('success', 'Activite modifié avec succès.');
 
-            return $this->redirectToRoute('list_questionnaires');
+            return $this->redirectToRoute(
+                'questionnaire_index',
+                [
+                    'id' => $questionnaire->getId(),
+                ]
+            );
         }
 
         return $this->render(
@@ -145,7 +150,7 @@ class QuestionnaireController extends AbstractController
     }
 
     /**
-     * @Route("/questionnaire/{id}", name="questionnaire_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="questionnaire_delete", methods={"DELETE"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
     public function deleteQuestionnaire(): RedirectResponse
@@ -155,7 +160,7 @@ class QuestionnaireController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$questionnaire->getId(), $this->request->get('_token'))) {
             $this->em->remove($questionnaire);
             $this->em->flush();
-            $this->addFlash('success', 'Questionnaire supprimé avec succès.');
+            $this->addFlash('success', 'Activité supprimé avec succès.');
         }
 
         return $this->redirectToRoute('list_questionnaires');
@@ -172,9 +177,17 @@ class QuestionnaireController extends AbstractController
         $questionnaire = $this->find->findQuestionnaire();
         // Check if we can play the questionnaire or not
         if (!$questionnaire->isPlayable()) {
-            $this->addFlash('error', 'Questionnaire indisponible !');
-
-            return $this->redirectToRoute('student_index');
+            $this->addFlash('error', 'Activité indisponible !');
+            $lesson_id = $this->request->get('lesson_id');
+            if (isset($lesson_id)) {
+                return $this->redirectToRoute(
+                    'lesson_index',
+                [
+                    'id' => $lesson_id,
+                ]);
+            } else {
+                return $this->redirectToRoute('list_questionnaires'); 
+            }
         }
 
         // Creates the variables that I'm gonna need later on
