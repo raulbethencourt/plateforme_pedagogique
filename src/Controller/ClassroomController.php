@@ -23,6 +23,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
  * This class manage the classrooms.
  *
  * @Route("/classroom")
+ * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
  */
 class ClassroomController extends AbstractController
 {
@@ -53,7 +54,6 @@ class ClassroomController extends AbstractController
      * and It allows us to invite new Teachers or students.
      *
      * @Route("/{id}", name="classroom_index", requirements={"id": "\d+"})
-     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
     public function index(): Response
     {
@@ -65,7 +65,6 @@ class ClassroomController extends AbstractController
         $formNotify = $this->createForm(NotificationType::class, $notification);
         $this->notifications->notify($notification, $classroom, $formNotify);
 
-        // TODO finish with invitation in depens of user
         // here i handle invitations
         $invite = new Invite(); // We invite a new teacher or student
         $formInvite = $this->createForm(InviteType::class, $invite, ['user' => $this->getUser()]);

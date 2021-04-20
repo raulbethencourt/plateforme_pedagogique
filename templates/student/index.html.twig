@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block body %}
-	<h1>Bienvenue {{ student.name }}</h1>
+	<h1>Bienvenue
+		{{ student.name }}</h1>
 	<h3>Liste des questionnaires</h3>
 	<table class="table border-bottom">
 		<thead class="thead-dark">
@@ -35,8 +36,7 @@
 						</td>
 					{% endif %}
 					<td>
-						<a href="{{ path('questionnaire_play', {id: questionnaire.id}) }}"
-						   class="btn btn-primary role="button">Jouer</a>
+						<a href="{{ path('questionnaire_play', {id: questionnaire.id}) }}" class="btn btn-primary role=" button">Jouer</a>
 					</td>
 				</tr>
 			{% endfor %}
