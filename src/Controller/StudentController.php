@@ -19,7 +19,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class StudentController extends AbstractController
 {
-    //TODO
     /**
      * @Route("/", name="student_index")
      */
@@ -28,19 +27,14 @@ class StudentController extends AbstractController
         $student = $this->getUser();
         $classrooms = $student->getClassrooms();
 
-        // We get all questionnaires that the student has access in this classroom
-        foreach ($classrooms as $classroom) {
-            $teachers = $classroom->getTeachers();
-            foreach ($teachers as $teacher) {
-                $questionnaires = $teacher->getQuestionnaires();
-            }
-        }
+        
 
         return $this->render(
             'student/index.html.twig',
             [
                 'student' => $student,
-                'questionnaires' => $questionnaires,
+                'classrooms' => $classrooms,
+
             ]
         );
     }
