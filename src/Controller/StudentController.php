@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Pass;
 use App\Entity\Questionnaire;
 use App\Form\EditStudentType;
+use App\Service\FindEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,9 +13,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class StudentController
- * This class manage student index and his profile
+ * This class manage student index and his profile.
+ *
  * @Route("/student")
- * @package App\Controller
  */
 class StudentController extends AbstractController
 {
@@ -27,33 +27,24 @@ class StudentController extends AbstractController
         $student = $this->getUser();
         $classrooms = $student->getClassrooms();
 
-        // We get all questionnaires that the student has access in this classroom
-        foreach ($classrooms as $classroom) {
-            $teachers = $classroom->getTeachers();
-            foreach ($teachers as $teacher) {
-                $questionnaires = $teacher->getQuestionnaires();
-            }
-        }
-
         return $this->render(
             'student/index.html.twig',
             [
                 'student' => $student,
-                'questionnaires' => $questionnaires,
+                'classrooms' => $classrooms,
             ]
         );
     }
 
     /**
-     * This methode builds student profile
+     * This methode builds student profile.
+     *
      * @Route("/profile", name="student_profile")
      */
-    public function profile(): Response
+    public function profile(FindEntity $find): Response
     {
         // Get each time that the student has passed q questionnaire
-        $passes = $this->getDoctrine()
-            ->getRepository(Pass::class)
-            ->findBy(['student' => $this->getUser()]);
+        $passes = $find->findPasses($this->getUser());
 
         $sum = array_reduce(
             $passes,
@@ -93,7 +84,7 @@ class StudentController extends AbstractController
                     return $i += $play->getPoints();
                 }
             );
-            if ($totalScore != null) {
+            if (null != $totalScore) {
                 $statsPerDiff[$difficulty] = round(($playerScore / $totalScore) * 100, 2);
             } else {
                 $statsPerDiff[$difficulty] = null;
@@ -108,13 +99,13 @@ class StudentController extends AbstractController
         );
 
         if ($sumMax) {
-            $average = (round($sum / $sumMax, 2) * 100) . "%";
+            $average = (round($sum / $sumMax, 2) * 100).'%';
         } else {
             $average = 0;
         }
 
         return $this->render(
-            "student/profile.html.twig",
+            'student/profile.html.twig',
             [
                 'student' => $this->getUser(),
                 'passes' => $passes,
@@ -123,17 +114,17 @@ class StudentController extends AbstractController
                 'statsPerDiff' => $statsPerDiff,
                 'spdjson' => json_encode(array_values($statsPerDiff)),
                 'numberOfQuestions' => $numberOfQuestions,
-                'avatar' => $this->getUser()->getAvatar()
+                'avatar' => $this->getUser()->getAvatar(),
             ]
         );
     }
 
     /**
-     * @Route ("/profile/edit", name="edit_student")
-     * @param Request $request
+     * @Route("/profile/edit", name="edit_student")
+     *
      * @return RedirectResponse|Response
      */
-    public function editProfile(Request $request)
+    public function editProfile(Request $request): Response
     {
         $student = $this->getUser();
 

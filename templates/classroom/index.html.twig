@@ -1,196 +1,209 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Admin -
+{% block title %}
 	{{ classroom.name }}
 {% endblock %}
 
 {% block body %}
-	{% for message in app.flashes('success') %}
-		<div class="alert alert-success mr-2 mb-0">
-			{{ message }}
-		</div>
-	{% endfor %}
+	{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+		{% for message in app.flashes('success') %}
+			<div class="alert alert-success mr-2 mb-0">
+				{{ message }}
+			</div>
+		{% endfor %}
 
-	{% if not formInvite.vars.valid %}
-		<div class="alert alert-danger mr-2 mb-0" role="alert">
-			<strong>Erreur fatal</strong>
-		</div>
-	{% endif %}
+		{% if not formInvite.vars.valid %}
+			<div class="alert alert-danger mr-2 mb-0" role="alert">
+				<strong>Erreur fatal</strong>
+			</div>
+		{% endif %}
 
-	{% if not formNotify.vars.valid %}
-		<div class="alert alert-danger mr-2 mb-0" role="alert">
-			<strong>Erreur fatal</strong>
-		</div>
-	{% endif %}
+		{% if not formNotify.vars.valid %}
+			<div class="alert alert-danger mr-2 mb-0" role="alert">
+				<strong>Erreur fatal</strong>
+			</div>
+		{% endif %}
 
-	<div class="row">
-		<div class="col-12 d-flex justify-content-center">
-			<h1>{{ classroom.name }}
-				-
-				<span class="badge badge-pill badge-info text-white">{{ classroom.discipline }}</span>
-			</h1>
+		<div class="row">
+			<div class="col-12 d-flex justify-content-center">
+				<h1>{{ classroom.name }}
+					-
+					<span class="badge badge-pill badge-info text-white">{{ classroom.discipline }}</span>
+				</h1>
 
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-12">
-			<div class="d-flex justify-content-center">
-				<a id="inviterBtn" class="btn btn-primary w-25" href="#" role="button" {% if formInvite.vars.submitted %} style="display:none;" {% endif %}>Inviter Utilisateur</a>
-				<div id="inviterForm" {% if not formInvite.vars.submitted %} style="display: none;" {% endif %} class="w-100">
-					{{ form_start(formInvite) }}
-					<div class="invite-form--responsive justify-content-sm-around align-items-center ">
-						<div class="form-group m-2">
-							{{ form_errors(formInvite.name) }}
-							{{ form_widget(formInvite.name) }}
-							{{ form_help(formInvite.name) }}
-						</div>
-						<div class="form-group m-2">
-							{{ form_errors(formInvite.surname) }}
-							{{ form_widget(formInvite.surname) }}
-							{{ form_help(formInvite.surname) }}
-						</div>
-						<div class="form-group m-2">
-							{{ form_errors(formInvite.email) }}
-							{{ form_widget(formInvite.email) }}
-							{{ form_help(formInvite.email) }}
-						</div>
-						<div class="form-group m-2">
-							{{ form_errors(formInvite.type) }}
-							{{ form_widget(formInvite.type) }}
-							{{ form_help(formInvite.type) }}
-						</div>
-						<div class="form-group m-2">
-							{{ form_widget(formInvite.submit) }}
-						</div>
-					</div>
-					{{ form_end(formInvite) }}
-				</div>
 			</div>
 		</div>
-	</div>
 
-	<div class="row">
-		<div class="col-12">
-			<h3>ESPACE ANNONCE</h3>
-			{% if notification %}
-				<p>{{ notification.text }}</p>
-			{% endif %}
-			{{ form_start(formNotify) }}
-			<div class="input-group m-2">
-				{{ form_errors(formNotify.text) }}
-				{{ form_widget(formNotify.text) }}
-				{{ form_help(formNotify.text) }}
-				<div class="input-group-append m-2">
-					{{ form_widget(formNotify.submit) }}
-				</div>
-			</div>
-			{{ form_end(formNotify) }}
-		</div>
-	</div>
-
-	{% if is_granted('ROLE_ADMIN') %}
 		<div class="row">
 			<div class="col-12">
-				<div class="d-flex align-items-center">
-					<h3>
-						<span class="badge badge-pill badge-secondary text-white">Formateur(s)</span>
-					</h3>
-				</div>
-				<table class="table border-bottom">
-					<thead class="thead-dark">
-						<tr>
-							<th scope="col"></th>
-							<th scope="col">Prénom</th>
-							<th scope="col">Nom</th>
-							<th scope="col">Matière(s)</th>
-							<th scope="col"></th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for teacher in teachers %}
-							<tr>
-								<th scope="row">{{ loop.index }}</th>
-								<td>{{ teacher.name }}</td>
-								<td>{{ teacher.surname }}</td>
-								<td>{{ teacher.subject }}</td>
-								<td>
-									<form method="post" action="{{ path('delete_user_classroom', {id: teacher.id, classroom_id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-										<input type="hidden" name="_method" value='DELETE'>
-										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ teacher.id) }}">
-										<button class="btn btn-danger">Supprimer</button>
-									</form>
-								</td>
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
-		</div>
-	{% endif %}
-
-
-	<div class="row">
-		<div class="col-12">
-			<h3>
-				<span class="badge badge-pill badge-secondary text-white">Étudiant(s)</span>
-			</h3>
-			<table class="table border-bottom">
-				<thead class="thead-dark ">
-					<tr>
-						<th scope="col"></th>
-						<th scope="col">Prénom</th>
-						<th scope="col">Nom</th>
-						<th scope="col">Loisirs</th>
-						<th scope="col"></th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for student in students %}
-						<tr>
-							<th scope="row">{{ loop.index }}</th>
-							<td>{{ student.name }}</td>
-							<td>{{ student.surname }}</td>
-							<td>{{ student.hobby }}</td>
-							<td>
-								<form method="post" action="{{ path('delete_user_classroom', {id: student.id, classroom_id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-									<input type="hidden" name="_method" value='DELETE'>
-									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ student.id) }}">
-									<button class="btn btn-danger">Supprimer</button>
-								</form>
-							</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-12 d-flex flex-column align-items-center">
-			<a href="{{ path('lesson_create', {classroom_id: classroom.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter Module</a>
-			<div class="d-flex flex-wrap">
-				{% for lesson in lessons %}
-					<div class="card">
-						<div class="card-body">
-							<a href="{{ path('lesson_index', {id: lesson.id, classroom_id: classroom.id}) }}">
-								<h4 class="card-title">{{lesson.title}}</h4>
-							</a>
-
-							<h6 class="card-subtitle mb-2 text-muted">{{lesson.level}}</h6>
-							
-							<div class="d-flex">
-								<a href="{{ path('lesson_edit', {id: lesson.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-								<form method="post" action="{{ path('delete_lesson_classroom', {id: lesson.id, classroom_id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-									<input type="hidden" name="_method" value='DELETE'>
-									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
-									<button class="btn btn-danger">Supprimer</button>
-								</form>
+				<div class="d-flex justify-content-center">
+					<a id="inviterBtn" class="btn btn-primary w-25" href="#" role="button" {% if formInvite.vars.submitted %} style="display:none;" {% endif %}>Inviter Utilisateur</a>
+					<div id="inviterForm" {% if not formInvite.vars.submitted %} style="display: none;" {% endif %} class="w-100">
+						{{ form_start(formInvite) }}
+						<div class="invite-form--responsive justify-content-sm-around align-items-center ">
+							<div class="form-group m-2">
+								{{ form_errors(formInvite.name) }}
+								{{ form_widget(formInvite.name) }}
+								{{ form_help(formInvite.name) }}
 							</div>
+							<div class="form-group m-2">
+								{{ form_errors(formInvite.surname) }}
+								{{ form_widget(formInvite.surname) }}
+								{{ form_help(formInvite.surname) }}
+							</div>
+							<div class="form-group m-2">
+								{{ form_errors(formInvite.email) }}
+								{{ form_widget(formInvite.email) }}
+								{{ form_help(formInvite.email) }}
+							</div>
+							{% if is_granted('ROLE_TEACHER') %}
+								<div class="form-group m-2 d-none">
+								{% else %}
+									<div class="form-group m-2">
+									{% endif %}
+									{{ form_errors(formInvite.type) }}
+									{{ form_widget(formInvite.type) }}
+									{{ form_help(formInvite.type) }}
+								</div>
+								<div class="form-group m-2">
+									{{ form_widget(formInvite.submit) }}
+								</div>
+							</div>
+							{{ form_end(formInvite) }}
 						</div>
 					</div>
-				{% endfor %}
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-12">
+					<h3>ESPACE ANNONCE</h3>
+					{% if notification %}
+						<p>{{ notification.text }}</p>
+					{% endif %}
+					{{ form_start(formNotify) }}
+					<div class="input-group m-2">
+						{{ form_errors(formNotify.text) }}
+						{{ form_widget(formNotify.text) }}
+						{{ form_help(formNotify.text) }}
+						<div class="input-group-append m-2">
+							{{ form_widget(formNotify.submit) }}
+						</div>
+					</div>
+					{{ form_end(formNotify) }}
+				</div>
+			</div>
+		{% endif %}
+
+		{% if is_granted('ROLE_ADMIN') %}
+			<div class="row">
+				<div class="col-12">
+					<div class="d-flex align-items-center">
+						<h3>
+							<span class="badge badge-pill badge-secondary text-white">Formateur(s)</span>
+						</h3>
+					</div>
+					<table class="table border-bottom">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col"></th>
+								<th scope="col">Prénom</th>
+								<th scope="col">Nom</th>
+								<th scope="col">Matière(s)</th>
+								<th scope="col"></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for teacher in teachers %}
+								<tr>
+									<th scope="row">{{ loop.index }}</th>
+									<td>{{ teacher.name }}</td>
+									<td>{{ teacher.surname }}</td>
+									<td>{{ teacher.subject }}</td>
+									<td>
+										<form method="post" action="{{ path('delete_user_classroom', {id: teacher.id, classroom_id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+											<input type="hidden" name="_method" value='DELETE'>
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ teacher.id) }}">
+											<button class="btn btn-danger">Supprimer</button>
+										</form>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		{% endif %}
+
+		{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+			<div class="row">
+				<div class="col-12">
+					<a href="{{ path('lesson_create', {classroom_id: classroom.id}) }}" class="btn btn-secondary mb-2" role="button">Statistics</a>
+					<h3>
+						<span class="badge badge-pill badge-secondary text-white">Étudiant(s)</span>
+					</h3>
+					<table class="table border-bottom">
+						<thead class="thead-dark ">
+							<tr>
+								<th scope="col"></th>
+								<th scope="col">Prénom</th>
+								<th scope="col">Nom</th>
+								<th scope="col">Statistics</th>
+								<th scope="col"></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for student in students %}
+								<tr>
+									<th scope="row">{{ loop.index }}</th>
+									<td>{{ student.name }}</td>
+									<td>{{ student.surname }}</td>
+									<td>{{ student.hobby }}</td>
+									<td>
+										<form method="post" action="{{ path('delete_user_classroom', {id: student.id, classroom_id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+											<input type="hidden" name="_method" value='DELETE'>
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ student.id) }}">
+											<button class="btn btn-danger">Supprimer</button>
+										</form>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		{% endif %}
+
+		<div class="row">
+			<div class="col-12 d-flex flex-column align-items-center">
+				{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+					<a href="{{ path('lesson_create', {classroom_id: classroom.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter Module</a>
+				{% endif %}
+				<h3>MES COURS</h3>
+				<div class="d-flex flex-wrap">
+					{% for lesson in lessons %}
+						<div class="card">
+							<div class="card-body">
+								<a href="{{ path('lesson_index', {id: lesson.id, classroom_id: classroom.id}) }}">
+									<h4 class="card-title">{{lesson.title}}</h4>
+								</a>
+
+								<h6 class="card-subtitle mb-2 text-muted">{{lesson.level}}</h6>
+								{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+
+									<div class="d-flex">
+										<a href="{{ path('lesson_edit', {id: lesson.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+										<form method="post" action="{{ path('delete_lesson_classroom', {id: lesson.id, classroom_id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+											<input type="hidden" name="_method" value='DELETE'>
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
+											<button class="btn btn-danger">Supprimer</button>
+										</form>
+									</div>
+								{% endif %}
+							</div>
+						</div>
+					{% endfor %}
+				</div>
 			</div>
 		</div>
-	</div>
-{% endblock %}
+	{% endblock %}

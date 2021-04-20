@@ -30,7 +30,7 @@
 
 				<tbody>
 					{% for lesson in lessons %}
-						{% if lesson.visibility or app.user.username == lesson.creator %}
+						{% if lesson.visibility or app.user.username == lesson.creator or is_granted('ROLE_SUPER_ADMIN') %}
 							<tr>
 								<th scope="row">{{ loop.index }}</th>
 								<td>

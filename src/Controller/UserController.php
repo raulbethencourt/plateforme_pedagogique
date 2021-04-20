@@ -47,7 +47,7 @@ class UserController extends AbstractController
 
         // admin invitation
         $invite = new Invite();
-        $form = $this->createForm(InviteType::class, $invite);
+        $form = $this->createForm(InviteType::class, $invite, ['user' => $this->getUser()]);
         $invitation->invitation($form, $invite);
 
         return $this->render(

@@ -5,41 +5,43 @@
 {% endblock %}
 
 {% block body %}
-	<h1>Bienvenue {{ student.name }}</h1>
-	<h3>Liste des questionnaires</h3>
-	<table class="table border-bottom">
-		<thead class="thead-dark">
-			<tr>
-				<th scope="col"></th>
-				<th scope="col">Titre</th>
-				<th scope="col">Difficulté</th>
-				<th scope="col"></th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for questionnaire in questionnaires %}
-				<tr>
-					<th scope="row">{{ loop.index }}</th>
-					<td>{{ questionnaire.title }}</td>
-					{% if questionnaire.difficulty == 'facile' %}
-						<td>
-							<span class="badge badge-pill badge-success p-2">{{ questionnaire.difficulty }}</span>
-						</td>
-					{% elseif questionnaire.difficulty == 'difficile' %}
-						<td>
-							<span class="badge badge-pill badge-difficile p-2">{{ questionnaire.difficulty }}</span>
-						</td>
-					{% else %}
-						<td>
-							<span class="badge badge-pill badge-secondary p-2">{{ questionnaire.difficulty }}</span>
-						</td>
-					{% endif %}
-					<td>
-						<a href="{{ path('questionnaire_play', {id: questionnaire.id}) }}"
-						   class="btn btn-primary role="button">Jouer</a>
-					</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+	<div class="row">
+		<div class="col-12 d-flex flex-column align-items-center">
+			<h3>Liste des classes</h3>
+			<div class="table-responsive">
+				<table class="table border-bottom">
+					<thead class="thead-dark">
+						<tr>
+							<th scope="col"></th>
+							<th scope="col">Nom</th>
+							<th scope="col">Niveau</th>
+							<th scope="col">Formateurs</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for classroom in classrooms %}
+							<tr>
+								<th scope="row">{{ loop.index }}</th>
+								<td>
+									<a href="{{ path('classroom_index', {id: classroom.id}) }}">{{ classroom.name }}</a>
+								</td>
+								<td>
+									<div class="d-flex justify-content-between ">
+										{{ classroom.discipline }}</div>
+								</td>
+								<td>
+									<div class="d-flex justify-content-between">
+										{% for teacher in classroom.teachers %}
+											/
+											{{ teacher.name }}
+										{% endfor %}
+									</div>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 {% endblock %}

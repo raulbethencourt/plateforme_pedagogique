@@ -2,16 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Questionnaire;
 use App\Form\EditTeacherType;
-use App\Repository\QuestionnaireRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class TeacherController
@@ -22,19 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class TeacherController extends AbstractController
 {
     /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    public function __construct(EntityManagerInterface $em)
-    {
-        $this->em = $em;
-    }
-
-    /**
      * @Route("/", name="teacher_index")
-     *
-     * @param QuestionnaireRepository $repository
      */
     public function index(): ResponseAlias
     {

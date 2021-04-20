@@ -28,17 +28,6 @@ class InviteType extends AbstractType
                 ]
             )
             ->add(
-                'type',
-                ChoiceType::class,
-                [
-                    'label' => false,
-                    'choices' => [
-                        'formateur' => 'teacher',
-                        'étudiant' => 'student',
-                    ]
-                ]
-            )
-            ->add(
                 'name',
                 TextType::class,
                 [
@@ -48,7 +37,7 @@ class InviteType extends AbstractType
                     ],
                     'purify_html' => true,
                 ]
-            )
+                )
             ->add(
                 'surname',
                 TextType::class,
@@ -69,7 +58,37 @@ class InviteType extends AbstractType
                         'class' => 'btn btn-primary',
                     ],
                 ]
-            );
+            )
+        ;
+
+        if ('ROLE_TEACHER' === $options['user']->getRoles()[0]) {
+            $builder
+                ->add(
+                    'type',
+                    ChoiceType::class,
+                    [
+                        'label' => false,
+                        'choices' => [
+                            'étudiant' => 'student',
+                        ],
+                    ]
+                    )
+                    ;
+        } else {
+            $builder
+                ->add(
+                        'type',
+                        ChoiceType::class,
+                        [
+                            'label' => false,
+                            'choices' => [
+                                'formateur' => 'teacher',
+                                'étudiant' => 'student',
+                            ],
+                        ]
+                )
+            ;
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -77,6 +96,7 @@ class InviteType extends AbstractType
         $resolver->setDefaults(
             [
                 'data_class' => Invite::class,
+                'user' => null,
             ]
         );
     }

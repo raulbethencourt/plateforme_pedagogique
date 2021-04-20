@@ -2,21 +2,21 @@
 
 namespace App\Controller;
 
+use App\Controller\Service\InvitationsController as Invitations;
+use App\Controller\Service\NotificationsController as Notify;
 use App\Entity\Invite;
-use App\Form\InviteType;
-use App\Service\FindEntity;
 use App\Entity\Notification;
+use App\Form\InviteType;
 use App\Form\NotificationType;
+use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use App\Controller\Service\NotificationsController as Notify;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use App\Controller\Service\InvitationsController as Invitations;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * Class ClassroomController
@@ -53,7 +53,7 @@ class ClassroomController extends AbstractController
      * and It allows us to invite new Teachers or students.
      *
      * @Route("/{id}", name="classroom_index", requirements={"id": "\d+"})
-     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
+     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN') or is_granted('ROLE_STUDENT')")
      */
     public function index(): Response
     {
@@ -67,7 +67,7 @@ class ClassroomController extends AbstractController
 
         // here i handle invitations
         $invite = new Invite(); // We invite a new teacher or student
-        $formInvite = $this->createForm(InviteType::class, $invite);
+        $formInvite = $this->createForm(InviteType::class, $invite, ['user' => $this->getUser()]);
         $this->invitations->invitation($formInvite, $invite, $classroom);
 
         return $this->render(
@@ -81,11 +81,12 @@ class ClassroomController extends AbstractController
                 'teachers' => $classroom->getTeachers(),
                 'lessons' => $classroom->getLessons(),
             ]
-        );
+            );
     }
 
     /**
      * @Route("/user/{id}/delete", name="delete_user_classroom", methods={"DELETE"})
+     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
     public function deleteUserFromClassroom(): RedirectResponse
     {
@@ -117,6 +118,7 @@ class ClassroomController extends AbstractController
      *
      * @Route("/add", name="add_lesson_classroom")
      * @ParamConverter("lesson", class="\App\Entity\Lesson")
+     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
     public function addLessonToClass(): RedirectResponse
     {
@@ -140,6 +142,7 @@ class ClassroomController extends AbstractController
 
     /**
      * @Route("/lesson/{id}/delete", name="delete_lesson_classroom", methods={"DELETE"})
+     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
     public function deleteLessonFromClass(): RedirectResponse
     {
