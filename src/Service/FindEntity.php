@@ -107,9 +107,17 @@ class FindEntity
     /**
      * find pass.
      */
-    public function findPass(User $user, Questionnaire $questionnaire): ?Pass
+    public function findPass(User $user, ?Questionnaire $questionnaire): ?Pass
     {
         return $this->passRepo->findOneBy(['student' => $user, 'questionnaire' => $questionnaire]);
+    }
+
+    /**
+     * find user passes
+     */
+    public function findPasses(User $user): array
+    {
+        return $this->passRepo->findBy(['student' => $user]);
     }
 
     /**

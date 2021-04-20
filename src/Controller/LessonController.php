@@ -18,7 +18,6 @@ use Symfony\Component\Routing\Annotation\Route;
  * This class manage the lessons.
  *
  * @Route("/lesson")
- * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
  */
 class LessonController extends AbstractController
 {
@@ -40,6 +39,7 @@ class LessonController extends AbstractController
 
     /**
      * @Route("/{id}", name="lesson_index", requirements={"id": "\d+"})
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') or is_granted('ROLE_STUDENT')")
      */
     public function index(): Response
     {
@@ -53,6 +53,7 @@ class LessonController extends AbstractController
 
     /**
      * @Route("/list", name="list_lessons")
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
      */
     public function listLessons(): Response
     {
@@ -67,6 +68,7 @@ class LessonController extends AbstractController
 
     /**
      * @Route("/create", name="lesson_create")
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
      */
     public function createLesson(): Response
     {
@@ -117,6 +119,7 @@ class LessonController extends AbstractController
 
     /**
      * @Route("/edit/{id}", name="lesson_edit", methods={"GET", "POST"})
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
      */
     public function editLesson(): Response
     {
@@ -142,6 +145,7 @@ class LessonController extends AbstractController
 
     /**
      * @Route("/delete/{id}", name="lesson_delete", methods={"DELETE"})
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
      */
     public function deleteLesson(): RedirectResponse
     {
@@ -163,6 +167,7 @@ class LessonController extends AbstractController
      * Add questionnaire direct to a lesson.
      *
      * @Route("/questionnaire/add", name="add_questionnaire_lesson")
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
      */
     public function addQuestionnaireToLesson(): RedirectResponse
     {
@@ -188,6 +193,7 @@ class LessonController extends AbstractController
      * Delete a questionnaire from a lesson and not in database.
      *
      * @Route("/questionnaire/{id}/delete", name="delete_questionnaire_lesson", methods={"DELETE"})
+     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
      */
     public function deleteQuestionnaireFromLesson(): RedirectResponse
     {
