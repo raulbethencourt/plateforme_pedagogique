@@ -65,9 +65,10 @@ class ClassroomController extends AbstractController
         $formNotify = $this->createForm(NotificationType::class, $notification);
         $this->notifications->notify($notification, $classroom, $formNotify);
 
+        // TODO finish with invitation in depens of user
         // here i handle invitations
         $invite = new Invite(); // We invite a new teacher or student
-        $formInvite = $this->createForm(InviteType::class, $invite);
+        $formInvite = $this->createForm(InviteType::class, $invite, ['user' => $this->getUser()]);
         $this->invitations->invitation($formInvite, $invite, $classroom);
 
         return $this->render(

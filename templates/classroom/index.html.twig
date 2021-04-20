@@ -55,11 +55,13 @@
 							{{ form_widget(formInvite.email) }}
 							{{ form_help(formInvite.email) }}
 						</div>
-						<div class="form-group m-2">
-							{{ form_errors(formInvite.type) }}
-							{{ form_widget(formInvite.type) }}
-							{{ form_help(formInvite.type) }}
-						</div>
+						{% if is_granted('ROLE_TEACHER') %}
+							<div class="form-group m-2 d-none">
+								{{ form_errors(formInvite.type) }}
+								{{ form_widget(formInvite.type) }}
+								{{ form_help(formInvite.type) }}
+							</div>
+						{% endif %}
 						<div class="form-group m-2">
 							{{ form_widget(formInvite.submit) }}
 						</div>
@@ -178,7 +180,7 @@
 							</a>
 
 							<h6 class="card-subtitle mb-2 text-muted">{{lesson.level}}</h6>
-							
+
 							<div class="d-flex">
 								<a href="{{ path('lesson_edit', {id: lesson.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
 								<form method="post" action="{{ path('delete_lesson_classroom', {id: lesson.id, classroom_id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
