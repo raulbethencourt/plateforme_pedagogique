@@ -17,6 +17,7 @@ class LinkController extends AbstractController
 {
     /**
      * @Route("/", name="link_index", methods={"GET"})
+     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
     public function index(LinkRepository $linkRepository): Response
     {
@@ -26,7 +27,8 @@ class LinkController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="link_new", methods={"GET","POST"})
+     * @Route("/new", name="link_new", methods={"GET", "POST"})
+     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
     public function new(Request $request): Response
     {
@@ -38,6 +40,7 @@ class LinkController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($link);
             $entityManager->flush();
+            $this->addFlash('success', 'Lien créée avec succès.');
 
             return $this->redirectToRoute('link_index');
         }
@@ -50,6 +53,7 @@ class LinkController extends AbstractController
 
     /**
      * @Route("/{id}", name="link_show", methods={"GET"})
+     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN') or is_granted('ROLE_STUDENT')")
      */
     public function show(Link $link): Response
     {
@@ -59,7 +63,8 @@ class LinkController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="link_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="link_edit", methods={"GET", "POST"})
+     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
     public function edit(Request $request, Link $link): Response
     {
@@ -68,6 +73,7 @@ class LinkController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', 'Lien modifiée avec succès.');
 
             return $this->redirectToRoute('link_index');
         }
@@ -87,6 +93,7 @@ class LinkController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($link);
             $entityManager->flush();
+            $this->addFlash('success', 'Lien supprimée avec succès.');
         }
 
         return $this->redirectToRoute('link_index');

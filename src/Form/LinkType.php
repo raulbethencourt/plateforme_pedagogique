@@ -15,8 +15,6 @@ class LinkType extends AbstractType
             ->add('name')
             ->add('link')
             ->add('description')
-            ->add('creator')
-            ->add('classrooms')
         ;
     }
 

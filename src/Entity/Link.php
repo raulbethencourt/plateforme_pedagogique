@@ -44,6 +44,16 @@ class Link
      */
     private $classrooms;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $visibility;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $usable;
+
     public function __construct()
     {
         $this->classrooms = new ArrayCollection();
@@ -122,6 +132,30 @@ class Link
     public function removeClassroom(Classroom $classroom): self
     {
         $this->classrooms->removeElement($classroom);
+
+        return $this;
+    }
+
+    public function getVisibility(): ?bool
+    {
+        return $this->visibility;
+    }
+
+    public function setVisibility(bool $visibility): self
+    {
+        $this->visibility = $visibility;
+
+        return $this;
+    }
+
+    public function getUsable(): ?bool
+    {
+        return $this->usable;
+    }
+
+    public function setUsable(bool $usable): self
+    {
+        $this->usable = $usable;
 
         return $this;
     }

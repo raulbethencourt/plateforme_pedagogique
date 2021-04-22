@@ -131,27 +131,11 @@ class FindEntity
     }
 
     /**
-     * find all lessons.
-     */
-    public function findAllLessons(): array
-    {
-        return $this->lessonRepo->findAll();
-    }
-
-    /**
      * find all classrooms.
      */
     public function findAllClassrooms(): array
     {
         return $this->classroomRepo->findAll();
-    }
-
-    /**
-     * find all questionnaires.
-     */
-    public function findAllQuestionnaires(): array
-    {
-        return $this->questionnaireRepo->findAll();
     }
 
     /**

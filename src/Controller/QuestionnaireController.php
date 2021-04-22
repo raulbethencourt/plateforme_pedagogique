@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Pass;
 use App\Entity\Questionnaire;
 use App\Form\QuestionnaireType;
+use App\Repository\QuestionnaireRepository;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -16,16 +17,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class QuestionnaireController
- * This class manage the questionnaires plays and creation.
- *
  * @Route("/questionnaire")
  */
 class QuestionnaireController extends AbstractController
 {
-    /**
-     * @var EntityManagerInterface
-     */
     private $em;
 
     private $find;
@@ -40,80 +35,74 @@ class QuestionnaireController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="questionnaire_index", requirements={"id": "\d+"})
+     * @Route("/", name="questionnaire_index", methods={"GET"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function index(): Response
+    public function index(QuestionnaireRepository $questionnaireRepo): Response
     {
-        $questionnaire = $this->find->findQuestionnaire();
-
-        return $this->render(
-            'questionnaire/index.html.twig',
-            [
-                'questionnaire' => $questionnaire,
-                'questions' => $questionnaire->getQuestions(),
-                'lesson_id' => $this->request->query->get('lesson_id'),
-            ]
-        );
-    }
-
-    /**
-     * @Route("/list", name="list_questionnaires")
-     */
-    public function listQuestionnaires(): Response
-    {
-        return $this->render('questionnaire/list.html.twig', [
-            'questionnaires' => $this->find->findAllQuestionnaires(),
+        return $this->render('questionnaire/index.html.twig', [
+            'questionnaires' => $questionnaireRepo->findAll(),
             'lesson_id' => $this->request->query->get('lesson_id'),
             'classroom_id' => $this->request->query->get('classroom_id'),
         ]);
     }
 
     /**
-     * @Route("/create", name="questionnaire_create")
+     * @Route("/new", name="questionnaire_new", methods={"GET", "POST"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function createQuestionnaire(): Response
+    public function new(): Response
     {
         $lesson = $this->find->findLesson();
         $questionnaire = new Questionnaire();
+
         if (isset($lesson)) {
             $questionnaire->addLesson($lesson);
             $lesson_id = $lesson->getId();
         } else {
             $lesson_id = null;
         }
+
         $questionnaire->setDateCreation(new \DateTime());
         $questionnaire->setCreator($this->getUser()->getUsername());
         $form = $this->createForm(QuestionnaireType::class, $questionnaire);
-
         $form->handleRequest($this->request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($questionnaire);
             $this->em->flush();
 
             $this->addFlash('success', 'Activité ajouté avec succès.');
 
-            return $this->redirectToRoute(
-                'question_create',
-                [
-                    'id' => $questionnaire->getId(),
-                    'lesson_id' => $lesson_id,
-                ]
-            );
+            return $this->redirectToRoute('question_create', [
+                'id' => $questionnaire->getId(),
+                'lesson_id' => $lesson_id,
+            ]);
         }
 
-        return $this->render(
-            'questionnaire/new.html.twig',
-            [
-                'questionnaire' => $questionnaire,
-                'form' => $form->createView(),
-                'user' => $this->getUser(),
-                'lesson_id' => $lesson_id,
-                'classroom_id' => $this->request->query->get('classroom'),
-            ]
-        );
+        return $this->render('questionnaire/new.html.twig', [
+            'questionnaire' => $questionnaire,
+            'form' => $form->createView(),
+            'user' => $this->getUser(),
+            'lesson_id' => $lesson_id,
+            'classroom_id' => $this->request->query->get('classroom'),
+        ]);
     }
+
+    /**
+     * @Route("/{id}", name="questionnaire_show", methods={"GET"})
+     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
+     */
+    public function show(Questionnaire $questionnaire): Response
+    {
+        return $this->render('questionnaire/show.html.twig', [
+            'questionnaire' => $questionnaire,
+            'questions' => $questionnaire->getQuestions(),
+            'lesson_id' => $this->request->query->get('lesson_id'),
+        ]);
+    }
+
+    //TODO continue refactoringj
 
     /**
      * @Route("/{id}/edit", name="questionnaire_edit", methods={"GET", "POST"})
@@ -185,9 +174,9 @@ class QuestionnaireController extends AbstractController
                 [
                     'id' => $lesson_id,
                 ]);
-            } else {
-                return $this->redirectToRoute('list_questionnaires'); 
             }
+
+            return $this->redirectToRoute('list_questionnaires');
         }
 
         // Creates the variables that I'm gonna need later on
