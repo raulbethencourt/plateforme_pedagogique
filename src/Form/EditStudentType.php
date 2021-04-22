@@ -66,8 +66,8 @@ class EditStudentType extends AbstractType
                     'purify_html' => true,
                     'required' => false,
                     'attr' => [
-                        'placeholder' => 'ex: 0768743772'
-                    ]
+                        'placeholder' => 'ex: 0768513172',
+                    ],
                 ]
             )
             ->add(
@@ -76,15 +76,6 @@ class EditStudentType extends AbstractType
                 [
                     'required' => false,
                     'purify_html' => true,
-                ]
-            )
-            ->add(
-                'hobby',
-                TextType::class,
-                [
-                    'required' => false,
-                    'purify_html' => true,
-                    'label' => 'Loisirs',
                 ]
             )
         ;

@@ -2,20 +2,24 @@
 
 namespace App\Service;
 
-use App\Entity\Classroom;
-use App\Entity\Lesson;
-use App\Entity\Notification;
 use App\Entity\Pass;
-use App\Entity\Question;
-use App\Entity\Questionnaire;
 use App\Entity\User;
-use App\Repository\ClassroomRepository;
-use App\Repository\LessonRepository;
-use App\Repository\NotificationRepository;
+use App\Entity\Lesson;
+use App\Entity\Student;
+use App\Entity\Teacher;
+use App\Entity\Question;
+use App\Entity\Classroom;
+use App\Entity\Notification;
+use App\Entity\Questionnaire;
 use App\Repository\PassRepository;
-use App\Repository\QuestionnaireRepository;
-use App\Repository\QuestionRepository;
 use App\Repository\UserRepository;
+use App\Repository\LessonRepository;
+use App\Repository\StudentRepository;
+use App\Repository\TeacherRepository;
+use App\Repository\QuestionRepository;
+use App\Repository\ClassroomRepository;
+use App\Repository\NotificationRepository;
+use App\Repository\QuestionnaireRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class FindEntity
@@ -36,7 +40,11 @@ class FindEntity
 
     private $passRepo;
 
-    public function __construct(ClassroomRepository $classroomRepo, LessonRepository $lessonRepo, RequestStack $requestStack, UserRepository $userRepo, NotificationRepository $notificationRepo, QuestionnaireRepository $questionnaireRepo, QuestionRepository $questionRepo, PassRepository $passRepo)
+    private $teacherRepo;
+
+    private $studentRepo;
+
+    public function __construct(ClassroomRepository $classroomRepo, LessonRepository $lessonRepo, RequestStack $requestStack, UserRepository $userRepo, NotificationRepository $notificationRepo, QuestionnaireRepository $questionnaireRepo, QuestionRepository $questionRepo, PassRepository $passRepo, TeacherRepository $teacherRepo, StudentRepository $studentRepo)
     {
         $this->classroomRepo = $classroomRepo;
         $this->lessonRepo = $lessonRepo;
@@ -46,6 +54,8 @@ class FindEntity
         $this->questionnaireRepo = $questionnaireRepo;
         $this->questionRepo = $questionRepo;
         $this->passRepo = $passRepo;
+        $this->teacherRepo = $teacherRepo;
+        $this->studentRepo = $studentRepo;
     }
 
     /**
@@ -113,7 +123,7 @@ class FindEntity
     }
 
     /**
-     * find user passes
+     * find user passes.
      */
     public function findPasses(User $user): array
     {
@@ -150,6 +160,22 @@ class FindEntity
     public function findUsersByRole(string $role): array
     {
         return $this->userRepo->findByRole($role);
+    }
+
+    /**
+     * find teacher by username.
+     */
+    public function findTeacherByUsername(string $user): Teacher
+    {
+        return $this->teacherRepo->findOneBy(['username' => $user]);
+    }
+
+    /**
+     * find teacher by username.
+     */
+    public function findStudentByUsername(string $user): Student
+    {
+        return $this->studentRepo->findOneBy(['username' => $user]);
     }
 
     /**

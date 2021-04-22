@@ -41,6 +41,7 @@
 							<td>{{ teacher.surname }}</td>
 							<td>{{ teacher.subject }}</td>
 							<td>
+								<a href="{{ path('edit_teacher', {username: teacher.username}) }}" class="btn btn-primary w-75 mt-4">Éditer Profil</a>
 								<form method="post" action="{{ path('user_delete', {id: teacher.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 									<input type="hidden" name="_method" value='DELETE'>
 									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ teacher.id) }}">
@@ -65,7 +66,6 @@
 						<th scope="col"></th>
 						<th scope="col">Prénom</th>
 						<th scope="col">Nom</th>
-						<th scope="col">Loisirs</th>
 						<th scope="col"></th>
 					</tr>
 				</thead>
@@ -75,8 +75,8 @@
 							<th scope="row">{{ loop.index }}</th>
 							<td>{{ student.name }}</td>
 							<td>{{ student.surname }}</td>
-							<td>{{ student.hobby }}</td>
 							<td>
+								<a href="{{ path('edit_student', {username: student.username}) }}" class="btn btn-primary w-75 mt-3">Éditer Profil</a>
 								<form method="post" action="{{ path('user_delete', {id: student.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 									<input type="hidden" name="_method" value='DELETE'>
 									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ student.id) }}">

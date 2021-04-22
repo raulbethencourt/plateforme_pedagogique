@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
@@ -65,7 +66,7 @@ class EditTeacherType extends AbstractType
                     'purify_html' => true,
                     'required' => false,
                     'attr' => [
-                        'placeholder' => 'ex: 0768743772',
+                        'placeholder' => 'ex: 0768513172',
                     ],
                 ]
             )
@@ -75,15 +76,6 @@ class EditTeacherType extends AbstractType
                 [
                     'required' => false,
                     'purify_html' => true,
-                ]
-            )
-            ->add(
-                'subject',
-                TextType::class,
-                [
-                    'required' => false,
-                    'purify_html' => true,
-                    'label' => 'Matière(s)',
                 ]
             )
         ;

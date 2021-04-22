@@ -1,51 +1,59 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Formateur - {{ teacher.name }}{% endblock %}
+{% block title %}Formateur -
+	{{ teacher.name }}
+{% endblock %}
 
 {% block body %}
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success mr-2 mb-0">
-            {{ message }}
-        </div>
-    {% endfor %}
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success mr-2 mb-0">
+			{{ message }}
+		</div>
+	{% endfor %}
 
-    <div class="d-flex">
-        <div class="card w-100 m-1">
-            <h2 class="card-header text-white bg-dark">Informations personnelles</h2>
-            <div class="card-body d-flex justify-content-between">
-                <div class="flex-column w-75">
-                    <ul class="list-group w-100">
-                        <li class="list-group-item list-group-item-info">
-                            <span class="font-weight-bold">Nom d'utilisateur</span></li>
-                        <li class="list-group-item">{{ teacher.username }}</li>
-                        <li class="list-group-item list-group-item-info">
-                            <span class="font-weight-bold">Prénom et nom</span></li>
-                        <li class="list-group-item">{{ teacher.name ~ " " ~ teacher.surname }}</li>
-                        <li class="list-group-item list-group-item-info">
-                            <span class="font-weight-bold">Email</span></li>
-                        <li class="list-group-item">{{ teacher.email }}</li>
-                        <li class="list-group-item list-group-item-info">
-                            <span class="font-weight-bold">Matière(s)</span></li>
-                        <li class="list-group-item">{{ teacher.subject }}</li>
-                    </ul>
-                </div>
-                <div class="d-flex flex-column justify-content-center align-items-center mr-3">
-                    <a href="{{ path('edit_teacher_avatar') }}">
-                        {% if teacher.avatar is defined and teacher.avatar is not null %}
-                            <img src="{{ vich_uploader_asset(teacher.avatar) }}" alt="profile"
-                                 class="rounded-circle profile__img">
-                        {% else %}
-                            <img src="{{ asset('images/image-profile.png') }}" alt="profile"
-                                 class="rounded-circle profile__img">
-                        {% endif %}
-                    </a>
-                    <a href="{{ path('edit_teacher') }}" class="btn btn-primary w-75 mt-4">Éditer Profil</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="mr-auto ml-auto text-center mt-3 w-75">
-        <h2><span class="badge badge-dark rounded p-2">Nombre de questionnaires créés :</span></h2>
-        <canvas id="questionnairesChart"></canvas>
-    </div>
+	<div class="d-flex">
+		<div class="card w-100 m-1">
+			<h2 class="card-header text-white bg-dark">Informations personnelles</h2>
+			<div class="card-body d-flex justify-content-between">
+				<div class="flex-column w-75">
+					<ul class="list-group w-100">
+						<li class="list-group-item list-group-item-info">
+							<span class="font-weight-bold">Nom d'utilisateur</span>
+						</li>
+						<li class="list-group-item">{{ teacher.username }}</li>
+						{% if teacher.name and teacher.surname %}
+							<li class="list-group-item list-group-item-info">
+								<span class="font-weight-bold">Prénom et nom</span>
+							</li>
+							<li class="list-group-item">{{ teacher.name ~ " " ~ teacher.surname }}</li>
+						{% endif %}
+						<li class="list-group-item list-group-item-info">
+							<span class="font-weight-bold">Email</span>
+						</li>
+						<li class="list-group-item">{{ teacher.email }}</li>
+						{% if teacher.telephone %}
+							<li class="list-group-item list-group-item-info">
+								<span class="font-weight-bold">Téléphone</span>
+							</li>
+							<li class="list-group-item">(0){{ teacher.telephone }}</li>
+						{% endif %}
+					</ul>
+				</div>
+				<div class="d-flex flex-column justify-content-center align-items-center mr-3">
+					<a href="{{ path('edit_teacher_avatar') }}">
+						{% if teacher.avatar is defined and teacher.avatar is not null %}
+							<img src="{{ vich_uploader_asset(teacher.avatar) }}" alt="profile" class="rounded-circle profile__img">
+						{% else %}
+							<img src="{{ asset('images/image-profile.png') }}" alt="profile" class="rounded-circle profile__img">
+						{% endif %}
+					</a>
+					<a href="{{ path('edit_teacher') }}" class="btn btn-primary w-75 mt-4">Éditer Profil</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	{# <div class="mr-auto ml-auto text-center mt-3 w-75">
+			        <h2><span class="badge badge-dark rounded p-2">Nombre de questionnaires créés :</span></h2>
+			        <canvas id="questionnairesChart"></canvas>
+			    </div> #}
 {% endblock %}

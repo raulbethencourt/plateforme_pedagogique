@@ -19,6 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class StudentController extends AbstractController
 {
+    private $find;
+
+    public function __construct(FindEntity $find)
+    {
+        $this->find = $find;
+    }
+
     /**
      * @Route("/", name="student_index")
      */
@@ -41,10 +48,10 @@ class StudentController extends AbstractController
      *
      * @Route("/profile", name="student_profile")
      */
-    public function profile(FindEntity $find): Response
+    public function profile(): Response
     {
         // Get each time that the student has passed q questionnaire
-        $passes = $find->findPasses($this->getUser());
+        $passes = $this->find->findPasses($this->getUser());
 
         $sum = array_reduce(
             $passes,
@@ -126,7 +133,12 @@ class StudentController extends AbstractController
      */
     public function editProfile(Request $request): Response
     {
-        $student = $this->getUser();
+        $student_name = $request->query->get('username');
+        if (isset($student_name)) {
+            $student = $this->find->findStudentByUsername($student_name);
+        } else {
+            $student = $this->getUser();
+        }
 
         $form = $this->createForm(EditStudentType::class, $student);
         $form->handleRequest($request);
@@ -135,8 +147,11 @@ class StudentController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($student);
             $entityManager->flush();
-
             $this->addFlash('success', 'Profil édité avec succès.');
+
+            if (isset($student_name)) {
+                return $this->redirectToRoute('user_list');
+            }
 
             return $this->redirectToRoute('student_profile');
         }

@@ -74,8 +74,8 @@ class EditUserType extends AbstractType
                     'purify_html' => true,
                     'required' => false,
                     'attr' => [
-                        'placeholder' => 'ex: 0768743772'
-                    ]
+                        'placeholder' => 'ex: 0768513172',
+                    ],
                 ]
             )
         ;
