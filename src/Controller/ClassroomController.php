@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+//TODO links section
+
 /**
  * Class ClassroomController
  * This class manage the classrooms.
