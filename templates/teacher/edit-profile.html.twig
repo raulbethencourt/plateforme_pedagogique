@@ -3,19 +3,5 @@
 {% block title %}Editer Profil{% endblock %}
 
 {% block body %}
-    <div class="container-sm mt-5">
-
-        <h1>Éditer votre profil</h1>
-        <form method="post" enctype="multipart/form-data">
-            {{ form_start(editForm) }}
-            {{ form_row(editForm.username) }}
-            {{ form_row(editForm.name) }}
-            {{ form_row(editForm.surname) }}
-            {{ form_row(editForm.email) }}
-            {{ form_row(editForm.subject) }}
-            <button id="btnSubmit" type="submit" class="btn btn-primary mb-xl-5">Éditer Profil</button>
-            {{ form_end(editForm) }}
-        </form>
-    </div>
-
+	{% include "profile/_form.html.twig" %}
 {% endblock %}

@@ -50,6 +50,11 @@ class Classroom
      * @ORM\ManyToMany(targetEntity=Lesson::class, mappedBy="classrooms", cascade={"persist"})
      */
     private $lessons;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Link::class, mappedBy="classrooms")
+     */
+    private $links;
     
     public function __construct()
     {
@@ -57,6 +62,7 @@ class Classroom
         $this->students = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->lessons = new ArrayCollection();
+        $this->links = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -186,6 +192,33 @@ class Classroom
     {
         if ($this->lessons->removeElement($lesson)) {
             $lesson->removeClassroom($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Link[]
+     */
+    public function getLinks(): Collection
+    {
+        return $this->links;
+    }
+
+    public function addLink(Link $link): self
+    {
+        if (!$this->links->contains($link)) {
+            $this->links[] = $link;
+            $link->addClassroom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLink(Link $link): self
+    {
+        if ($this->links->removeElement($link)) {
+            $link->removeClassroom($this);
         }
 
         return $this;

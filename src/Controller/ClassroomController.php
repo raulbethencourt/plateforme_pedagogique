@@ -4,13 +4,15 @@ namespace App\Controller;
 
 use App\Controller\Service\InvitationsController as Invitations;
 use App\Controller\Service\NotificationsController as Notify;
+use App\Entity\Classroom;
 use App\Entity\Invite;
 use App\Entity\Notification;
+use App\Form\ClassroomType;
 use App\Form\InviteType;
 use App\Form\NotificationType;
+use App\Repository\ClassroomRepository;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,16 +21,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class ClassroomController
- * This class manage the classrooms.
- *
  * @Route("/classroom")
  */
 class ClassroomController extends AbstractController
 {
-    /**
-     * @var EntityManagerInterface
-     */
     private $em;
 
     private $find;
@@ -49,16 +45,47 @@ class ClassroomController extends AbstractController
     }
 
     /**
-     * This method shows the students and teacher that belongs to the classroom
-     * and It allows us to invite new Teachers or students.
-     *
-     * @Route("/{id}", name="classroom_index", requirements={"id": "\d+"})
+     * @Route("/", name="classroom_index", methods={"GET"})
+     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
+     */
+    public function index(ClassroomRepository $classroomRepo): Response
+    {
+        return $this->render('class/index.html.twig', [
+            'classrooms' => $classroomRepo->findAll(),
+        ]);
+    }
+
+    /**
+     * @Route("/new", name="classroom_new", methods={"GET", "POST"})
+     * @Security("is_granted('ROLE_ADMIN')")
+     */
+    public function new(): Response
+    {
+        $classroom = new Classroom();
+        $form = $this->createForm(ClassroomType::class, $classroom);
+        $form->handleRequest($this->request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->persist($classroom);
+            $this->em->flush();
+            $this->addFlash('success', 'Classe créée avec succès.');
+
+            return $this->redirectToRoute('classroom_show', [
+                'id' => $classroom->getId(),
+            ]);
+        }
+
+        return $this->render('classroom/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}", name="classroom_show", methods={"GET"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN') or is_granted('ROLE_STUDENT')")
      */
-    public function index(): Response
+    public function show(Classroom $classroom): Response
     {
-        $classroom = $this->find->findClassroom();
-
         // here i handle notifications
         $notification = new Notification();
         $notification->setClassroom($classroom);
@@ -70,28 +97,59 @@ class ClassroomController extends AbstractController
         $formInvite = $this->createForm(InviteType::class, $invite, ['user' => $this->getUser()]);
         $this->invitations->invitation($formInvite, $invite, $classroom);
 
-        return $this->render(
-            'classroom/index.html.twig',
-            [
-                'notification' => $this->find->findNotification($classroom),
-                'formInvite' => $formInvite->createView(),
-                'formNotify' => $formNotify->createView(),
-                'classroom' => $classroom,
-                'students' => $classroom->getStudents(),
-                'teachers' => $classroom->getTeachers(),
-                'lessons' => $classroom->getLessons(),
-            ]
-            );
+        return $this->render('classroom/show.html.twig', [
+            'notification' => $this->find->findNotification($classroom),
+            'formInvite' => $formInvite->createView(),
+            'formNotify' => $formNotify->createView(),
+            'classroom' => $classroom,
+            'students' => $classroom->getStudents(),
+            'teachers' => $classroom->getTeachers(),
+            'lessons' => $classroom->getLessons(),
+        ]);
     }
 
     /**
-     * @Route("/user/{id}/delete", name="delete_user_classroom", methods={"DELETE"})
+     * @Route("/{id}/edit", name="classroom_edit", methods={"GET", "POST"})
+     */
+    public function edit(Classroom $classroom): Response
+    {
+        $form = $this->createForm(ClassroomType::class, $classroom);
+        $form->handleRequest($this->request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->flush();
+            $this->addFlash('success', 'Classe modifiée avec succès.');
+
+            return $this->redirectToRoute('classroom_show', [
+                'id' => $classroom->getId(),
+            ]);
+        }
+
+        return $this->render('classroom/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}", name="classroom_delete", methods={"POST"})
+     */
+    public function delete(Classroom $classroom): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$classroom->getId(), $this->request->request->get('_token'))) {
+            $this->em->remove($classroom);
+            $this->em->flush();
+            $this->addFlash('success', 'Classe supprimée avec succès.');
+        }
+
+        return $this->redirectToRoute('user_index');
+    }
+
+    /**
+     * @Route("/{id}/user_delete", name="delete_user_classroom", methods={"DELETE"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function deleteUserFromClassroom(): RedirectResponse
+    public function deleteUserFromClassroom(Classroom $classroom): Response
     {
-        // find classroom
-        $classroom = $this->find->findClassroom();
         // find user
         $user = $this->find->findUser();
 
@@ -105,64 +163,46 @@ class ClassroomController extends AbstractController
         $this->em->flush();
         $this->addFlash('success', 'Utilisateur supprimée de la classe avec succès.');
 
-        return $this->redirectToRoute(
-            'classroom_index',
-            [
-                'id' => $classroom->getId(),
-            ]
-        );
+        return $this->redirectToRoute('classroom_show', [
+            'id' => $classroom->getId(),
+        ]);
     }
 
     /**
-     * Add lesson direct to a class.
-     *
-     * @Route("/add", name="add_lesson_classroom")
-     * @ParamConverter("lesson", class="\App\Entity\Lesson")
+     * @Route("/add_lesson", name="classroom_lesson_add", methods={"GET"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function addLessonToClass(): RedirectResponse
+    public function addLessonToClass(Classroom $classroom): RedirectResponse
     {
         // find lesson
         $lesson = $this->find->findLesson();
-        // find classroom
-        $classroom = $this->find->findClassroom();
-
         $classroom->addLesson($lesson);
         $this->em->persist($classroom);
         $this->em->flush();
-        $this->addFlash('success', 'Module ajouté avec succès.');
+        $this->addFlash('success', 'Module ajouté à la classe avec succès.');
 
-        return $this->redirectToRoute(
-            'classroom_index',
-            [
-                'id' => $classroom->getId(),
-            ]
-        );
+        return $this->redirectToRoute('classroom_index', [
+            'id' => $classroom->getId(),
+        ]);
     }
 
     /**
-     * @Route("/lesson/{id}/delete", name="delete_lesson_classroom", methods={"DELETE"})
+     * @Route("/{id}/lesson_remove", name="classroom_lesson_remove", methods={"POST"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function deleteLessonFromClass(): RedirectResponse
+    public function removeLessonFromClass(Classroom $classroom): RedirectResponse
     {
         // find lesson
         $lesson = $this->find->findLesson();
-        // find classroom
-        $classroom = $this->find->findClassroom();
-
         // Check the token
-        if ($this->isCsrfTokenValid(
-            'delete'.$lesson->getId(),
-            $this->request->get('_token')
-        )) {
+        if ($this->isCsrfTokenValid('delete'.$lesson->getId(), $this->request->get('_token'))) {
             $classroom->removeLesson($lesson);
             $this->em->persist($classroom);
             $this->em->flush();
-            $this->addFlash('success', 'Module supprimé avec succès.');
+            $this->addFlash('success', 'Module supprimé de la classe avec succès.');
         }
 
-        return $this->redirectToRoute('classroom_index', [
+        return $this->redirectToRoute('classroom_show', [
             'id' => $classroom->getId(),
         ]);
     }

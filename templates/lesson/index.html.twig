@@ -1,7 +1,6 @@
-{% extends 'base.html.twig' %}
+{% extends "base.html.twig" %}
 
-{% block title %}
-	{{lesson.title}}
+{% block title %}Liste des Modules
 {% endblock %}
 
 {% block body %}
@@ -11,69 +10,55 @@
 		</div>
 	{% endfor %}
 
-	{% for message in app.flashes('error') %}
-		<div class="alert alert-danger mr-2 mb-0">
-			{{ message }}
-		</div>
-	{% endfor %}
-
-
-	<h1>{{ lesson.title }}</h1>
-
-	<h3>Liste des activites</h3>
-
-	<table class="table border-bottom">
-		<thead class="thead-dark">
-			<tr>
-				<th scope="col"></th>
-				<th scope="col">Titre</th>
-				<th scope="col">Author</th>
-				<th scope="col">Niveau</th>
-				<th scope="col"></th>
-			</tr>
-		</thead>
-
-		<tbody>
-			{% for questionnaire in questionnaires %}
-				<tr>
-					<th scope="row">{{ loop.index }}</th>
-					<td>
-						<a href="{{ path('questionnaire_index', {id: questionnaire.id, lesson_id: lesson.id}) }}" role="button">{{ questionnaire.title }}</a>
-					</td>
-					<td>{{ questionnaire.creator }}</td>
-					{% if questionnaire.difficulty == 'facile' %}
-						<td>
-							<span class="badge badge-pill badge-success p-2">{{ questionnaire.difficulty }}</span>
-						</td>
-					{% elseif questionnaire.difficulty == 'difficile' %}
-						<td>
-							<span class="badge badge-pill badge-difficile p-2">{{ questionnaire.difficulty }}</span>
-						</td>
-					{% else %}
-						<td>
-							<span class="badge badge-pill badge-secondary p-2">{{ questionnaire.difficulty }}</span>
-						</td>
-					{% endif %}
-
-					<td class="d-flex justify-content-end">
-						{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
-							<a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-							<form method="post" action="{{ path('delete_questionnaire_lesson', {id: questionnaire.id, lesson_id: lesson.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-								<input type="hidden" name="_method" value='DELETE'>
-								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
-								<button class="btn btn-danger mr-2">Supprimer</button>
-							</form>
-						{% endif %}
-						<a href="{{ path('questionnaire_play', {id: questionnaire.id, lesson_id: lesson.id}) }}" class="btn btn-success mr-2" role="button">Jouer</a>
-					</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-
-	{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
-		<div class="text-right">
-			<a href="{{ path('questionnaire_create', {lesson_id: lesson.id}) }}" class="btn btn-primary">Créer activité</a>
-		</div>
+	{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and classroom_id is null %}
+		<a href="{{ path('lesson_create') }}" class="btn btn-secondary mb-2" role="button">Créer Module</a>
 	{% endif %}
+
+	<div class="row">
+		<div class="col-12">
+			<h1>Liste des modules</h1>
+			<table class="table border-bottom">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col"></th>
+						<th scope="col">Titre</th>
+						<th scope="col">Author</th>
+						<th scope="col">Niveau</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+
+				<tbody>
+					{% for lesson in lessons %}
+						{% if lesson.visibility or app.user.username == lesson.creator or is_granted('ROLE_SUPER_ADMIN') %}
+							<tr>
+								<th scope="row">{{ loop.index }}</th>
+								<td>
+									<a href="{{ path('lesson_index', {id: lesson.id, classroom_id: classroom_id}) }}">
+										{{ lesson.title }}
+									</a>
+								</td>
+								<td>{{ lesson.creator }}</td>
+								<td>{{ lesson.level}}</td>
+								<td>
+									{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
+										<a href="{{ path('lesson_edit', {id: lesson.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+										<form method="post" action="{{ path('lesson_delete', {id: lesson.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+											<input type="hidden" name="_method" value='DELETE'>
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
+											<button class="btn btn-danger">Supprimer</button>
+										</form>
+									{% endif %}
+
+									{% if classroom_id is defined and classroom_id is not null %}
+										<a href="{{ path('add_lesson_classroom', {lesson_id: lesson.id, classroom_id: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+									{% endif %}
+								</td>
+							</tr>
+						{% endif %}
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 {% endblock %}

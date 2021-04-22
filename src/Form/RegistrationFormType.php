@@ -66,6 +66,13 @@ class RegistrationFormType extends AbstractType
                 'email',
                 EmailType::class,
                 [
+                    'constraint' => [
+                        new NotBlank(
+                            [
+                                'message' => 'Please enter your email address',
+                            ]
+                        ),
+                    ],
                     'purify_html' => true,
                 ]
             )
@@ -112,6 +119,9 @@ class RegistrationFormType extends AbstractType
                     'label' => 'Téléphone',
                     'purify_html' => true,
                     'required' => false,
+                    'attr' => [
+                        'placeholder' => 'ex: 0768513172',
+                    ],
                 ]
             )
         ;

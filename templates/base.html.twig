@@ -42,8 +42,21 @@
 								{% endif %}
 							</li>
 							{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
-								<li class="nav-item ml-4 mr-4">
-									<a class="nav-link" href="{{ path('toolbox') }}">BOÎTE À OUTILS</a>
+								<li class="nav-item dropdown">
+									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+										BOÎTE À OUTILS
+									</a>
+									<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+										<li>
+											<a class="dropdown-item" href="{{path('lesson_index')}}">List des Modules</a>
+										</li>
+										<li>
+											<a class="dropdown-item" href="{{ path('questionnaire_index') }}">List des Activités</a>
+										</li>
+										<li>
+											<a class="dropdown-item" href="{{ path('link_index') }}">List des Liens</a>
+										</li>
+									</ul>
 								</li>
 							{% endif %}
 							<li class="nav-item d-flex justify-content-center">
@@ -63,7 +76,11 @@
 									{% endif %}
 								{% else %}
 									<a class="nav-link mr-2" href="{{ path('user_profile') }}">Mon Profile</a>
-									<img class="profile" src="{{ asset('images/image-profile.png') }}" alt="profil icon">
+									{% if user.avatar is defined and user.avatar is not null %}
+										<img class="profile rounded-circle bg-black" src="{{ vich_uploader_asset(user.avatar) }}" alt="profil icon">
+									{% else %}
+										<img class="profile" src="{{ asset('images/image-profile.png') }}" alt="profil icon">
+									{% endif %}
 								{% endif %}
 							</li>
 						</ul>

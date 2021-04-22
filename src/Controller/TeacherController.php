@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\FindEntity;
 use App\Form\EditTeacherType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,9 +50,14 @@ class TeacherController extends AbstractController
     /**
      * @Route("/profile/edit", name="edit_teacher")
      */
-    public function editProfile(Request $request): Response
+    public function editProfile(Request $request, FindEntity $find): Response
     {
-        $teacher = $this->getUser();
+        $teacher_name = $request->query->get('username');
+        if (isset($teacher_name)) {
+            $teacher = $find->findTeacherByUsername($teacher_name);
+        } else {
+            $teacher = $this->getUser();
+        }
 
         $form = $this->createForm(EditTeacherType::class, $teacher);
         $form->handleRequest($request);
@@ -60,9 +66,11 @@ class TeacherController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($teacher);
             $entityManager->flush();
-
             $this->addFlash('success', 'Profil édité avec succès.');
-
+            
+            if (isset($teacher_name)) {
+                return $this->redirectToRoute('user_list');
+            }
             return $this->redirectToRoute('teacher_profile');
         }
 

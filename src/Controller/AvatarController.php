@@ -4,30 +4,21 @@ namespace App\Controller;
 
 use App\Entity\Avatar;
 use App\Form\AvatarType;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\Entity;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AvatarController extends AbstractController
 {
-    private $em;
-
-    private $request;
-
-    public function __construct(EntityManagerInterface $em, RequestStack $requestStack)
-    {
-        $this->em = $em;
-        $this->request = $requestStack->getCurrentRequest();
-    }
-
     /**
      * @Route("/student/avatar", name="edit_student_avatar")
      * @Route("/teacher/avatar", name="edit_teacher_avatar")
      * @Route("/user/avatar", name="edit_user_avatar")
      */
-    public function createAvatar(): Response
+    public function new(EntityManager $em, Request $request): Response
     {
         $avatar = $this->getUser()->getAvatar();
         // Check if the image already exist
@@ -39,10 +30,10 @@ class AvatarController extends AbstractController
 
         $form = $this->createForm(AvatarType::class, $avatar);
 
-        $form->handleRequest($this->request);
+        $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($avatar);
-            $this->em->flush();
+            $em->persist($avatar);
+            $em->flush();
             $this->addFlash('success', 'Avatar ajouté avec succès.');
 
             switch ($this->getUser()->getRoles()[0]) {
