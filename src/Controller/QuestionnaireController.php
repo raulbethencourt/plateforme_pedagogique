@@ -8,6 +8,7 @@ use App\Entity\Questionnaire;
 use App\Form\QuestionnaireType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\QuestionnaireRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -37,10 +38,17 @@ class QuestionnaireController extends AbstractController
      * @Route("/", name="questionnaire_index", methods={"GET"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function index(QuestionnaireRepository $questionnaireRepo): Response
+    public function index(QuestionnaireRepository $questionnaireRepo, PaginatorInterface $paginator): Response
     {
+        $questionnaires = $questionnaireRepo->findAll();
+
+        $questionnaires = $paginator->paginate(
+            $questionnaires,
+            $this->request->query->getInt('page', 1),
+            5
+        );
         return $this->render('questionnaire/index.html.twig', [
-            'questionnaires' => $questionnaireRepo->findAll(),
+            'questionnaires' => $questionnaires,
             'lesson_id' => $this->request->query->get('lesson_id'),
             'classroom_id' => $this->request->query->get('classroom_id'),
         ]);

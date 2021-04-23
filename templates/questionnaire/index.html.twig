@@ -37,7 +37,7 @@
 					{% for questionnaire in questionnaires %}
 						{% if questionnaire.visibility or app.user.username == questionnaire.creator %}
 							<tr>
-								<th scope="row">{{ loop.index }}</th>
+								<th scope="row"></th>
 								<td>
 									<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson_id}) }}">
 										{{ questionnaire.title }}
@@ -64,6 +64,9 @@
 					{% endfor %}
 				</tbody>
 			</table>
+			<div class="pagination">
+				{{ knp_pagination_render(questionnaires) }}
+			</div>
 		</div>
 	</div>
 {% endblock %}
