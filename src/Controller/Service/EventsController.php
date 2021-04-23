@@ -9,10 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
-
-//TODO refactor code
 /**
  * @Route("/events")
  */
@@ -29,7 +26,7 @@ class EventsController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="events_new", methods={"GET","POST"})
+     * @Route("/new", name="events_new", methods={"GET", "POST"})
      */
     public function new(Request $request): Response
     {
@@ -53,7 +50,6 @@ class EventsController extends AbstractController
 
     /**
      * @Route("/{id_events}/event", name="events_show", methods={"GET"})
-     * @ParamConverter("events", options={"mapping": {"id_events"   : "id"}})
      */
     public function show(Events $event): Response
     {
@@ -63,7 +59,7 @@ class EventsController extends AbstractController
     }
 
     /**
-     * @Route("/{id_events}/edit", name="events_edit", methods={"GET","POST"})
+     * @Route("/{id_events}/edit", name="events_edit", methods={"GET", "POST"})
      */
     public function edit(Request $request, Events $event): Response
     {
@@ -83,7 +79,7 @@ class EventsController extends AbstractController
     }
 
     /**
-     * @Route("/{id_events}/delete", name="events_delete", methods={"DELETE"})
+     * @Route("/{id}/delete", name="events_delete", methods={"POST"})
      */
     public function delete(Request $request, Events $event): Response
     {
@@ -97,12 +93,12 @@ class EventsController extends AbstractController
     }
 
     /**
-     * @Route("/calendar_view",name="events_calendar", methods={"GET"})
+     * @Route("/calendar_view", name="events_calendar", methods={"GET"})
      */
     public function calendar(): Response
     {
         return $this->render('events/calendar.html.twig', [
-            'user' => $this->getUser()
+            'user' => $this->getUser(),
         ]);
     }
 }

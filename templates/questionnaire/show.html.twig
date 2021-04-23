@@ -53,7 +53,7 @@
 
 	{% if (is_granted('ROLE_ADMIN') or app.user.username == questionnaire.creator) %}
 		<div class="text-right">
-			<a href="{{ path('question_create', {id: questionnaire.id}) }}" class="btn btn-primary">Ajouter question</a>
+			<a href="{{ path('question_new', {questionnaire_id: questionnaire.id}) }}" class="btn btn-primary">Ajouter question</a>
 		</div>
 	{% endif %}
 {% endblock %}

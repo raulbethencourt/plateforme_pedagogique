@@ -3,18 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Pass;
+use App\Service\FindEntity;
 use App\Entity\Questionnaire;
 use App\Form\QuestionnaireType;
-use App\Repository\QuestionnaireRepository;
-use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
+use App\Repository\QuestionnaireRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/questionnaire")
@@ -74,8 +73,8 @@ class QuestionnaireController extends AbstractController
 
             $this->addFlash('success', 'Activité ajouté avec succès.');
 
-            return $this->redirectToRoute('question_create', [
-                'id' => $questionnaire->getId(),
+            return $this->redirectToRoute('question_new', [
+                'questionnaire_id' => $questionnaire->getId(),
                 'lesson_id' => $lesson_id,
             ]);
         }
@@ -102,15 +101,12 @@ class QuestionnaireController extends AbstractController
         ]);
     }
 
-    //TODO continue refactoringj
-
     /**
      * @Route("/{id}/edit", name="questionnaire_edit", methods={"GET", "POST"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function editQuestionnaire(): Response
+    public function edit(Questionnaire $questionnaire): Response
     {
-        $questionnaire = $this->find->findQuestionnaire();
         $form = $this->createForm(QuestionnaireType::class, $questionnaire);
         $form->handleRequest($this->request);
 
@@ -121,7 +117,7 @@ class QuestionnaireController extends AbstractController
             $this->addFlash('success', 'Activite modifié avec succès.');
 
             return $this->redirectToRoute(
-                'questionnaire_index',
+                'questionnaire_show',
                 [
                     'id' => $questionnaire->getId(),
                 ]
@@ -139,12 +135,11 @@ class QuestionnaireController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/delete", name="questionnaire_delete", methods={"DELETE"})
+     * @Route("/{id}", name="questionnaire_delete", methods={"POST"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function deleteQuestionnaire(): RedirectResponse
+    public function delete(Questionnaire $questionnaire): Response
     {
-        $questionnaire = $this->find->findQuestionnaire();
         // check the token to delete
         if ($this->isCsrfTokenValid('delete'.$questionnaire->getId(), $this->request->get('_token'))) {
             $this->em->remove($questionnaire);
@@ -152,31 +147,26 @@ class QuestionnaireController extends AbstractController
             $this->addFlash('success', 'Activité supprimé avec succès.');
         }
 
-        return $this->redirectToRoute('list_questionnaires');
+        return $this->redirectToRoute('questionnaire_index');
     }
 
     /**
-     * This methode control the questionnaires gaming.
-     *
-     * @Route("/{id}/play", name="questionnaire_play")
+     * @Route("/{id}/play", name="questionnaire_play", methods={"GET", "POST"})
      * @Security("is_granted('ROLE_STUDENT') or is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function play(): Response
+    public function play(Questionnaire $questionnaire): Response
     {
-        $questionnaire = $this->find->findQuestionnaire();
         // Check if we can play the questionnaire or not
         if (!$questionnaire->isPlayable()) {
             $this->addFlash('error', 'Activité indisponible !');
             $lesson_id = $this->request->get('lesson_id');
             if (isset($lesson_id)) {
-                return $this->redirectToRoute(
-                    'lesson_index',
-                [
+                return $this->redirectToRoute('lesson_show', [
                     'id' => $lesson_id,
                 ]);
             }
 
-            return $this->redirectToRoute('list_questionnaires');
+            return $this->redirectToRoute('questionnaire_index');
         }
 
         // Creates the variables that I'm gonna need later on
@@ -206,19 +196,16 @@ class QuestionnaireController extends AbstractController
             }
         }
 
-        return $this->render(
-            'questionnaire/play.html.twig',
-            [
-                'questionnaire' => $questionnaire,
-                'questions' => $questionnaire->getQuestions(),
-                'points' => $points,
-                'finalResults' => [
-                    'given' => $answers,
-                    'rights' => $rights,
-                ],
-                'user' => $this->getUser(),
-            ]
-        );
+        return $this->render('questionnaire/play.html.twig', [
+            'questionnaire' => $questionnaire,
+            'questions' => $questionnaire->getQuestions(),
+            'points' => $points,
+            'finalResults' => [
+                'given' => $answers,
+                'rights' => $rights,
+            ],
+            'user' => $this->getUser(),
+        ]);
     }
 
     /**
@@ -231,7 +218,6 @@ class QuestionnaireController extends AbstractController
 
         // For each questionnaire question we check if the student has chosen a good answer
         foreach ($questionnaire->getQuestions() as $question) {
-            // Call a methode in question Entity
             $rightPropositions = $question->getRightPropositions();
 
             foreach ($rightPropositions as $rightProposition) {
