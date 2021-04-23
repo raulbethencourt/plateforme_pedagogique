@@ -131,7 +131,7 @@ class ClassroomController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="classroom_delete", methods={"POST"})
+     * @Route("/{id}", name="classroom_delete", methods={"DELETE"})
      */
     public function delete(Classroom $classroom): Response
     {
@@ -187,7 +187,7 @@ class ClassroomController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/lesson_remove", name="classroom_lesson_remove", methods={"POST"})
+     * @Route("/{id}/lesson_remove", name="classroom_lesson_remove", methods={"DELETE"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
     public function removeLessonFromClass(Classroom $classroom): RedirectResponse

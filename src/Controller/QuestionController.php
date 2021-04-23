@@ -3,22 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\Question;
-use App\Entity\Questionnaire;
 use App\Form\QuestionType;
 use App\Service\FindEntity;
+use App\Entity\Questionnaire;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * Class QuestionController
- * This class manage the questions.
- *
  * @Route("/question")
  * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
  */
@@ -38,10 +34,9 @@ class QuestionController extends AbstractController
     }
 
     /**
-     * @Route("/create/{id}", name="question_create", methods={"GET", "POST"})
-     * @ParamConverter("question", class="\App\Entity\Question")
+     * @Route("/new", name="question_new", methods={"GET", "POST"})
      */
-    public function createQuestion(): Response
+    public function new(): Response
     {
         $questionnaire = $this->find->findQuestionnaire();
         $questionnaire_id = $questionnaire->getId();
@@ -59,33 +54,29 @@ class QuestionController extends AbstractController
             $this->addFlash('success', 'Question ajoutée avec succès.');
 
             return $this->redirectToRoute(
-                'question_create',
+                'question_new',
                 [
-                    'id' => $questionnaire_id,
+                    'questionnaire_id' => $questionnaire_id,
                     'lesson_id' => $lesson_id,
                 ]
             );
         }
 
-        return $this->render(
-            'question/new.html.twig',
-            [
-                'questionnaire' => $questionnaire,
-                'question' => $question,
-                'form' => $form->createView(),
-                'user' => $this->getUser(),
-                'lesson_id' => $this->request->query->get('lesson_id'),
-            ]
-        );
+        return $this->render('question/new.html.twig', [
+            'questionnaire' => $questionnaire,
+            'question' => $question,
+            'form' => $form->createView(),
+            'user' => $this->getUser(),
+            'lesson_id' => $this->request->query->get('lesson_id'),
+        ]);
     }
 
     /**
-     * @Route("/edit/{id}", name="question_edit", methods={"GET", "POST"})
+     * @Route("/{id}/edit", name="question_edit", methods={"GET", "POST"})
      */
-    public function editQuestion(): Response
+    public function edit(Question $question): Response
     {
         $questionnaire = $this->find->findQuestionnaire();
-        $question = $this->find->findQuestion();
         $question->setQuestionnaire($questionnaire);
         $form = $this->createForm(QuestionType::class, $question);
 
@@ -96,44 +87,31 @@ class QuestionController extends AbstractController
 
             $this->addFlash('success', 'Question editée avec succès.');
 
-            return $this->redirectToRoute(
-                'questionnaire_index',
-                [
-                    'id' => $this->request->query->get('questionnaire_id'),
-                ]
-            );
+            return $this->redirectToRoute('questionnaire_show', [
+                'id' => $this->request->query->get('questionnaire_id'),
+            ]);
         }
 
-        return $this->render(
-            'question/edit.html.twig',
-            [
-                'question' => $question,
-                'form' => $form->createView(),
-            ]
-        );
+        return $this->render('question/edit.html.twig', [
+            'question' => $question,
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
-     * @Route("/delete/{id}", name="question_delete", methods={"DELETE"})
+     * @Route("/{id}", name="question_delete", methods={"DELETE"})
      */
-    public function deleteQuestion(): RedirectResponse
+    public function delete(Question $question): RedirectResponse
     {
-        $question = $this->find->findQuestion();
         // Check the token for validation
-        if ($this->isCsrfTokenValid(
-            'delete'.$question->getId(),
-            $this->request->get('_token')
-        )) {
+        if ($this->isCsrfTokenValid('delete'.$question->getId(), $this->request->get('_token'))) {
             $this->em->remove($question);
             $this->em->flush();
             $this->addFlash('succes', 'Questionnaire supprimé avec succès.');
         }
 
-        return $this->redirectToRoute(
-            'questionnaire_index',
-            [
-                'id' => $this->request->query->get('questionnaire_id'),
-            ]
-        );
+        return $this->redirectToRoute('questionnaire_show', [
+            'id' => $this->request->query->get('questionnaire_id'),
+        ]);
     }
 }

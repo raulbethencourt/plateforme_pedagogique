@@ -1,41 +1,59 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Link index{% endblock %}
+{% block title %}Link index
+{% endblock %}
 
 {% block body %}
-    <h1>Link index</h1>
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success mr-2 mb-0">
+			{{ message }}
+		</div>
+	{% endfor %}
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Link</th>
-                <th>Description</th>
-                <th>Creator</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for link in links %}
-            <tr>
-                <td>{{ link.id }}</td>
-                <td>{{ link.name }}</td>
-                <td>{{ link.link }}</td>
-                <td>{{ link.description }}</td>
-                <td>{{ link.creator }}</td>
-                <td>
-                    <a href="{{ path('link_show', {'id': link.id}) }}">show</a>
-                    <a href="{{ path('link_edit', {'id': link.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+	<a href="{{ path('link_new') }}" class="btn btn-secondary mb-2" role="button">Create new</a>
 
-    <a href="{{ path('link_new') }}">Create new</a>
+	<div class="row">
+		<div class="col-12">
+			<h1>Liste des liens</h1>
+			<table class="table border-bottom">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col"></th>
+						<th scope="col">Name</th>
+						<th scope="col">Link</th>
+						<th scope="col">Creator</th>
+						<th scope="col">actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for link in links %}
+						<tr>
+							<th scope="row">{{ loop.index }}</th>
+							<td>
+								<a href="{{ path('link_show', {id: link.id}) }}">
+									{{ link.name }}
+								</a>
+							</td>
+							<td>
+								<a href="{{ link.link }}" target="_blank" rel="noopener noreferrer">{{ link.link }}</a>
+							</td>
+							<td>{{ link.creator }}</td>
+							<td>
+								<a href="{{ path('link_edit', {id: link.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+								<form method="post" action="{{ path('link_delete', {id: link.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+									<input type="hidden" name="_method" value='DELETE'>
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ link.id) }}">
+									<button class="btn btn-danger">Supprimer</button>
+								</form>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="6">no records found</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 {% endblock %}

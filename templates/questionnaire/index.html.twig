@@ -16,9 +16,8 @@
 		</div>
 	{% endfor %}
 
-
 	{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and lesson_id is null %}
-		<a href="{{ path('questionnaire_create') }}" class="btn btn-secondary mb-2" role="button">Créer Activité</a>
+		<a href="{{ path('questionnaire_new') }}" class="btn btn-secondary mb-2" role="button">Créer Activité</a>
 	{% endif %}
 
 	<div class="row">
@@ -38,9 +37,9 @@
 					{% for questionnaire in questionnaires %}
 						{% if questionnaire.visibility or app.user.username == questionnaire.creator %}
 							<tr>
-								<th scope="row">{{ loop.index }}</th>
+								<th scope="row"></th>
 								<td>
-									<a href="{{ path('questionnaire_index', {id: questionnaire.id, lesson_id: lesson_id}) }}">
+									<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson_id}) }}">
 										{{ questionnaire.title }}
 									</a>
 								</td>
@@ -65,6 +64,9 @@
 					{% endfor %}
 				</tbody>
 			</table>
+			<div class="pagination">
+				{{ knp_pagination_render(questionnaires) }}
+			</div>
 		</div>
 	</div>
 {% endblock %}

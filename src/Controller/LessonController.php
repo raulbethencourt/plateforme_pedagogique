@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Lesson;
 use App\Form\LessonType;
 use App\Service\FindEntity;
-use App\Repository\ClassroomRepository;
+use App\Repository\LessonRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,10 +35,10 @@ class LessonController extends AbstractController
      * @Route("/", name="lesson_index", methods={"GET"})
      * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
      */
-    public function index(ClassroomRepository $classroomRepo): Response
+    public function index(LessonRepository $lessonRepo): Response
     {
         return $this->render('lesson/index.html.twig', [
-            'lessons' => $classroomRepo->findAll(),
+            'lessons' => $lessonRepo->findAll(),
             'classroom_id' => $this->request->query->get('classroom_id'),
         ]);
     }

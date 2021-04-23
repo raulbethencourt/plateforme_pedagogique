@@ -4,11 +4,12 @@ namespace App\Form;
 
 use App\Entity\Questionnaire;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichImageType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class QuestionnaireType extends AbstractType
 {
@@ -47,23 +48,15 @@ class QuestionnaireType extends AbstractType
             )
             ->add(
                 'visibility',
-                ChoiceType::class,
+                CheckboxType::class,
                 [
-                    'choices' => [
-                        'Oui' => true,
-                        'Non' => false,
-                    ],
                     'label' => 'Rendre visible',
                 ]
             )
             ->add(
                 'playable',
-                ChoiceType::class,
+                CheckboxType::class,
                 [
-                    'choices' => [
-                        'Oui' => true,
-                        'Non' => false,
-                    ],
                     'label' => 'Rendre juable',
                 ]
             )

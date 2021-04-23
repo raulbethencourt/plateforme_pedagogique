@@ -29,7 +29,7 @@
 						<th scope="col"></th>
 						<th scope="col">Prénom</th>
 						<th scope="col">Nom</th>
-						<th scope="col">Matière(s)</th>
+						<th scope="col">Téléphone</th>
 						<th scope="col"></th>
 					</tr>
 				</thead>
@@ -39,7 +39,11 @@
 							<th scope="row">{{ loop.index }}</th>
 							<td>{{ teacher.name }}</td>
 							<td>{{ teacher.surname }}</td>
-							<td>{{ teacher.subject }}</td>
+							{% if teacher.telephone %}
+								<td>(0){{ teacher.telephone }}</td>
+							{% else %}
+								<td></td>
+							{% endif %}
 							<td>
 								<a href="{{ path('edit_teacher', {username: teacher.username}) }}" class="btn btn-primary w-75 mt-4">Éditer Profil</a>
 								<form method="post" action="{{ path('user_delete', {id: teacher.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
@@ -66,6 +70,7 @@
 						<th scope="col"></th>
 						<th scope="col">Prénom</th>
 						<th scope="col">Nom</th>
+						<th scope="col">Téléphone</th>
 						<th scope="col"></th>
 					</tr>
 				</thead>
@@ -75,6 +80,11 @@
 							<th scope="row">{{ loop.index }}</th>
 							<td>{{ student.name }}</td>
 							<td>{{ student.surname }}</td>
+							{% if student.telephone %}
+								<td>(0){{ student.telephone }}</td>
+							{% else %}
+								<td></td>
+							{% endif %}
 							<td>
 								<a href="{{ path('edit_student', {username: student.username}) }}" class="btn btn-primary w-75 mt-3">Éditer Profil</a>
 								<form method="post" action="{{ path('user_delete', {id: student.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">

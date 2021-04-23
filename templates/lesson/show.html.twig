@@ -37,9 +37,13 @@
 			{% for questionnaire in questionnaires %}
 				<tr>
 					<th scope="row">{{ loop.index }}</th>
-					<td>
-						<a href="{{ path('questionnaire_index', {id: questionnaire.id, lesson_id: lesson.id}) }}" role="button">{{ questionnaire.title }}</a>
-					</td>
+					{% if is_granted('ROLE_STUDENT') %}
+						<td>{{ questionnaire.title }}</td>
+					{% else %}
+						<td>
+							<a href="{{ path('questionnaire_index', {id: questionnaire.id, lesson_id: lesson.id}) }}" role="button">{{ questionnaire.title }}</a>
+						</td>
+					{% endif %}
 					<td>{{ questionnaire.creator }}</td>
 					{% if questionnaire.difficulty == 'facile' %}
 						<td>

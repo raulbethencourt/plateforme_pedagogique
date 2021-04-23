@@ -4,12 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Avatar;
 use App\Form\AvatarType;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\Entity;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AvatarController extends AbstractController
 {
@@ -18,7 +16,7 @@ class AvatarController extends AbstractController
      * @Route("/teacher/avatar", name="edit_teacher_avatar")
      * @Route("/user/avatar", name="edit_user_avatar")
      */
-    public function new(EntityManager $em, Request $request): Response
+    public function new(Request $request): Response
     {
         $avatar = $this->getUser()->getAvatar();
         // Check if the image already exist
@@ -32,6 +30,7 @@ class AvatarController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
             $em->persist($avatar);
             $em->flush();
             $this->addFlash('success', 'Avatar ajouté avec succès.');
@@ -46,14 +45,11 @@ class AvatarController extends AbstractController
             }
         }
 
-        return $this->render(
-            'avatar/edit.html.twig',
-            [
-                'form' => $form->createView(),
-                'student' => $this->getUser(),
-                'teacher' => $this->getUser(),
-                'user' => $this->getUser(),
-            ]
-        );
+        return $this->render('avatar/edit.html.twig', [
+            'form' => $form->createView(),
+            'student' => $this->getUser(),
+            'teacher' => $this->getUser(),
+            'user' => $this->getUser(),
+        ]);
     }
 }
