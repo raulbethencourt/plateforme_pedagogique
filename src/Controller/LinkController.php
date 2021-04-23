@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use   App\Entity\Link;
+use App\Entity\Link;
 use App\Form\LinkType;
 use App\Repository\LinkRepository;
 use Symfony\Component\HttpFoundation\Request;

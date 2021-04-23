@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Student;
 use Symfony\Component\Form\AbstractType;
+use FOS\RestBundle\Validator\Constraints\Regex;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -67,6 +68,14 @@ class EditStudentType extends AbstractType
                     'required' => false,
                     'attr' => [
                         'placeholder' => 'ex: 0768513172',
+                    ],
+                    'constraints' => [
+                        new Regex(
+                            [
+                                'pattern' => '/^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/',
+                                'message' => 'Votre numero doit faire 10 digits',
+                            ]
+                        ),
                     ],
                 ]
             )
