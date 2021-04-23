@@ -62,25 +62,15 @@
 							<li class="nav-item d-flex justify-content-center">
 								{% if is_granted('ROLE_TEACHER') %}
 									<a class="nav-link mr-2" href="{{ path('teacher_profile') }}">Mon Profile</a>
-									{% if teacher.avatar is defined and teacher.avatar is not null %}
-										<img class="profile rounded-circle bg-black" src="{{ vich_uploader_asset(teacher.avatar) }}" alt="profil icon">
-									{% else %}
-										<img class="profile" src="{{ asset('images/image-profile.png') }}" alt="profil icon">
-									{% endif %}
 								{% elseif is_granted('ROLE_STUDENT') %}
 									<a class="nav-link mr-2" href="{{ path('student_profile') }}">Mon Profile</a>
-									{% if student.avatar is defined and student.avatar is not null %}
-										<img class="profile rounded-circle bg-black" src="{{ vich_uploader_asset(student.avatar) }}" alt="profil icon">
-									{% else %}
-										<img class="profile" src="{{ asset('images/image-profile.png') }}" alt="profil icon">
-									{% endif %}
 								{% else %}
 									<a class="nav-link mr-2" href="{{ path('user_profile') }}">Mon Profile</a>
-									{% if user.avatar is defined and user.avatar is not null %}
-										<img class="profile rounded-circle bg-black" src="{{ vich_uploader_asset(user.avatar) }}" alt="profil icon">
-									{% else %}
-										<img class="profile" src="{{ asset('images/image-profile.png') }}" alt="profil icon">
-									{% endif %}
+								{% endif %}
+								{% if app.user.avatar %}
+									<img class="profile rounded-circle bg-black" src="{{ vich_uploader_asset(app.user.avatar) }}" alt="profil icon">
+								{% else %}
+									<img class="profile" src="{{ asset('images/image-profile.png') }}" alt="profil icon">
 								{% endif %}
 							</li>
 						</ul>

@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Link{% endblock %}
+{% block title %}Editer Lien
+{% endblock %}
 
 {% block body %}
-    <h1>Edit Link</h1>
-
-    {{ include('link/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('link_index') }}">back to list</a>
-
-    {{ include('link/_delete_form.html.twig') }}
+	<div class="row">
+		<div class="col-12">
+			<h1>Editer Lien</h1>
+			{{ include('link/_form.html.twig', {'button_label': 'Editer'}) }}
+		</div>
+	</div>
 {% endblock %}

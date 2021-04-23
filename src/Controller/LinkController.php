@@ -34,8 +34,9 @@ class LinkController extends AbstractController
     public function new(Request $request): Response
     {
         $link = new Link();
+        $link->setCreator($this->getUser()->getUsername());
         $form = $this->createForm(LinkType::class, $link);
-        $form->handleRequest($request);
+        $form->handleRequest($request); 
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -86,7 +87,7 @@ class LinkController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="link_delete", methods={"POST"})
+     * @Route("/{id}", name="link_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Link $link): Response
     {

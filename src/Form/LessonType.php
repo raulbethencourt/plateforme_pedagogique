@@ -4,10 +4,11 @@ namespace App\Form;
 
 use App\Entity\Lesson;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class LessonType extends AbstractType
 {
@@ -36,23 +37,15 @@ class LessonType extends AbstractType
             )
             ->add(
                 'visibility',
-                ChoiceType::class,
+                CheckboxType::class,
                 [
-                    'choices' => [
-                        'Oui' => true,
-                        'Non' => false,
-                    ],
                     'label' => 'Rendre visible',
                 ]
             )
             ->add(
                 'playable',
-                ChoiceType::class,
+                CheckboxType::class,
                 [
-                    'choices' => [
-                        'Oui' => true,
-                        'Non' => false,
-                    ],
                     'label' => 'Rendre juable',
                 ]
             )

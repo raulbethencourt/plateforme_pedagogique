@@ -135,7 +135,7 @@ class QuestionnaireController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="questionnaire_delete", methods={"POST"})
+     * @Route("/{id}", name="questionnaire_delete", methods={"DELETE"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
     public function delete(Questionnaire $questionnaire): Response
