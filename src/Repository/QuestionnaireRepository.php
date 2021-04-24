@@ -3,10 +3,11 @@
 namespace App\Repository;
 
 use App\Entity\Questionnaire;
-use App\Entity\Teacher;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Questionnaire|null find($id, $lockMode = null, $lockVersion = null)
@@ -22,24 +23,8 @@ class QuestionnaireRepository extends ServiceEntityRepository
     }
 
     /**
-     * This method allows to find a questionnaire by a teacher.
-     *
-     * @return questionnaire[] Returns an array of questionnaire objects
-     */
-    public function findByTeacher(Teacher $value): array
-    {
-        return $this->createQueryBuilder('q')
-            ->andWhere('q.teacher = :val')
-            ->setParameter('val', $value)
-            ->orderBy('q.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
-    /**
      * This method allows to find a questionnaire by an Id.
+     *
      * @throws NonUniqueResultException
      */
     public function findOneById(string $id): ?questionnaire
@@ -49,6 +34,24 @@ class QuestionnaireRepository extends ServiceEntityRepository
             ->setParameter('val', $id)
             ->getQuery()
             ->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * This method allows to find a questionnaire by creator or visibility.
+     */
+    public function findByVisibilityOrCreator(bool $visibility, string $creator): array
+    {
+        return $this->createQueryBuilder('q')
+            ->where('q.visibility = :val1')
+            ->orWhere('q.creator = :val2')
+            ->setParameters(new ArrayCollection([
+                new Parameter('val1', $visibility),
+                new Parameter('val2', $creator),
+            ]))
+            ->orderBy('q.id', 'ASC')
+            ->getQuery()
+            ->getResult()
         ;
     }
 }

@@ -77,7 +77,7 @@
 
 	{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
 		<div class="text-right">
-			<a href="{{ path('questionnaire_create', {lesson_id: lesson.id}) }}" class="btn btn-primary">Créer activité</a>
+			<a href="{{ path('questionnaire_new', {lesson_id: lesson.id}) }}" class="btn btn-primary">Créer activité</a>
 		</div>
 	{% endif %}
 {% endblock %}

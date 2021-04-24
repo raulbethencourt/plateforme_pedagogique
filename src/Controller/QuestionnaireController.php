@@ -3,18 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\Pass;
-use App\Service\FindEntity;
 use App\Entity\Questionnaire;
 use App\Form\QuestionnaireType;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\QuestionnaireRepository;
+use App\Service\FindEntity;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\ParameterBag;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/questionnaire")
@@ -40,13 +40,23 @@ class QuestionnaireController extends AbstractController
      */
     public function index(QuestionnaireRepository $questionnaireRepo, PaginatorInterface $paginator): Response
     {
-        $questionnaires = $questionnaireRepo->findAll();
+        $user = $this->getUser();
+        if ('ROLE_ADMIN' === $user->getRoles()[0] || 'ROLE_SUPER_ADMIN' === $user->getRoles()[0]) {
+            $questionnaires = $questionnaireRepo->findAll();
+        } else {
+            $questionnaires = $questionnaireRepo->findByVisibilityOrCreator(true, $user->getUsername());
+        }
 
         $questionnaires = $paginator->paginate(
             $questionnaires,
             $this->request->query->getInt('page', 1),
             5
         );
+        $questionnaires->setCustomParameters([
+            'align' => 'center',
+            'rounded' => true,
+        ]);
+
         return $this->render('questionnaire/index.html.twig', [
             'questionnaires' => $questionnaires,
             'lesson_id' => $this->request->query->get('lesson_id'),

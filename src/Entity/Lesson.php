@@ -55,12 +55,12 @@ class Lesson
     private $creator;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $visibility;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     private $playable;
 
@@ -148,9 +148,9 @@ class Lesson
         return $this;
     }
 
-    public function getDateCreation(): ?\DateTimeInterface
+    public function getDateCreation(): ?string
     {
-        return $this->date_creation;
+        return $this->date_creation->format('d-m-Y');
     }
 
     public function setDateCreation(\DateTimeInterface $date_creation): self
