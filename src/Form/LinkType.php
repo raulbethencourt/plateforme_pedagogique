@@ -4,11 +4,11 @@ namespace App\Form;
 
 use App\Entity\Link;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LinkType extends AbstractType
 {
@@ -34,12 +34,16 @@ class LinkType extends AbstractType
             ->add(
                 'description',
                 TextareaType::class,
+                [
+                    'required' => false,
+                ]
             )
             ->add(
                 'visibility',
                 CheckboxType::class,
                 [
                     'label' => 'Rendre le lien visible',
+                    'required' => false,
                 ]
             )
             ->add(
@@ -47,6 +51,7 @@ class LinkType extends AbstractType
                 CheckboxType::class,
                 [
                     'label' => 'Rendre le lien utilisable',
+                    'required' => false,
                 ]
             )
         ;

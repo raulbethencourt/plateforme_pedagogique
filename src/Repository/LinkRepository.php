@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Link;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Link|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,32 +21,21 @@ class LinkRepository extends ServiceEntityRepository
         parent::__construct($registry, Link::class);
     }
 
-    // /**
-    //  * @return Link[] Returns an array of Link objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * This method allows to find a link by creator or visibility.
+     */
+    public function findByVisibilityOrCreator(bool $visibility, string $creator): array
     {
         return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
+            ->where('l.visibility = :val1')
+            ->orWhere('l.creator = :val2')
+            ->setParameters(new ArrayCollection([
+                new Parameter('val1', $visibility),
+                new Parameter('val2', $creator),
+            ]))
             ->orderBy('l.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Link
-    {
-        return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

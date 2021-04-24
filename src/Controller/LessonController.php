@@ -4,14 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Lesson;
 use App\Form\LessonType;
-use App\Service\FindEntity;
 use App\Repository\LessonRepository;
+use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/lesson")
@@ -35,10 +36,28 @@ class LessonController extends AbstractController
      * @Route("/", name="lesson_index", methods={"GET"})
      * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
      */
-    public function index(LessonRepository $lessonRepo): Response
+    public function index(LessonRepository $lessonRepo, PaginatorInterface $paginator): Response
     {
+        $user = $this->getUser();
+        if ('ROLE_ADMIN' === $user->getRoles()[0] || 'ROLE_SUPER_ADMIN' === $user->getRoles()[0]) {
+            $lessons = $lessonRepo->findAll();
+        } else {
+            $lessons = $lessonRepo->findByVisibilityOrCreator(true, $user->getUsername());
+        }
+
+        $lessons = $paginator->paginate(
+            $lessons,
+            $this->request->query->getInt('page', 1),
+            5
+        );
+
+        $lessons->setCustomParameters([
+            'align' => 'center',
+            'rounded' => true,
+        ]);
+
         return $this->render('lesson/index.html.twig', [
-            'lessons' => $lessonRepo->findAll(),
+            'lessons' => $lessons,
             'classroom_id' => $this->request->query->get('classroom_id'),
         ]);
     }

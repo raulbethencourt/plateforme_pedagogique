@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Lesson;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Lesson|null find($id, $lockMode = null, $lockVersion = null)
@@ -33,15 +35,21 @@ class LessonRepository extends ServiceEntityRepository
         ;
     }
 
-    /*
-    public function findOneBySomeField($value): ?Lesson
+    /**
+     * This method allows to find a questionnaire by creator or visibility.
+     */
+    public function findByVisibilityOrCreator(bool $visibility, string $creator): array
     {
         return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
+            ->where('l.visibility = :val1')
+            ->orWhere('l.creator = :val2')
+            ->setParameters(new ArrayCollection([
+                new Parameter('val1', $visibility),
+                new Parameter('val2', $creator),
+            ]))
+            ->orderBy('l.id', 'ASC')
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
-    */
 }

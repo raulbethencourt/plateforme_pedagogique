@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Link;
 use App\Form\LinkType;
 use App\Repository\LinkRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,10 +21,28 @@ class LinkController extends AbstractController
      * @Route("/", name="link_index", methods={"GET"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function index(LinkRepository $linkRepository): Response
+    public function index(LinkRepository $linkRepo, PaginatorInterface $paginator, Request $request): Response
     {
+        $user = $this->getUser();
+        if ('ROLE_ADMIN' === $user->getRoles()[0] || 'ROLE_SUPER_ADMIN' === $user->getRoles()[0]) {
+            $links = $linkRepo->findAll();
+        } else {
+            $links = $linkRepo->findByVisibilityOrCreator(true, $user->getUsername());
+        }
+
+        $links = $paginator->paginate(
+            $links,
+            $request->query->getInt('page', 1),
+            5
+        );
+
+        $links->setCustomParameters([
+            'align' => 'center',
+            'rounded' => true,
+        ]);
+
         return $this->render('link/index.html.twig', [
-            'links' => $linkRepository->findAll(),
+            'links' => $links,
         ]);
     }
 

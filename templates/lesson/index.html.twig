@@ -24,41 +24,44 @@
 						<th scope="col">Titre</th>
 						<th scope="col">Author</th>
 						<th scope="col">Niveau</th>
+						<th scope="col">Date creation</th>
 						<th scope="col"></th>
 					</tr>
 				</thead>
 
 				<tbody>
 					{% for lesson in lessons %}
-						{% if lesson.visibility or app.user.username == lesson.creator or is_granted('ROLE_SUPER_ADMIN') %}
-							<tr>
-								<th scope="row">{{ loop.index }}</th>
-								<td>
-									<a href="{{ path('lesson_show', {id: lesson.id, classroom_id: classroom_id}) }}">
-										{{ lesson.title }}
-									</a>
-								</td>
-								<td>{{ lesson.creator }}</td>
-								<td>{{ lesson.level}}</td>
-								<td>
-									{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
-										<a href="{{ path('lesson_edit', {id: lesson.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-										<form method="post" action="{{ path('lesson_delete', {id: lesson.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-											<input type="hidden" name="_method" value='DELETE'>
-											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
-											<button class="btn btn-danger">Supprimer</button>
-										</form>
-									{% endif %}
+						<tr>
+							<th scope="row"></th>
+							<td>
+								<a href="{{ path('lesson_show', {id: lesson.id, classroom_id: classroom_id}) }}">
+									{{ lesson.title }}
+								</a>
+							</td>
+							<td>{{ lesson.creator }}</td>
+							<td>{{ lesson.level}}</td>
+							<td>{{ lesson.dateCreation}}</td>
+							<td>
+								{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
+									<a href="{{ path('lesson_edit', {id: lesson.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+									<form method="post" action="{{ path('lesson_delete', {id: lesson.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+										<input type="hidden" name="_method" value='DELETE'>
+										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
+										<button class="btn btn-danger">Supprimer</button>
+									</form>
+								{% endif %}
 
-									{% if classroom_id is defined and classroom_id is not null %}
-										<a href="{{ path('classroom_lesson_add', {lesson_id: lesson.id, classroom_id: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
-									{% endif %}
-								</td>
-							</tr>
-						{% endif %}
+								{% if classroom_id is defined and classroom_id is not null %}
+									<a href="{{ path('classroom_lesson_add', {lesson_id: lesson.id, classroom_id: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+								{% endif %}
+							</td>
+						</tr>
 					{% endfor %}
 				</tbody>
 			</table>
+			<div class="pagination">
+				{{ knp_pagination_render(lessons) }}
+			</div>
 		</div>
 	</div>
 {% endblock %}
