@@ -81,7 +81,7 @@ class ClassroomController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="classroom_show", methods={"GET"})
+     * @Route("/{id}", name="classroom_show", methods={"GET","POST"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN') or is_granted('ROLE_STUDENT')")
      */
     public function show(Classroom $classroom): Response
@@ -145,10 +145,10 @@ class ClassroomController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/user_delete", name="delete_user_classroom", methods={"DELETE"})
+     * @Route("/{id}/user_delete", name="classroom_user_remove", methods={"DELETE"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function deleteUserFromClassroom(Classroom $classroom): Response
+    public function removeUserFromClassroom(Classroom $classroom): Response
     {
         // find user
         $user = $this->find->findUser();
@@ -169,7 +169,7 @@ class ClassroomController extends AbstractController
     }
 
     /**
-     * @Route("/add_lesson", name="classroom_lesson_add", methods={"GET"})
+     * @Route("/{id}/add_lesson", name="classroom_lesson_add", methods={"GET"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
     public function addLessonToClass(Classroom $classroom): RedirectResponse
@@ -181,7 +181,7 @@ class ClassroomController extends AbstractController
         $this->em->flush();
         $this->addFlash('success', 'Module ajouté à la classe avec succès.');
 
-        return $this->redirectToRoute('classroom_index', [
+        return $this->redirectToRoute('classroom_show', [
             'id' => $classroom->getId(),
         ]);
     }
@@ -190,7 +190,7 @@ class ClassroomController extends AbstractController
      * @Route("/{id}/lesson_remove", name="classroom_lesson_remove", methods={"DELETE"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function removeLessonFromClass(Classroom $classroom): RedirectResponse
+    public function removeLessonFromClass(Classroom $classroom): Response
     {
         // find lesson
         $lesson = $this->find->findLesson();

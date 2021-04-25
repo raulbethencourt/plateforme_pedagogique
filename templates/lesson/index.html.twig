@@ -52,7 +52,7 @@
 								{% endif %}
 
 								{% if classroom_id is defined and classroom_id is not null %}
-									<a href="{{ path('classroom_lesson_add', {lesson_id: lesson.id, classroom_id: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+									<a href="{{ path('classroom_lesson_add', {id: classroom_id, lesson_id: lesson.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
 								{% endif %}
 							</td>
 						</tr>

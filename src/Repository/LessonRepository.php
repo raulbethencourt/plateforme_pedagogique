@@ -28,7 +28,7 @@ class LessonRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('l')
             ->andWhere('l.classrooms LIKE :val')
-            ->setParameter('val', "%$classroom%")
+            ->setParameter('val', "%{$classroom}%")
             ->orderBy('l.id', 'ASC')
             ->getQuery()
             ->getResult()

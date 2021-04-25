@@ -2,24 +2,24 @@
 
 namespace App\Service;
 
-use App\Entity\Pass;
-use App\Entity\User;
+use App\Entity\Classroom;
 use App\Entity\Lesson;
+use App\Entity\Notification;
+use App\Entity\Pass;
+use App\Entity\Question;
+use App\Entity\Questionnaire;
 use App\Entity\Student;
 use App\Entity\Teacher;
-use App\Entity\Question;
-use App\Entity\Classroom;
-use App\Entity\Notification;
-use App\Entity\Questionnaire;
-use App\Repository\PassRepository;
-use App\Repository\UserRepository;
+use App\Entity\User;
+use App\Repository\ClassroomRepository;
 use App\Repository\LessonRepository;
+use App\Repository\NotificationRepository;
+use App\Repository\PassRepository;
+use App\Repository\QuestionnaireRepository;
+use App\Repository\QuestionRepository;
 use App\Repository\StudentRepository;
 use App\Repository\TeacherRepository;
-use App\Repository\QuestionRepository;
-use App\Repository\ClassroomRepository;
-use App\Repository\NotificationRepository;
-use App\Repository\QuestionnaireRepository;
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class FindEntity
@@ -167,7 +167,11 @@ class FindEntity
      */
     public function findUser(): User
     {
-        $user_id = $this->request->attributes->get('id');
+        if (null !== $this->request->query->get('user_id')) {
+            $user_id = $this->request->query->get('user_id');
+        } else {
+            $user_id = $this->request->attributes->get('id');
+        }
 
         return $this->userRepo->findOneById($user_id);
     }
