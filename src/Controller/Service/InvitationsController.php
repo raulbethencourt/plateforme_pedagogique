@@ -4,7 +4,6 @@ namespace App\Controller\Service;
 
 use App\Entity\User;
 use App\Entity\Invite;
-use App\Entity\Student;
 use App\Entity\Classroom;
 use App\Service\FindEntity;
 use Symfony\Component\Form\Form;
@@ -52,9 +51,9 @@ class InvitationsController extends AbstractController
                 $this->invite($invite, $classroom, $userAlready);
             } else {
                 $this->invite($invite, $classroom);
+                $this->addFlash('success', 'Votre invitation a bien été envoyée.');
             }
 
-            $this->addFlash('success', 'Votre invitation a bien été envoyée.');
         }
 
         if (null !== $classroom) {

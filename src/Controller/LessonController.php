@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Lesson;
 use App\Form\LessonType;
 use App\Repository\LessonRepository;
+use App\Repository\QuestionnaireRepository;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -108,11 +109,17 @@ class LessonController extends AbstractController
      * @Route("/{id}", name="lesson_show", methods={"GET"})
      * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') or is_granted('ROLE_STUDENT')")
      */
-    public function show(Lesson $lesson): Response
+    public function show(Lesson $lesson, QuestionnaireRepository $questionnaireRepo): Response
     {
+        foreach ($lesson->getQuestionnaires() as $questionnaire) {
+            if ($questionnaire->getPlayable() && $questionnaire->isPlayable()) {
+                $questionnaires[] = $questionnaire;
+            }
+        }
+
         return $this->render('lesson/show.html.twig', [
             'lesson' => $lesson,
-            'questionnaires' => $lesson->getQuestionnaires(),
+            'questionnaires' => $questionnaires,
         ]);
     }
 
