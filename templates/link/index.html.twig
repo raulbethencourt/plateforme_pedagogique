@@ -19,9 +19,10 @@
 				<thead class="thead-dark">
 					<tr>
 						<th scope="col"></th>
-						<th scope="col">Name</th>
-						<th scope="col">Link</th>
-						<th scope="col">Creator</th>
+						<th scope="col">Titre</th>
+						<th scope="col">lien</th>
+						<th scope="col">Categorie</th>
+						<th scope="col">Author</th>
 						<th scope="col">actions</th>
 					</tr>
 				</thead>
@@ -29,14 +30,11 @@
 					{% for link in links %}
 						<tr>
 							<th scope="row">{{ loop.index }}</th>
-							<td>
-								<a href="{{ path('link_show', {id: link.id}) }}">
-									{{ link.name }}
-								</a>
-							</td>
+							<td>{{ link.name }}</td>
 							<td>
 								<a href="{{ link.link }}" target="_blank" rel="noopener noreferrer">{{ link.link }}</a>
 							</td>
+							<td>{{ link.category }}</td>
 							<td>{{ link.creator }}</td>
 							{% if (is_granted('ROLE_ADMIN') or app.user.username == link.creator)%}
 								<td>

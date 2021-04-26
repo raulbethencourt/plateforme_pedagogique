@@ -49,7 +49,7 @@ class LessonController extends AbstractController
         $lessons = $paginator->paginate(
             $lessons,
             $this->request->query->getInt('page', 1),
-            5
+            10
         );
 
         $lessons->setCustomParameters([
@@ -111,9 +111,15 @@ class LessonController extends AbstractController
      */
     public function show(Lesson $lesson, QuestionnaireRepository $questionnaireRepo): Response
     {
-        foreach ($lesson->getQuestionnaires() as $questionnaire) {
-            if ($questionnaire->getPlayable() && $questionnaire->isPlayable()) {
-                $questionnaires[] = $questionnaire;
+        $user = $this->getUser()->getRoles()[0];
+        if ('ROLE_ADMIN' === $user || 'ROLE_TEACHER' === $user || 'ROLE_SUPER_ADMIN' === $user) {
+            $questionnaires = $lesson->getQuestionnaires();
+        } else {
+            $questionnaires = [];
+            foreach ($lesson->getQuestionnaires() as $questionnaire) {
+                if ($questionnaire->getPlayable() && $questionnaire->isPlayable()) {
+                    $questionnaires[] = $questionnaire;
+                }
             }
         }
 
@@ -161,7 +167,7 @@ class LessonController extends AbstractController
     }
 
     /**
-     * @Route("/add_questionnaire", name="lesson_questionnaire_add", methods={"GET"})
+     * @Route("/{id}/add_questionnaire", name="lesson_questionnaire_add", methods={"GET"})
      * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
      */
     public function addQuestionnaireToLesson(Lesson $lesson): Response
@@ -170,7 +176,7 @@ class LessonController extends AbstractController
         $lesson->addQuestionnaire($questionnaire);
         $this->em->persist($lesson);
         $this->em->flush();
-        $this->addFlash('success', 'Module ajouté avec succès.');
+        $this->addFlash('success', 'Questionnare ajouté avec succès.');
 
         return $this->redirectToRoute('lesson_show', [
             'id' => $lesson->getId(),

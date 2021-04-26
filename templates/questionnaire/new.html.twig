@@ -7,7 +7,7 @@
 	{% if lesson_id is not null %}
 		<div class="row">
 			<div class="col-12 d-flex justify-content-center">
-				<a href="{{ path('list_questionnaires', {lesson_id: lesson_id, classroom_id: classroom_id}) }}" class="btn btn-secondary">importer activité existante</a>
+				<a href="{{ path('questionnaire_index', {lesson_id: lesson_id, classroom_id: classroom_id}) }}" class="btn btn-secondary">importer activité existante</a>
 			</div>
 		</div>
 	{% endif %}

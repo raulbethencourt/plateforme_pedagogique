@@ -99,7 +99,7 @@ class QuestionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="question_delete", methods={"DELETE"})
+     * @Route("/{id}", name="question_delete", methods={"DELETE<"})
      */
     public function delete(Question $question): RedirectResponse
     {

@@ -192,7 +192,7 @@
 				{% endif %}
 				<div class="d-flex flex-wrap">
 					{% for lesson in lessons %}
-						{% if lesson.playable or lesson.visibility %}
+						{% if lesson.playable or is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
 							<div class="card">
 								<div class="card-body">
 									<a href="{{ path('lesson_show', {id: lesson.id, classroom_id: classroom.id}) }}">

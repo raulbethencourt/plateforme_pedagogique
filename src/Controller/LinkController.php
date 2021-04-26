@@ -33,7 +33,7 @@ class LinkController extends AbstractController
         $links = $paginator->paginate(
             $links,
             $request->query->getInt('page', 1),
-            5
+            10
         );
 
         $links->setCustomParameters([

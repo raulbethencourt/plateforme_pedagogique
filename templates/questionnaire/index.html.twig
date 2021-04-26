@@ -55,7 +55,7 @@
 								{% endif %}
 								<a href="{{ path('questionnaire_play', {id: questionnaire.id}) }}" class="btn btn-success mr-2" role="button">Jouer</a>
 								{% if lesson_id is defined and lesson_id is not null %}
-									<a href="{{ path('add_questionnaire_lesson', {questionnaire_id: questionnaire.id, lesson_id: lesson_id, classroom_id: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+									<a href="{{ path('lesson_questionnaire_add', {id: lesson_id, questionnaire_id: questionnaire.id, classroom_id: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
 								{% endif %}
 							</td>
 						</tr>

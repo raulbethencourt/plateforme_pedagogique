@@ -12,17 +12,16 @@
 
 	<div class="row">
 		<div class="col-12">
-			<h1>Liste des utilisateurs</h1>
+			{% if type == 'teachers' %}
+				<h1>Liste des Formateurs</h1>
+			{% else %}
+				<h1>Liste des Apprenates</h1>
+			{% endif %}
 		</div>
 	</div>
 
 	<div class="row">
 		<div class="col-12">
-			<div class="d-flex align-items-center">
-				<h3>
-					<span class="badge badge-pill badge-secondary text-white">Formateur(s)</span>
-				</h3>
-			</div>
 			<table class="table border-bottom">
 				<thead class="thead-dark">
 					<tr>
@@ -34,21 +33,21 @@
 					</tr>
 				</thead>
 				<tbody>
-					{% for teacher in teachers %}
+					{% for user in users %}
 						<tr>
 							<th scope="row">{{ loop.index }}</th>
-							<td>{{ teacher.name }}</td>
-							<td>{{ teacher.surname }}</td>
-							{% if teacher.telephone %}
-								<td>(0){{ teacher.telephone }}</td>
+							<td>{{ user.name }}</td>
+							<td>{{ user.surname }}</td>
+							{% if user.telephone %}
+								<td>(0){{ user.telephone }}</td>
 							{% else %}
 								<td></td>
 							{% endif %}
 							<td>
-								<a href="{{ path('edit_teacher', {username: teacher.username}) }}" class="btn btn-primary w-75 mt-4">Éditer Profil</a>
-								<form method="post" action="{{ path('user_delete', {id: teacher.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+								<a href="{{ path('edit_teacher', {username: user.username}) }}" class="btn btn-primary w-75 mt-4">Éditer Profil</a>
+								<form method="post" action="{{ path('user_delete', {id: user.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 									<input type="hidden" name="_method" value='DELETE'>
-									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ teacher.id) }}">
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
 									<button class="btn btn-danger">Supprimer</button>
 								</form>
 							</td>
@@ -58,45 +57,7 @@
 			</table>
 		</div>
 	</div>
-
-	<div class="row">
-		<div class="col-12">
-			<h3>
-				<span class="badge badge-pill badge-secondary text-white">Étudiant(s)</span>
-			</h3>
-			<table class="table border-bottom">
-				<thead class="thead-dark ">
-					<tr>
-						<th scope="col"></th>
-						<th scope="col">Prénom</th>
-						<th scope="col">Nom</th>
-						<th scope="col">Téléphone</th>
-						<th scope="col"></th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for student in students %}
-						<tr>
-							<th scope="row">{{ loop.index }}</th>
-							<td>{{ student.name }}</td>
-							<td>{{ student.surname }}</td>
-							{% if student.telephone %}
-								<td>(0){{ student.telephone }}</td>
-							{% else %}
-								<td></td>
-							{% endif %}
-							<td>
-								<a href="{{ path('edit_student', {username: student.username}) }}" class="btn btn-primary w-75 mt-3">Éditer Profil</a>
-								<form method="post" action="{{ path('user_delete', {id: student.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-									<input type="hidden" name="_method" value='DELETE'>
-									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ student.id) }}">
-									<button class="btn btn-danger">Supprimer</button>
-								</form>
-							</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		</div>
+	<div class="pagination">
+		{{ knp_pagination_render(users) }}
 	</div>
 {% endblock %}

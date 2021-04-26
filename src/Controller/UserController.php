@@ -8,6 +8,7 @@ use App\Form\EditUserType;
 use App\Form\InviteType;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -62,14 +63,28 @@ class UserController extends AbstractController
     /**
      * @Route("/list", name="user_list")
      */
-    public function listUser(): Response
+    public function listUser(PaginatorInterface $paginator): Response
     {
-        $teachers = $this->find->findUsersByRole('ROLE_TEACHER');
-        $students = $this->find->findUsersByRole('ROLE_STUDENT');
+        $type = $this->request->query->get('users');
+        if ('teachers' === $type) {
+            $users = $this->find->findUsersByRole('ROLE_TEACHER');
+        } else {
+            $users = $this->find->findUsersByRole('ROLE_STUDENT');
+        }
+            $users = $paginator->paginate(
+                $users,
+                $this->request->query->getInt('page', 1),
+                10
+            );
+
+            $users->setCustomParameters([
+                'align' => 'center',
+                'rounded' => true,
+            ]);        
 
         return $this->render('user/list.html.twig', [
-            'teachers' => $teachers,
-            'students' => $students,
+            'users' => $users,
+            'type' => $type,
         ]);
     }
 
