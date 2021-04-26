@@ -34,7 +34,7 @@
 							<td>
 								<a href="{{ link.link }}" target="_blank" rel="noopener noreferrer">{{ link.link }}</a>
 							</td>
-							<td></td>
+							<td>{{ link.category }}</td>
 							<td>{{ link.creator }}</td>
 							{% if (is_granted('ROLE_ADMIN') or app.user.username == link.creator)%}
 								<td>

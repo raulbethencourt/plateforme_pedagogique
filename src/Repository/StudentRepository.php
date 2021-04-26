@@ -30,7 +30,6 @@ class StudentRepository extends ServiceEntityRepository
             ->andWhere(':val MEMBER OF e.classrooms ')
             ->setParameter('val', $classroom)
             ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;

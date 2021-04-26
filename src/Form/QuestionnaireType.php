@@ -4,12 +4,12 @@ namespace App\Form;
 
 use App\Entity\Questionnaire;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Vich\UploaderBundle\Form\Type\VichImageType;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class QuestionnaireType extends AbstractType
 {
@@ -39,11 +39,12 @@ class QuestionnaireType extends AbstractType
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'Facile' => 'facile',
-                        'Moyen' => 'moyen',
-                        'Difficile' => 'difficile',
+                        'Grammaire' => 'grammaire',
+                        'Sintaxe' => 'sintaxe',
+                        'Comprension' => 'comprension',
+                        'Expression' => 'expression', 
                     ],
-                    'label' => 'Difficulté',
+                    'label' => 'Categorie',
                 ]
             )
             ->add(
@@ -51,6 +52,7 @@ class QuestionnaireType extends AbstractType
                 CheckboxType::class,
                 [
                     'label' => 'Rendre visible',
+                    'required' => false,
                 ]
             )
             ->add(
@@ -58,6 +60,7 @@ class QuestionnaireType extends AbstractType
                 CheckboxType::class,
                 [
                     'label' => 'Rendre juable',
+                    'required' => false,
                 ]
             )
         ;

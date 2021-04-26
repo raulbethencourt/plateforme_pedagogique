@@ -50,7 +50,7 @@ class QuestionnaireController extends AbstractController
         $questionnaires = $paginator->paginate(
             $questionnaires,
             $this->request->query->getInt('page', 1),
-            5
+            10
         );
         $questionnaires->setCustomParameters([
             'align' => 'center',

@@ -32,7 +32,7 @@
 
 					<div class="collapse navbar-collapse" id="navbarSupportedContent">
 						<ul class="navbar-nav justify-content-center w-100">
-							<li class="nav-item">
+							<li class="nav-item dropdown">
 								{% if is_granted('ROLE_TEACHER') %}
 									<a class="nav-link" href="{{ path('teacher_index') }}">MES CLASSES</a>
 								{% elseif is_granted('ROLE_STUDENT') %}
@@ -46,13 +46,16 @@
 											<a class="dropdown-item" href="{{ path('user_index') }}">CLASSES</a>
 										</li>
 										<li>
-											<a href="{{ path('user_list') }}" class="dropdown-item">list des utilisateurs</a>
+											<a href="{{ path('user_list', {users: 'teachers'}) }}" class="dropdown-item">list des formateurs</a>
+										</li>
+										<li>
+											<a href="{{ path('user_list', {users: 'students'}) }}" class="dropdown-item">list des apprenantes</a>
 										</li>
 									</ul>
 								{% endif %}
 							</li>
-							<li class="nav-item">
-								{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+							{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+								<li class="nav-item dropdown">
 									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-expanded="false">
 										BOÎTE À OUTILS
 									</a>
@@ -67,16 +70,10 @@
 											<a class="dropdown-item" href="{{ path('link_index') }}">List des Liens</a>
 										</li>
 									</ul>
-								{% endif %}
-							</li>
+								</li>
+							{% endif %}
 							<li class="nav-item d-flex justify-content-center">
-								{% if is_granted('ROLE_TEACHER') %}
-									<a class="nav-link mr-2" href="{{ path('teacher_profile') }}">Mon Profile</a>
-								{% elseif is_granted('ROLE_STUDENT') %}
-									<a class="nav-link mr-2" href="{{ path('student_profile') }}">Mon Profile</a>
-								{% else %}
-									<a class="nav-link mr-2" href="{{ path('user_profile') }}">Mon Profile</a>
-								{% endif %}
+								<a class="nav-link mr-2" {% if is_granted('ROLE_TEACHER') %} href="{{ path('teacher_profile') }} {% elseif is_granted('ROLE_STUDENT') %} href=" {{ path('student_profile') }} {% else %} href="{{ path('user_profile') }} {% endif %}">PROFILE</a>
 								{% if app.user.avatar %}
 									<img class="profile rounded-circle bg-black" src="{{ vich_uploader_asset(app.user.avatar) }}" alt="profil icon">
 								{% else %}

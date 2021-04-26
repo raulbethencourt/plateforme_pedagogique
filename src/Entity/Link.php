@@ -30,11 +30,6 @@ class Link
     private $link;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $description;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $creator;
@@ -53,6 +48,11 @@ class Link
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $usable;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $category;
 
     public function __construct()
     {
@@ -84,18 +84,6 @@ class Link
     public function setLink(string $link): self
     {
         $this->link = $link;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
 
         return $this;
     }
@@ -156,6 +144,18 @@ class Link
     public function setUsable(bool $usable): self
     {
         $this->usable = $usable;
+
+        return $this;
+    }
+
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    public function setCategory(string $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

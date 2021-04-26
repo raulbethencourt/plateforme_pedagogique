@@ -32,15 +32,12 @@ class ClassroomType extends AbstractType
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'Arts' => 'arts',
-                        'Français' => 'français',
-                        'Histoire' => 'histoire',
-                        'Musique' => 'musique',
-                        'Mathématiques' => 'mathematiques',
-                        'Informatique' => 'informatique',
-                        'Philosophie' => 'philosophie',
-                        'Chimie' => 'chimie',
-                        'Physique' => 'physique',
+                        'Alpha 1' => 'alpha1',
+                        'Alpha 2' => 'alpha2',
+                        'A1.1' => 'a1.1',
+                        'A1' => 'a1',
+                        'A2' => 'a2',
+                        'B1' => 'b1',
                     ],
                 ]
             );
