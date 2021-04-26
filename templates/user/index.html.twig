@@ -80,8 +80,10 @@
 						<tr>
 							<th scope="col"></th>
 							<th scope="col">Nom</th>
+							<th scope="col">Localisation</th>
 							<th scope="col">Niveau</th>
 							<th scope="col">Formateurs</th>
+							<th scope="col"></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -91,31 +93,29 @@
 								<td>
 									<a href="{{ path('classroom_show', {id: classroom.id}) }}">{{ classroom.name }}</a>
 								</td>
+								<td>{{ classroom.location }}</td>
+								<td>{{ classroom.discipline }}</td>
 								<td>
-									<div class="d-flex justify-content-between ">
-										{{ classroom.discipline }}</div>
+									{% for teacher in classroom.teachers %}
+										/
+										{{ teacher.name }}
+									{% endfor %}
 								</td>
 								<td>
-									<div class="d-flex justify-content-between">
-										{% for teacher in classroom.teachers %}
-											/
-											{{ teacher.name }}
-										{% endfor %}
-										<div class="d-flex justify-content-center w-50">
-											<a href="{{ path('classroom_edit', {id: classroom.id}) }}" class="btn btn-secondary mr-lg-2" role="button">Éditer</a>
-											<form method="post" action="{{ path('classroom_delete', {id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-												<input type="hidden" name="_method" value='DELETE'>
-												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ classroom.id) }}">
-												<button class="btn btn-danger">Supprimer</button>
-											</form>
-										</div>
+									<div class="d-flex justify-content-center w-50">
+										<a href="{{ path('classroom_edit', {id: classroom.id}) }}" class="btn btn-secondary mr-lg-2" role="button">Éditer</a>
+										<form method="post" action="{{ path('classroom_delete', {id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+											<input type="hidden" name="_method" value='DELETE'>
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ classroom.id) }}">
+											<button class="btn btn-danger">Supprimer</button>
+										</form>
 									</div>
 								</td>
 							</tr>
-						{% endfor %}
+						</div>
 					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-{% endblock %}
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table></div></div></div>{% endblock %}

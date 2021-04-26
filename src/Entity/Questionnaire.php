@@ -195,9 +195,9 @@ class Questionnaire implements Serializable
         return $this;
     }
 
-    public function getDateCreation(): ?\DateTimeInterface
+    public function getDateCreation(): ?string
     {
-        return $this->date_creation;
+        return $this->date_creation->format('d-m-Y');
     }
 
     public function setDateCreation(\DateTimeInterface $date_creation): self

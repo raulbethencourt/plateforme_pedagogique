@@ -30,6 +30,7 @@
 						<th scope="col">Titre</th>
 						<th scope="col">Author</th>
 						<th scope="col">Niveau</th>
+						<th scope="col">Date creation</th>
 						<th scope="col"></th>
 					</tr>
 				</thead>
@@ -44,6 +45,7 @@
 							</td>
 							<td>{{ questionnaire.creator }}</td>
 							<td>{{ questionnaire.difficulty }}</td>
+							<td>{{ questionnaire.dateCreation}}</td>
 							<td>
 								{% if (is_granted('ROLE_ADMIN') or app.user.username == questionnaire.creator) and lesson_id is null %}
 									<a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
