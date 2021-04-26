@@ -40,6 +40,7 @@ class LessonType extends AbstractType
                 CheckboxType::class,
                 [
                     'label' => 'Rendre visible',
+                    'required' => false,
                 ]
             )
             ->add(
@@ -47,6 +48,7 @@ class LessonType extends AbstractType
                 CheckboxType::class,
                 [
                     'label' => 'Rendre juable',
+                    'required' => false,
                 ]
             )
         ;

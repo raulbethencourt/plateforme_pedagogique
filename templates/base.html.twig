@@ -38,15 +38,25 @@
 								{% elseif is_granted('ROLE_STUDENT') %}
 									<a class="nav-link" href="{{ path('student_index') }}">MES CLASSES</a>
 								{% else %}
-									<a class="nav-link" href="{{ path('user_index') }}">CLASSES</a>
+									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-expanded="false">
+										DATA
+									</a>
+									<ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+										<li>
+											<a class="dropdown-item" href="{{ path('user_index') }}">CLASSES</a>
+										</li>
+										<li>
+											<a href="{{ path('user_list') }}" class="dropdown-item">list des utilisateurs</a>
+										</li>
+									</ul>
 								{% endif %}
 							</li>
-							{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
-								<li class="nav-item dropdown">
-									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+							<li class="nav-item">
+								{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-expanded="false">
 										BOÎTE À OUTILS
 									</a>
-									<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
 										<li>
 											<a class="dropdown-item" href="{{path('lesson_index')}}">List des Modules</a>
 										</li>
@@ -57,8 +67,8 @@
 											<a class="dropdown-item" href="{{ path('link_index') }}">List des Liens</a>
 										</li>
 									</ul>
-								</li>
-							{% endif %}
+								{% endif %}
+							</li>
 							<li class="nav-item d-flex justify-content-center">
 								{% if is_granted('ROLE_TEACHER') %}
 									<a class="nav-link mr-2" href="{{ path('teacher_profile') }}">Mon Profile</a>
@@ -93,4 +103,4 @@
 			</body>
 		</body>
 	</html>
-</body></html>
+</body></html></body></html>

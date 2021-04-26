@@ -41,7 +41,7 @@
 						<td>{{ questionnaire.title }}</td>
 					{% else %}
 						<td>
-							<a href="{{ path('questionnaire_index', {id: questionnaire.id, lesson_id: lesson.id}) }}" role="button">{{ questionnaire.title }}</a>
+							<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson.id}) }}" role="button">{{ questionnaire.title }}</a>
 						</td>
 					{% endif %}
 					<td>{{ questionnaire.creator }}</td>
@@ -62,7 +62,7 @@
 					<td class="d-flex justify-content-end">
 						{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
 							<a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-							<form method="post" action="{{ path('delete_questionnaire_lesson', {id: questionnaire.id, lesson_id: lesson.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+							<form method="post" action="{{ path('lesson_questionnaire_remove', {id: lesson.id, questionnaire_id: questionnaire.id }) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 								<input type="hidden" name="_method" value='DELETE'>
 								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
 								<button class="btn btn-danger mr-2">Supprimer</button>
