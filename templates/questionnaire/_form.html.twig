@@ -15,7 +15,12 @@
 
 {{ form_row(form.difficulty) }}
 {{ form_row(form.level) }}
+<div class="d-flex">
 {{ form_row(form.realisation_time) }}
+<div class="alert alert-info w-50" role="alert">
+    <strong>Atention!</strong> Le temps que vous choici ici c'est une estimation de temps pour l'apprenant de realicer l'activité.
+</div>
+</div>
 {{ form_row(form.visibility) }}
 {{ form_row(form.playable) }}
 <button type="submit" class="btn btn-primary">{{ button|default('Create') }}</button>
