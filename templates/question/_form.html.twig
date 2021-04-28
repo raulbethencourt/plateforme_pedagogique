@@ -1,6 +1,12 @@
 {{ form_start(form) }}
 {{ form_row(form.title) }}
-{{ form_row(form.score) }}
+<div class="d-flex">
+	{{ form_row(form.score) }}
+	<div class="alert alert-info w-50" role="alert">
+		<strong>Atention!</strong>
+		Le points c'est pour trier la difficulté des questions.
+	</div>
+</div>
 
 {% set error_flag = form_errors(form.imageFile) %}
 <label class=" {% if error_flag %}has-error{% endif %}">

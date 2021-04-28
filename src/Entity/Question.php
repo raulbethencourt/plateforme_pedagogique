@@ -31,7 +31,7 @@ class Question implements Serializable
     private $title;
 
     /**
-     * @ORM\Column(type="decimal", precision=5, scale=2)
+     * @ORM\Column(type="integer")
      */
     private $score;
 

@@ -185,7 +185,7 @@ class LessonController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/questionnaire_remove", name="lesson_questionnaire_remove", methods={"POST"})
+     * @Route("/{id}/questionnaire_remove", name="lesson_questionnaire_remove", methods={"DELETE"})
      * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
      */
     public function removeQuestionnaireFromLesson(Lesson $lesson): Response

@@ -11,8 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class ClassroomType
- * Form to creat a Classroom
- * @package App\Form
+ * Form to creat a Classroom.
  */
 class ClassroomType extends AbstractType
 {
@@ -31,16 +30,34 @@ class ClassroomType extends AbstractType
                 'discipline',
                 ChoiceType::class,
                 [
+                    'label' => 'Niveau',
                     'choices' => [
-                        'Alpha 1' => 'alpha1',
-                        'Alpha 2' => 'alpha2',
+                        'NS 1' => 'NS 1',
+                        'NS 2' => 'NS 2',
                         'A1.1' => 'a1.1',
                         'A1' => 'a1',
                         'A2' => 'a2',
                         'B1' => 'b1',
+                        'B2' => 'b2',
+                        'CléA' => 'clea',
+                        'Voltaire' => 'voltaire',
+
                     ],
                 ]
-            );
+            )
+            ->add(
+                'location',
+                ChoiceType::class,
+                [
+                    'label' => 'Localisation',
+                    'choices' => [
+                        'Koenigshoffen' => 'koenigshoffen',
+                        'Le Marais' => 'le marais',
+                        'Hautepierre' => 'hautepierre',
+                    ],
+                ]
+            )
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

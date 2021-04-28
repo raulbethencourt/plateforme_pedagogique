@@ -27,7 +27,10 @@
 			<tr>
 				<th scope="col"></th>
 				<th scope="col">Titre</th>
-				<th scope="col">Author</th>
+				<th scope="col">Temps estimé de realisation</th>
+				{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+					<th scope="col">Author</th>
+				{% endif %}
 				<th scope="col">Niveau</th>
 				<th scope="col"></th>
 			</tr>
@@ -36,7 +39,7 @@
 		<tbody>
 			{% for questionnaire in questionnaires %}
 				<tr>
-					<th scope="row">{{ loop.index }}</th>
+					<th scope="row"></th>
 					{% if is_granted('ROLE_STUDENT') %}
 						<td>{{ questionnaire.title }}</td>
 					{% else %}
@@ -44,23 +47,13 @@
 							<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson.id}) }}" role="button">{{ questionnaire.title }}</a>
 						</td>
 					{% endif %}
-					<td>{{ questionnaire.creator }}</td>
-					{% if questionnaire.difficulty == 'facile' %}
-						<td>
-							<span class="badge badge-pill badge-success p-2">{{ questionnaire.difficulty }}</span>
-						</td>
-					{% elseif questionnaire.difficulty == 'difficile' %}
-						<td>
-							<span class="badge badge-pill badge-difficile p-2">{{ questionnaire.difficulty }}</span>
-						</td>
-					{% else %}
-						<td>
-							<span class="badge badge-pill badge-secondary p-2">{{ questionnaire.difficulty }}</span>
-						</td>
+					<td>{{ questionnaire.realisationTime }}</td>
+					{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+						<td>{{ questionnaire.creator }}</td>
 					{% endif %}
-
+					<td>{{ questionnaire.difficulty }}</td>
 					<td class="d-flex justify-content-end">
-						{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
+						{% if (is_granted('ROLE_ADMIN') or app.user.username == questionnaire.creator) %}
 							<a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
 							<form method="post" action="{{ path('lesson_questionnaire_remove', {id: lesson.id, questionnaire_id: questionnaire.id }) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 								<input type="hidden" name="_method" value='DELETE'>

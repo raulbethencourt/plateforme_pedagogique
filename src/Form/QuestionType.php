@@ -4,15 +4,13 @@ namespace App\Form;
 
 use App\Entity\Question;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Vich\UploaderBundle\Form\Type\VichImageType;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Validator\Constraints\LessThanOrEqual;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class QuestionType extends AbstractType
 {
@@ -54,26 +52,24 @@ class QuestionType extends AbstractType
             )
             ->add(
                 'score',
-                NumberType::class,
+                ChoiceType::class,
                 [
-                    "constraints" => [
-                        new GreaterThanOrEqual(
-                            [
-                                'value' => "0",
-                                'message' => 'votre score doit être supérieur à 0',
-                            ]
-                        ),
-                        new LessThanOrEqual(
-                            [
-                                'value' => "10",
-                                'message' => 'votre score doit être inférieur à 10',
-                            ]
-                        ),
+                    'choices' => [
+                        '1' => 1,
+                        '2' => 2,
+                        '3' => 3,
+                        '4' => 4,
+                        '5' => 5,
+                        '6' => 6,
+                        '7' => 7,
+                        '8' => 8,
+                        '9' => 9,
+                        '10' => 10,
                     ],
                     'attr' => [
                         'class' => 'score',
                     ],
-                    'label' => 'Point(s)'
+                    'label' => 'Point(s)',
                 ]
             )
             ->add(
@@ -83,7 +79,8 @@ class QuestionType extends AbstractType
                     'label' => 'Ajouter cette question',
                     'attr' => ['class' => 'btn-secondary'],
                 ]
-            );
+            )
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

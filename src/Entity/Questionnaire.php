@@ -96,7 +96,17 @@ class Questionnaire implements Serializable
      */
     private $playable;
 
-    public const DIFFICULTIES = ["facile", "moyen", "difficile"];
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $realisation_time;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $level;
+
+    public const DIFFICULTIES = ["cEcrite", "cOrale", "eEcrite", "lexique", "phonetique", "grammaire"];
 
     public function __construct()
     {
@@ -195,9 +205,9 @@ class Questionnaire implements Serializable
         return $this;
     }
 
-    public function getDateCreation(): ?\DateTimeInterface
+    public function getDateCreation(): ?string
     {
-        return $this->date_creation;
+        return $this->date_creation->format('d-m-Y');
     }
 
     public function setDateCreation(\DateTimeInterface $date_creation): self
@@ -349,6 +359,30 @@ class Questionnaire implements Serializable
     public function setPlayable(bool $playable): self
     {
         $this->playable = $playable;
+
+        return $this;
+    }
+
+    public function getRealisationTime(): ?int
+    {
+        return $this->realisation_time;
+    }
+
+    public function setRealisationTime(int $realisation_time): self
+    {
+        $this->realisation_time = $realisation_time;
+
+        return $this;
+    }
+
+    public function getLevel(): ?string
+    {
+        return $this->level;
+    }
+
+    public function setLevel(string $level): self
+    {
+        $this->level = $level;
 
         return $this;
     }

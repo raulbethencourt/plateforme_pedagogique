@@ -79,7 +79,7 @@ class EventsController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/delete", name="events_delete", methods={"POST"})
+     * @Route("/{id}/delete", name="events_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Events $event): Response
     {

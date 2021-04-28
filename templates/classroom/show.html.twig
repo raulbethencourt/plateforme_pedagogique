@@ -202,7 +202,9 @@
 									<h6 class="card-subtitle mb-2 text-muted">{{lesson.level}}</h6>
 									{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
 										<div class="d-flex">
-											<a href="{{ path('lesson_edit', {id: lesson.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+											{% if is_granted('ROLE_ADMIN') or app.user.username == lesson.creator %}
+												<a href="{{ path('lesson_edit', {id: lesson.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+											{% endif %}
 											<form method="post" action="{{ path('classroom_lesson_remove', {id: classroom.id, lesson_id: lesson.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 												<input type="hidden" name="_method" value='DELETE'>
 												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">

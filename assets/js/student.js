@@ -10,15 +10,21 @@ if ($('#studentChart').length) {
 
         // The data for our dataset
         data: {
-            labels: ['Facile', 'Moyen', 'Difficile'],
+            labels: ['Compréhension écrite', 'Compréhension orale', 'Expression écrite', 'Lexique','Phonétique','Grammaire'],
             datasets: [{
                 data: data,
                 backgroundColor: [
+                    'rgb(141,255,99, 0.2)',
+                    'rgb(141,255,99, 0.2)',
+                    'rgb(141,255,99, 0.2)',
                     'rgb(141,255,99, 0.2)',
                     'rgb(60,167,221, 0.2)',
                     'rgb(203,91,91, 0.2)',
                 ],
                 borderColor: [
+                    'rgb(141,255,99, 0.9)',
+                    'rgb(141,255,99, 0.9)',
+                    'rgb(141,255,99, 0.9)',
                     'rgb(141,255,99, 0.9)',
                     'rgb(60,167,221, 0.9)',
                     'rgb(203,91,91, 0.9)',
