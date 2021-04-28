@@ -10,7 +10,7 @@ if ($('#studentChart').length) {
 
         // The data for our dataset
         data: {
-            labels: ['Facile', 'Moyen', 'Difficile'],
+            labels: ['Grammaire', 'Sintax', 'lexique'],
             datasets: [{
                 data: data,
                 backgroundColor: [

@@ -32,8 +32,8 @@ class ClassroomType extends AbstractType
                 [
                     'label' => 'Niveau',
                     'choices' => [
-                        'Alpha 1' => 'alpha1',
-                        'Alpha 2' => 'alpha2',
+                        'NS 1' => 'NS 1',
+                        'NS 2' => 'NS 2',
                         'A1.1' => 'a1.1',
                         'A1' => 'a1',
                         'A2' => 'a2',
