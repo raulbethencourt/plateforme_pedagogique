@@ -101,6 +101,11 @@ class Questionnaire implements Serializable
      */
     private $realisation_time;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $level;
+
     public const DIFFICULTIES = ["cEcrite", "cOrale", "eEcrite", "lexique", "phonetique", "grammaire"];
 
     public function __construct()
@@ -366,6 +371,18 @@ class Questionnaire implements Serializable
     public function setRealisationTime(int $realisation_time): self
     {
         $this->realisation_time = $realisation_time;
+
+        return $this;
+    }
+
+    public function getLevel(): ?string
+    {
+        return $this->level;
+    }
+
+    public function setLevel(string $level): self
+    {
+        $this->level = $level;
 
         return $this;
     }

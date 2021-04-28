@@ -35,6 +35,7 @@ class LessonType extends AbstractType
                         'A2' => 'a2',
                         'B1' => 'b1',
                     ],
+                    'label' => 'Niveau'
                 ]
             )
             ->add(

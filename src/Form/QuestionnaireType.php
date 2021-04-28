@@ -42,11 +42,26 @@ class QuestionnaireType extends AbstractType
                         'Compréhension écrite' => 'cEcrite',
                         'Compréhension orale' => 'cOrale',
                         'Expression écrite' => 'eEcrite',
-                        'Lexique' => 'lexique', 
-                        'Phonétique' => 'phonetique', 
-                        'Grammaire' => 'grammaire', 
+                        'Lexique' => 'lexique',
+                        'Phonétique' => 'phonetique',
+                        'Grammaire' => 'grammaire',
                     ],
                     'label' => 'Categorie',
+                ]
+            )
+            ->add(
+                'level',
+                ChoiceType::class,
+                [
+                    'choices' => [
+                        'Alpha 1' => 'alpha1',
+                        'Alpha 2' => 'alpha2',
+                        'A1.1' => 'a1.1',
+                        'A1' => 'a1',
+                        'A2' => 'a2',
+                        'B1' => 'b1',
+                    ],
+                    'label' => 'Niveau',
                 ]
             )
             ->add(
@@ -57,12 +72,11 @@ class QuestionnaireType extends AbstractType
                         '2 mnts' => 2,
                         '5 mnts' => 5,
                         '10 mnts' => 10,
-                        '15 mnts' => 15, 
-                        '20 mnts' => 20, 
-                        '30 mnts' => 30, 
-
+                        '15 mnts' => 15,
+                        '20 mnts' => 20,
+                        '30 mnts' => 30,
                     ],
-                    'label' => 'Categorie',
+                    'label' => 'Temps de realisation',
                 ]
             )
             ->add(
