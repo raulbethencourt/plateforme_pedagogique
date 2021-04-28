@@ -39,10 +39,28 @@ class QuestionnaireType extends AbstractType
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'Grammaire' => 'grammaire',
-                        'Sintaxe' => 'sintaxe',
-                        'Comprension' => 'comprension',
-                        'Expression' => 'expression', 
+                        'Compréhension écrite' => 'cEcrite',
+                        'Compréhension orale' => 'cOrale',
+                        'Expression écrite' => 'eEcrite',
+                        'Lexique' => 'lexique', 
+                        'Phonétique' => 'phonetique', 
+                        'Grammaire' => 'grammaire', 
+                    ],
+                    'label' => 'Categorie',
+                ]
+            )
+            ->add(
+                'realisation_time',
+                ChoiceType::class,
+                [
+                    'choices' => [
+                        '2 mnts' => 2,
+                        '5 mnts' => 5,
+                        '10 mnts' => 10,
+                        '15 mnts' => 15, 
+                        '20 mnts' => 20, 
+                        '30 mnts' => 30, 
+
                     ],
                     'label' => 'Categorie',
                 ]

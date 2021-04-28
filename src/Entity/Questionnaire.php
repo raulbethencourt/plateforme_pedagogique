@@ -96,7 +96,12 @@ class Questionnaire implements Serializable
      */
     private $playable;
 
-    public const DIFFICULTIES = ["facile", "moyen", "difficile"];
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $realisation_time;
+
+    public const DIFFICULTIES = ["cEcrite", "cOrale", "eEcrite", "lexique", "phonetique", "grammaire"];
 
     public function __construct()
     {
@@ -349,6 +354,18 @@ class Questionnaire implements Serializable
     public function setPlayable(bool $playable): self
     {
         $this->playable = $playable;
+
+        return $this;
+    }
+
+    public function getRealisationTime(): ?int
+    {
+        return $this->realisation_time;
+    }
+
+    public function setRealisationTime(int $realisation_time): self
+    {
+        $this->realisation_time = $realisation_time;
 
         return $this;
     }
