@@ -1,6 +1,7 @@
 {{ form_start(form) }}
 
 {{ form_row(form.title) }}
+{{ form_row(form.type) }}
 
 {% set error_flag = form_errors(form.imageFile) %}
 <label class=" {% if error_flag %}has-error{% endif %}">

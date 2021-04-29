@@ -106,6 +106,11 @@ class Questionnaire implements Serializable
      */
     private $level;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $type;
+
     public const DIFFICULTIES = ["cEcrite", "cOrale", "eEcrite", "lexique", "phonetique", "grammaire"];
 
     public function __construct()
@@ -383,6 +388,18 @@ class Questionnaire implements Serializable
     public function setLevel(string $level): self
     {
         $this->level = $level;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

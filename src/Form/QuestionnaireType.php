@@ -65,6 +65,19 @@ class QuestionnaireType extends AbstractType
                 ]
             )
             ->add(
+                'type',
+                ChoiceType::class,
+                [
+                    'choices' => [
+                        'QCM ' => 'qcm',
+                        'Vrai/faux 2' => 'vf',
+                        'Text a trous' => 'tous',
+                    ],
+                    'label' => 'Tipe de activité',
+                ]
+            )
+
+            ->add(
                 'realisation_time',
                 ChoiceType::class,
                 [

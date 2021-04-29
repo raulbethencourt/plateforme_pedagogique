@@ -174,18 +174,39 @@
 			</div>
 		{% endif %}
 
+		{% if is_granted('ROLE_STUDENT') and notification %}
+			<div class="row">
+				<div class="col-12">
+					<div class="alert alert-info">
+						<h3>ESPACE ANNONCE</h3>
+						<p>{{ notification.text }}</p>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+
+		<div class="row">
+			<div class="col-12">
+				{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+					<a href="{{ path('link_new', {classroom_id: classroom.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter une Lien</a>
+				{% endif %}
+				{% if links|length > 0 %}
+					<ul class="list-group">
+						<p class="list-group-item list-group-item-dark">Liste des Liens</p>
+						{% for link in links %}
+							<a href="{{ link.link }}" target="_blank" rel="noopener noreferrer" class="list-group-item list-group-item-action">{{ link.name }}
+								//
+								{{ link.category }}</a>
+						{% endfor %}
+					</ul>
+				{% endif %}
+			</div>
+		</div>
+
 		<div class="row">
 			<div class="col-12 d-flex flex-column align-items-center">
 				{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
 					<a href="{{ path('lesson_new', {classroom_id: classroom.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter Module</a>
-				{% endif %}
-				{% if is_granted('ROLE_STUDENT') %}
-					<div class="alert alert-info">
-						<h3>ESPACE ANNONCE</h3>
-						{% if notification %}
-							<p>{{ notification.text }}</p>
-						{% endif %}
-					</div>
 				{% endif %}
 				{% if lessons|length > 0 %}
 					<h3>MES COURS</h3>
