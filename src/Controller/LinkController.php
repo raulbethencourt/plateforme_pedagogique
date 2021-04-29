@@ -5,12 +5,13 @@ namespace App\Controller;
 use App\Entity\Link;
 use App\Form\LinkType;
 use App\Repository\LinkRepository;
+use App\Service\FindEntity;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/link")
@@ -30,6 +31,12 @@ class LinkController extends AbstractController
             $links = $linkRepo->findByVisibilityOrCreator(true, $user->getUsername());
         }
 
+        if ($request->query->get('classroom_id')) {
+            $classroom_id = $request->query->get('classroom_id');
+        } else {
+            $classroom_id = false;
+        }
+
         $links = $paginator->paginate(
             $links,
             $request->query->getInt('page', 1),
@@ -43,6 +50,7 @@ class LinkController extends AbstractController
 
         return $this->render('link/index.html.twig', [
             'links' => $links,
+            'classroom_id' => $classroom_id,
         ]);
     }
 
@@ -50,12 +58,20 @@ class LinkController extends AbstractController
      * @Route("/new", name="link_new", methods={"GET", "POST"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function new(Request $request): Response
+    public function new(Request $request, FindEntity $find): Response
     {
+        $classroom_id = $request->query->get('classroom_id');
+
         $link = new Link();
         $link->setCreator($this->getUser()->getUsername());
+
+        if (isset($classroom_id)) {
+            $classroom = $find->findClassroom();
+            $link->addClassroom($classroom);
+        }
+
         $form = $this->createForm(LinkType::class, $link);
-        $form->handleRequest($request); 
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -63,12 +79,18 @@ class LinkController extends AbstractController
             $entityManager->flush();
             $this->addFlash('success', 'Lien créée avec succès.');
 
+            if (isset($classroom_id)) {
+                return $this->redirectToRoute('classroom_show', [
+                    'id' => $classroom_id,
+                ]);
+            }
             return $this->redirectToRoute('link_index');
         }
 
         return $this->render('link/new.html.twig', [
             'link' => $link,
             'form' => $form->createView(),
+            'classroom_id' => $classroom_id,
         ]);
     }
 

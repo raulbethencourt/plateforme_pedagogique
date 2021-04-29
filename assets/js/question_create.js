@@ -63,7 +63,7 @@ function addPropositionForm($collectionHolder, $newLinkLi) {
   $newLinkLi.before($newFormLi);
 
   // handle the removal
-  $(".remove-tag").click(function (e) {
+  $(".remove-tag").on('click', function (e) {
     e.preventDefault();
 
     $(this).parent().remove();

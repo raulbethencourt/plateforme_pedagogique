@@ -1,4 +1,20 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn btn-secondary">{{ button_label|default('Ajouter') }}</button>
+
+{{ form_row(form.name) }}
+
+<div class="d-flex w-100">
+	<div class="form-group w-50">
+		{{ form_label(form.link) }}
+		{{ form_widget(form.link) }}
+		{{ form_help(form.link) }}
+		{{ form_errors(form.link) }}
+	</div>
+
+	<div class="alert alert-info w-25" role="alert">
+		<strong>Atention!</strong> Votre lien dois commencer avec http:// or https:// et doit finir avec .com ou un autre .
+	</div>
+</div>
+
+{{ form_rest(form) }}
+<button class="btn btn-secondary">{{ button_label|default('Ajouter') }}</button>
 {{ form_end(form) }}

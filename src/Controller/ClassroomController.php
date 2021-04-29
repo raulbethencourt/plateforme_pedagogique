@@ -81,7 +81,7 @@ class ClassroomController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="classroom_show", methods={"GET","POST"})
+     * @Route("/{id}", name="classroom_show", methods={"GET", "POST"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN') or is_granted('ROLE_STUDENT')")
      */
     public function show(Classroom $classroom): Response
@@ -105,6 +105,7 @@ class ClassroomController extends AbstractController
             'students' => $classroom->getStudents(),
             'teachers' => $classroom->getTeachers(),
             'lessons' => $classroom->getLessons(),
+            'links' => $classroom->getLinks(),
         ]);
     }
 
@@ -200,6 +201,43 @@ class ClassroomController extends AbstractController
             $this->em->persist($classroom);
             $this->em->flush();
             $this->addFlash('success', 'Module supprimé de la classe avec succès.');
+        }
+
+        return $this->redirectToRoute('classroom_show', [
+            'id' => $classroom->getId(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/link_add", name="classroom_link_add", methods={"GET"})
+     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
+     */
+    public function addLinkToClass(Classroom $classroom): RedirectResponse
+    {
+        $link = $this->find->findLink();
+        $classroom->addLink($link);
+        $this->em->persist($classroom);
+        $this->em->flush();
+        $this->addFlash('success', 'Lien ajouté à la classe avec succès.');
+
+        return $this->redirectToRoute('classroom_show', [
+            'id' => $classroom->getId(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/link_remove", name="classroom_link_remove", methods={"DELETE"})
+     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
+     */
+    public function removeLinkFromClass(Classroom $classroom): Response
+    {
+        $link = $this->find->findLink();
+        // Check the token
+        if ($this->isCsrfTokenValid('delete'.$link->getId(), $this->request->get('_token'))) {
+            $classroom->removeLink($link);
+            $this->em->persist($classroom);
+            $this->em->flush();
+            $this->addFlash('success', 'Lien supprimé de la classe avec succès.');
         }
 
         return $this->redirectToRoute('classroom_show', [
