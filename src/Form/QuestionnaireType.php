@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Regex;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class QuestionnaireType extends AbstractType
@@ -32,6 +33,33 @@ class QuestionnaireType extends AbstractType
                     'delete_label' => 'Supprimer l\'ancienne image.',
                     'imagine_pattern' => 'thumb',
                     'required' => false,
+                ]
+            )
+            ->add(
+                'link_description',
+                TextType::class,
+                [
+                    'purify_html' => true,
+                    'label' => 'Descrition de lien',
+                ]
+            )
+            ->add(
+                'link',
+                TextType::class,
+                [
+                    'purify_html' => true,
+                    'label' => 'Lien',
+                    'constraints' => [
+                        new Regex(
+                            [
+                                'pattern' => '$https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?$',
+                                'message' => 'Votre url doit commencer avec http or https et avoir . quelque chose',
+                            ]
+                        ),
+                    ],
+                    'attr' => [
+                        'placeholder' => 'ex: https://contact-promotion.org',
+                    ],
                 ]
             )
             ->add(
@@ -76,7 +104,6 @@ class QuestionnaireType extends AbstractType
                     'label' => 'Tipe de activité',
                 ]
             )
-
             ->add(
                 'realisation_time',
                 ChoiceType::class,

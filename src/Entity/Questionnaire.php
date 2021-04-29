@@ -111,6 +111,16 @@ class Questionnaire implements Serializable
      */
     private $type;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $link_description;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $link;
+
     public const DIFFICULTIES = ["cEcrite", "cOrale", "eEcrite", "lexique", "phonetique", "grammaire"];
 
     public function __construct()
@@ -400,6 +410,30 @@ class Questionnaire implements Serializable
     public function setType(string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getLinkDescription(): ?string
+    {
+        return $this->link_description;
+    }
+
+    public function setLinkDescription(?string $link_description): self
+    {
+        $this->link_description = $link_description;
+
+        return $this;
+    }
+
+    public function getLink(): ?string
+    {
+        return $this->link;
+    }
+
+    public function setLink(?string $link): self
+    {
+        $this->link = $link;
 
         return $this;
     }

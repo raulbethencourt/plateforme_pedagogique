@@ -14,14 +14,29 @@
 	</div>
 {% endif %}
 
+<div class="d-flex w-100">
+	<div class="d-flex flex-column w-75">
+		{{ form_row(form.link_description) }}
+		{{ form_row(form.link) }}
+	</div>
+
+	<div class="alert alert-info" role="alert">
+		<strong>Atention!</strong>
+		Votre lien dois commencer avec http:// or https:// et doit finir avec .com ou un autre .
+	</div>
+</div>
+
 {{ form_row(form.difficulty) }}
 {{ form_row(form.level) }}
+
 <div class="d-flex">
-{{ form_row(form.realisation_time) }}
-<div class="alert alert-info w-50" role="alert">
-    <strong>Atention!</strong> Le temps que vous choici ici c'est une estimation de temps pour l'apprenant de realicer l'activité.
+	{{ form_row(form.realisation_time) }}
+	<div class="alert alert-info w-50" role="alert">
+		<strong>Atention!</strong>
+		Le temps que vous choici ici c'est une estimation de temps pour l'apprenant de realicer l'activité.
+	</div>
 </div>
-</div>
+
 {{ form_row(form.visibility) }}
 {{ form_row(form.playable) }}
 <button type="submit" class="btn btn-primary">{{ button|default('Create') }}</button>

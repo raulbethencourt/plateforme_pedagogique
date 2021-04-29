@@ -11,7 +11,22 @@
 		</div>
 	{% endfor %}
 
-	<h1>{{ questionnaire.title }}</h1>
+	<div class="row">
+		<div class="col-12">
+
+			<h1>{{ questionnaire.title }}</h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12">
+			<h3>Lien</h3>
+			<a href="{{ questionnaire.link }}" target="_blank" rel="noopener noreferrer">{{ questionnaire.linkdescription }}</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-12"></div>
+	</div>
+
 	<h3>Liste des questions</h3>
 	<table class="table border-bottom">
 		<thead class="thead-dark">
