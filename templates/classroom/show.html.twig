@@ -39,6 +39,9 @@
 				<div class="d-flex justify-content-center">
 					<a id="inviterBtn" class="btn btn-primary w-25" href="#" role="button" {% if formInvite.vars.submitted %} style="display:none;" {% endif %}>Inviter Utilisateur</a>
 					<div id="inviterForm" {% if not formInvite.vars.submitted %} style="display: none;" {% endif %} class="w-100">
+						<button type="button" id="closeInviter" class="close">
+							<span aria-hidden="true" class="text-danger">&times;</span>
+						</button>
 						{{ form_start(formInvite) }}
 						<div class="invite-form--responsive justify-content-sm-around align-items-center ">
 							<div class="form-group m-2">
@@ -70,7 +73,6 @@
 								</div>
 							</div>
 							{{ form_end(formInvite) }}
-							{# TODO btn para cerrar #}
 						</div>
 
 					</div>

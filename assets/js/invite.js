@@ -2,10 +2,15 @@
 import $ from 'jquery';
 
 if ($('#inviterBtn').length) {
-	$('#inviterBtn').on('click', (e) => {
-		console.log(e);
-		e.preventDefault();
+	$('#inviterBtn').on('click', (evt) => {
+		evt.preventDefault();
 		$('#inviterForm').fadeIn();
 		$('#inviterBtn').hide();
+	});
+
+	$('#closeInviter').on('click', (evt) => {
+		evt.preventDefault();
+		$('#inviterBtn').fadeIn();
+		$('#inviterForm').hide();
 	});
 }
