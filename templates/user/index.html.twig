@@ -17,6 +17,9 @@
 		<div class="row">
 			<div class="col-12">
 				<div id="inviterForm" {% if not form.vars.submitted %} style="display: none;" {% endif %} class="w-100">
+					<button type="button" id="closeInviter" class="close">
+						<span aria-hidden="true" class="text-danger">&times;</span>
+					</button>
 					{{ form_start(form) }}
 					<div class="invite-form--responsive justify-content-sm-around align-items-center ">
 						<div class="form-group m-2">
