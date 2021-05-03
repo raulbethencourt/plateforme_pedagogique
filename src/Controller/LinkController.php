@@ -12,12 +12,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 /**
  * @Route("/link")
  */
 class LinkController extends AbstractController
 {
+    private $breadCrumbs;
+
+    public function __construct(Breadcrumbs $breadCrumbs)
+    {
+        $this->breadCrumbs = $breadCrumbs;
+    }
+
     /**
      * @Route("/", name="link_index", methods={"GET"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
@@ -60,15 +68,24 @@ class LinkController extends AbstractController
      */
     public function new(Request $request, FindEntity $find): Response
     {
-        $classroom_id = $request->query->get('classroom_id');
-
         $link = new Link();
         $link->setCreator($this->getUser()->getUsername());
 
+        $classroom_id = $request->query->get('classroom_id');
         if (isset($classroom_id)) {
             $classroom = $find->findClassroom();
             $link->addClassroom($classroom);
+            $this->breadCrumbs
+                ->addRouteItem('Acueille', 'user_index')
+                ->addRouteItem($classroom->getName(),
+                    'classroom_show',
+                    ['id' => $classroom->getId()]
+                )
+            ;
+        } else {
+            $this->breadCrumbs->addRouteItem('Liste de liens', 'link_index');
         }
+        $this->breadCrumbs->addRouteItem('Create à lien', 'link_new');
 
         $form = $this->createForm(LinkType::class, $link);
         $form->handleRequest($request);
@@ -84,6 +101,7 @@ class LinkController extends AbstractController
                     'id' => $classroom_id,
                 ]);
             }
+
             return $this->redirectToRoute('link_index');
         }
 

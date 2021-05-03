@@ -4,6 +4,9 @@
 {% endblock %}
 
 {% block body %}
+
+	{{ wo_render_breadcrumbs() }}
+
 	{% if classroom_id %}
 		<div class="row col-12">
 			<a href="{{ path('link_index', {classroom_id: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter une Lien</a>

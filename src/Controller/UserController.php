@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 /**
  * Class UserController.
@@ -28,11 +29,14 @@ class UserController extends AbstractController
 
     private $request;
 
-    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack)
+    private $breadCrumbs;
+
+    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, Breadcrumbs $breadCrumbs)
     {
         $this->em = $em;
         $this->find = $find;
         $this->request = $requestStack->getCurrentRequest();
+        $this->breadCrumbs = $breadCrumbs;
     }
 
     /**
@@ -61,7 +65,7 @@ class UserController extends AbstractController
                 'user' => $user,
                 'form' => $form->createView(),
             ]
-            );
+        );
     }
 
     /**
@@ -70,11 +74,16 @@ class UserController extends AbstractController
     public function listUser(PaginatorInterface $paginator): Response
     {
         $type = $this->request->query->get('users');
+
         if ('teachers' === $type) {
             $users = $this->find->findUsersByRole('ROLE_TEACHER');
+            $this->breadCrumbs->addRouteItem('formateurs', 'user_list');
         } else {
             $users = $this->find->findUsersByRole('ROLE_STUDENT');
+            $this->breadCrumbs->addRouteItem('apprenantes', 'user_list');
         }
+        $this->breadCrumbs->prependRouteItem('Acueille', 'user_index');
+
         $users = $paginator->paginate(
                 $users,
                 $this->request->query->getInt('page', 1),

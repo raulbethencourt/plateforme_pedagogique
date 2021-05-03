@@ -57,7 +57,7 @@ class InvitationsController extends AbstractController
         }
 
         if (null !== $classroom) {
-            return $this->redirectToRoute('classroom_index', [
+            return $this->redirectToRoute('classroom_show', [
                 'id' => $classroom->getId(),
             ]);
         }

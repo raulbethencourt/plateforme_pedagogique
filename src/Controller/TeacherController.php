@@ -28,7 +28,7 @@ class TeacherController extends AbstractController
         return $this->render(
             'teacher/index.html.twig',
             [
-                'questionnaires' => $teacher->getClassrooms(),
+                'questionnaires' => $teacher->getClassroomsTeacher(),
                 'teacher' => $teacher,
             ]
         );

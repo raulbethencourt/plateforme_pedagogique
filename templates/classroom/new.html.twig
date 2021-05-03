@@ -2,6 +2,8 @@
 {% block title %}Créer une classe{% endblock %}
 
 {% block body %}
+	{{ wo_render_breadcrumbs() }}
+
     <h1>Créer une classe</h1>
     {{ include ("classroom/_form.html.twig", {button: 'Créer'}) }}
 {% endblock %}

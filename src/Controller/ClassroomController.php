@@ -10,7 +10,6 @@ use App\Entity\Notification;
 use App\Form\ClassroomType;
 use App\Form\InviteType;
 use App\Form\NotificationType;
-use App\Repository\ClassroomRepository;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -19,6 +18,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 /**
  * @Route("/classroom")
@@ -35,24 +35,16 @@ class ClassroomController extends AbstractController
 
     private $invitations;
 
-    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, Notify $notifications, Invitations $invitations)
+    private $breadCrumbs;
+
+    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, Notify $notifications, Invitations $invitations, Breadcrumbs $breadCrumbs)
     {
         $this->em = $em;
         $this->find = $find;
         $this->request = $requestStack->getCurrentRequest();
         $this->notifications = $notifications;
         $this->invitations = $invitations;
-    }
-
-    /**
-     * @Route("/", name="classroom_index", methods={"GET"})
-     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
-     */
-    public function index(ClassroomRepository $classroomRepo): Response
-    {
-        return $this->render('class/index.html.twig', [
-            'classrooms' => $classroomRepo->findAll(),
-        ]);
+        $this->breadCrumbs = $breadCrumbs;
     }
 
     /**
@@ -61,6 +53,11 @@ class ClassroomController extends AbstractController
      */
     public function new(): Response
     {
+        $this->breadCrumbs
+            ->addRouteItem('Acueille', 'user_index')
+            ->addRouteItem('Crate à Class', 'classroom_new')
+        ;
+
         $classroom = new Classroom();
         $classroom->setUser($this->getUser());
         $form = $this->createForm(ClassroomType::class, $classroom);
@@ -87,6 +84,24 @@ class ClassroomController extends AbstractController
      */
     public function show(Classroom $classroom): Response
     {
+        $role = $this->getUser()->getRoles()[0];
+        switch ($role) {
+            case 'ROLE_TEACHER':
+                $this->breadCrumbs->addRouteItem('Acueille', 'teacher_index');
+                break;
+            case 'ROLE_STUDENT':
+                $this->breadCrumbs->addRouteItem('Acueille', 'student_index');
+                break;
+            default:
+                $this->breadCrumbs->addRouteItem('Acueille', 'user_index');
+                break;
+        }
+
+        $this->breadCrumbs->addRouteItem($classroom->getName(),
+            'classroom_show',
+            ['id' => $classroom->getId()]
+        );
+
         // here i handle notifications
         $notification = new Notification();
         $notification->setClassroom($classroom);
@@ -115,6 +130,11 @@ class ClassroomController extends AbstractController
      */
     public function edit(Classroom $classroom): Response
     {
+        $this->breadCrumbs
+            ->addRouteItem('Acueille', 'user_index')
+            ->addRouteItem('Editer à Classe', 'classroom_new')
+        ;
+
         $form = $this->createForm(ClassroomType::class, $classroom);
         $form->handleRequest($this->request);
 
