@@ -16,6 +16,7 @@
         "fzaninotto/faker": "^1.5",
         "knplabs/knp-paginator-bundle": "^5.4",
         "liip/imagine-bundle": "^2.3",
+        "mhujer/breadcrumbs-bundle": "^1.5",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/apache-pack": "^1.0",

@@ -1,8 +1,10 @@
 {% extends 'base.html.twig' %}
-{% block title %}Editer une classe{% endblock %}
-
-{% block body %}
-    <h1>Editer une classe</h1>
-    {{ include ("classroom/_form.html.twig", {form: form, button: 'Editer'}) }}
+{% block title %}Editer une classe
 {% endblock %}
 
+{% block body %}
+	{{ wo_render_breadcrumbs() }}
+
+	<h1>Editer une classe</h1>
+	{{ include ("classroom/_form.html.twig", {form: form, button: 'Editer'}) }}
+{% endblock %}

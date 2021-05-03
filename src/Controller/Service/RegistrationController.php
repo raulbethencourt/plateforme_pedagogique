@@ -37,7 +37,7 @@ class RegistrationController extends AbstractController
     {
         $this->emailVerifier = $emailVerifier;
         $this->find = $find;
-        $this->request = $requestStack;
+        $this->request = $requestStack->getCurrentRequest();
     }
 
     /**
@@ -54,7 +54,7 @@ class RegistrationController extends AbstractController
         LoginFormAuthenticator $authenticator
     ): Response {
         // I get User type property to change the registration way
-        $type = $this->request->getCurrentRequest()->query->get("type");
+        $type = $this->request->query->get("type");
         $classroom = $this->find->findClassroom();
 
         // In depends of type we creates different user
@@ -75,7 +75,7 @@ class RegistrationController extends AbstractController
         $form = $this->createForm(RegistrationFormType::class, $user, [
             'method' => 'POST',
         ]);
-        $form->handleRequest($this->request->getCurrentRequest());
+        $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
@@ -87,7 +87,7 @@ class RegistrationController extends AbstractController
             );
 
             if ($type === 'teacher' || $type === 'student') {
-                $user->addClassrooms($classroom);
+                $user->addClassroom($classroom);
             }
 
             $user->setEntryDate(new \DateTime());
@@ -108,7 +108,7 @@ class RegistrationController extends AbstractController
 
             return $guardHandler->authenticateUserAndHandleSuccess(
                 $user,
-                $this->request->getCurrentRequest(),
+                $this->request,
                 $authenticator,
                 'main' // firewall name in security.yaml
             );
@@ -131,7 +131,7 @@ class RegistrationController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
-            $this->emailVerifier->handleEmailConfirmation($this->request->getCurrentRequest(), $this->getUser());
+            $this->emailVerifier->handleEmailConfirmation($this->request, $this->getUser());
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $exception->getReason());
 

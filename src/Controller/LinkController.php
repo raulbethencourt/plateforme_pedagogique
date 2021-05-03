@@ -12,12 +12,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 /**
  * @Route("/link")
  */
 class LinkController extends AbstractController
 {
+    private $breadCrumbs;
+
+    private $find;
+
+    public function __construct(Breadcrumbs $breadCrumbs, FindEntity $find)
+    {
+        $this->breadCrumbs = $breadCrumbs;
+        $this->find = $find;
+    }
+
     /**
      * @Route("/", name="link_index", methods={"GET"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
@@ -33,8 +44,19 @@ class LinkController extends AbstractController
 
         if ($request->query->get('classroom_id')) {
             $classroom_id = $request->query->get('classroom_id');
+            $classroom = $this->find->findClassroom();
+            $this->breadCrumbs
+                ->addRouteItem('Acueille', 'user_index')
+                ->addRouteItem($classroom->getName(),
+                    'classroom_show',
+                    ['id' => $classroom->getId()]
+                )
+                ->addRouteItem('Créer une lien', 'link_new', ['classroom_id' => $classroom->getId()])
+                ->addRouteItem('Liste de liens', 'link_index')
+            ;
         } else {
             $classroom_id = false;
+            $this->breadCrumbs->addRouteItem('Liste de liens', 'link_index');
         }
 
         $links = $paginator->paginate(
@@ -60,15 +82,24 @@ class LinkController extends AbstractController
      */
     public function new(Request $request, FindEntity $find): Response
     {
-        $classroom_id = $request->query->get('classroom_id');
-
         $link = new Link();
         $link->setCreator($this->getUser()->getUsername());
 
+        $classroom_id = $request->query->get('classroom_id');
         if (isset($classroom_id)) {
             $classroom = $find->findClassroom();
             $link->addClassroom($classroom);
+            $this->breadCrumbs
+                ->addRouteItem('Acueille', 'user_index')
+                ->addRouteItem($classroom->getName(),
+                    'classroom_show',
+                    ['id' => $classroom->getId()]
+                )
+            ;
+        } else {
+            $this->breadCrumbs->addRouteItem('Liste de liens', 'link_index');
         }
+        $this->breadCrumbs->addRouteItem('Créer une lien', 'link_new');
 
         $form = $this->createForm(LinkType::class, $link);
         $form->handleRequest($request);
@@ -84,6 +115,7 @@ class LinkController extends AbstractController
                     'id' => $classroom_id,
                 ]);
             }
+
             return $this->redirectToRoute('link_index');
         }
 
@@ -111,6 +143,7 @@ class LinkController extends AbstractController
      */
     public function edit(Request $request, Link $link): Response
     {
+        //TODO breadCrumbs
         $form = $this->createForm(LinkType::class, $link);
         $form->handleRequest($request);
 

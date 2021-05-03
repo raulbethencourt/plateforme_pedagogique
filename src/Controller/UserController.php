@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 /**
  * Class UserController.
@@ -28,11 +29,14 @@ class UserController extends AbstractController
 
     private $request;
 
-    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack)
+    private $breadCrumbs;
+
+    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, Breadcrumbs $breadCrumbs)
     {
         $this->em = $em;
         $this->find = $find;
         $this->request = $requestStack->getCurrentRequest();
+        $this->breadCrumbs = $breadCrumbs->addRouteItem('Accueil', 'user_index');
     }
 
     /**
@@ -40,13 +44,17 @@ class UserController extends AbstractController
      */
     public function index(InvitationsController $invitation): Response
     {
-        $classrooms = $this->find->findAllClassrooms();
-        $admins = $this->find->findUsersByRole('ROLE_ADMIN');
         $user = $this->getUser();
+        if ('ROLE_ADMIN' === $user->getRoles()[0]) {
+            $classrooms = $user->getClassrooms();
+        } else {
+            $classrooms = $this->find->findAllClassrooms();
+        }
+        $admins = $this->find->findUsersByRole('ROLE_ADMIN');
 
         // admin invitation
         $invite = new Invite();
-        $form = $this->createForm(InviteType::class, $invite, ['user' => $this->getUser()]);
+        $form = $this->createForm(InviteType::class, $invite, ['user' => $user]);
         $invitation->invitation($form, $invite);
 
         return $this->render(
@@ -57,7 +65,7 @@ class UserController extends AbstractController
                 'user' => $user,
                 'form' => $form->createView(),
             ]
-            );
+        );
     }
 
     /**
@@ -66,21 +74,25 @@ class UserController extends AbstractController
     public function listUser(PaginatorInterface $paginator): Response
     {
         $type = $this->request->query->get('users');
+
         if ('teachers' === $type) {
             $users = $this->find->findUsersByRole('ROLE_TEACHER');
+            $this->breadCrumbs->addRouteItem('formateurs', 'user_list');
         } else {
             $users = $this->find->findUsersByRole('ROLE_STUDENT');
+            $this->breadCrumbs->addRouteItem('apprenantes', 'user_list');
         }
-            $users = $paginator->paginate(
+
+        $users = $paginator->paginate(
                 $users,
                 $this->request->query->getInt('page', 1),
                 10
             );
 
-            $users->setCustomParameters([
-                'align' => 'center',
-                'rounded' => true,
-            ]);        
+        $users->setCustomParameters([
+            'align' => 'center',
+            'rounded' => true,
+        ]);
 
         return $this->render('user/list.html.twig', [
             'users' => $users,
@@ -120,12 +132,10 @@ class UserController extends AbstractController
      */
     public function userProfile(): Response
     {
-        return $this->render(
-            'user/profile.html.twig',
-            [
-                'user' => $this->getUser(),
-            ]
-        );
+        $this->breadCrumbs->addRouteItem('Profile', 'user_profile');
+        return $this->render('user/profile.html.twig', [
+            'user' => $this->getUser(),
+        ]);
     }
 
     /**
@@ -133,6 +143,10 @@ class UserController extends AbstractController
      */
     public function editProfile(): Response
     {
+        $this->breadCrumbs
+            ->addRouteItem('Profile', 'user_profile')
+            ->addRouteItem('Editer Profile', 'edit_user');
+
         $user = $this->getUser();
         $form = $this->createForm(EditUserType::class, $user);
         $form->handleRequest($this->request);
@@ -147,11 +161,8 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user_profile');
         }
 
-        return $this->render(
-            'user/edit-profile.html.twig',
-            [
-                'editForm' => $form->createView(),
-            ]
-        );
+        return $this->render('user/edit-profile.html.twig', [
+            'editForm' => $form->createView(),
+        ]);
     }
 }
