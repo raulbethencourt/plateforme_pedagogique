@@ -41,6 +41,7 @@ class QuestionnaireController extends AbstractController
     public function index(QuestionnaireRepository $questionnaireRepo, PaginatorInterface $paginator): Response
     {
         $user = $this->getUser();
+
         if ('ROLE_ADMIN' === $user->getRoles()[0] || 'ROLE_SUPER_ADMIN' === $user->getRoles()[0]) {
             $questionnaires = $questionnaireRepo->findAll();
         } else {

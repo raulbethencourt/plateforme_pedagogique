@@ -23,6 +23,7 @@
 						<th scope="col">lien</th>
 						<th scope="col">Categorie</th>
 						<th scope="col">Author</th>
+						<th scope="col">Classes</th>
 						<th scope="col"></th>
 					</tr>
 				</thead>
@@ -36,6 +37,12 @@
 							</td>
 							<td>{{ link.category }}</td>
 							<td>{{ link.creator }}</td>
+							{% if link.classrooms|length > 1 %}
+								<td>danger</td>
+							{% else %}
+								<td>cool</td>
+							{% endif %}
+
 							<td>
 								{% if (is_granted('ROLE_ADMIN') or app.user.username == link.creator)%}
 									<a href="{{ path('link_edit', {id: link.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
