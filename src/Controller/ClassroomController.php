@@ -62,6 +62,7 @@ class ClassroomController extends AbstractController
     public function new(): Response
     {
         $classroom = new Classroom();
+        $classroom->setUser($this->getUser());
         $form = $this->createForm(ClassroomType::class, $classroom);
         $form->handleRequest($this->request);
 

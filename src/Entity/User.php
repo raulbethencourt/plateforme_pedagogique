@@ -85,9 +85,15 @@ class User implements UserInterface
      */
     private $telephone;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Classroom::class, mappedBy="user")
+     */
+    private $classrooms;
+
     public function __construct()
     {
         $this->lessons = new ArrayCollection();
+        $this->classrooms = new ArrayCollection();
     }
 
     public function getUsername(): string
@@ -261,6 +267,36 @@ class User implements UserInterface
     public function setTelephone(?int $telephone): self
     {
         $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Classroom[]
+     */
+    public function getClassrooms(): Collection
+    {
+        return $this->classrooms;
+    }
+
+    public function addClassroom(Classroom $classroom): self
+    {
+        if (!$this->classrooms->contains($classroom)) {
+            $this->classrooms[] = $classroom;
+            $classroom->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeClassroom(Classroom $classroom): self
+    {
+        if ($this->classrooms->removeElement($classroom)) {
+            // set the owning side to null (unless already changed)
+            if ($classroom->getUser() === $this) {
+                $classroom->setUser(null);
+            }
+        }
 
         return $this;
     }

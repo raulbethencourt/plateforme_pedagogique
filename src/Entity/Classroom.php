@@ -60,6 +60,11 @@ class Classroom
      * @ORM\Column(type="string", length=255)
      */
     private $location;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="classrooms")
+     */
+    private $user;
     
     public function __construct()
     {
@@ -237,6 +242,18 @@ class Classroom
     public function setLocation(string $location): self
     {
         $this->location = $location;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

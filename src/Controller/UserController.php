@@ -40,13 +40,17 @@ class UserController extends AbstractController
      */
     public function index(InvitationsController $invitation): Response
     {
-        $classrooms = $this->find->findAllClassrooms();
-        $admins = $this->find->findUsersByRole('ROLE_ADMIN');
         $user = $this->getUser();
+        if ('ROLE_ADMIN' === $user->getRoles()[0]) {
+            $classrooms = $user->getClassrooms();
+        } else {
+            $classrooms = $this->find->findAllClassrooms();
+        }
+        $admins = $this->find->findUsersByRole('ROLE_ADMIN');
 
         // admin invitation
         $invite = new Invite();
-        $form = $this->createForm(InviteType::class, $invite, ['user' => $this->getUser()]);
+        $form = $this->createForm(InviteType::class, $invite, ['user' => $user]);
         $invitation->invitation($form, $invite);
 
         return $this->render(
@@ -71,16 +75,16 @@ class UserController extends AbstractController
         } else {
             $users = $this->find->findUsersByRole('ROLE_STUDENT');
         }
-            $users = $paginator->paginate(
+        $users = $paginator->paginate(
                 $users,
                 $this->request->query->getInt('page', 1),
                 10
             );
 
-            $users->setCustomParameters([
-                'align' => 'center',
-                'rounded' => true,
-            ]);        
+        $users->setCustomParameters([
+            'align' => 'center',
+            'rounded' => true,
+        ]);
 
         return $this->render('user/list.html.twig', [
             'users' => $users,
@@ -120,12 +124,9 @@ class UserController extends AbstractController
      */
     public function userProfile(): Response
     {
-        return $this->render(
-            'user/profile.html.twig',
-            [
-                'user' => $this->getUser(),
-            ]
-        );
+        return $this->render('user/profile.html.twig', [
+            'user' => $this->getUser(),
+        ]);
     }
 
     /**
@@ -147,11 +148,8 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user_profile');
         }
 
-        return $this->render(
-            'user/edit-profile.html.twig',
-            [
-                'editForm' => $form->createView(),
-            ]
-        );
+        return $this->render('user/edit-profile.html.twig', [
+            'editForm' => $form->createView(),
+        ]);
     }
 }
