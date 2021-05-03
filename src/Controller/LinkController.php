@@ -21,9 +21,12 @@ class LinkController extends AbstractController
 {
     private $breadCrumbs;
 
-    public function __construct(Breadcrumbs $breadCrumbs)
+    private $find;
+
+    public function __construct(Breadcrumbs $breadCrumbs, FindEntity $find)
     {
         $this->breadCrumbs = $breadCrumbs;
+        $this->find = $find;
     }
 
     /**
@@ -41,8 +44,19 @@ class LinkController extends AbstractController
 
         if ($request->query->get('classroom_id')) {
             $classroom_id = $request->query->get('classroom_id');
+            $classroom = $this->find->findClassroom();
+            $this->breadCrumbs
+                ->addRouteItem('Acueille', 'user_index')
+                ->addRouteItem($classroom->getName(),
+                    'classroom_show',
+                    ['id' => $classroom->getId()]
+                )
+                ->addRouteItem('Créer une lien', 'link_new', ['classroom_id' => $classroom->getId()])
+                ->addRouteItem('Liste de liens', 'link_index')
+            ;
         } else {
             $classroom_id = false;
+            $this->breadCrumbs->addRouteItem('Liste de liens', 'link_index');
         }
 
         $links = $paginator->paginate(
@@ -85,7 +99,7 @@ class LinkController extends AbstractController
         } else {
             $this->breadCrumbs->addRouteItem('Liste de liens', 'link_index');
         }
-        $this->breadCrumbs->addRouteItem('Create à lien', 'link_new');
+        $this->breadCrumbs->addRouteItem('Créer une lien', 'link_new');
 
         $form = $this->createForm(LinkType::class, $link);
         $form->handleRequest($request);
@@ -129,6 +143,7 @@ class LinkController extends AbstractController
      */
     public function edit(Request $request, Link $link): Response
     {
+        //TODO breadCrumbs
         $form = $this->createForm(LinkType::class, $link);
         $form->handleRequest($request);
 

@@ -86,7 +86,7 @@ class User implements UserInterface
     private $telephone;
 
     /**
-     * @ORM\OneToMany(targetEntity=Classroom::class, mappedBy="user")
+     * @ORM\ManyToMany(targetEntity=Classroom::class, inversedBy="users")
      */
     private $classrooms;
 
@@ -283,7 +283,6 @@ class User implements UserInterface
     {
         if (!$this->classrooms->contains($classroom)) {
             $this->classrooms[] = $classroom;
-            $classroom->setUser($this);
         }
 
         return $this;
@@ -291,12 +290,7 @@ class User implements UserInterface
 
     public function removeClassroom(Classroom $classroom): self
     {
-        if ($this->classrooms->removeElement($classroom)) {
-            // set the owning side to null (unless already changed)
-            if ($classroom->getUser() === $this) {
-                $classroom->setUser(null);
-            }
-        }
+        $this->classrooms->removeElement($classroom);
 
         return $this;
     }

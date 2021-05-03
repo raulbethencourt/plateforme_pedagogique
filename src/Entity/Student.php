@@ -18,11 +18,6 @@ class Student extends User
     private $pass;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Classroom::class, mappedBy="students")
-     */
-    private $classrooms;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $hobby;
@@ -61,31 +56,6 @@ class Student extends User
         return $this;
     }
 
-    public function getClassrooms(): Collection
-    {
-        return $this->classrooms;
-    }
-
-    public function addClassrooms(Classroom $classroom): self
-    {
-        if (!$this->classrooms->contains($classroom)) {
-            $this->classrooms[] = $classroom;
-            $classroom->addStudent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeClassrooms(Classroom $classroom): self
-    {
-        if ($this->classrooms->contains($classroom)) {
-            $this->classrooms->removeElement($classroom);
-            $classroom->removeStudent($this);
-        }
-
-        return $this;
-    }
-
     public function getHobby()
     {
         return $this->hobby;
@@ -94,24 +64,5 @@ class Student extends User
     public function setHobby($hobby): void
     {
         $this->hobby = $hobby;
-    }
-
-    public function addClassroom(Classroom $classroom): self
-    {
-        if (!$this->classrooms->contains($classroom)) {
-            $this->classrooms[] = $classroom;
-            $classroom->addStudent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeClassroom(Classroom $classroom): self
-    {
-        if ($this->classrooms->removeElement($classroom)) {
-            $classroom->removeStudent($this);
-        }
-
-        return $this;
     }
 }

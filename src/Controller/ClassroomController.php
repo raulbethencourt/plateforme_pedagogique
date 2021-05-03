@@ -54,12 +54,12 @@ class ClassroomController extends AbstractController
     public function new(): Response
     {
         $this->breadCrumbs
-            ->addRouteItem('Acueille', 'user_index')
-            ->addRouteItem('Crate à Class', 'classroom_new')
+            ->addRouteItem('Accueil', 'user_index')
+            ->addRouteItem('Créer une Classe', 'classroom_new')
         ;
 
         $classroom = new Classroom();
-        $classroom->setUser($this->getUser());
+        $classroom->addUser($this->getUser());
         $form = $this->createForm(ClassroomType::class, $classroom);
         $form->handleRequest($this->request);
 
@@ -87,13 +87,13 @@ class ClassroomController extends AbstractController
         $role = $this->getUser()->getRoles()[0];
         switch ($role) {
             case 'ROLE_TEACHER':
-                $this->breadCrumbs->addRouteItem('Acueille', 'teacher_index');
+                $this->breadCrumbs->addRouteItem('Accueil', 'teacher_index');
                 break;
             case 'ROLE_STUDENT':
-                $this->breadCrumbs->addRouteItem('Acueille', 'student_index');
+                $this->breadCrumbs->addRouteItem('Accueil', 'student_index');
                 break;
             default:
-                $this->breadCrumbs->addRouteItem('Acueille', 'user_index');
+                $this->breadCrumbs->addRouteItem('Accueil', 'user_index');
                 break;
         }
 
@@ -118,10 +118,6 @@ class ClassroomController extends AbstractController
             'formInvite' => $formInvite->createView(),
             'formNotify' => $formNotify->createView(),
             'classroom' => $classroom,
-            'students' => $classroom->getStudents(),
-            'teachers' => $classroom->getTeachers(),
-            'lessons' => $classroom->getLessons(),
-            'links' => $classroom->getLinks(),
         ]);
     }
 
@@ -131,8 +127,8 @@ class ClassroomController extends AbstractController
     public function edit(Classroom $classroom): Response
     {
         $this->breadCrumbs
-            ->addRouteItem('Acueille', 'user_index')
-            ->addRouteItem('Editer à Classe', 'classroom_new')
+            ->addRouteItem('Accueil', 'user_index')
+            ->addRouteItem('Editer une Classe', 'classroom_new')
         ;
 
         $form = $this->createForm(ClassroomType::class, $classroom);
@@ -174,12 +170,7 @@ class ClassroomController extends AbstractController
     {
         // find user
         $user = $this->find->findUser();
-
-        if ('ROLE_STUDENT' === $user->getRoles()[0]) {
-            $classroom->removeStudent($user);
-        } else {
-            $classroom->removeTeacher($user);
-        }
+        $classroom->removeUser($user);
 
         $this->em->persist($classroom);
         $this->em->flush();

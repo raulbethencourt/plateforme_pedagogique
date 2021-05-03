@@ -36,7 +36,7 @@ class UserController extends AbstractController
         $this->em = $em;
         $this->find = $find;
         $this->request = $requestStack->getCurrentRequest();
-        $this->breadCrumbs = $breadCrumbs;
+        $this->breadCrumbs = $breadCrumbs->addRouteItem('Accueil', 'user_index');
     }
 
     /**
@@ -82,7 +82,6 @@ class UserController extends AbstractController
             $users = $this->find->findUsersByRole('ROLE_STUDENT');
             $this->breadCrumbs->addRouteItem('apprenantes', 'user_list');
         }
-        $this->breadCrumbs->prependRouteItem('Acueille', 'user_index');
 
         $users = $paginator->paginate(
                 $users,
@@ -133,6 +132,7 @@ class UserController extends AbstractController
      */
     public function userProfile(): Response
     {
+        $this->breadCrumbs->addRouteItem('Profile', 'user_profile');
         return $this->render('user/profile.html.twig', [
             'user' => $this->getUser(),
         ]);
@@ -143,6 +143,10 @@ class UserController extends AbstractController
      */
     public function editProfile(): Response
     {
+        $this->breadCrumbs
+            ->addRouteItem('Profile', 'user_profile')
+            ->addRouteItem('Editer Profile', 'edit_user');
+
         $user = $this->getUser();
         $form = $this->createForm(EditUserType::class, $user);
         $form->handleRequest($this->request);

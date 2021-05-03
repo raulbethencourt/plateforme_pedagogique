@@ -44,9 +44,11 @@
 								</td>
 								<td>
 									<div class="d-flex justify-content-between">
-										{% for teacher in classroom.teachers %}
+										{% for user in classroom.users %}
 											/
-											{{ teacher.name }}
+											{% if user.roles[0] == 'ROLE_TEACHER' %}
+												{{ user.name }}
+											{% endif %}
 										{% endfor %}
 									</div>
 								</td>

@@ -3,5 +3,11 @@
 {% block title %}Editer Avatar!{% endblock %}
 
 {% block body %}
+	<div class="row">
+		<div class="col-12">
+			{{ wo_render_breadcrumbs() }}
+		</div>
+	</div>
+
     {{ form(form) }}
 {% endblock %}

@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use App\Entity\Student;
-use App\Entity\Teacher;
 use App\Repository\ClassroomRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -25,16 +23,6 @@ class Classroom
      * @ORM\Column(type="string", length=255)
      */
     private $name;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Teacher::class, inversedBy="classrooms")
-     */
-    private $teachers;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Student::class, inversedBy="classrooms")
-     */
-    private $students;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -62,10 +50,10 @@ class Classroom
     private $location;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="classrooms")
+     * @ORM\ManyToMany(targetEntity=User::class, mappedBy="classrooms")
      */
-    private $user;
-    
+    private $users;
+
     public function __construct()
     {
         $this->teachers = new ArrayCollection();
@@ -73,6 +61,7 @@ class Classroom
         $this->notifications = new ArrayCollection();
         $this->lessons = new ArrayCollection();
         $this->links = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -88,52 +77,6 @@ class Classroom
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getTeachers(): Collection
-    {
-        return $this->teachers;
-    }
-
-    public function addTeacher(Teacher $teacher): self
-    {
-        if (!$this->teachers->contains($teacher)) {
-            $this->teachers[] = $teacher;
-        }
-
-        return $this;
-    }
-
-    public function removeTeacher(Teacher $teacher): self
-    {
-        if ($this->teachers->contains($teacher)) {
-            $this->teachers->removeElement($teacher);
-        }
-
-        return $this;
-    }
-
-    public function getStudents(): Collection
-    {
-        return $this->students;
-    }
-
-    public function addStudent(Student $student): self
-    {
-        if (!$this->students->contains($student)) {
-            $this->students[] = $student;
-        }
-
-        return $this;
-    }
-
-    public function removeStudent(Student $student): self
-    {
-        if ($this->students->contains($student)) {
-            $this->students->removeElement($student);
-        }
 
         return $this;
     }
@@ -246,14 +189,29 @@ class Classroom
         return $this;
     }
 
-    public function getUser(): ?User
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsers(): Collection
     {
-        return $this->user;
+        return $this->users;
     }
 
-    public function setUser(?User $user): self
+    public function addUser(User $user): self
     {
-        $this->user = $user;
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addClassroom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeClassroom($this);
+        }
 
         return $this;
     }

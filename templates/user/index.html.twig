@@ -13,6 +13,12 @@
 		</div>
 	{% endfor %}
 
+	<div class="row">
+		<div class="col-12">
+			{{ wo_render_breadcrumbs() }}
+		</div>
+	</div>
+
 	{% if is_granted('ROLE_SUPER_ADMIN') %}
 		<div class="row">
 			<div class="col-12">
@@ -99,9 +105,11 @@
 								<td>{{ classroom.location }}</td>
 								<td>{{ classroom.discipline }}</td>
 								<td>
-									{% for teacher in classroom.teachers %}
+									{% for user in classroom.users %}
 										/
-										{{ teacher.name }}
+										{% if user.roles[0] == 'ROLE_TEACHER' %}
+											{{ user.name }}
+										{% endif %}
 									{% endfor %}
 								</td>
 								<td>

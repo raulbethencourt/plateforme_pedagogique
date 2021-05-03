@@ -10,7 +10,15 @@
 		</div>
 	{% endfor %}
 
-	<a href="{{ path('link_new') }}" class="btn btn-secondary mb-2" role="button">Create new</a>
+	<div class="row">
+		<div class="col-12">
+			{{ wo_render_breadcrumbs() }}
+		</div>
+	</div>
+
+	{% if not classroom_id %}
+		<a href="{{ path('link_new') }}" class="btn btn-secondary mb-2" role="button">Create new</a>
+	{% endif %}
 
 	<div class="row">
 		<div class="col-12">

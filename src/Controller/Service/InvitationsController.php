@@ -2,18 +2,18 @@
 
 namespace App\Controller\Service;
 
-use App\Entity\User;
-use App\Entity\Invite;
 use App\Entity\Classroom;
+use App\Entity\Invite;
+use App\Entity\User;
 use App\Service\FindEntity;
-use Symfony\Component\Form\Form;
-use Symfony\Component\Mime\Address;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 
 /**
  * Class Invitation
@@ -51,15 +51,13 @@ class InvitationsController extends AbstractController
                 $this->invite($invite, $classroom, $userAlready);
             } else {
                 $this->invite($invite, $classroom);
-                $this->addFlash('success', 'Votre invitation a bien été envoyée.');
             }
 
-        }
-
-        if (null !== $classroom) {
-            return $this->redirectToRoute('classroom_show', [
-                'id' => $classroom->getId(),
-            ]);
+            if (null !== $classroom) {
+                return $this->redirectToRoute('classroom_show', [
+                    'id' => $classroom->getId(),
+                ]);
+            }
         }
 
         return $this->redirectToRoute('user_index');
@@ -71,11 +69,7 @@ class InvitationsController extends AbstractController
     public function invite(Invite $data, ?Classroom $classroom, User $user = null): void
     {
         if (isset($user)) {
-            if ('ROLE_STUDENT' === $user->getRoles()[0]) {
-                $classroom->addStudent($user);
-            } else {
-                $classroom->addTeacher($user);
-            }
+            $classroom->addUser($user);
             $this->em->persist($classroom);
             $this->em->flush();
             $this->addFlash('success', 'Utilisateur ajouté dans la classe avec succès.');
@@ -83,6 +77,7 @@ class InvitationsController extends AbstractController
         } else {
             // If the user is not in the data base
             // an email is sent to the new user
+            $this->addFlash('success', 'Votre invitation a bien été envoyée.');
             $this->email('emails/new_invitation.html.twig', $data, $classroom);
         }
     }
