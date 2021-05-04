@@ -2,26 +2,22 @@
 
 namespace App\Controller;
 
-use App\Service\FindEntity;
 use App\Form\EditTeacherType;
+use App\Service\FindEntity;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Response as ResponseAlias;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * Class TeacherController
- * This class manage questionnaire creation by the teachers.
- *
  * @Route("/teacher")
  */
 class TeacherController extends AbstractController
 {
     /**
-     * @Route("/", name="teacher_index")
+     * @Route("/", name="teacher_show")
      */
-    public function index(): ResponseAlias
+    public function show(): Response
     {
         $teacher = $this->getUser();
 
@@ -37,7 +33,7 @@ class TeacherController extends AbstractController
     /**
      * @Route("/profile", name="teacher_profile")
      */
-    public function teacherProfile(): ResponseAlias
+    public function profile(): Response
     {
         return $this->render(
             'teacher/profile.html.twig',
@@ -48,7 +44,7 @@ class TeacherController extends AbstractController
     }
 
     /**
-     * @Route("/profile/edit", name="edit_teacher")
+     * @Route("/profile/edit", name="teacher_edit_profile")
      */
     public function editProfile(Request $request, FindEntity $find): Response
     {
@@ -67,10 +63,11 @@ class TeacherController extends AbstractController
             $entityManager->persist($teacher);
             $entityManager->flush();
             $this->addFlash('success', 'Profil édité avec succès.');
-            
+
             if (isset($teacher_name)) {
                 return $this->redirectToRoute('user_list');
             }
+
             return $this->redirectToRoute('teacher_profile');
         }
 

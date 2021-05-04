@@ -17,11 +17,11 @@
 	<body>
 		<nav class="navbar navbar-expand-lg sticky-top bg-white">
 			{% if is_granted('ROLE_TEACHER') %}
-				<a class="navbar-brand ml-4" href="{{ path('teacher_index') }}">
+				<a class="navbar-brand ml-4" href="{{ path('teacher_show') }}">
 				{% elseif is_granted('ROLE_STUDENT') %}
-					<a class="navbar-brand ml-4" href="{{ path('student_index') }}">
+					<a class="navbar-brand ml-4" href="{{ path('student_show') }}">
 					{% else %}
-						<a class="navbar-brand ml-4" href="{{ path('user_index') }}">
+						<a class="navbar-brand ml-4" href="{{ path('user_show') }}">
 						{% endif %}
 						<img src="{{ asset('images/cp-logo-big.webp') }}" class="logo-contact" alt="logo C&P">
 					</a>
@@ -34,16 +34,16 @@
 						<ul class="navbar-nav justify-content-center w-100">
 							<li class="nav-item dropdown">
 								{% if is_granted('ROLE_TEACHER') %}
-									<a class="nav-link" href="{{ path('teacher_index') }}">Accueil</a>
+									<a class="nav-link" href="{{ path('teacher_show') }}">Accueil</a>
 								{% elseif is_granted('ROLE_STUDENT') %}
-									<a class="nav-link" href="{{ path('student_index') }}">Accueil</a>
+									<a class="nav-link" href="{{ path('student_show') }}">Accueil</a>
 								{% else %}
 									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-expanded="false">
 										DATA
 									</a>
 									<ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
 										<li>
-											<a class="dropdown-item" href="{{ path('user_index') }}">Accueil</a>
+											<a class="dropdown-item" href="{{ path('user_show') }}">Accueil</a>
 										</li>
 										<li>
 											<a href="{{ path('user_list', {users: 'teachers'}) }}" class="dropdown-item">Liste des formateurs</a>

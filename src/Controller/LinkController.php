@@ -46,7 +46,7 @@ class LinkController extends AbstractController
             $classroom_id = $request->query->get('classroom_id');
             $classroom = $this->find->findClassroom();
             $this->breadCrumbs
-                ->addRouteItem('Acueille', 'user_index')
+                ->addRouteItem('Acueille', 'user_show')
                 ->addRouteItem($classroom->getName(),
                     'classroom_show',
                     ['id' => $classroom->getId()]
@@ -90,7 +90,7 @@ class LinkController extends AbstractController
             $classroom = $find->findClassroom();
             $link->addClassroom($classroom);
             $this->breadCrumbs
-                ->addRouteItem('Acueille', 'user_index')
+                ->addRouteItem('Acueille', 'user_show')
                 ->addRouteItem($classroom->getName(),
                     'classroom_show',
                     ['id' => $classroom->getId()]

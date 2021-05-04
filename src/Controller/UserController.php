@@ -36,13 +36,13 @@ class UserController extends AbstractController
         $this->em = $em;
         $this->find = $find;
         $this->request = $requestStack->getCurrentRequest();
-        $this->breadCrumbs = $breadCrumbs->addRouteItem('Accueil', 'user_index');
+        $this->breadCrumbs = $breadCrumbs->addRouteItem('Accueil', 'user_show');
     }
 
     /**
-     * @Route("/", name="user_index")
+     * @Route("/", name="user_show")
      */
-    public function index(InvitationsController $invitation): Response
+    public function show(InvitationsController $invitation): Response
     {
         $user = $this->getUser();
         if ('ROLE_ADMIN' === $user->getRoles()[0]) {
@@ -71,7 +71,7 @@ class UserController extends AbstractController
     /**
      * @Route("/list", name="user_list")
      */
-    public function listUser(PaginatorInterface $paginator): Response
+    public function listUsers(PaginatorInterface $paginator): Response
     {
         $type = $this->request->query->get('users');
 
@@ -124,28 +124,30 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user_list');
         }
 
-        return $this->redirectToRoute('user_index');
+        return $this->redirectToRoute('user_show');
     }
 
     /**
      * @Route("/profile", name="user_profile")
      */
-    public function userProfile(): Response
+    public function profile(): Response
     {
         $this->breadCrumbs->addRouteItem('Profile', 'user_profile');
+
         return $this->render('user/profile.html.twig', [
             'user' => $this->getUser(),
         ]);
     }
 
     /**
-     * @Route("/profile/edit", name="edit_user")
+     * @Route("/profile/edit", name="user_edit_profile")
      */
     public function editProfile(): Response
     {
         $this->breadCrumbs
             ->addRouteItem('Profile', 'user_profile')
-            ->addRouteItem('Editer Profile', 'edit_user');
+            ->addRouteItem('Editer Profile', 'user_edit_profile')
+        ;
 
         $user = $this->getUser();
         $form = $this->createForm(EditUserType::class, $user);

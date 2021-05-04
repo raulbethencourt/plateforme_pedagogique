@@ -54,7 +54,7 @@ class ClassroomController extends AbstractController
     public function new(): Response
     {
         $this->breadCrumbs
-            ->addRouteItem('Accueil', 'user_index')
+            ->addRouteItem('Accueil', 'user_show')
             ->addRouteItem('Créer une Classe', 'classroom_new')
         ;
 
@@ -87,13 +87,13 @@ class ClassroomController extends AbstractController
         $role = $this->getUser()->getRoles()[0];
         switch ($role) {
             case 'ROLE_TEACHER':
-                $this->breadCrumbs->addRouteItem('Accueil', 'teacher_index');
+                $this->breadCrumbs->addRouteItem('Accueil', 'teacher_show');
                 break;
             case 'ROLE_STUDENT':
-                $this->breadCrumbs->addRouteItem('Accueil', 'student_index');
+                $this->breadCrumbs->addRouteItem('Accueil', 'student_show');
                 break;
             default:
-                $this->breadCrumbs->addRouteItem('Accueil', 'user_index');
+                $this->breadCrumbs->addRouteItem('Accueil', 'user_show');
                 break;
         }
 
@@ -127,7 +127,7 @@ class ClassroomController extends AbstractController
     public function edit(Classroom $classroom): Response
     {
         $this->breadCrumbs
-            ->addRouteItem('Accueil', 'user_index')
+            ->addRouteItem('Accueil', 'user_show')
             ->addRouteItem('Editer une Classe', 'classroom_new')
         ;
 
@@ -159,7 +159,7 @@ class ClassroomController extends AbstractController
             $this->addFlash('success', 'Classe supprimée avec succès.');
         }
 
-        return $this->redirectToRoute('user_index');
+        return $this->redirectToRoute('user_show');
     }
 
     /**

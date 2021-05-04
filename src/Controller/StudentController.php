@@ -6,15 +6,11 @@ use App\Entity\Questionnaire;
 use App\Form\EditStudentType;
 use App\Service\FindEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class StudentController
- * This class manage student index and his profile.
- *
  * @Route("/student")
  */
 class StudentController extends AbstractController
@@ -27,9 +23,9 @@ class StudentController extends AbstractController
     }
 
     /**
-     * @Route("/", name="student_index")
+     * @Route("/", name="student_show")
      */
-    public function index(): Response
+    public function show(): Response
     {
         $student = $this->getUser();
         $classrooms = $student->getClassrooms();
@@ -44,8 +40,6 @@ class StudentController extends AbstractController
     }
 
     /**
-     * This methode builds student profile.
-     *
      * @Route("/profile", name="student_profile")
      */
     public function profile(): Response
@@ -127,13 +121,12 @@ class StudentController extends AbstractController
     }
 
     /**
-     * @Route("/profile/edit", name="edit_student")
-     *
-     * @return RedirectResponse|Response
+     * @Route("/profile/edit", name="student_edit_profile")
      */
     public function editProfile(Request $request): Response
     {
         $student_name = $request->query->get('username');
+
         if (isset($student_name)) {
             $student = $this->find->findStudentByUsername($student_name);
         } else {
