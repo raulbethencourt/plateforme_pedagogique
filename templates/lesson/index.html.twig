@@ -10,6 +10,16 @@
 		</div>
 	{% endfor %}
 
+	<div class="row">
+		<div class="col-12">
+			{{ wo_render_breadcrumbs() }}
+		</div>
+	</div>
+
+	<pre>
+		{{ dump(list) }}
+	</pre>
+
 	{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and classroom_id is null %}
 		<a href="{{ path('lesson_new') }}" class="btn btn-secondary mb-2" role="button">Créer Module</a>
 	{% endif %}
@@ -35,7 +45,7 @@
 						<tr>
 							<th scope="row"></th>
 							<td>
-								<a href="{{ path('lesson_show', {id: lesson.id, classroom_id: classroom_id}) }}">
+								<a href="{{ path('lesson_show', {id: lesson.id, classroom_id: classroom_id, list: list}) }}">
 									{{ lesson.title }}
 								</a>
 							</td>
@@ -49,7 +59,7 @@
 							{% endif %}
 							<td>
 								{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
-									<a href="{{ path('lesson_edit', {id: lesson.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+									<a href="{{ path('lesson_edit', {id: lesson.id, classroom_id: classroom_id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
 									<form method="post" action="{{ path('lesson_delete', {id: lesson.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 										<input type="hidden" name="_method" value='DELETE'>
 										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">

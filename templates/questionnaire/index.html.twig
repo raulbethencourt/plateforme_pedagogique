@@ -16,6 +16,13 @@
 		</div>
 	{% endfor %}
 
+	<div class="row">
+		<div class="col-12">
+			{{ wo_render_breadcrumbs() }}
+		</div>
+	</div>
+
+
 	{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and lesson_id is null %}
 		<a href="{{ path('questionnaire_new') }}" class="btn btn-secondary mb-2" role="button">Créer Activité</a>
 	{% endif %}

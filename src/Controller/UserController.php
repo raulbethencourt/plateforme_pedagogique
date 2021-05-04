@@ -58,7 +58,7 @@ class UserController extends AbstractController
         $invitation->invitation($form, $invite);
 
         return $this->render(
-            'user/index.html.twig',
+            'user/show.html.twig',
             [
                 'admins' => $admins,
                 'classrooms' => $classrooms,
@@ -144,10 +144,19 @@ class UserController extends AbstractController
      */
     public function editProfile(): Response
     {
-        $this->breadCrumbs
-            ->addRouteItem('Profile', 'user_profile')
-            ->addRouteItem('Editer Profile', 'user_edit_profile')
-        ;
+        $type = $this->request->query->get('users');
+
+        if ('teachers' === $type) {
+            $this->breadCrumbs
+                ->addRouteItem('formateurs', 'user_list')
+                ->addRouteItem('Editer Profile', 'teacher_edit_profile')
+            ;
+        } else {
+            $this->breadCrumbs
+                ->addRouteItem('apprenantes', 'user_list')
+                ->addRouteItem('Editer Profile', 'student_edit_profile')
+            ;
+        }
 
         $user = $this->getUser();
         $form = $this->createForm(EditUserType::class, $user);

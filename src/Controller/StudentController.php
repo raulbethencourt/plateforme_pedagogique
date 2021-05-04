@@ -2,24 +2,28 @@
 
 namespace App\Controller;
 
+use App\Service\FindEntity;
 use App\Entity\Questionnaire;
 use App\Form\EditStudentType;
-use App\Service\FindEntity;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/student")
  */
 class StudentController extends AbstractController
 {
+    private $breadCrumbs;
+
     private $find;
 
-    public function __construct(FindEntity $find)
+    public function __construct(FindEntity $find, Breadcrumbs $breadCrumbs)
     {
         $this->find = $find;
+        $this->breadCrumbs = $breadCrumbs;
     }
 
     /**
@@ -31,7 +35,7 @@ class StudentController extends AbstractController
         $classrooms = $student->getClassrooms();
 
         return $this->render(
-            'student/index.html.twig',
+            'student/show.html.twig',
             [
                 'student' => $student,
                 'classrooms' => $classrooms,
@@ -125,6 +129,14 @@ class StudentController extends AbstractController
      */
     public function editProfile(Request $request): Response
     {
+        if ('students' === $request->query->get('type')) {
+            $this->breadCrumbs
+                ->addRouteItem('Accueil', 'user_show')
+                ->addRouteItem('apprenantes', 'user_list')
+                ->addRouteItem('Editer Profile', 'student_edit_profile')
+            ;
+        }
+
         $student_name = $request->query->get('username');
 
         if (isset($student_name)) {

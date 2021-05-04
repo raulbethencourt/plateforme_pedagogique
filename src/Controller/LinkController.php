@@ -43,7 +43,6 @@ class LinkController extends AbstractController
         }
 
         if ($request->query->get('classroom_id')) {
-            $classroom_id = $request->query->get('classroom_id');
             $classroom = $this->find->findClassroom();
             $this->breadCrumbs
                 ->addRouteItem('Acueille', 'user_show')
@@ -55,7 +54,6 @@ class LinkController extends AbstractController
                 ->addRouteItem('Liste de liens', 'link_index')
             ;
         } else {
-            $classroom_id = false;
             $this->breadCrumbs->addRouteItem('Liste de liens', 'link_index');
         }
 
@@ -72,7 +70,7 @@ class LinkController extends AbstractController
 
         return $this->render('link/index.html.twig', [
             'links' => $links,
-            'classroom_id' => $classroom_id,
+            'classroom_id' => $request->query->get('classroom_id'),
         ]);
     }
 
@@ -143,7 +141,25 @@ class LinkController extends AbstractController
      */
     public function edit(Request $request, Link $link): Response
     {
-        //TODO breadCrumbs
+        if ($request->query->get('classroom_id')) {
+            $classroom = $this->find->findClassroom();
+            $this->breadCrumbs
+                ->addRouteItem('Acueille', 'user_show')
+                ->addRouteItem($classroom->getName(),
+                    'classroom_show',
+                    ['id' => $classroom->getId()]
+                )
+                ->addRouteItem('Créer une lien', 'link_new', ['classroom_id' => $classroom->getId()])
+                ->addRouteItem('Liste de liens', 'link_index', ['classroom_id' => $classroom->getId()])
+                ->addRouteItem('Editer une lien', 'link_edit', ['id' => $link->getId()])
+            ;
+        } else {
+            $this->breadCrumbs
+                ->addRouteItem('Liste de liens', 'link_index')
+                ->addRouteItem('Editer une lien', 'link_edit', ['id' => $link->getId()])
+            ;
+        }
+
         $form = $this->createForm(LinkType::class, $link);
         $form->handleRequest($request);
 

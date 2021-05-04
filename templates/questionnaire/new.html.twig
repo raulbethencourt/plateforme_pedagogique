@@ -4,6 +4,16 @@
 {% endblock %}
 
 {% block body %}
+	<div class="row">
+		<div class="col-12">
+			{{ wo_render_breadcrumbs() }}
+		</div>
+	</div>
+
+	<pre>
+		{{ dump(lonely) }}
+	</pre>
+
 	{% if lesson_id is not null %}
 		<div class="row">
 			<div class="col-12 d-flex justify-content-center">

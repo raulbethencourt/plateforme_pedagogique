@@ -8,12 +8,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 /**
  * @Route("/teacher")
  */
 class TeacherController extends AbstractController
 {
+    private $breadCrumbs;
+
+    public function __construct(Breadcrumbs $breadCrumbs)
+    {
+        $this->breadCrumbs = $breadCrumbs;
+    }
+
     /**
      * @Route("/", name="teacher_show")
      */
@@ -22,7 +30,7 @@ class TeacherController extends AbstractController
         $teacher = $this->getUser();
 
         return $this->render(
-            'teacher/index.html.twig',
+            'teacher/show.html.twig',
             [
                 'questionnaires' => $teacher->getClassrooms(),
                 'teacher' => $teacher,
@@ -48,6 +56,14 @@ class TeacherController extends AbstractController
      */
     public function editProfile(Request $request, FindEntity $find): Response
     {
+        if ('teachers' === $request->query->get('type')) {
+            $this->breadCrumbs
+                ->addRouteItem('Accueil', 'user_show')
+                ->addRouteItem('formateurs', 'user_list')
+                ->addRouteItem('Editer Profile', 'teacher_edit_profile')
+            ;
+        }
+
         $teacher_name = $request->query->get('username');
         if (isset($teacher_name)) {
             $teacher = $find->findTeacherByUsername($teacher_name);

@@ -17,6 +17,15 @@
 		</div>
 	{% endfor %}
 
+	<div class="row">
+		<div class="col-12">
+			{{ wo_render_breadcrumbs() }}
+		</div>
+	</div>
+
+<pre>
+	{{ dump(list, lonely) }}
+</pre>
 
 	<h1>{{ lesson.title }}</h1>
 
@@ -44,7 +53,7 @@
 						<td>{{ questionnaire.title }}</td>
 					{% else %}
 						<td>
-							<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson.id}) }}" role="button">{{ questionnaire.title }}</a>
+							<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson.id, classroom_id: classroom_id}) }}" role="button">{{ questionnaire.title }}</a>
 						</td>
 					{% endif %}
 					<td>{{ questionnaire.realisationTime }}</td>
@@ -70,7 +79,7 @@
 
 	{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
 		<div class="text-right">
-			<a href="{{ path('questionnaire_new', {lesson_id: lesson.id}) }}" class="btn btn-primary">Créer activité</a>
+			<a href="{{ path('questionnaire_new', {lesson_id: lesson.id, classroom_id: classroom_id, lonely: lonely }) }}" class="btn btn-primary">Créer activité</a>
 		</div>
 	{% endif %}
 {% endblock %}
