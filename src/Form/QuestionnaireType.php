@@ -41,6 +41,7 @@ class QuestionnaireType extends AbstractType
                 [
                     'purify_html' => true,
                     'label' => 'Descrition de lien',
+                    'required' => false,
                 ]
             )
             ->add(
@@ -60,6 +61,7 @@ class QuestionnaireType extends AbstractType
                     'attr' => [
                         'placeholder' => 'ex: https://contact-promotion.org',
                     ],
+                    'required' => false,
                 ]
             )
             ->add(

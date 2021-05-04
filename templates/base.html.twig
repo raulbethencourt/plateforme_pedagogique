@@ -32,28 +32,21 @@
 
 					<div class="collapse navbar-collapse" id="navbarSupportedContent">
 						<ul class="navbar-nav justify-content-center w-100">
-							<li class="nav-item dropdown">
-								{% if is_granted('ROLE_TEACHER') %}
-									<a class="nav-link" href="{{ path('teacher_show') }}">Accueil</a>
-								{% elseif is_granted('ROLE_STUDENT') %}
-									<a class="nav-link" href="{{ path('student_show') }}">Accueil</a>
-								{% else %}
+							{% if is_granted('ROLE_ADMIN') %}
+								<li class="nav-item dropdown">
 									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-expanded="false">
-										DATA
+										UTILISATEURS
 									</a>
 									<ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
 										<li>
-											<a class="dropdown-item" href="{{ path('user_show') }}">Accueil</a>
+											<a href="{{ path('user_list', {users: 'teachers'}) }}" class="dropdown-item">LISTE DES FORMATEURS·RICES</a>
 										</li>
 										<li>
-											<a href="{{ path('user_list', {users: 'teachers'}) }}" class="dropdown-item">Liste des formateurs</a>
-										</li>
-										<li>
-											<a href="{{ path('user_list', {users: 'students'}) }}" class="dropdown-item">Liste des apprenantes</a>
+											<a href="{{ path('user_list', {users: 'students'}) }}" class="dropdown-item">LISTE DES APPRENANTS·TES</a>
 										</li>
 									</ul>
-								{% endif %}
-							</li>
+								</li>
+							{% endif %}
 							{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
 								<li class="nav-item dropdown">
 									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-expanded="false">
@@ -61,13 +54,13 @@
 									</a>
 									<ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
 										<li>
-											<a class="dropdown-item" href="{{path('lesson_index')}}">List des Modules</a>
+											<a class="dropdown-item" href="{{path('lesson_index')}}">MODULES</a>
 										</li>
 										<li>
-											<a class="dropdown-item" href="{{ path('questionnaire_index') }}">List des Activités</a>
+											<a class="dropdown-item" href="{{ path('questionnaire_index') }}">ACTIVITÉS</a>
 										</li>
 										<li>
-											<a class="dropdown-item" href="{{ path('link_index') }}">List des Liens</a>
+											<a class="dropdown-item" href="{{ path('link_index') }}">LIENS</a>
 										</li>
 									</ul>
 								</li>

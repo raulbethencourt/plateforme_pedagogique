@@ -84,8 +84,7 @@ class ClassroomController extends AbstractController
      */
     public function show(Classroom $classroom): Response
     {
-        $role = $this->getUser()->getRoles()[0];
-        switch ($role) {
+        switch ($this->getUser()->getRoles()[0]) {
             case 'ROLE_TEACHER':
                 $this->breadCrumbs->addRouteItem('Accueil', 'teacher_show');
                 break;
@@ -97,7 +96,7 @@ class ClassroomController extends AbstractController
                 break;
         }
 
-        $this->breadCrumbs->addRouteItem($classroom->getName(),
+        $this->breadCrumbs->addRouteItem('Classe',
             'classroom_show',
             ['id' => $classroom->getId()]
         );

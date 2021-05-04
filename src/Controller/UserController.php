@@ -36,7 +36,7 @@ class UserController extends AbstractController
         $this->em = $em;
         $this->find = $find;
         $this->request = $requestStack->getCurrentRequest();
-        $this->breadCrumbs = $breadCrumbs->addRouteItem('Accueil', 'user_show');
+        $this->breadCrumbs = $breadCrumbs;
     }
 
     /**
@@ -132,7 +132,10 @@ class UserController extends AbstractController
      */
     public function profile(): Response
     {
-        $this->breadCrumbs->addRouteItem('Profile', 'user_profile');
+        $this->breadCrumbs
+            ->addRouteItem('Accueil', 'user_show')
+            ->addRouteItem('Profile', 'user_profile')
+        ;
 
         return $this->render('user/profile.html.twig', [
             'user' => $this->getUser(),
@@ -144,19 +147,11 @@ class UserController extends AbstractController
      */
     public function editProfile(): Response
     {
-        $type = $this->request->query->get('users');
-
-        if ('teachers' === $type) {
-            $this->breadCrumbs
-                ->addRouteItem('formateurs', 'user_list')
-                ->addRouteItem('Editer Profile', 'teacher_edit_profile')
+        $this->breadCrumbs
+            ->addRouteItem('Accueil', 'user_show')
+            ->addRouteItem('Profile', 'user_profile')
+            ->addRouteItem('Editer Profile', 'teacher_edit_profile')
             ;
-        } else {
-            $this->breadCrumbs
-                ->addRouteItem('apprenantes', 'user_list')
-                ->addRouteItem('Editer Profile', 'student_edit_profile')
-            ;
-        }
 
         $user = $this->getUser();
         $form = $this->createForm(EditUserType::class, $user);

@@ -46,16 +46,24 @@ class LinkController extends AbstractController
             $classroom = $this->find->findClassroom();
             $this->breadCrumbs
                 ->addRouteItem('Acueille', 'user_show')
-                ->addRouteItem($classroom->getName(),
+                ->addRouteItem('Classe',
                     'classroom_show',
                     ['id' => $classroom->getId()]
                 )
                 ->addRouteItem('Créer une lien', 'link_new', ['classroom_id' => $classroom->getId()])
-                ->addRouteItem('Liste de liens', 'link_index')
             ;
         } else {
-            $this->breadCrumbs->addRouteItem('Liste de liens', 'link_index');
+            $role = $this->getUser()->getRoles()[0];
+            switch ($role) {
+                case 'ROLE_TEACHER':
+                    $this->breadCrumbs->addRouteItem('Accueil', 'teacher_show');
+                    break;
+                default:
+                    $this->breadCrumbs->addRouteItem('Accueil', 'user_show');
+                    break;
+            }
         }
+        $this->breadCrumbs->addRouteItem('Liens', 'link_index');
 
         $links = $paginator->paginate(
             $links,
@@ -89,13 +97,22 @@ class LinkController extends AbstractController
             $link->addClassroom($classroom);
             $this->breadCrumbs
                 ->addRouteItem('Acueille', 'user_show')
-                ->addRouteItem($classroom->getName(),
+                ->addRouteItem('Classe',
                     'classroom_show',
                     ['id' => $classroom->getId()]
                 )
             ;
         } else {
-            $this->breadCrumbs->addRouteItem('Liste de liens', 'link_index');
+            $role = $this->getUser()->getRoles()[0];
+            switch ($role) {
+                case 'ROLE_TEACHER':
+                    $this->breadCrumbs->addRouteItem('Accueil', 'teacher_show');
+                    break;
+                default:
+                    $this->breadCrumbs->addRouteItem('Accueil', 'user_show');
+                    break;
+            }
+            $this->breadCrumbs->addRouteItem('Liens', 'link_index');
         }
         $this->breadCrumbs->addRouteItem('Créer une lien', 'link_new');
 
@@ -141,21 +158,30 @@ class LinkController extends AbstractController
      */
     public function edit(Request $request, Link $link): Response
     {
+        $classroom = $this->find->findClassroom();
         if ($request->query->get('classroom_id')) {
-            $classroom = $this->find->findClassroom();
             $this->breadCrumbs
                 ->addRouteItem('Acueille', 'user_show')
-                ->addRouteItem($classroom->getName(),
+                ->addRouteItem('Classe',
                     'classroom_show',
                     ['id' => $classroom->getId()]
                 )
                 ->addRouteItem('Créer une lien', 'link_new', ['classroom_id' => $classroom->getId()])
-                ->addRouteItem('Liste de liens', 'link_index', ['classroom_id' => $classroom->getId()])
+                ->addRouteItem('Liens', 'link_index', ['classroom_id' => $classroom->getId()])
                 ->addRouteItem('Editer une lien', 'link_edit', ['id' => $link->getId()])
             ;
         } else {
+            $role = $this->getUser()->getRoles()[0];
+            switch ($role) {
+                case 'ROLE_TEACHER':
+                    $this->breadCrumbs->addRouteItem('Accueil', 'teacher_show');
+                    break;
+                default:
+                    $this->breadCrumbs->addRouteItem('Accueil', 'user_show');
+                    break;
+            }
             $this->breadCrumbs
-                ->addRouteItem('Liste de liens', 'link_index')
+                ->addRouteItem('Liens', 'link_index')
                 ->addRouteItem('Editer une lien', 'link_edit', ['id' => $link->getId()])
             ;
         }
@@ -167,12 +193,19 @@ class LinkController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Lien modifiée avec succès.');
 
+            if (isset($classroom)) {
+                return $this->redirectToRoute('link_index', [
+                    'classroom_id' => $classroom->getId(),
+                ]);
+            }
+
             return $this->redirectToRoute('link_index');
         }
 
         return $this->render('link/edit.html.twig', [
             'link' => $link,
             'form' => $form->createView(),
+            'classroom_id' => $request->query->get('classroom_id'),
         ]);
     }
 

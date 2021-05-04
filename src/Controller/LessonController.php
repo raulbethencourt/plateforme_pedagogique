@@ -44,25 +44,27 @@ class LessonController extends AbstractController
     {
         $request = $this->request->query;
         $user = $this->getUser();
-        if ('ROLE_ADMIN' === $user->getRoles()[0] || 'ROLE_SUPER_ADMIN' === $user->getRoles()[0]) {
-            $lessons = $lessonRepo->findAll();
-        } else {
+
+        if ('ROLE_TEACHER' === $user->getRoles()[0]) {
             $lessons = $lessonRepo->findByVisibilityOrCreator(true, $user->getUsername());
+            $this->breadCrumbs->addRouteItem('Acueille', 'teacher_show');
+        } else {
+            $lessons = $lessonRepo->findAll();
+            $this->breadCrumbs->addRouteItem('Acueille', 'user_show');
         }
 
         if ($request->get('classroom_id')) {
             $classroom = $this->find->findClassroom();
             $this->breadCrumbs
-                ->addRouteItem('Acueille', 'user_show')
-                ->addRouteItem($classroom->getName(),
+                ->addRouteItem('Classe',
                     'classroom_show',
                     ['id' => $classroom->getId()]
                 )
                 ->addRouteItem('Créer un Module', 'lesson_new', ['classroom_id' => $classroom->getId()])
-                ->addRouteItem('Liste des Modules', 'lesson_index')
+                ->addRouteItem('Modules', 'lesson_index')
             ;
         } else {
-            $this->breadCrumbs->addRouteItem('Liste de Modules', 'lesson_index');
+            $this->breadCrumbs->addRouteItem('Modules', 'lesson_index');
         }
 
         $lessons = $paginator->paginate(
@@ -91,19 +93,20 @@ class LessonController extends AbstractController
     {
         $classroom = $this->find->findClassroom();
         $lesson = new Lesson();
+
+        if ('ROLE_TEACHER' === $this->getUser()->getRoles()[0]) {
+            $this->breadCrumbs->addRouteItem('Acueille', 'teacher_show');
+        } else {
+            $this->breadCrumbs->addRouteItem('Acueille', 'user_show');
+        }
+
         if (isset($classroom)) {
             $lesson->addClassroom($classroom);
-            $this->breadCrumbs
-                ->addRouteItem('Acueille', 'user_show')
-                ->addRouteItem($classroom->getName(),
-                'classroom_show',
-                ['id' => $classroom->getId()]
-            )
-        ;
+            $this->breadCrumbs->addRouteItem('Classe', 'classroom_show', ['id' => $classroom->getId()]);
         } else {
-            $this->breadCrumbs->addRouteItem('Liste de Modules', 'lesson_index');
+            $this->breadCrumbs->addRouteItem('Modules', 'lesson_index');
         }
-        $this->breadCrumbs->addRouteItem('Créer une Module', 'lesson_new');
+        $this->breadCrumbs->addRouteItem('Créer Module', 'lesson_new');
 
         $lesson->setDateCreation(new \DateTime());
         $lesson->addUser($this->getUser());
@@ -119,7 +122,8 @@ class LessonController extends AbstractController
             if (isset($classroom)) {
                 return $this->redirectToRoute('lesson_show', [
                     'id' => $lesson->getId(),
-                    'classroom' => $classroom->getId(),
+                    'classroom_id' => $classroom->getId(),
+                    'lonely' => true,
                 ]);
             }
 
@@ -144,34 +148,44 @@ class LessonController extends AbstractController
     {
         $request = $this->request->query;
         $classroom = $this->find->findClassroom();
+
+        switch ($this->getUser()->getRoles()[0]) {
+            case 'ROLE_TEACHER':
+                $this->breadCrumbs->addRouteItem('Accueil', 'teacher_show');
+                break;
+            case 'ROLE_STUDENT':
+                $this->breadCrumbs->addRouteItem('Accueil', 'student_show');
+                break;
+            default:
+                $this->breadCrumbs->addRouteItem('Accueil', 'user_show');
+                break;
+        }
+
         if ($request->get('classroom_id') && $request->get('list')) {
             $this->breadCrumbs
-                ->addRouteItem('Acueille', 'user_show')
-                ->addRouteItem($classroom->getName(),
+                ->addRouteItem('Classe',
                     'classroom_show',
                     ['id' => $classroom->getId()]
                 )
                 ->addRouteItem('Créer un Module', 'lesson_new', ['classroom_id' => $classroom->getId()])
-                ->addRouteItem('Liste des Modules', 'lesson_index', [
+                ->addRouteItem('Modules', 'lesson_index', [
                     'classroom_id' => $classroom->getId(),
                     'list' => $request->get('list'),
                 ])
-                ->addRouteItem($lesson->getTitle(), 'lesson_show', ['id' => $lesson->getId()])
+                ->addRouteItem('Module', 'lesson_show', ['id' => $lesson->getId()])
             ;
         } elseif ($request->get('lonely')) {
             $this->breadCrumbs
-                ->addRouteItem('Acueille', 'user_show')
-                ->addRouteItem($classroom->getName(),
+                ->addRouteItem('Classe',
                     'classroom_show',
                     ['id' => $classroom->getId()]
                 )
-                ->addRouteItem($lesson->getTitle(), 'lesson_show', ['id' => $lesson->getId()])
+                ->addRouteItem('Module', 'lesson_show', ['id' => $lesson->getId()])
             ;
         } else {
-            // code...
             $this->breadCrumbs
-                ->addRouteItem('Liste des Modules', 'lesson_index')
-                ->addRouteItem($lesson->getTitle(), 'lesson_show', ['id' => $lesson->getId()])
+                ->addRouteItem('Modules', 'lesson_index')
+                ->addRouteItem('Module', 'lesson_show', ['id' => $lesson->getId()])
             ;
         }
 
@@ -202,21 +216,27 @@ class LessonController extends AbstractController
      */
     public function edit(Lesson $lesson): Response
     {
-        if ($this->request->query->get('classroom_id')) {
+        if ('ROLE_TEACHER' === $this->getUser()->getRoles()[0]) {
+            $this->breadCrumbs->addRouteItem('Acueille', 'teacher_show');
+        } else {
+            $this->breadCrumbs->addRouteItem('Acueille', 'user_show');
+        }
+
+        $classroom_id = $this->request->query->get('classroom_id');
+        if ($classroom_id) {
             $classroom = $this->find->findClassroom();
             $this->breadCrumbs
-                ->addRouteItem('Acueille', 'user_show')
-                ->addRouteItem($classroom->getName(),
+                ->addRouteItem('Classe',
                     'classroom_show',
                     ['id' => $classroom->getId()]
                 )
                 ->addRouteItem('Créer un Module', 'lesson_new', ['classroom_id' => $classroom->getId()])
-                ->addRouteItem('Liste des Modules', 'lesson_index', ['classroom_id' => $classroom->getId()])
+                ->addRouteItem('Modules', 'lesson_index', ['classroom_id' => $classroom->getId()])
                 ->addRouteItem('Editer un Module', 'lesson_edit', ['id' => $lesson->getId()])
             ;
         } else {
             $this->breadCrumbs
-                ->addRouteItem('Liste des Modules', 'lesson_index')
+                ->addRouteItem('Modules', 'lesson_index')
                 ->addRouteItem('Editer un Module', 'lesson_edit', ['id' => $lesson->getId()])
             ;
         }
@@ -227,6 +247,13 @@ class LessonController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
             $this->addFlash('success', 'Module modifiée avec succès.');
+
+            if ($classroom_id) {
+                return $this->redirectToRoute('lesson_index', [
+                    'classroom_id' => $classroom_id,
+                    'list' => true,
+                ]);
+            }
 
             return $this->redirectToRoute('lesson_index');
         }
@@ -247,6 +274,14 @@ class LessonController extends AbstractController
             $this->em->remove($lesson);
             $this->em->flush();
             $this->addFlash('success', 'Module supprimée avec succès.');
+        }
+
+        $classroom_id = $this->request->query->get('classroom_id');
+        if (isset($classroom_id)) {
+            return $this->redirectToRoute('lesson_index', [
+                'classroom_id' => $classroom_id,
+                'list' => true,
+            ]);
         }
 
         return $this->redirectToRoute('lesson_index');

@@ -40,7 +40,7 @@
 					</ul>
 				</div>
 				<div class="d-flex flex-column justify-content-center align-items-center mr-3">
-					<a href="{{ path('teacher_edit_avataravatar') }}">
+					<a href="{{ path('teacher_edit_avatar') }}">
 						{% if teacher.avatar is defined and teacher.avatar is not null %}
 							<img src="{{ vich_uploader_asset(teacher.avatar) }}" alt="profile" class="rounded-circle profile__img">
 						{% else %}

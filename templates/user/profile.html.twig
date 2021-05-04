@@ -46,7 +46,7 @@
 					</ul>
 					<a href="{{ path('user_edit_profile') }}" class="btn btn-primary mt-4">Éditer Profil</a>
 				</div>
-				<a href="{{ path('user_edit_avataravatar') }}" class="d-flex flex-column align-items-center justify-content-center">
+				<a href="{{ path('user_edit_avatar') }}" class="d-flex flex-column align-items-center justify-content-center">
 					{% if user.avatar is defined and user.avatar is not null %}
 						<img src="{{ vich_uploader_asset(user.avatar) }}" alt="profile" class="rounded-circle profile__img">
 					{% else %}

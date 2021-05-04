@@ -13,9 +13,9 @@ use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 class AvatarController extends AbstractController
 {
     /**
-     * @Route("/student/avatar", name="student_edit_avatarvatar")
-     * @Route("/teacher/avatar", name="teacher_edit_avataravatar")
-     * @Route("/user/avatar", name="user_edit_avataravatar")
+     * @Route("/student/avatar", name="student_edit_avatar")
+     * @Route("/teacher/avatar", name="teacher_edit_avatar")
+     * @Route("/user/avatar", name="user_edit_avatar")
      */
     public function new(Request $request, Breadcrumbs $breadcrumbs): Response
     {
@@ -30,8 +30,8 @@ class AvatarController extends AbstractController
             default:
                 $breadcrumbs->addRouteItem('Profile', 'user_profile');
         }
+        $breadcrumbs->addRouteItem('Avatar', 'student_edit_avatar');
 
-        $breadcrumbs->addRouteItem('Avatar', 'student_edit_avatarvatar');
         $avatar = $this->getUser()->getAvatar();
         // Check if the image already exist
         if (!$avatar) {
