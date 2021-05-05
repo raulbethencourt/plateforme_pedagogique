@@ -2,19 +2,19 @@
 
 namespace App\Controller;
 
-use App\Controller\Service\InvitationsController;
 use App\Entity\Invite;
-use App\Form\EditUserType;
 use App\Form\InviteType;
+use App\Form\EditUserType;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
+use App\Controller\Service\InvitationsController;
+use App\Service\BreadCrumbsService as BreadCrumbs;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class UserController.
@@ -31,7 +31,7 @@ class UserController extends AbstractController
 
     private $breadCrumbs;
 
-    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, Breadcrumbs $breadCrumbs)
+    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, BreadCrumbs $breadCrumbs)
     {
         $this->em = $em;
         $this->find = $find;
@@ -77,10 +77,10 @@ class UserController extends AbstractController
 
         if ('teachers' === $type) {
             $users = $this->find->findUsersByRole('ROLE_TEACHER');
-            $this->breadCrumbs->addRouteItem('formateurs', 'user_list');
+            $this->breadCrumbs->bcListUsers($type);
         } else {
             $users = $this->find->findUsersByRole('ROLE_STUDENT');
-            $this->breadCrumbs->addRouteItem('apprenantes', 'user_list');
+            $this->breadCrumbs->bcListUsers($type);
         }
 
         $users = $paginator->paginate(
@@ -132,10 +132,7 @@ class UserController extends AbstractController
      */
     public function profile(): Response
     {
-        $this->breadCrumbs
-            ->addRouteItem('Accueil', 'user_show')
-            ->addRouteItem('Profile', 'user_profile')
-        ;
+        $this->breadCrumbs->bcProfile('user', false);
 
         return $this->render('user/profile.html.twig', [
             'user' => $this->getUser(),
@@ -147,11 +144,7 @@ class UserController extends AbstractController
      */
     public function editProfile(): Response
     {
-        $this->breadCrumbs
-            ->addRouteItem('Accueil', 'user_show')
-            ->addRouteItem('Profile', 'user_profile')
-            ->addRouteItem('Editer Profile', 'teacher_edit_profile')
-            ;
+        $this->breadCrumbs->bcProfile('user', true);
 
         $user = $this->getUser();
         $form = $this->createForm(EditUserType::class, $user);

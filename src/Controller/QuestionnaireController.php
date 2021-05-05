@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
+use App\Service\BreadCrumbsService as BreadCrumbs;
 
 /**
  * @Route("/questionnaire")
@@ -30,7 +30,7 @@ class QuestionnaireController extends AbstractController
 
     private $breadCrumbs;
 
-    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $request, Breadcrumbs $breadCrumbs)
+    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $request, BreadCrumbs $breadCrumbs)
     {
         $this->em = $em;
         $this->find = $find;
@@ -44,17 +44,19 @@ class QuestionnaireController extends AbstractController
      */
     public function index(QuestionnaireRepository $questionnaireRepo, PaginatorInterface $paginator): Response
     {
-        // TODO continuar los Breadcrumbs
+        $request = $this->request->query;
         $user = $this->getUser();
+        $lesson_id = $request->get('lesson_id');
+        $classroom_id = $request->get('classroom_id');
+        $list = $request->get('list');
+
         if ('ROLE_TEACHER' === $user->getRoles()[0]) {
             $questionnaires = $questionnaireRepo->findByVisibilityOrCreator(true, $user->getUsername());
-            $this->breadCrumbs->addRouteItem('Acueille', 'teacher_show');
         } else {
             $questionnaires = $questionnaireRepo->findAll();
-            $this->breadCrumbs->addRouteItem('Acueille', 'user_show');
         }
 
-        $this->breadCrumbs->addRouteItem('Activités', 'questionnaire_index');
+        $this->breadCrumbs->bcQuestionnaire(null, 'index', $classroom_id, $lesson_id, $list, null);
 
         $questionnaires = $paginator->paginate(
             $questionnaires,
@@ -68,8 +70,8 @@ class QuestionnaireController extends AbstractController
 
         return $this->render('questionnaire/index.html.twig', [
             'questionnaires' => $questionnaires,
-            'lesson_id' => $this->request->query->get('lesson_id'),
-            'classroom_id' => $this->request->query->get('classroom_id'),
+            'lesson_id' => $lesson_id,
+            'classroom_id' => $classroom_id,
         ]);
     }
 
@@ -81,44 +83,11 @@ class QuestionnaireController extends AbstractController
     {
         $request = $this->request->query;
         $lesson = $this->find->findLesson();
-        $classroom = $this->find->findClassroom();
+        $lesson_id = $request->get('lesson_id');
+        $classroom_id = $request->get('classroom_id');
         $user = $this->getUser();
-        if ('ROLE_TEACHER' === $user->getRoles()[0]) {
-            $this->breadCrumbs->addRouteItem('Acueille', 'teacher_show');
-        } else {
-            $this->breadCrumbs->addRouteItem('Acueille', 'user_show');
-        }
 
-        if ($request->get('classroom_id') && null === $request->get('lonely')) {
-            $this->breadCrumbs
-                ->addRouteItem('Classe',
-                    'classroom_show',
-                    ['id' => $classroom->getId()]
-                )
-                ->addRouteItem('Créer un Module', 'lesson_new', ['classroom_id' => $classroom->getId()])
-                ->addRouteItem('Modules', 'lesson_index', ['classroom_id' => $classroom->getId()])
-                ->addRouteItem('Module', 'lesson_show', ['id' => $lesson->getId()])
-                ->addRouteItem('Créer une Activité', 'questionnaire_new')
-            ;
-        } elseif ($request->get('lonely')) {
-            $this->breadCrumbs
-                ->addRouteItem('Classe',
-                    'classroom_show',
-                    ['id' => $classroom->getId()]
-                )
-                ->addRouteItem('Module', 'lesson_show', [
-                    'id' => $lesson->getId(),
-                    'classroom_id' => $classroom->getId(),
-                    'lonely' => true,
-                ])
-                ->addRouteItem('Créer une Activité', 'questionnaire_new')
-            ;
-        } else {
-            $this->breadCrumbs
-                ->addRouteItem('Activités', 'questionnaire_index')
-                ->addRouteItem('Créer une Activité', 'questionnaire_new')
-            ;
-        }
+        $this->breadCrumbs->bcQuestionnaire(null, 'new', $classroom_id, $lesson_id, null, null);
 
         $lesson = $this->find->findLesson();
         $questionnaire = new Questionnaire();
@@ -163,8 +132,6 @@ class QuestionnaireController extends AbstractController
      */
     public function show(Questionnaire $questionnaire): Response
     {
-        $this->breadCrumbsFunction('Activité', 'lesson_show', ['id' => $questionnaire->getId()]);
-
         return $this->render('questionnaire/show.html.twig', [
             'questionnaire' => $questionnaire,
             'questions' => $questionnaire->getQuestions(),
@@ -180,8 +147,6 @@ class QuestionnaireController extends AbstractController
      */
     public function edit(Questionnaire $questionnaire): Response
     {
-        $this->breadCrumbsFunction('Editer une Activité', 'questionnaire_edit', ['id' => $questionnaire->getId()]);
-
         $form = $this->createForm(QuestionnaireType::class, $questionnaire);
         $form->handleRequest($this->request);
 
@@ -231,8 +196,6 @@ class QuestionnaireController extends AbstractController
      */
     public function play(Questionnaire $questionnaire): Response
     {
-        $this->breadCrumbsFunction('Efectuer une Activité', 'questionnaire_play', ['id' => $questionnaire->getId()]);
-
         // Check if we can play the questionnaire or not
         if (!$questionnaire->isPlayable()) {
             $this->addFlash('error', 'Activité indisponible !');
@@ -310,47 +273,39 @@ class QuestionnaireController extends AbstractController
         return ['corrects' => $correctPropositions, 'points' => $points];
     }
 
+
     private function breadCrumbsFunction(string $txt, string $route, ?array $params): Breadcrumbs
     {
-        $request = $this->request->query;
-        $lesson = $this->find->findLesson();
-        $classroom = $this->find->findClassroom();
-        $user = $this->getUser();
+        
 
-        if ('ROLE_TEACHER' === $user->getRoles()[0]) {
-            $this->breadCrumbs->addRouteItem('Acueille', 'teacher_show');
-        } else {
-            $this->breadCrumbs->addRouteItem('Acueille', 'user_show');
-        }
-
-        if ($request->get('classroom_id') && null === $request->get('lonely')) {
+                if ($request->get('classroom_id') && null === $request->get('lonely')) {
             $this->breadCrumbs
-                ->addRouteItem('Classe',
+                ->bC->addRouteItem('Classe',
                     'classroom_show',
                     ['id' => $classroom->getId()]
                 )
-                ->addRouteItem('Créer un Module', 'lesson_new', ['classroom_id' => $classroom->getId()])
-                ->addRouteItem('Modules', 'lesson_index', ['classroom_id' => $classroom->getId()])
-                ->addRouteItem('Module', 'lesson_show', ['id' => $lesson->getId()])
-                ->addRouteItem($txt, $route, $params)
+                ->bC->addRouteItem('Créer un Module', 'lesson_new', ['classroom_id' => $classroom->getId()])
+                ->bC->addRouteItem('Modules', 'lesson_index', ['classroom_id' => $classroom->getId()])
+                ->bC->addRouteItem('Module', 'lesson_show', ['id' => $lesson->getId()])
+                ->bC->addRouteItem($txt, $route, $params)
             ;
         } elseif ($request->get('lonely')) {
             $this->breadCrumbs
-                ->addRouteItem('Classe',
+                ->bC->addRouteItem('Classe',
                     'classroom_show',
                     ['id' => $classroom->getId()]
                 )
-                ->addRouteItem('Module', 'lesson_show', [
+                ->bC->addRouteItem('Module', 'lesson_show', [
                     'id' => $lesson->getId(),
                     'classroom_id' => $classroom->getId(),
                     'lonely' => true,
                 ])
-                ->addRouteItem($txt, $route, $params)
+                ->bC->addRouteItem($txt, $route, $params)
             ;
         } else {
             $this->breadCrumbs
-                ->addRouteItem('Activités', 'questionnaire_index')
-                ->addRouteItem($txt, $route, $params)
+                ->bC->addRouteItem('Activités', 'questionnaire_index')
+                ->bC->addRouteItem($txt, $route, $params)
             ;
         }
 

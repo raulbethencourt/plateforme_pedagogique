@@ -8,7 +8,7 @@ use App\Form\EditStudentType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
+use App\Service\BreadCrumbsService as BreadCrumbs;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -20,7 +20,7 @@ class StudentController extends AbstractController
 
     private $find;
 
-    public function __construct(FindEntity $find, Breadcrumbs $breadCrumbs)
+    public function __construct(FindEntity $find, BreadCrumbs $breadCrumbs)
     {
         $this->find = $find;
         $this->breadCrumbs = $breadCrumbs;
@@ -48,6 +48,8 @@ class StudentController extends AbstractController
      */
     public function profile(): Response
     {
+        $this->breadCrumbs->bcProfile(false);
+
         // Get each time that the student has passed q questionnaire
         $passes = $this->find->findPasses($this->getUser());
 
@@ -129,13 +131,7 @@ class StudentController extends AbstractController
      */
     public function editProfile(Request $request): Response
     {
-        if ('students' === $request->query->get('type')) {
-            $this->breadCrumbs
-                ->addRouteItem('Accueil', 'user_show')
-                ->addRouteItem('apprenantes', 'user_list')
-                ->addRouteItem('Editer Profile', 'student_edit_profile')
-            ;
-        }
+        $this->breadCrumbs->bcProfile(true);
 
         $student_name = $request->query->get('username');
 

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Lesson;
 use App\Form\LessonType;
 use App\Repository\LessonRepository;
+use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -13,7 +14,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 /**
  * @Route("/lesson")
@@ -28,7 +28,7 @@ class LessonController extends AbstractController
 
     private $breadCrumbs;
 
-    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, Breadcrumbs $breadCrumbs)
+    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, BreadCrumbs $breadCrumbs)
     {
         $this->em = $em;
         $this->find = $find;
@@ -43,29 +43,17 @@ class LessonController extends AbstractController
     public function index(LessonRepository $lessonRepo, PaginatorInterface $paginator): Response
     {
         $request = $this->request->query;
+        $classroom_id = $request->get('classroom_id');
+        $list = $request->get('list');
         $user = $this->getUser();
 
         if ('ROLE_TEACHER' === $user->getRoles()[0]) {
             $lessons = $lessonRepo->findByVisibilityOrCreator(true, $user->getUsername());
-            $this->breadCrumbs->addRouteItem('Acueille', 'teacher_show');
         } else {
             $lessons = $lessonRepo->findAll();
-            $this->breadCrumbs->addRouteItem('Acueille', 'user_show');
         }
 
-        if ($request->get('classroom_id')) {
-            $classroom = $this->find->findClassroom();
-            $this->breadCrumbs
-                ->addRouteItem('Classe',
-                    'classroom_show',
-                    ['id' => $classroom->getId()]
-                )
-                ->addRouteItem('Créer un Module', 'lesson_new', ['classroom_id' => $classroom->getId()])
-                ->addRouteItem('Modules', 'lesson_index')
-            ;
-        } else {
-            $this->breadCrumbs->addRouteItem('Modules', 'lesson_index');
-        }
+        $this->breadCrumbs->bcLesson(null, 'index', $classroom_id, $list, null);
 
         $lessons = $paginator->paginate(
             $lessons,
@@ -80,8 +68,8 @@ class LessonController extends AbstractController
 
         return $this->render('lesson/index.html.twig', [
             'lessons' => $lessons,
-            'classroom_id' => $request->get('classroom_id'),
-            'list' => $request->get('list'),
+            'classroom_id' => $classroom_id,
+            'list' => $list,
         ]);
     }
 
@@ -91,23 +79,15 @@ class LessonController extends AbstractController
      */
     public function new(): Response
     {
+        $classroom_id = $this->request->query->get('classroom_id');
         $classroom = $this->find->findClassroom();
+
+        $this->breadCrumbs->bcLesson(null, 'new', $classroom_id, null, null);
+
         $lesson = new Lesson();
-
-        if ('ROLE_TEACHER' === $this->getUser()->getRoles()[0]) {
-            $this->breadCrumbs->addRouteItem('Acueille', 'teacher_show');
-        } else {
-            $this->breadCrumbs->addRouteItem('Acueille', 'user_show');
-        }
-
         if (isset($classroom)) {
             $lesson->addClassroom($classroom);
-            $this->breadCrumbs->addRouteItem('Classe', 'classroom_show', ['id' => $classroom->getId()]);
-        } else {
-            $this->breadCrumbs->addRouteItem('Modules', 'lesson_index');
         }
-        $this->breadCrumbs->addRouteItem('Créer Module', 'lesson_new');
-
         $lesson->setDateCreation(new \DateTime());
         $lesson->addUser($this->getUser());
         $lesson->setCreator($this->getUser()->getUsername());
@@ -147,66 +127,34 @@ class LessonController extends AbstractController
     public function show(Lesson $lesson): Response
     {
         $request = $this->request->query;
-        $classroom = $this->find->findClassroom();
+        $classroom_id = $request->get('classroom_id');
+        $lonely = $request->get('lonely');
+        $list = $request->get('list');
 
-        switch ($this->getUser()->getRoles()[0]) {
-            case 'ROLE_TEACHER':
-                $this->breadCrumbs->addRouteItem('Accueil', 'teacher_show');
-                break;
-            case 'ROLE_STUDENT':
-                $this->breadCrumbs->addRouteItem('Accueil', 'student_show');
-                break;
-            default:
-                $this->breadCrumbs->addRouteItem('Accueil', 'user_show');
-                break;
-        }
-
-        if ($request->get('classroom_id') && $request->get('list')) {
-            $this->breadCrumbs
-                ->addRouteItem('Classe',
-                    'classroom_show',
-                    ['id' => $classroom->getId()]
-                )
-                ->addRouteItem('Créer un Module', 'lesson_new', ['classroom_id' => $classroom->getId()])
-                ->addRouteItem('Modules', 'lesson_index', [
-                    'classroom_id' => $classroom->getId(),
-                    'list' => $request->get('list'),
-                ])
-                ->addRouteItem('Module', 'lesson_show', ['id' => $lesson->getId()])
-            ;
-        } elseif ($request->get('lonely')) {
-            $this->breadCrumbs
-                ->addRouteItem('Classe',
-                    'classroom_show',
-                    ['id' => $classroom->getId()]
-                )
-                ->addRouteItem('Module', 'lesson_show', ['id' => $lesson->getId()])
-            ;
-        } else {
-            $this->breadCrumbs
-                ->addRouteItem('Modules', 'lesson_index')
-                ->addRouteItem('Module', 'lesson_show', ['id' => $lesson->getId()])
-            ;
-        }
+        $this->breadCrumbs->bcLesson($lesson, 'show', $classroom_id, $list, $lonely);
 
         $user = $this->getUser()->getRoles()[0];
-        if ('ROLE_ADMIN' === $user || 'ROLE_TEACHER' === $user || 'ROLE_SUPER_ADMIN' === $user) {
-            $questionnaires = $lesson->getQuestionnaires();
-        } else {
-            $questionnaires = [];
-            foreach ($lesson->getQuestionnaires() as $questionnaire) {
-                if ($questionnaire->getPlayable() && $questionnaire->isPlayable()) {
-                    $questionnaires[] = $questionnaire;
+        switch ($user) {
+            case 'ROLE_ADMIN':
+            case 'ROLE_SUPER_ADMIN':
+            case 'ROLE_TEACHER':
+                $questionnaires = $lesson->getQuestionnaires();
+                break;
+            default:
+                $questionnaires = [];
+                foreach ($lesson->getQuestionnaires() as $questionnaire) {
+                    if ($questionnaire->getPlayable() && $questionnaire->isPlayable()) {
+                        $questionnaires[] = $questionnaire;
+                    }
                 }
-            }
         }
 
         return $this->render('lesson/show.html.twig', [
             'lesson' => $lesson,
             'questionnaires' => $questionnaires,
-            'classroom_id' => $request->get('classroom_id'),
-            'list' => $request->get('list'),
-            'lonely' => $request->get('lonely'),
+            'classroom_id' => $classroom_id,
+            'list' => $list,
+            'lonely' => $lonely,
         ]);
     }
 
@@ -216,30 +164,9 @@ class LessonController extends AbstractController
      */
     public function edit(Lesson $lesson): Response
     {
-        if ('ROLE_TEACHER' === $this->getUser()->getRoles()[0]) {
-            $this->breadCrumbs->addRouteItem('Acueille', 'teacher_show');
-        } else {
-            $this->breadCrumbs->addRouteItem('Acueille', 'user_show');
-        }
-
         $classroom_id = $this->request->query->get('classroom_id');
-        if ($classroom_id) {
-            $classroom = $this->find->findClassroom();
-            $this->breadCrumbs
-                ->addRouteItem('Classe',
-                    'classroom_show',
-                    ['id' => $classroom->getId()]
-                )
-                ->addRouteItem('Créer un Module', 'lesson_new', ['classroom_id' => $classroom->getId()])
-                ->addRouteItem('Modules', 'lesson_index', ['classroom_id' => $classroom->getId()])
-                ->addRouteItem('Editer un Module', 'lesson_edit', ['id' => $lesson->getId()])
-            ;
-        } else {
-            $this->breadCrumbs
-                ->addRouteItem('Modules', 'lesson_index')
-                ->addRouteItem('Editer un Module', 'lesson_edit', ['id' => $lesson->getId()])
-            ;
-        }
+
+        $this->breadCrumbs->bcLesson($lesson, 'edit', $classroom_id, true, null);
 
         $form = $this->createForm(LessonType::class, $lesson);
         $form->handleRequest($this->request);

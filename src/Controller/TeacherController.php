@@ -3,12 +3,12 @@
 namespace App\Controller;
 
 use App\Form\EditTeacherType;
+use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 /**
  * @Route("/teacher")
@@ -17,7 +17,7 @@ class TeacherController extends AbstractController
 {
     private $breadCrumbs;
 
-    public function __construct(Breadcrumbs $breadCrumbs)
+    public function __construct(BreadCrumbs $breadCrumbs)
     {
         $this->breadCrumbs = $breadCrumbs;
     }
@@ -32,8 +32,8 @@ class TeacherController extends AbstractController
         return $this->render(
             'teacher/show.html.twig',
             [
-                'questionnaires' => $teacher->getClassrooms(),
                 'teacher' => $teacher,
+                'classrooms' => $teacher->getClassrooms(),
             ]
         );
     }
@@ -43,6 +43,8 @@ class TeacherController extends AbstractController
      */
     public function profile(): Response
     {
+        $this->breadCrumbs->bcProfile(false);
+
         return $this->render(
             'teacher/profile.html.twig',
             [
@@ -56,13 +58,7 @@ class TeacherController extends AbstractController
      */
     public function editProfile(Request $request, FindEntity $find): Response
     {
-        if ('teachers' === $request->query->get('type')) {
-            $this->breadCrumbs
-                ->addRouteItem('Accueil', 'user_show')
-                ->addRouteItem('formateurs', 'user_list')
-                ->addRouteItem('Editer Profile', 'teacher_edit_profile')
-            ;
-        }
+        $this->breadCrumbs->bcProfile(true);
 
         $teacher_name = $request->query->get('username');
         if (isset($teacher_name)) {

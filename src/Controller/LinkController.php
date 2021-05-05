@@ -4,15 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Link;
 use App\Form\LinkType;
-use App\Repository\LinkRepository;
 use App\Service\FindEntity;
+use App\Repository\LinkRepository;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use App\Service\BreadCrumbsService as BreadCrumbs;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/link")
@@ -23,7 +23,7 @@ class LinkController extends AbstractController
 
     private $find;
 
-    public function __construct(Breadcrumbs $breadCrumbs, FindEntity $find)
+    public function __construct(BreadCrumbs $breadCrumbs, FindEntity $find)
     {
         $this->breadCrumbs = $breadCrumbs;
         $this->find = $find;
@@ -42,28 +42,8 @@ class LinkController extends AbstractController
             $links = $linkRepo->findByVisibilityOrCreator(true, $user->getUsername());
         }
 
-        if ($request->query->get('classroom_id')) {
-            $classroom = $this->find->findClassroom();
-            $this->breadCrumbs
-                ->addRouteItem('Acueille', 'user_show')
-                ->addRouteItem('Classe',
-                    'classroom_show',
-                    ['id' => $classroom->getId()]
-                )
-                ->addRouteItem('Créer une lien', 'link_new', ['classroom_id' => $classroom->getId()])
-            ;
-        } else {
-            $role = $this->getUser()->getRoles()[0];
-            switch ($role) {
-                case 'ROLE_TEACHER':
-                    $this->breadCrumbs->addRouteItem('Accueil', 'teacher_show');
-                    break;
-                default:
-                    $this->breadCrumbs->addRouteItem('Accueil', 'user_show');
-                    break;
-            }
-        }
-        $this->breadCrumbs->addRouteItem('Liens', 'link_index');
+        $classroom_id = $request->query->get('classroom_id');
+        $this->breadCrumbs->bcLink(null, 'index', $classroom_id);
 
         $links = $paginator->paginate(
             $links,
@@ -78,7 +58,7 @@ class LinkController extends AbstractController
 
         return $this->render('link/index.html.twig', [
             'links' => $links,
-            'classroom_id' => $request->query->get('classroom_id'),
+            'classroom_id' => $classroom_id,
         ]);
     }
 
@@ -95,26 +75,9 @@ class LinkController extends AbstractController
         if (isset($classroom_id)) {
             $classroom = $find->findClassroom();
             $link->addClassroom($classroom);
-            $this->breadCrumbs
-                ->addRouteItem('Acueille', 'user_show')
-                ->addRouteItem('Classe',
-                    'classroom_show',
-                    ['id' => $classroom->getId()]
-                )
-            ;
-        } else {
-            $role = $this->getUser()->getRoles()[0];
-            switch ($role) {
-                case 'ROLE_TEACHER':
-                    $this->breadCrumbs->addRouteItem('Accueil', 'teacher_show');
-                    break;
-                default:
-                    $this->breadCrumbs->addRouteItem('Accueil', 'user_show');
-                    break;
-            }
-            $this->breadCrumbs->addRouteItem('Liens', 'link_index');
         }
-        $this->breadCrumbs->addRouteItem('Créer une lien', 'link_new');
+
+        $this->breadCrumbs->bcLink(null, 'new', $classroom_id);
 
         $form = $this->createForm(LinkType::class, $link);
         $form->handleRequest($request);
@@ -142,50 +105,14 @@ class LinkController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="link_show", methods={"GET"})
-     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN') or is_granted('ROLE_STUDENT')")
-     */
-    public function show(Link $link): Response
-    {
-        return $this->render('link/show.html.twig', [
-            'link' => $link,
-        ]);
-    }
-
-    /**
      * @Route("/{id}/edit", name="link_edit", methods={"GET", "POST"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
     public function edit(Request $request, Link $link): Response
     {
-        $classroom = $this->find->findClassroom();
-        if ($request->query->get('classroom_id')) {
-            $this->breadCrumbs
-                ->addRouteItem('Acueille', 'user_show')
-                ->addRouteItem('Classe',
-                    'classroom_show',
-                    ['id' => $classroom->getId()]
-                )
-                ->addRouteItem('Créer une lien', 'link_new', ['classroom_id' => $classroom->getId()])
-                ->addRouteItem('Liens', 'link_index', ['classroom_id' => $classroom->getId()])
-                ->addRouteItem('Editer une lien', 'link_edit', ['id' => $link->getId()])
-            ;
-        } else {
-            $role = $this->getUser()->getRoles()[0];
-            switch ($role) {
-                case 'ROLE_TEACHER':
-                    $this->breadCrumbs->addRouteItem('Accueil', 'teacher_show');
-                    break;
-                default:
-                    $this->breadCrumbs->addRouteItem('Accueil', 'user_show');
-                    break;
-            }
-            $this->breadCrumbs
-                ->addRouteItem('Liens', 'link_index')
-                ->addRouteItem('Editer une lien', 'link_edit', ['id' => $link->getId()])
-            ;
-        }
-
+        $classroom_id = $request->query->get('classroom_id');
+        $this->breadCrumbs->bcLink($link, 'edit', $classroom_id);
+        
         $form = $this->createForm(LinkType::class, $link);
         $form->handleRequest($request);
 
@@ -193,9 +120,9 @@ class LinkController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success', 'Lien modifiée avec succès.');
 
-            if (isset($classroom)) {
+            if (isset($classroom_id)) {
                 return $this->redirectToRoute('link_index', [
-                    'classroom_id' => $classroom->getId(),
+                    'classroom_id' => $classroom_id,
                 ]);
             }
 
@@ -205,7 +132,7 @@ class LinkController extends AbstractController
         return $this->render('link/edit.html.twig', [
             'link' => $link,
             'form' => $form->createView(),
-            'classroom_id' => $request->query->get('classroom_id'),
+            'classroom_id' => $classroom_id,
         ]);
     }
 

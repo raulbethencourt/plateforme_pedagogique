@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Controller\Service\InvitationsController as Invitations;
 use App\Controller\Service\NotificationsController as Notify;
 use App\Entity\Classroom;
@@ -18,7 +19,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 
 /**
  * @Route("/classroom")
@@ -37,7 +37,7 @@ class ClassroomController extends AbstractController
 
     private $breadCrumbs;
 
-    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, Notify $notifications, Invitations $invitations, Breadcrumbs $breadCrumbs)
+    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, Notify $notifications, Invitations $invitations, BreadCrumbs $breadCrumbs)
     {
         $this->em = $em;
         $this->find = $find;
@@ -53,10 +53,7 @@ class ClassroomController extends AbstractController
      */
     public function new(): Response
     {
-        $this->breadCrumbs
-            ->addRouteItem('Accueil', 'user_show')
-            ->addRouteItem('Créer une Classe', 'classroom_new')
-        ;
+        $this->breadCrumbs->bcClassroom(null, 'new');
 
         $classroom = new Classroom();
         $classroom->addUser($this->getUser());
@@ -84,22 +81,7 @@ class ClassroomController extends AbstractController
      */
     public function show(Classroom $classroom): Response
     {
-        switch ($this->getUser()->getRoles()[0]) {
-            case 'ROLE_TEACHER':
-                $this->breadCrumbs->addRouteItem('Accueil', 'teacher_show');
-                break;
-            case 'ROLE_STUDENT':
-                $this->breadCrumbs->addRouteItem('Accueil', 'student_show');
-                break;
-            default:
-                $this->breadCrumbs->addRouteItem('Accueil', 'user_show');
-                break;
-        }
-
-        $this->breadCrumbs->addRouteItem('Classe',
-            'classroom_show',
-            ['id' => $classroom->getId()]
-        );
+        $this->breadCrumbs->bcClassroom($classroom, 'show');
 
         // here i handle notifications
         $notification = new Notification();
@@ -125,10 +107,7 @@ class ClassroomController extends AbstractController
      */
     public function edit(Classroom $classroom): Response
     {
-        $this->breadCrumbs
-            ->addRouteItem('Accueil', 'user_show')
-            ->addRouteItem('Editer une Classe', 'classroom_new')
-        ;
+        $this->breadCrumbs->bcClassroom($classroom, 'edit');
 
         $form = $this->createForm(ClassroomType::class, $classroom);
         $form->handleRequest($this->request);

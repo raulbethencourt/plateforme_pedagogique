@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
+use App\Service\BreadCrumbsService as BreadCrumbs;
 
 class AvatarController extends AbstractController
 {
@@ -17,20 +17,9 @@ class AvatarController extends AbstractController
      * @Route("/teacher/avatar", name="teacher_edit_avatar")
      * @Route("/user/avatar", name="user_edit_avatar")
      */
-    public function new(Request $request, Breadcrumbs $breadcrumbs): Response
+    public function new(Request $request, BreadCrumbs $breadcrumbs): Response
     {
-        $breadcrumbs->addRouteItem('Accueil', 'user_show');
-        switch ($this->getUser()->getRoles()[0]) {
-            case 'ROLE_TEACHER':
-                $breadcrumbs->addRouteItem('Profile', 'teacher_profile');
-                break;
-            case 'ROLE_STUDENT':
-                $breadcrumbs->addRouteItem('Profile', 'student_profile');
-                break;
-            default:
-                $breadcrumbs->addRouteItem('Profile', 'user_profile');
-        }
-        $breadcrumbs->addRouteItem('Avatar', 'student_edit_avatar');
+        $breadcrumbs->bcAvatar();
 
         $avatar = $this->getUser()->getAvatar();
         // Check if the image already exist
