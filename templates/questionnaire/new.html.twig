@@ -46,8 +46,8 @@
 			<div class="col-12 d-flex justify-content-center">
 				{% if lonely is defined and lonely is not null %}
 					<a href="{{ path('questionnaire_index', {lesson_id: lesson_id, classroom_id: classroom_id, lonely: lonely}) }}" class="btn btn-secondary">importer activité existante</a>
-				{% elseif list is defined and list is not null %}
-					<a href="{{ path('questionnaire_index', {lesson_id: lesson_id, classroom_id: classroom_id, list:list}) }}" class="btn btn-secondary">importer activité existante</a>
+				{% elseif list is not null and classroom_id is null%}
+					<a href="{{ path('questionnaire_index', {lesson_id: lesson_id, classroom_id: classroom_id, list:list, extra: true}) }}" class="btn btn-secondary">importer activité existante</a>
 				{% endif %}
 			</div>
 		</div>

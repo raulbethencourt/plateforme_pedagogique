@@ -54,6 +54,17 @@
 	{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and lesson_id is null %}
 		<a href="{{ path('questionnaire_new') }}" class="btn btn-secondary mb-2" role="button">Créer Activité</a>
 	{% endif %}
+		{% if extra is defined %}
+		extra
+		<pre>
+		{{ dump(extra) }}
+	</pre>
+	{% else %}
+		<div class="alert alert-danger" role="alert">
+			NOT DEFINED extra
+		</div>
+	{% endif %}
+
 
 	<div class="row">
 		<div class="col-12">
@@ -75,12 +86,12 @@
 						<tr>
 							<th scope="row"></th>
 							<td>
-								{% if (classroom_id is defined and classroom_id is not null) and (lonely is defined and lonely is not null) %}
+								{% if classroom_id is not null and (lonely is defined and lonely is not null) %}
 									<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson_id, classroom_id: classroom_id, lonely: lonely}) }}">
 										{{ questionnaire.title }}
 									</a>
-								{% elseif list is defined and list is not null %}
-									<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson_id, list: list, lonely: true}) }}">
+								{% elseif list is not null %}
+									<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson_id, list: list,  extra: extra}) }}">
 										{{ questionnaire.title }}
 									</a>
 								{% else %}

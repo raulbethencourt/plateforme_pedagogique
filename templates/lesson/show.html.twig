@@ -80,12 +80,12 @@
 						<td>{{ questionnaire.title }}</td>
 					{% else %}
 						<td>
-							{% if (classroom_id is defined and classroom_id is not null) and (list is defined and list is not null) %}
+							{% if classroom_id is not null and list is not null %}
 								<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson.id, classroom_id: classroom_id, list: list}) }}" role="button">{{ questionnaire.title }}</a>
-							{% elseif list is defined and list is not null %}
+							{% elseif list is not null %}
 								<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson.id, list: list}) }}" role="button">{{ questionnaire.title }}</a>
 							{% else %}
-								<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson.id,classroom_id: classroom_id, lonely: lonely}) }}" role="button">{{ questionnaire.title }}</a>
+								<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson.id,classroom_id: classroom_id, lonely: lonely, extra: true}) }}" role="button">{{ questionnaire.title }}</a>
 							{% endif %}
 						</td>
 					{% endif %}

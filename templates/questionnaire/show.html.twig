@@ -47,6 +47,16 @@
 			NOT DEFINED lonely
 		</div>
 	{% endif %}
+	{% if extra is defined %}
+		extra
+		<pre>
+		{{ dump(extra) }}
+	</pre>
+	{% else %}
+		<div class="alert alert-danger" role="alert">
+			NOT DEFINED extra
+		</div>
+	{% endif %}
 
 	<div class="row">
 		<div class="col-12">
@@ -88,7 +98,6 @@
 						{% endfor %}
 					</td>
 					<td>
-					{# TODO arreglar el camino lonely#}
 						{% if (is_granted('ROLE_ADMIN') or app.user.username == questionnaire.creator) %}
 							{% if (classroom_id is null and list is null) %}
 								<a href="{{ path('question_edit', {id: question.id, questionnaire_id: questionnaire.id}) }}" class="btn btn-secondary mb-2" role="button">Éditer</a>
@@ -107,7 +116,20 @@
 
 	{% if (is_granted('ROLE_ADMIN') or app.user.username == questionnaire.creator) %}
 		<div class="text-right">
-			<a href="{{ path('questionnaire_play', {id: questionnaire.id, play: true}) }}" class="btn btn-success mr-2" role="button">Jouer</a>
+			{% if classroom_id is not null and (lonely is defined and lonely is not null) %}
+				<a href="{{ path('questionnaire_play', {id: questionnaire.id, lesson_id: lesson_id, classroom_id: classroom_id, lonely: lonely, extra: extra}) }}" class="btn btn-success mr-2" role="button">
+					Jouer
+				</a>
+			{% elseif list is not null %}
+				<a href="{{ path('questionnaire_play', {id: questionnaire.id, lesson_id: lesson_id, classroom_id: classroom_id, list: list, extra: extra}) }}" class="btn btn-success mr-2" role="button">
+					Jouer
+				</a>
+			{% else %}
+				<a href="{{ path('questionnaire_play', {id: questionnaire.id}) }}" class="btn btn-success mr-2" role="button">
+					Jouer
+				</a>
+			{% endif %}
+
 			{% if (classroom_id is null or list is null) and (lonely is defined and lonely is null)  %}
 				<a href="{{ path('question_new', {questionnaire_id: questionnaire.id}) }}" class="btn btn-primary">Ajouter question</a>
 			{% endif %}

@@ -71,6 +71,7 @@ class QuestionnaireController extends AbstractController
             'classroom_id' => $this->request->get('classroom_id'),
             'list' => $this->request->get('list'),
             'lonely' => $this->request->get('lonely'),
+            'extra' => $this->request->get('extra'),
         ]);
     }
 
@@ -87,7 +88,7 @@ class QuestionnaireController extends AbstractController
 
         if (isset($lesson)) {
             $questionnaire->addLesson($lesson);
-        } 
+        }
 
         $questionnaire->setDateCreation(new \DateTime());
         $questionnaire->setCreator($this->getUser()->getUsername());
@@ -135,6 +136,7 @@ class QuestionnaireController extends AbstractController
             'classroom_id' => $this->request->get('classroom_id'),
             'list' => $this->request->get('list'),
             'lonely' => $this->request->get('lonely'),
+            'extra' => $this->request->get('extra'),
         ]);
     }
 
@@ -259,6 +261,11 @@ class QuestionnaireController extends AbstractController
                 'rights' => $rights,
             ],
             'user' => $this->getUser(),
+            'lesson_id' => $this->request->get('lesson_id'),
+            'classroom_id' => $this->request->get('classroom_id'),
+            'list' => $this->request->get('list'),
+            'lonely' => $this->request->get('lonely'),
+            'extra' => $this->request->get('extra'),            
         ]);
     }
 
@@ -298,7 +305,8 @@ class QuestionnaireController extends AbstractController
             $this->request->get('classroom_id'),
             $this->request->get('lesson_id'),
             $this->request->get('list'),
-            $this->request->get('lonely')
+            $this->request->get('lonely'),
+            $this->request->get('extra')
         );
     }
 

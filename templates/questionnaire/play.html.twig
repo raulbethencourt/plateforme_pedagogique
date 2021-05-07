@@ -11,8 +11,8 @@
 		</div>
 	</div>
 
-{% if classroom_id is defined %}
-	classroom_id
+	{% if classroom_id is defined %}
+		classroom_id
 		<pre>
 		{{ dump(classroom_id) }}
 	</pre>
@@ -22,23 +22,33 @@
 		</div>
 	{% endif %}
 	{% if list is defined %}
-	list
+		list
 		<pre>
 		{{ dump(list) }}
 	</pre>
 	{% else %}
 		<div class="alert alert-danger" role="alert">
-			NOT DEFINED list 
+			NOT DEFINED list
 		</div>
 	{% endif %}
 	{% if lonely is defined %}
-	lonely
+		lonely
 		<pre>
 		{{ dump(lonely) }}
 	</pre>
 	{% else %}
 		<div class="alert alert-danger" role="alert">
 			NOT DEFINED lonely
+		</div>
+	{% endif %}
+	{% if extra is defined %}
+		extra
+		<pre>
+		{{ dump(extra) }}
+	</pre>
+	{% else %}
+		<div class="alert alert-danger" role="alert">
+			NOT DEFINED extra
 		</div>
 	{% endif %}
 
