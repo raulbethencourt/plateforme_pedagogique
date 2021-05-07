@@ -2,19 +2,19 @@
 
 namespace App\Controller;
 
+use App\Controller\Service\InvitationsController;
 use App\Entity\Invite;
-use App\Form\InviteType;
 use App\Form\EditUserType;
+use App\Form\InviteType;
+use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Controller\Service\InvitationsController;
-use App\Service\BreadCrumbsService as BreadCrumbs;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class UserController.
@@ -73,7 +73,8 @@ class UserController extends AbstractController
      */
     public function listUsers(PaginatorInterface $paginator): Response
     {
-        $type = $this->request->query->get('users');
+        $type = $this->request->query->get('type');
+        $listProfileEdit = $this->request->query->get('list_profile_edit');
 
         if ('teachers' === $type) {
             $users = $this->find->findUsersByRole('ROLE_TEACHER');
@@ -97,6 +98,7 @@ class UserController extends AbstractController
         return $this->render('user/list.html.twig', [
             'users' => $users,
             'type' => $type,
+            'list_profile_edit' => $listProfileEdit,
         ]);
     }
 
@@ -106,6 +108,7 @@ class UserController extends AbstractController
     public function deleteUser(): RedirectResponse
     {
         $user = $this->find->findUser();
+        $role = $user->getRoles()[0];
         // Check the token
         if ($this->isCsrfTokenValid(
             'delete'.$user->getId(),
@@ -113,15 +116,23 @@ class UserController extends AbstractController
         )) {
             $this->em->remove($user);
             $this->em->flush();
-            if ('ROLE_TEACHER' === $user->getRoles()[0] || 'ROLE_STUDENT' === $user->getRoles()[0]) {
+            if ('ROLE_TEACHER' === $role || 'ROLE_STUDENT' === $role) {
                 $this->addFlash('success', 'Utilisateur supprimée avec succès.');
             } else {
                 $this->addFlash('success', 'Administrateur supprimée avec succès.');
             }
         }
 
-        if ('ROLE_TEACHER' === $user->getRoles()[0] || 'ROLE_STUDENT' === $user->getRoles()[0]) {
-            return $this->redirectToRoute('user_list');
+        if ('ROLE_TEACHER' === $role || 'ROLE_STUDENT' === $role) {
+            if ('ROLE_TEACHER' === $role) {
+                return $this->redirectToRoute('user_list', [
+                    'type' => 'teachers',
+                ]);
+            }
+
+            return $this->redirectToRoute('user_list', [
+                'type' => 'students',
+            ]);
         }
 
         return $this->redirectToRoute('user_show');
@@ -132,7 +143,7 @@ class UserController extends AbstractController
      */
     public function profile(): Response
     {
-        $this->breadCrumbs->bcProfile('user', false);
+        $this->breadCrumbs->bcProfile(false, false);
 
         return $this->render('user/profile.html.twig', [
             'user' => $this->getUser(),
@@ -144,7 +155,7 @@ class UserController extends AbstractController
      */
     public function editProfile(): Response
     {
-        $this->breadCrumbs->bcProfile('user', true);
+        $this->breadCrumbs->bcProfile(true, false);
 
         $user = $this->getUser();
         $form = $this->createForm(EditUserType::class, $user);

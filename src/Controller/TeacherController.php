@@ -43,7 +43,7 @@ class TeacherController extends AbstractController
      */
     public function profile(): Response
     {
-        $this->breadCrumbs->bcProfile(false);
+        $this->breadCrumbs->bcProfile(false, false);
 
         return $this->render(
             'teacher/profile.html.twig',
@@ -58,7 +58,12 @@ class TeacherController extends AbstractController
      */
     public function editProfile(Request $request, FindEntity $find): Response
     {
-        $this->breadCrumbs->bcProfile(true);
+        // TODO continuar por aqui
+        if ($request->query->get('list_profile_edit')) {
+            $this->breadCrumbs->bcListUsers('teacher', $request->query->get('list_profile_edit'));
+        } else {
+            $this->breadCrumbs->bcProfile(true);
+        }
 
         $teacher_name = $request->query->get('username');
         if (isset($teacher_name)) {
@@ -88,6 +93,7 @@ class TeacherController extends AbstractController
             [
                 'editForm' => $form->createView(),
                 'teacher' => $this->getUser(),
+                'list_profile_edit' => $request->query->get('list_profile_edit'),
             ]
         );
     }

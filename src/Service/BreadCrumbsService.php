@@ -72,7 +72,7 @@ class BreadCrumbsService
         ?string $lonely
     ): Breadcrumbs {
         if (isset($classroom_id) && $list) {
-            $this->classroomStart($classroom_id,null)
+            $this->classroomStart($classroom_id, null)
                 ->addRouteItem('Créer un Module', 'lesson_new', ['classroom_id' => $classroom_id])
                 ->addRouteItem('Modules', 'lesson_index', [
                     'classroom_id' => $classroom_id,
@@ -112,13 +112,19 @@ class BreadCrumbsService
     /**
      * Handling list of users breadcrumbs.
      */
-    public function bcListUsers(string $type): Breadcrumbs
+    public function bcListUsers(string $type, ?bool $listProfileEdit): Breadcrumbs
     {
         $this->bC->addRouteItem('Accueil', 'user_show');
         if ('teachers' === $type) {
             $this->bC->addRouteItem('formateurs', 'user_list');
+            if ($listProfileEdit) {
+                $this->bC->addRouteItem('Editer Profile', 'teacher_edit_profile');
+            }
         } else {
             $this->bC->addRouteItem('apprenantes', 'user_list');
+            if ($listProfileEdit) {
+                $this->bC->addRouteItem('Editer Profile', 'teacher_edit_profile');
+            }
         }
 
         return $this->bC;
@@ -127,24 +133,32 @@ class BreadCrumbsService
     /**
      * Handling profiles breadcrumbs.
      */
-    public function bcProfile(bool $edit): Breadcrumbs
+    public function bcProfile(?bool $edit): Breadcrumbs
     {
-        $this->userHome();
         switch ($this->user->getRoles()[0]) {
             case 'ROLE_TEACHER':
-                $this->bC->addRouteItem('Profile', 'teacher_profile');
+                $this->bC
+                    ->addRouteItem('Accueil', 'teacher_show')
+                    ->addRouteItem('Profile', 'teacher_profile')
+                ;
                 if ($edit) {
                     $this->bC->addRouteItem('Editer Profile', 'teacher_edit_profile');
                 }
                 break;
             case 'ROLE_STUDENT':
-                $this->bC->addRouteItem('Profile', 'student_profile');
+                $this->bC
+                    ->addRouteItem('Accueil', 'student_show')
+                    ->addRouteItem('Profile', 'student_profile')
+                ;
                 if ($edit) {
                     $this->bC->addRouteItem('Editer Profile', 'student_edit_profile');
                 }
                 break;
             default:
-                $this->bC->addRouteItem('Profile', 'user_profile');
+                $this->bC
+                    ->addRouteItem('Accueil', 'user_show')
+                    ->addRouteItem('Profile', 'user_profile')
+                ;
                 if ($edit) {
                     $this->bC->addRouteItem('Editer Profile', 'user_edit_profile');
                 }
@@ -158,7 +172,7 @@ class BreadCrumbsService
      */
     public function bcAvatar(): Breadcrumbs
     {
-        $this->bcProfile(false);
+        $this->bcProfile(false, null);
         switch ($this->user->getRoles()[0]) {
             case 'ROLE_TEACHER':
                 $this->bC->addRouteItem('Avatar', 'teacher_edit_avatar');
@@ -200,10 +214,10 @@ class BreadCrumbsService
     /**
      * Handling all links breadcrumbs.
      */
-    public function bcLink(?Link $link, string $methode, ?string $classroom_id): Breadcrumbs
+    public function bcLink(?Link $link, string $methode, ?string $classroom_id, ?bool $extra): Breadcrumbs
     {
-        if (isset($classroom_id)) {
-            $this->classroomStart($classroom_id, null);
+        if (isset($classroom_id) || $extra) {
+            $this->classroomStart($classroom_id, $extra);
         } else {
             $this->userHome()->addRouteItem('Liens', 'link_index');
         }
@@ -221,7 +235,7 @@ class BreadCrumbsService
                 $this->bC->addRouteItem('Créer une lien', 'link_new');
                 break;
             case 'edit':
-                if (isset($classroom_id)) {
+                if (isset($classroom_id) && !$extra) {
                     $this->bC
                         ->addRouteItem('Créer une lien', 'link_new', ['classroom_id' => $classroom_id])
                         ->addRouteItem('Liens', 'link_index', ['classroom_id' => $classroom_id])

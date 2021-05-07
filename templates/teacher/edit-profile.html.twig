@@ -9,6 +9,9 @@
 			{{ wo_render_breadcrumbs() }}
 		</div>
 	</div>
+	{% if list_profile_edit %}
+		{{list_profile_edit}}
+	{% endif %}
 
 	{% include "profile/_form.html.twig" %}
 {% endblock %}

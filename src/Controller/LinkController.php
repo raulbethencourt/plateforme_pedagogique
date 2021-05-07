@@ -4,15 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Link;
 use App\Form\LinkType;
-use App\Service\FindEntity;
 use App\Repository\LinkRepository;
+use App\Service\BreadCrumbsService as BreadCrumbs;
+use App\Service\FindEntity;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use App\Service\BreadCrumbsService as BreadCrumbs;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/link")
@@ -43,7 +43,7 @@ class LinkController extends AbstractController
         }
 
         $classroom_id = $request->query->get('classroom_id');
-        $this->breadCrumbs->bcLink(null, 'index', $classroom_id);
+        $this->breadCrumbs->bcLink(null, 'index', $classroom_id, null);
 
         $links = $paginator->paginate(
             $links,
@@ -77,7 +77,7 @@ class LinkController extends AbstractController
             $link->addClassroom($classroom);
         }
 
-        $this->breadCrumbs->bcLink(null, 'new', $classroom_id);
+        $this->breadCrumbs->bcLink(null, 'new', $classroom_id, null);
 
         $form = $this->createForm(LinkType::class, $link);
         $form->handleRequest($request);
@@ -111,8 +111,9 @@ class LinkController extends AbstractController
     public function edit(Request $request, Link $link): Response
     {
         $classroom_id = $request->query->get('classroom_id');
-        $this->breadCrumbs->bcLink($link, 'edit', $classroom_id);
-        
+        $extra = $request->query->get('extra');
+        $this->breadCrumbs->bcLink($link, 'edit', $classroom_id, $extra);
+
         $form = $this->createForm(LinkType::class, $link);
         $form->handleRequest($request);
 
@@ -133,6 +134,7 @@ class LinkController extends AbstractController
             'link' => $link,
             'form' => $form->createView(),
             'classroom_id' => $classroom_id,
+            'extra' => $extra,
         ]);
     }
 

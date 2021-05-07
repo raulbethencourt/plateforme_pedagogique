@@ -223,6 +223,7 @@ class ClassroomController extends AbstractController
     public function removeLinkFromClass(Classroom $classroom): Response
     {
         $link = $this->find->findLink();
+        $extra = $this->request->query->get('extra');
         // Check the token
         if ($this->isCsrfTokenValid('delete'.$link->getId(), $this->request->get('_token'))) {
             $classroom->removeLink($link);
@@ -233,6 +234,7 @@ class ClassroomController extends AbstractController
 
         return $this->redirectToRoute('classroom_show', [
             'id' => $classroom->getId(),
+            'extra' => $extra
         ]);
     }
 }
