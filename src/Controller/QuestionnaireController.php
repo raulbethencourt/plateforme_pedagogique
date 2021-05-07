@@ -6,16 +6,18 @@ use App\Entity\Pass;
 use App\Entity\Questionnaire;
 use App\Form\QuestionnaireType;
 use App\Repository\QuestionnaireRepository;
+use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\BreadCrumbsService as BreadCrumbs;
+use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs as ModelBreadcrumbs;
 
 /**
  * @Route("/questionnaire")
@@ -34,7 +36,7 @@ class QuestionnaireController extends AbstractController
     {
         $this->em = $em;
         $this->find = $find;
-        $this->request = $request->getCurrentRequest();
+        $this->request = $request->getCurrentRequest()->query;
         $this->breadCrumbs = $breadCrumbs;
     }
 
@@ -44,23 +46,18 @@ class QuestionnaireController extends AbstractController
      */
     public function index(QuestionnaireRepository $questionnaireRepo, PaginatorInterface $paginator): Response
     {
-        $request = $this->request->query;
-        $user = $this->getUser();
-        $lesson_id = $request->get('lesson_id');
-        $classroom_id = $request->get('classroom_id');
-        $list = $request->get('list');
+        $this->questionnaireBC(null, 'index');
 
+        $user = $this->getUser();
         if ('ROLE_TEACHER' === $user->getRoles()[0]) {
             $questionnaires = $questionnaireRepo->findByVisibilityOrCreator(true, $user->getUsername());
         } else {
             $questionnaires = $questionnaireRepo->findAll();
         }
 
-        $this->breadCrumbs->bcQuestionnaire(null, 'index', $classroom_id, $lesson_id, $list, null);
-
         $questionnaires = $paginator->paginate(
             $questionnaires,
-            $this->request->query->getInt('page', 1),
+            $this->request->getInt('page', 1),
             10
         );
         $questionnaires->setCustomParameters([
@@ -70,8 +67,10 @@ class QuestionnaireController extends AbstractController
 
         return $this->render('questionnaire/index.html.twig', [
             'questionnaires' => $questionnaires,
-            'lesson_id' => $lesson_id,
-            'classroom_id' => $classroom_id,
+            'lesson_id' => $this->request->get('lesson_id'),
+            'classroom_id' => $this->request->get('classroom_id'),
+            'list' => $this->request->get('list'),
+            'lonely' => $this->request->get('lonely'),
         ]);
     }
 
@@ -79,30 +78,21 @@ class QuestionnaireController extends AbstractController
      * @Route("/new", name="questionnaire_new", methods={"GET", "POST"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function new(): Response
+    public function new(Request $request): Response
     {
-        $request = $this->request->query;
-        $lesson = $this->find->findLesson();
-        $lesson_id = $request->get('lesson_id');
-        $classroom_id = $request->get('classroom_id');
-        $user = $this->getUser();
-
-        $this->breadCrumbs->bcQuestionnaire(null, 'new', $classroom_id, $lesson_id, null, null);
+        $this->questionnaireBC(null, 'new');
 
         $lesson = $this->find->findLesson();
         $questionnaire = new Questionnaire();
 
         if (isset($lesson)) {
             $questionnaire->addLesson($lesson);
-            $lesson_id = $lesson->getId();
-        } else {
-            $lesson_id = null;
-        }
+        } 
 
         $questionnaire->setDateCreation(new \DateTime());
         $questionnaire->setCreator($this->getUser()->getUsername());
         $form = $this->createForm(QuestionnaireType::class, $questionnaire);
-        $form->handleRequest($this->request);
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($questionnaire);
@@ -112,7 +102,10 @@ class QuestionnaireController extends AbstractController
 
             return $this->redirectToRoute('question_new', [
                 'questionnaire_id' => $questionnaire->getId(),
-                'lesson_id' => $lesson_id,
+                'lesson_id' => $this->request->get('lesson_id'),
+                'classroom_id' => $this->request->get('classroom_id'),
+                'list' => $this->request->get('list'),
+                'lonely' => $this->request->get('lonely'),
             ]);
         }
 
@@ -120,9 +113,10 @@ class QuestionnaireController extends AbstractController
             'questionnaire' => $questionnaire,
             'form' => $form->createView(),
             'user' => $this->getUser(),
-            'lesson_id' => $lesson_id,
-            'classroom_id' => $this->request->query->get('classroom'),
-            'lonely' => $request->get('lonely'),
+            'lesson_id' => $this->request->get('lesson_id'),
+            'classroom_id' => $this->request->get('classroom_id'),
+            'list' => $this->request->get('list'),
+            'lonely' => $this->request->get('lonely'),
         ]);
     }
 
@@ -132,12 +126,15 @@ class QuestionnaireController extends AbstractController
      */
     public function show(Questionnaire $questionnaire): Response
     {
+        $this->questionnaireBC($questionnaire, 'show');
+
         return $this->render('questionnaire/show.html.twig', [
             'questionnaire' => $questionnaire,
             'questions' => $questionnaire->getQuestions(),
-            'lesson_id' => $this->request->query->get('lesson_id'),
-            'classroom_id' => $this->request->query->get('classroom_id'),
-            'list' => $this->request->query->get('list'),
+            'lesson_id' => $this->request->get('lesson_id'),
+            'classroom_id' => $this->request->get('classroom_id'),
+            'list' => $this->request->get('list'),
+            'lonely' => $this->request->get('lonely'),
         ]);
     }
 
@@ -145,10 +142,12 @@ class QuestionnaireController extends AbstractController
      * @Route("/{id}/edit", name="questionnaire_edit", methods={"GET", "POST"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function edit(Questionnaire $questionnaire): Response
+    public function edit(Questionnaire $questionnaire, Request $request): Response
     {
+        $this->questionnaireBC($questionnaire, 'edit');
+
         $form = $this->createForm(QuestionnaireType::class, $questionnaire);
-        $form->handleRequest($this->request);
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->persist($questionnaire);
@@ -160,6 +159,10 @@ class QuestionnaireController extends AbstractController
                 'questionnaire_show',
                 [
                     'id' => $questionnaire->getId(),
+                    'lesson_id' => $this->request->get('lesson_id'),
+                    'classroom_id' => $this->request->get('classroom_id'),
+                    'list' => $this->request->get('list'),
+                    'lonely' => $this->request->get('lonely'),
                 ]
             );
         }
@@ -170,6 +173,10 @@ class QuestionnaireController extends AbstractController
                 'questionnaire' => $questionnaire,
                 'form' => $form->createView(),
                 'user' => $this->getUser(),
+                'lesson_id' => $this->request->get('lesson_id'),
+                'classroom_id' => $this->request->get('classroom_id'),
+                'list' => $this->request->get('list'),
+                'lonely' => $this->request->get('lonely'),
             ]
         );
     }
@@ -187,15 +194,22 @@ class QuestionnaireController extends AbstractController
             $this->addFlash('success', 'Activité supprimé avec succès.');
         }
 
-        return $this->redirectToRoute('questionnaire_index');
+        return $this->redirectToRoute('questionnaire_index', [
+            'lesson_id' => $this->request->get('lesson_id'),
+            'classroom_id' => $this->request->get('classroom_id'),
+            'list' => $this->request->get('list'),
+            'lonely' => $this->request->get('lonely'),
+        ]);
     }
 
     /**
      * @Route("/{id}/play", name="questionnaire_play", methods={"GET", "POST"})
      * @Security("is_granted('ROLE_STUDENT') or is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function play(Questionnaire $questionnaire): Response
+    public function play(Questionnaire $questionnaire, Request $requestOne): Response
     {
+        $this->questionnaireBC($questionnaire, 'play');
+
         // Check if we can play the questionnaire or not
         if (!$questionnaire->isPlayable()) {
             $this->addFlash('error', 'Activité indisponible !');
@@ -214,8 +228,8 @@ class QuestionnaireController extends AbstractController
         $rights = null;
         $points = null;
 
-        if ($this->request->isMethod('post')) {
-            $answers = $this->request->request; //equivalent à $_POST
+        if ($requestOne->isMethod('post')) {
+            $answers = $requestOne->request; //equivalent à $_POST
             $eval = $this->evaluateQuestionnaire($answers, $questionnaire);
             $rights = $eval['corrects'];
             $points = $eval['points'];
@@ -273,41 +287,53 @@ class QuestionnaireController extends AbstractController
         return ['corrects' => $correctPropositions, 'points' => $points];
     }
 
+    /**
+     * Helping methodss to call breadcrumbsService.
+     */
+    private function questionnaireBC(?Questionnaire $questionnaire, string $method): ModelBreadcrumbs
+    {
+        return $this->breadCrumbs->bcQuestionnaire(
+            $questionnaire,
+            $method,
+            $this->request->get('classroom_id'),
+            $this->request->get('lesson_id'),
+            $this->request->get('list'),
+            $this->request->get('lonely')
+        );
+    }
 
     private function breadCrumbsFunction(string $txt, string $route, ?array $params): Breadcrumbs
     {
-        
-
-                if ($request->get('classroom_id') && null === $request->get('lonely')) {
-            $this->breadCrumbs
-                ->bC->addRouteItem('Classe',
-                    'classroom_show',
-                    ['id' => $classroom->getId()]
-                )
-                ->bC->addRouteItem('Créer un Module', 'lesson_new', ['classroom_id' => $classroom->getId()])
-                ->bC->addRouteItem('Modules', 'lesson_index', ['classroom_id' => $classroom->getId()])
-                ->bC->addRouteItem('Module', 'lesson_show', ['id' => $lesson->getId()])
-                ->bC->addRouteItem($txt, $route, $params)
-            ;
-        } elseif ($request->get('lonely')) {
-            $this->breadCrumbs
-                ->bC->addRouteItem('Classe',
-                    'classroom_show',
-                    ['id' => $classroom->getId()]
-                )
-                ->bC->addRouteItem('Module', 'lesson_show', [
-                    'id' => $lesson->getId(),
-                    'classroom_id' => $classroom->getId(),
-                    'lonely' => true,
-                ])
-                ->bC->addRouteItem($txt, $route, $params)
-            ;
-        } else {
-            $this->breadCrumbs
-                ->bC->addRouteItem('Activités', 'questionnaire_index')
-                ->bC->addRouteItem($txt, $route, $params)
-            ;
-        }
+        //         if ($request->get('classroom_id') && null === $request->get('lonely')) {
+        //     $this->breadCrumbs
+        //         ->bC->addRouteItem('Classe',
+        //             'classroom_show',
+        //             ['id' => $classroom->getId()]
+        //         )
+        //         ->bC->addRouteItem('Créer un Module', 'lesson_new', ['classroom_id' => $classroom->getId()])
+        //         ->bC->addRouteItem('Modules', 'lesson_index', ['classroom_id' => $classroom->getId()])
+        //         ->bC->addRouteItem('Module', 'lesson_show', ['id' => $lesson->getId()])
+        //         ->bC->addRouteItem($txt, $route, $params)
+        //     ;
+        // } elseif ($request->get('lonely')) {
+        //     $this->breadCrumbs
+        //         ->bC->addRouteItem('Classe',
+        //             'classroom_show',
+        //             ['id' => $classroom->getId()]
+        //         )
+        //         ->bC->addRouteItem('Module', 'lesson_show', [
+        //             'id' => $lesson->getId(),
+        //             'classroom_id' => $classroom->getId(),
+        //             'lonely' => true,
+        //         ])
+        //         ->bC->addRouteItem($txt, $route, $params)
+        //     ;
+        // } else {
+        //     $this->breadCrumbs
+        //         ->bC->addRouteItem('Activités', 'questionnaire_index')
+        //         ->bC->addRouteItem($txt, $route, $params)
+        //     ;
+        // }
 
         return $this->breadCrumbs;
     }

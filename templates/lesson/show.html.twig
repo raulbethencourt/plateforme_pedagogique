@@ -23,9 +23,36 @@
 		</div>
 	</div>
 
-<pre>
-	{{ dump(list, lonely) }}
-</pre>
+	{% if classroom_id is defined %}
+		classroom_id
+		<pre>
+		{{ dump(classroom_id) }}
+	</pre>
+	{% else %}
+		<div class="alert alert-danger" role="alert">
+			NOT DEFINED classroom_id
+		</div>
+	{% endif %}
+	{% if list is defined %}
+		list
+		<pre>
+		{{ dump(list) }}
+	</pre>
+	{% else %}
+		<div class="alert alert-danger" role="alert">
+			NOT DEFINED list
+		</div>
+	{% endif %}
+	{% if lonely is defined %}
+		lonely
+		<pre>
+		{{ dump(lonely) }}
+	</pre>
+	{% else %}
+		<div class="alert alert-danger" role="alert">
+			NOT DEFINED lonely
+		</div>
+	{% endif %}
 
 	<h1>{{ lesson.title }}</h1>
 
@@ -53,7 +80,13 @@
 						<td>{{ questionnaire.title }}</td>
 					{% else %}
 						<td>
-							<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson.id, classroom_id: classroom_id}) }}" role="button">{{ questionnaire.title }}</a>
+							{% if (classroom_id is defined and classroom_id is not null) and (list is defined and list is not null) %}
+								<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson.id, classroom_id: classroom_id, list: list}) }}" role="button">{{ questionnaire.title }}</a>
+							{% elseif list is defined and list is not null %}
+								<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson.id, list: list}) }}" role="button">{{ questionnaire.title }}</a>
+							{% else %}
+								<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson.id,classroom_id: classroom_id, lonely: lonely}) }}" role="button">{{ questionnaire.title }}</a>
+							{% endif %}
 						</td>
 					{% endif %}
 					<td>{{ questionnaire.realisationTime }}</td>
@@ -63,23 +96,34 @@
 					<td>{{ questionnaire.difficulty }}</td>
 					<td class="d-flex justify-content-end">
 						{% if (is_granted('ROLE_ADMIN') or app.user.username == questionnaire.creator) %}
-							<a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-							<form method="post" action="{{ path('lesson_questionnaire_remove', {id: lesson.id, questionnaire_id: questionnaire.id }) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-								<input type="hidden" name="_method" value='DELETE'>
-								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
-								<button class="btn btn-danger mr-2">Supprimer</button>
-							</form>
+							{% if lonely is defined and lonely is not null %}
+								<a href="{{ path('questionnaire_edit', {id: questionnaire.id, lonely: lonely}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+								<form method="post" action="{{ path('lesson_questionnaire_remove', {id: lesson.id, questionnaire_id: questionnaire.id }) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+									<input type="hidden" name="_method" value='DELETE'>
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
+									<button class="btn btn-danger mr-2">Supprimer</button>
+								</form>
+							{% elseif list is not null and classroom_id is null%}
+								<a href="{{ path('questionnaire_edit', {id: questionnaire.id, lesson_id: lesson.id, list: list}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+								<form method="post" action="{{ path('lesson_questionnaire_remove', {id: lesson.id, questionnaire_id: questionnaire.id }) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+									<input type="hidden" name="_method" value='DELETE'>
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
+									<button class="btn btn-danger mr-2">Supprimer</button>
+								</form>
+							{% endif %}
 						{% endif %}
-						<a href="{{ path('questionnaire_play', {id: questionnaire.id, lesson_id: lesson.id}) }}" class="btn btn-success mr-2" role="button">Jouer</a>
 					</td>
 				</tr>
 			{% endfor %}
 		</tbody>
 	</table>
-
 	{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
 		<div class="text-right">
-			<a href="{{ path('questionnaire_new', {lesson_id: lesson.id, classroom_id: classroom_id, lonely: lonely }) }}" class="btn btn-primary">Créer activité</a>
+			{% if lonely is defined and lonely is not null %}
+				<a href="{{ path('questionnaire_new', {lesson_id: lesson.id, classroom_id: classroom_id, lonely: lonely }) }}" class="btn btn-primary">Créer activité</a>
+			{% elseif list is not null and classroom_id is null%}
+				<a href="{{ path('questionnaire_new', {lesson_id: lesson.id, classroom_id: classroom_id, list: list }) }}" class="btn btn-primary">Créer activité</a>
+			{% endif %}
 		</div>
 	{% endif %}
 {% endblock %}

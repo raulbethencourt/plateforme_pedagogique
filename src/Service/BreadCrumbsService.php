@@ -56,27 +56,45 @@ class BreadCrumbsService
         return $this->bC;
     }
 
-    //TODO terminar questionnaire
-
     /**
-     * Begining for lesson.
+     * Begining for questionnaires.
      */
-    private function lessonStart(
+    private function questionnaireStart(
         ?string $classroom_id,
         ?string $lesson_id,
+        ?string $list,
         ?string $lonely
     ): Breadcrumbs {
-        if (isset($classroom_id) && null === $lonely) {
+        if (isset($classroom_id) && $list) {
             $this->classroomStart($classroom_id)
                 ->addRouteItem('Créer un Module', 'lesson_new', ['classroom_id' => $classroom_id])
-                ->addRouteItem('Modules', 'lesson_index', ['classroom_id' => $classroom_id])
-                ->addRouteItem('Module', 'lesson_show', ['id' => $lesson_id])
+                ->addRouteItem('Modules', 'lesson_index', [
+                    'classroom_id' => $classroom_id,
+                    'list' => $list,
+                ])
+                ->addRouteItem('Module', 'lesson_show', [
+                    'id' => $lesson_id,
+                    'classroom_id' => $classroom_id,
+                    'list' => $list,
+                ])
+            ;
+        } elseif (($list && $lonely) || $list) {
+            $this->userHome()
+                ->addRouteItem('Modules', 'lesson_index', [
+                    'list' => $list,
+                    'lonely' => $lonely,
+                ])
+                ->addRouteItem('Module', 'lesson_show', [
+                    'id' => $lesson_id,
+                    'list' => $list,
+                    'lonely' => $lonely,
+                ])
             ;
         } elseif ($lonely) {
             $this->classroomStart($classroom_id)->addRouteItem('Module', 'lesson_show', [
-                'id' => $lesson_id(),
-                'classroom_id' => $classroom_id(),
-                'lonely' => true,
+                'id' => $lesson_id,
+                'classroom_id' => $classroom_id,
+                'lonely' => $lonely,
             ]);
         } else {
             $this->userHome()->addRouteItem('Activités', 'questionnaire_index');
@@ -241,7 +259,7 @@ class BreadCrumbsService
                 $this->bC->addRouteItem('Créer une Module', 'lesson_new');
                 break;
             case 'show':
-                if ($list) {
+                if ($list && isset($classroom_id)) {
                     $this->bC
                         ->addRouteItem('Créer un Module', 'lesson_new', ['classroom_id' => $classroom_id])
                         ->addRouteItem('Modules', 'lesson_index', [
@@ -285,52 +303,82 @@ class BreadCrumbsService
         ?bool $list,
         ?bool $lonely
     ): Breadcrumbs {
-        $this->lessonStart($classroom_id, $lesson_id, $list, $lonely);
+        $this->questionnaireStart($classroom_id, $lesson_id, $list, $lonely);
 
         switch ($methode) {
             case 'index':
-                if (isset($classroom_id)) {
-                    $this->userHome()->addRouteItem('Activités', 'questionnaire_index');
+                if (isset($classroom_id) && $list) {
+                    $this->bC->addRouteItem('Créer une Activité', 'questionnaire_new', [
+                        'lesson_id' => $lesson_id,
+                        'classroom_id' => $classroom_id,
+                        'list' => $list,
+                    ])
+                        ->addRouteItem('Activités', 'questionnaire_index')
+                    ;
+                } elseif ($list) {
+                    $this->bC
+                        ->addRouteItem('Créer une Activité', 'questionnaire_new', [
+                            'list' => $list,
+                            'lesson_id' => $lesson_id,
+                        ])
+                        ->addRouteItem('Activités', 'questionnaire_index')
+                    ;
+                } elseif ($lonely) {
+                    $this->bC
+                        ->addRouteItem('Créer une Activité', 'questionnaire_new', [
+                            'lesson_id' => $lesson_id,
+                            'classroom_id' => $classroom_id,
+                            'lonely' => $lonely,
+                        ])
+                        ->addRouteItem('Activités', 'questionnaire_index')
+                    ;
                 }
                 break;
             case 'new':
-                if (isset($classroom_id) && null === $lonely) {
-                
-                }
                 $this->bC->addRouteItem('Créer une Activité', 'questionnaire_new');
                 break;
-            case 'show':
-                if ($list) {
-                    $this->bC
-                        ->addRouteItem('Créer un Module', 'lesson_new', ['classroom_id' => $classroom_id])
-                        ->addRouteItem('Modules', 'lesson_index', [
-                            'classroom_id' => $classroom_id,
-                            'list' => $list,
-                        ])
-                        ->addRouteItem('Module', 'lesson_show', ['id' => $lesson->getId()])
-                    ;
-                } elseif ($lonely) {
-                    $this->bC->addRouteItem('Module', 'lesson_show', ['id' => $lesson->getId()]);
-                } else {
-                    $this->bC
-                        ->addRouteItem('Module', 'lesson_show', ['id' => $lesson->getId()])
-                    ;
-                }
-                break;
             case 'edit':
-                if (isset($classroom_id)) {
+                $this->bC->addRouteItem('Editer une Activité', 'questionnaire_edit', ['id' => $questionnaire->getId()]);
+                break;
+            case 'show':
+                if ($list && $lonely) {
                     $this->bC
-                        ->addRouteItem('Créer une Module', 'lesson_new', ['classroom_id' => $classroom_id])
-                        ->addRouteItem('Modules', 'lesson_index', [
-                            'classroom_id' => $classroom_id,
+                        ->addRouteItem('Créer une Activité', 'questionnaire_new', [
                             'list' => $list,
+                            'lesson_id' => $lesson_id,
+                            'lonely' => $lonely,
                         ])
-                        ->addRouteItem('Editer une Module', 'lesson_edit', ['id' => $lesson->getId()])
+                        ->addRouteItem('Activités', 'questionnaire_index', [
+                            'lesson_id' => $lesson_id,
+                            'list' => $list,
+                            'lonely' => $lonely,
+                        ])
+                        ->addRouteItem('Activité', 'questionnaire_show', ['id' => $questionnaire->getId()])
                     ;
                 } else {
-                    $this->bC->addRouteItem('Editer un Module', 'lesson_edit', ['id' => $lesson->getId()]);
+                    $this->bC->addRouteItem('Activité', 'questionnaire_show', ['id' => $questionnaire->getId()])
+                    ;
                 }
                 break;
+            case 'play':
+                if ($list && $lonely) {
+                    $this->bC
+                        ->addRouteItem('Créer une Activité', 'questionnaire_new', [
+                            'list' => $list,
+                            'lesson_id' => $lesson_id,
+                            'lonely' => $lonely,
+                        ])
+                        ->addRouteItem('Activités', 'questionnaire_index', [
+                            'lesson_id' => $lesson_id,
+                            'list' => $list,
+                            'lonely' => $lonely,
+                        ])
+                        ->addRouteItem('Realiser une Activité', 'questionnaire_play', ['id' => $questionnaire->getId()])
+                    ;
+                } else {
+                    $this->bC->addRouteItem('Realiser un Activité', 'questionnaire_play', ['id' => $questionnaire->getId()]);
+                }
+            break;
         }
 
         return $this->bC;
