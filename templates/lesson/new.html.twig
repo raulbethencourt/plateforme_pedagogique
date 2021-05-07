@@ -4,10 +4,16 @@
 {% endblock %}
 
 {% block body %}
+	<div class="row">
+		<div class="col-12">
+			{{ wo_render_breadcrumbs() }}
+		</div>
+	</div>
+
 	{% if classroom %}
 		<div class="row">
 			<div class="col-12 d-flex justify-content-center">
-				<a href="{{ path('lesson_index', {classroom_id: classroom.id}) }}" class="btn btn-secondary">importer module existante</a>
+				<a href="{{ path('lesson_index', {classroom_id: classroom.id, list: true}) }}" class="btn btn-secondary">importer module existante</a>
 			</div>
 		</div>
 	{% endif %}

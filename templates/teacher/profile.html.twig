@@ -11,6 +11,12 @@
 		</div>
 	{% endfor %}
 
+	<div class="row">
+		<div class="col-12">
+			{{ wo_render_breadcrumbs() }}
+		</div>
+	</div>
+
 	<div class="d-flex">
 		<div class="card w-100 m-1">
 			<h2 class="card-header text-white bg-dark">Informations personnelles</h2>
@@ -40,20 +46,20 @@
 					</ul>
 				</div>
 				<div class="d-flex flex-column justify-content-center align-items-center mr-3">
-					<a href="{{ path('edit_teacher_avatar') }}">
+					<a href="{{ path('teacher_edit_avatar') }}">
 						{% if teacher.avatar is defined and teacher.avatar is not null %}
 							<img src="{{ vich_uploader_asset(teacher.avatar) }}" alt="profile" class="rounded-circle profile__img">
 						{% else %}
 							<img src="{{ asset('images/image-profile.png') }}" alt="profile" class="rounded-circle profile__img">
 						{% endif %}
 					</a>
-					<a href="{{ path('edit_teacher') }}" class="btn btn-primary w-75 mt-4">Éditer Profil</a>
+					<a href="{{ path('teacher_edit_profile') }}" class="btn btn-primary w-75 mt-4">Éditer Profil</a>
 				</div>
 			</div>
 		</div>
 	</div>
 	{# <div class="mr-auto ml-auto text-center mt-3 w-75">
-			        <h2><span class="badge badge-dark rounded p-2">Nombre de questionnaires créés :</span></h2>
-			        <canvas id="questionnairesChart"></canvas>
-			    </div> #}
+				        <h2><span class="badge badge-dark rounded p-2">Nombre de questionnaires créés :</span></h2>
+				        <canvas id="questionnairesChart"></canvas>
+				    </div> #}
 {% endblock %}

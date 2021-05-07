@@ -60,7 +60,7 @@ class InvitationsController extends AbstractController
             }
         }
 
-        return $this->redirectToRoute('user_index');
+        return $this->redirectToRoute('user_show');
     }
 
     /**

@@ -2,19 +2,19 @@
 
 namespace App\Controller;
 
-use App\Controller\Service\InvitationsController;
 use App\Entity\Invite;
-use App\Form\EditUserType;
 use App\Form\InviteType;
+use App\Form\EditUserType;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
+use App\Controller\Service\InvitationsController;
+use App\Service\BreadCrumbsService as BreadCrumbs;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class UserController.
@@ -31,18 +31,18 @@ class UserController extends AbstractController
 
     private $breadCrumbs;
 
-    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, Breadcrumbs $breadCrumbs)
+    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, BreadCrumbs $breadCrumbs)
     {
         $this->em = $em;
         $this->find = $find;
         $this->request = $requestStack->getCurrentRequest();
-        $this->breadCrumbs = $breadCrumbs->addRouteItem('Accueil', 'user_index');
+        $this->breadCrumbs = $breadCrumbs;
     }
 
     /**
-     * @Route("/", name="user_index")
+     * @Route("/", name="user_show")
      */
-    public function index(InvitationsController $invitation): Response
+    public function show(InvitationsController $invitation): Response
     {
         $user = $this->getUser();
         if ('ROLE_ADMIN' === $user->getRoles()[0]) {
@@ -58,7 +58,7 @@ class UserController extends AbstractController
         $invitation->invitation($form, $invite);
 
         return $this->render(
-            'user/index.html.twig',
+            'user/show.html.twig',
             [
                 'admins' => $admins,
                 'classrooms' => $classrooms,
@@ -71,16 +71,16 @@ class UserController extends AbstractController
     /**
      * @Route("/list", name="user_list")
      */
-    public function listUser(PaginatorInterface $paginator): Response
+    public function listUsers(PaginatorInterface $paginator): Response
     {
         $type = $this->request->query->get('users');
 
         if ('teachers' === $type) {
             $users = $this->find->findUsersByRole('ROLE_TEACHER');
-            $this->breadCrumbs->addRouteItem('formateurs', 'user_list');
+            $this->breadCrumbs->bcListUsers($type);
         } else {
             $users = $this->find->findUsersByRole('ROLE_STUDENT');
-            $this->breadCrumbs->addRouteItem('apprenantes', 'user_list');
+            $this->breadCrumbs->bcListUsers($type);
         }
 
         $users = $paginator->paginate(
@@ -124,28 +124,27 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user_list');
         }
 
-        return $this->redirectToRoute('user_index');
+        return $this->redirectToRoute('user_show');
     }
 
     /**
      * @Route("/profile", name="user_profile")
      */
-    public function userProfile(): Response
+    public function profile(): Response
     {
-        $this->breadCrumbs->addRouteItem('Profile', 'user_profile');
+        $this->breadCrumbs->bcProfile('user', false);
+
         return $this->render('user/profile.html.twig', [
             'user' => $this->getUser(),
         ]);
     }
 
     /**
-     * @Route("/profile/edit", name="edit_user")
+     * @Route("/profile/edit", name="user_edit_profile")
      */
     public function editProfile(): Response
     {
-        $this->breadCrumbs
-            ->addRouteItem('Profile', 'user_profile')
-            ->addRouteItem('Editer Profile', 'edit_user');
+        $this->breadCrumbs->bcProfile('user', true);
 
         $user = $this->getUser();
         $form = $this->createForm(EditUserType::class, $user);

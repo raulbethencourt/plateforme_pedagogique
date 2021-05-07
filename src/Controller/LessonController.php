@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Lesson;
 use App\Form\LessonType;
 use App\Repository\LessonRepository;
-use App\Repository\QuestionnaireRepository;
+use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -26,11 +26,14 @@ class LessonController extends AbstractController
 
     private $request;
 
-    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack)
+    private $breadCrumbs;
+
+    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, BreadCrumbs $breadCrumbs)
     {
         $this->em = $em;
         $this->find = $find;
         $this->request = $requestStack->getCurrentRequest();
+        $this->breadCrumbs = $breadCrumbs;
     }
 
     /**
@@ -39,16 +42,22 @@ class LessonController extends AbstractController
      */
     public function index(LessonRepository $lessonRepo, PaginatorInterface $paginator): Response
     {
+        $request = $this->request->query;
+        $classroom_id = $request->get('classroom_id');
+        $list = $request->get('list');
         $user = $this->getUser();
-        if ('ROLE_ADMIN' === $user->getRoles()[0] || 'ROLE_SUPER_ADMIN' === $user->getRoles()[0]) {
-            $lessons = $lessonRepo->findAll();
-        } else {
+
+        if ('ROLE_TEACHER' === $user->getRoles()[0]) {
             $lessons = $lessonRepo->findByVisibilityOrCreator(true, $user->getUsername());
+        } else {
+            $lessons = $lessonRepo->findAll();
         }
+
+        $this->breadCrumbs->bcLesson(null, 'index', $classroom_id, $list, null);
 
         $lessons = $paginator->paginate(
             $lessons,
-            $this->request->query->getInt('page', 1),
+            $request->getInt('page', 1),
             10
         );
 
@@ -59,7 +68,8 @@ class LessonController extends AbstractController
 
         return $this->render('lesson/index.html.twig', [
             'lessons' => $lessons,
-            'classroom_id' => $this->request->query->get('classroom_id'),
+            'classroom_id' => $classroom_id,
+            'list' => $list,
         ]);
     }
 
@@ -69,7 +79,11 @@ class LessonController extends AbstractController
      */
     public function new(): Response
     {
+        $classroom_id = $this->request->query->get('classroom_id');
         $classroom = $this->find->findClassroom();
+
+        $this->breadCrumbs->bcLesson(null, 'new', $classroom_id, null, null);
+
         $lesson = new Lesson();
         if (isset($classroom)) {
             $lesson->addClassroom($classroom);
@@ -88,7 +102,8 @@ class LessonController extends AbstractController
             if (isset($classroom)) {
                 return $this->redirectToRoute('lesson_show', [
                     'id' => $lesson->getId(),
-                    'classroom' => $classroom->getId(),
+                    'classroom_id' => $classroom->getId(),
+                    'lonely' => true,
                 ]);
             }
 
@@ -109,23 +124,37 @@ class LessonController extends AbstractController
      * @Route("/{id}", name="lesson_show", methods={"GET"})
      * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') or is_granted('ROLE_STUDENT')")
      */
-    public function show(Lesson $lesson, QuestionnaireRepository $questionnaireRepo): Response
+    public function show(Lesson $lesson): Response
     {
+        $request = $this->request->query;
+        $classroom_id = $request->get('classroom_id');
+        $lonely = $request->get('lonely');
+        $list = $request->get('list');
+
+        $this->breadCrumbs->bcLesson($lesson, 'show', $classroom_id, $list, $lonely);
+
         $user = $this->getUser()->getRoles()[0];
-        if ('ROLE_ADMIN' === $user || 'ROLE_TEACHER' === $user || 'ROLE_SUPER_ADMIN' === $user) {
-            $questionnaires = $lesson->getQuestionnaires();
-        } else {
-            $questionnaires = [];
-            foreach ($lesson->getQuestionnaires() as $questionnaire) {
-                if ($questionnaire->getPlayable() && $questionnaire->isPlayable()) {
-                    $questionnaires[] = $questionnaire;
+        switch ($user) {
+            case 'ROLE_ADMIN':
+            case 'ROLE_SUPER_ADMIN':
+            case 'ROLE_TEACHER':
+                $questionnaires = $lesson->getQuestionnaires();
+                break;
+            default:
+                $questionnaires = [];
+                foreach ($lesson->getQuestionnaires() as $questionnaire) {
+                    if ($questionnaire->getPlayable() && $questionnaire->isPlayable()) {
+                        $questionnaires[] = $questionnaire;
+                    }
                 }
-            }
         }
 
         return $this->render('lesson/show.html.twig', [
             'lesson' => $lesson,
             'questionnaires' => $questionnaires,
+            'classroom_id' => $classroom_id,
+            'list' => $list,
+            'lonely' => $lonely,
         ]);
     }
 
@@ -135,12 +164,23 @@ class LessonController extends AbstractController
      */
     public function edit(Lesson $lesson): Response
     {
+        $classroom_id = $this->request->query->get('classroom_id');
+
+        $this->breadCrumbs->bcLesson($lesson, 'edit', $classroom_id, true, null);
+
         $form = $this->createForm(LessonType::class, $lesson);
         $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
             $this->addFlash('success', 'Module modifiée avec succès.');
+
+            if ($classroom_id) {
+                return $this->redirectToRoute('lesson_index', [
+                    'classroom_id' => $classroom_id,
+                    'list' => true,
+                ]);
+            }
 
             return $this->redirectToRoute('lesson_index');
         }
@@ -161,6 +201,14 @@ class LessonController extends AbstractController
             $this->em->remove($lesson);
             $this->em->flush();
             $this->addFlash('success', 'Module supprimée avec succès.');
+        }
+
+        $classroom_id = $this->request->query->get('classroom_id');
+        if (isset($classroom_id)) {
+            return $this->redirectToRoute('lesson_index', [
+                'classroom_id' => $classroom_id,
+                'list' => true,
+            ]);
         }
 
         return $this->redirectToRoute('lesson_index');

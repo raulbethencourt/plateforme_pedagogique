@@ -6,6 +6,12 @@
 {% block body %}
 	<div class="row">
 		<div class="col-12">
+			{{ wo_render_breadcrumbs() }}
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-12">
 			<h1>Editer Lien</h1>
 			{{ include('link/_form.html.twig', {'button_label': 'Editer'}) }}
 		</div>

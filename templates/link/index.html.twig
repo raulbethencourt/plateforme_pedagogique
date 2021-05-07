@@ -35,6 +35,7 @@
 						<th scope="col"></th>
 					</tr>
 				</thead>
+
 				<tbody>
 					{% for link in links %}
 						<tr>
@@ -53,7 +54,7 @@
 
 							<td>
 								{% if (is_granted('ROLE_ADMIN') or app.user.username == link.creator)%}
-									<a href="{{ path('link_edit', {id: link.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+									<a href="{{ path('link_edit', {id: link.id, classroom_id: classroom_id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
 									<form method="post" action="{{ path('link_delete', {id: link.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 										<input type="hidden" name="_method" value='DELETE'>
 										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ link.id) }}">

@@ -95,6 +95,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
+     *
+     * @param mixed $credentials
      */
     public function getPassword($credentials): ?string
     {
@@ -108,15 +110,15 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         }
 
         if (!$this->userConnected) {
-            return  new RedirectResponse($this->urlGenerator->generate('confirm_mail'));
+            return new RedirectResponse($this->urlGenerator->generate('confirm_mail'));
         }
 
         if (!$request->get('type')) {
-            $teacher = get_class($this->userConnected) === Teacher::class;
-            $student = get_class($this->userConnected) === Student::class;
+            $teacher = Teacher::class === get_class($this->userConnected);
+            $student = Student::class === get_class($this->userConnected);
         } else {
-            $teacher = $request->get('type') === 'teacher';
-            $student = $request->get('type') === 'student';
+            $teacher = 'teacher' === $request->get('type');
+            $student = 'student' === $request->get('type');
         }
 
         // I do a redirection using the user type to arrive a different parts of the application
@@ -124,19 +126,19 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             case $teacher:
                 return new RedirectResponse(
                     $this->urlGenerator->generate(
-                        'teacher_index',
+                        'teacher_show',
                         ['user' => $this->userConnected]
                     )
                 );
             case $student:
                 return new RedirectResponse(
                     $this->urlGenerator->generate(
-                        'student_index',
+                        'student_show',
                         ['user' => $this->userConnected]
                     )
                 );
             default:
-                return new RedirectResponse($this->urlGenerator->generate('user_index'));
+                return new RedirectResponse($this->urlGenerator->generate('user_show'));
         }
     }
 

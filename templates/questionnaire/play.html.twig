@@ -5,36 +5,62 @@
 {% endblock %}
 
 {% block body %}
-	<header>
-		<h2 class="m-3">
-			{{ questionnaire.title }}
-			<span class="badge badge-pill
-																{% if questionnaire.difficulty == " difficile" %}
-																	badge-danger
-																{% elseif questionnaire.difficulty ==  " facile" %}
-																	badge-success
-																{% else %}
-																	badge-info
-																{% endif %}
-																">{{ questionnaire.difficulty }}</span>
-		</h2>
-
-		{% if questionnaire.imageName is not null %}
-			<div class="m-3 text-center">
-				<img src="{{ vich_uploader_asset(questionnaire, 'imageFile') }}" alt="Image" class="play__img">
-			</div>
-		{% endif %}
-
-		<div class="m-3 text-center">
-			{% if questionnaire.linkdescription %}
-				<a href="{{ questionnaire.link }}" target="_blank" rel="noopener noreferrer">{{ questionnaire.linkdescription }}</a>
-			{% endif %}
-			{% if vich_uploader_asset(questionnaire, 'imageFile') %}
-				<img src="{{ vich_uploader_asset(questionnaire, 'imageFile') }}" alt="Image" class="play__img">
-			{% endif %}
+	<div class="row">
+		<div class="col-12">
+			{{ wo_render_breadcrumbs() }}
 		</div>
+	</div>
 
-	</header>
+{% if classroom_id is defined %}
+	classroom_id
+		<pre>
+		{{ dump(classroom_id) }}
+	</pre>
+	{% else %}
+		<div class="alert alert-danger" role="alert">
+			NOT DEFINED classroom_id
+		</div>
+	{% endif %}
+	{% if list is defined %}
+	list
+		<pre>
+		{{ dump(list) }}
+	</pre>
+	{% else %}
+		<div class="alert alert-danger" role="alert">
+			NOT DEFINED list 
+		</div>
+	{% endif %}
+	{% if lonely is defined %}
+	lonely
+		<pre>
+		{{ dump(lonely) }}
+	</pre>
+	{% else %}
+		<div class="alert alert-danger" role="alert">
+			NOT DEFINED lonely
+		</div>
+	{% endif %}
+
+
+	<h2 class="m-3">
+		{{ questionnaire.title }}
+	</h2>
+
+	{% if questionnaire.imageName is not null %}
+		<div class="m-3 text-center">
+			<img src="{{ vich_uploader_asset(questionnaire, 'imageFile') }}" alt="Image" class="play__img">
+		</div>
+	{% endif %}
+
+	<div class="m-3 text-center">
+		{% if questionnaire.linkdescription %}
+			<a href="{{ questionnaire.link }}" target="_blank" rel="noopener noreferrer">{{ questionnaire.linkdescription }}</a>
+		{% endif %}
+		{% if vich_uploader_asset(questionnaire, 'imageFile') %}
+			<img src="{{ vich_uploader_asset(questionnaire, 'imageFile') }}" alt="Image" class="play__img">
+		{% endif %}
+	</div>
 
 	{% if finalResults['given'] is not null %}
 		<div class="alert alert-primary">Votre points :

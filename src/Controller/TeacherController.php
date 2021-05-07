@@ -2,34 +2,38 @@
 
 namespace App\Controller;
 
-use App\Service\FindEntity;
 use App\Form\EditTeacherType;
+use App\Service\BreadCrumbsService as BreadCrumbs;
+use App\Service\FindEntity;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Response as ResponseAlias;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * Class TeacherController
- * This class manage questionnaire creation by the teachers.
- *
  * @Route("/teacher")
  */
 class TeacherController extends AbstractController
 {
+    private $breadCrumbs;
+
+    public function __construct(BreadCrumbs $breadCrumbs)
+    {
+        $this->breadCrumbs = $breadCrumbs;
+    }
+
     /**
-     * @Route("/", name="teacher_index")
+     * @Route("/", name="teacher_show")
      */
-    public function index(): ResponseAlias
+    public function show(): Response
     {
         $teacher = $this->getUser();
 
         return $this->render(
-            'teacher/index.html.twig',
+            'teacher/show.html.twig',
             [
-                'questionnaires' => $teacher->getClassrooms(),
                 'teacher' => $teacher,
+                'classrooms' => $teacher->getClassrooms(),
             ]
         );
     }
@@ -37,8 +41,10 @@ class TeacherController extends AbstractController
     /**
      * @Route("/profile", name="teacher_profile")
      */
-    public function teacherProfile(): ResponseAlias
+    public function profile(): Response
     {
+        $this->breadCrumbs->bcProfile(false);
+
         return $this->render(
             'teacher/profile.html.twig',
             [
@@ -48,10 +54,12 @@ class TeacherController extends AbstractController
     }
 
     /**
-     * @Route("/profile/edit", name="edit_teacher")
+     * @Route("/profile/edit", name="teacher_edit_profile")
      */
     public function editProfile(Request $request, FindEntity $find): Response
     {
+        $this->breadCrumbs->bcProfile(true);
+
         $teacher_name = $request->query->get('username');
         if (isset($teacher_name)) {
             $teacher = $find->findTeacherByUsername($teacher_name);
@@ -67,10 +75,11 @@ class TeacherController extends AbstractController
             $entityManager->persist($teacher);
             $entityManager->flush();
             $this->addFlash('success', 'Profil édité avec succès.');
-            
+
             if (isset($teacher_name)) {
                 return $this->redirectToRoute('user_list');
             }
+
             return $this->redirectToRoute('teacher_profile');
         }
 

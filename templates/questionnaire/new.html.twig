@@ -4,10 +4,51 @@
 {% endblock %}
 
 {% block body %}
+	<div class="row">
+		<div class="col-12">
+			{{ wo_render_breadcrumbs() }}
+		</div>
+	</div>
+
+	{% if classroom_id is defined %}
+		classroom_id
+		<pre>
+		{{ dump(classroom_id) }}
+	</pre>
+	{% else %}
+		<div class="alert alert-danger" role="alert">
+			NOT DEFINED classroom_id
+		</div>
+	{% endif %}
+	{% if list is defined %}
+		list
+		<pre>
+		{{ dump(list) }}
+	</pre>
+	{% else %}
+		<div class="alert alert-danger" role="alert">
+			NOT DEFINED list
+		</div>
+	{% endif %}
+	{% if lonely is defined %}
+		lonely
+		<pre>
+		{{ dump(lonely) }}
+	</pre>
+	{% else %}
+		<div class="alert alert-danger" role="alert">
+			NOT DEFINED lonely
+		</div>
+	{% endif %}
+
 	{% if lesson_id is not null %}
 		<div class="row">
 			<div class="col-12 d-flex justify-content-center">
-				<a href="{{ path('questionnaire_index', {lesson_id: lesson_id, classroom_id: classroom_id}) }}" class="btn btn-secondary">importer activité existante</a>
+				{% if lonely is defined and lonely is not null %}
+					<a href="{{ path('questionnaire_index', {lesson_id: lesson_id, classroom_id: classroom_id, lonely: lonely}) }}" class="btn btn-secondary">importer activité existante</a>
+				{% elseif list is defined and list is not null %}
+					<a href="{{ path('questionnaire_index', {lesson_id: lesson_id, classroom_id: classroom_id, list:list}) }}" class="btn btn-secondary">importer activité existante</a>
+				{% endif %}
 			</div>
 		</div>
 	{% endif %}

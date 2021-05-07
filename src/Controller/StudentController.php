@@ -2,40 +2,40 @@
 
 namespace App\Controller;
 
+use App\Service\FindEntity;
 use App\Entity\Questionnaire;
 use App\Form\EditStudentType;
-use App\Service\FindEntity;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\BreadCrumbsService as BreadCrumbs;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * Class StudentController
- * This class manage student index and his profile.
- *
  * @Route("/student")
  */
 class StudentController extends AbstractController
 {
+    private $breadCrumbs;
+
     private $find;
 
-    public function __construct(FindEntity $find)
+    public function __construct(FindEntity $find, BreadCrumbs $breadCrumbs)
     {
         $this->find = $find;
+        $this->breadCrumbs = $breadCrumbs;
     }
 
     /**
-     * @Route("/", name="student_index")
+     * @Route("/", name="student_show")
      */
-    public function index(): Response
+    public function show(): Response
     {
         $student = $this->getUser();
         $classrooms = $student->getClassrooms();
 
         return $this->render(
-            'student/index.html.twig',
+            'student/show.html.twig',
             [
                 'student' => $student,
                 'classrooms' => $classrooms,
@@ -44,12 +44,12 @@ class StudentController extends AbstractController
     }
 
     /**
-     * This methode builds student profile.
-     *
      * @Route("/profile", name="student_profile")
      */
     public function profile(): Response
     {
+        $this->breadCrumbs->bcProfile(false);
+
         // Get each time that the student has passed q questionnaire
         $passes = $this->find->findPasses($this->getUser());
 
@@ -127,13 +127,14 @@ class StudentController extends AbstractController
     }
 
     /**
-     * @Route("/profile/edit", name="edit_student")
-     *
-     * @return RedirectResponse|Response
+     * @Route("/profile/edit", name="student_edit_profile")
      */
     public function editProfile(Request $request): Response
     {
+        $this->breadCrumbs->bcProfile(true);
+
         $student_name = $request->query->get('username');
+
         if (isset($student_name)) {
             $student = $this->find->findStudentByUsername($student_name);
         } else {
