@@ -48,7 +48,7 @@ class StudentController extends AbstractController
      */
     public function profile(): Response
     {
-        $this->breadCrumbs->bcProfile(false);
+        $this->breadCrumbs->bcProfile(false, false);
 
         // Get each time that the student has passed q questionnaire
         $passes = $this->find->findPasses($this->getUser());
@@ -131,7 +131,7 @@ class StudentController extends AbstractController
      */
     public function editProfile(Request $request): Response
     {
-        $this->breadCrumbs->bcProfile(true);
+        $this->breadCrumbs->bcProfile(true, $request->query->get('list_profile_edit'));
 
         $student_name = $request->query->get('username');
 

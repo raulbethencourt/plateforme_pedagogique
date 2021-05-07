@@ -4,6 +4,53 @@
 {% endblock %}
 
 {% block body %}
+	<div class="row">
+		<div class="col-12">
+			{{ wo_render_breadcrumbs() }}
+		</div>
+	</div>
+
+	{% if classroom_id is defined %}
+		classroom_id
+		<pre>
+		{{ dump(classroom_id) }}
+	</pre>
+	{% else %}
+		<div class="alert alert-danger" role="alert">
+			NOT DEFINED classroom_id
+		</div>
+	{% endif %}
+	{% if list is defined %}
+		list
+		<pre>
+		{{ dump(list) }}
+	</pre>
+	{% else %}
+		<div class="alert alert-danger" role="alert">
+			NOT DEFINED list
+		</div>
+	{% endif %}
+	{% if lonely is defined %}
+		lonely
+		<pre>
+		{{ dump(lonely) }}
+	</pre>
+	{% else %}
+		<div class="alert alert-danger" role="alert">
+			NOT DEFINED lonely
+		</div>
+	{% endif %}
+	{% if extra is defined %}
+		extra
+		<pre>
+		{{ dump(extra) }}
+	</pre>
+	{% else %}
+		<div class="alert alert-danger" role="alert">
+			NOT DEFINED extra
+		</div>
+	{% endif %}
+
 	{% for message in app.flashes('success') %}
 		<div class="alert alert-success mr-2 mb-3">
 			{{ message }}

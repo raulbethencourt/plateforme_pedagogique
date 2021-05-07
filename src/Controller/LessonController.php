@@ -53,7 +53,7 @@ class LessonController extends AbstractController
             $lessons = $lessonRepo->findAll();
         }
 
-        $this->breadCrumbs->bcLesson(null, 'index', $classroom_id, $list, null);
+        $this->breadCrumbs->bcLesson(null, 'index', $classroom_id, $list, null, null);
 
         $lessons = $paginator->paginate(
             $lessons,
@@ -82,7 +82,7 @@ class LessonController extends AbstractController
         $classroom_id = $this->request->query->get('classroom_id');
         $classroom = $this->find->findClassroom();
 
-        $this->breadCrumbs->bcLesson(null, 'new', $classroom_id, null, null);
+        $this->breadCrumbs->bcLesson(null, 'new', $classroom_id, null, null, null);
 
         $lesson = new Lesson();
         if (isset($classroom)) {
@@ -131,7 +131,7 @@ class LessonController extends AbstractController
         $lonely = $request->get('lonely');
         $list = $request->get('list');
 
-        $this->breadCrumbs->bcLesson($lesson, 'show', $classroom_id, $list, $lonely);
+        $this->breadCrumbs->bcLesson($lesson, 'show', $classroom_id, $list, $lonely, null);
 
         $user = $this->getUser()->getRoles()[0];
         switch ($user) {
@@ -165,8 +165,9 @@ class LessonController extends AbstractController
     public function edit(Lesson $lesson): Response
     {
         $classroom_id = $this->request->query->get('classroom_id');
+        $extra = $this->request->query->get('extra');
 
-        $this->breadCrumbs->bcLesson($lesson, 'edit', $classroom_id, true, null);
+        $this->breadCrumbs->bcLesson($lesson, 'edit', $classroom_id, true, null, $extra);
 
         $form = $this->createForm(LessonType::class, $lesson);
         $form->handleRequest($this->request);
@@ -188,6 +189,7 @@ class LessonController extends AbstractController
         return $this->render('lesson/edit.html.twig', [
             'lesson' => $lesson,
             'form' => $form->createView(),
+            'extra' => $extra
         ]);
     }
 

@@ -9,10 +9,12 @@ use App\Entity\Questionnaire;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\BreadCrumbsService as BreadCrumbs;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs as ModelBreadcrumbs;
 
 /**
  * @Route("/question")
@@ -26,11 +28,14 @@ class QuestionController extends AbstractController
 
     private $request;
 
-    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack)
+    private $breadCrumbs;
+
+    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, BreadCrumbs $breadCrumbs)
     {
         $this->em = $em;
         $this->find = $find;
         $this->request = $requestStack->getCurrentRequest();
+        $this->breadCrumbs = $breadCrumbs;
     }
 
     /**
@@ -38,6 +43,7 @@ class QuestionController extends AbstractController
      */
     public function new(): Response
     {
+        $this->questionBC(null, 'new');
         $questionnaire = $this->find->findQuestionnaire();
         $questionnaire_id = $questionnaire->getId();
         $lesson_id = $this->request->query->get('lesson_id');
@@ -68,6 +74,11 @@ class QuestionController extends AbstractController
             'form' => $form->createView(),
             'user' => $this->getUser(),
             'lesson_id' => $this->request->query->get('lesson_id'),
+            'questionnaire_id' => $this->request->get('questionnaire_id'),
+            'classroom_id' => $this->request->get('classroom_id'),
+            'list' => $this->request->get('list'),
+            'lonely' => $this->request->get('lonely'),
+            'extra' => $this->request->get('extra'),            
         ]);
     }
 
@@ -76,6 +87,7 @@ class QuestionController extends AbstractController
      */
     public function edit(Question $question): Response
     {
+        $this->questionBC($question, 'edit');
         $questionnaire = $this->find->findQuestionnaire();
         $question->setQuestionnaire($questionnaire);
         $form = $this->createForm(QuestionType::class, $question);
@@ -95,6 +107,12 @@ class QuestionController extends AbstractController
         return $this->render('question/edit.html.twig', [
             'question' => $question,
             'form' => $form->createView(),
+            'questionnaire_id' => $this->request->get('questionnaire_id'),
+            'lesson_id' => $this->request->get('lesson_id'),
+            'classroom_id' => $this->request->get('classroom_id'),
+            'list' => $this->request->get('list'),
+            'lonely' => $this->request->get('lonely'),
+            'extra' => $this->request->get('extra'),            
         ]);
     }
 
@@ -113,5 +131,22 @@ class QuestionController extends AbstractController
         return $this->redirectToRoute('questionnaire_show', [
             'id' => $this->request->query->get('questionnaire_id'),
         ]);
+    }
+
+    /**
+     * Helping methodss to call breadcrumbsService.
+     */
+    private function questionBC(?Question $question, string $method): ModelBreadcrumbs
+    {
+        return $this->breadCrumbs->bcQuestion(
+            $question,
+            $method,
+            $this->request->get('classroom_id'),
+            $this->request->get('lesson_id'),
+            $this->request->get('questionnaire_id'),
+            $this->request->get('list'),
+            $this->request->get('lonely'),
+            $this->request->get('extra'),
+        );
     }
 }

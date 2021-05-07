@@ -100,7 +100,7 @@
 							<tr>
 								<th scope="row">{{ loop.index }}</th>
 								<td>
-									<a href="{{ path('classroom_show', {id: classroom.id}) }}">{{ classroom.name }}</a>
+									<a href="{{ path('classroom_show', {id: classroom.id, extra: true}) }}">{{ classroom.name }}</a>
 								</td>
 								<td>{{ classroom.location }}</td>
 								<td>{{ classroom.discipline }}</td>

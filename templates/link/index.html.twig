@@ -51,16 +51,14 @@
 							{% else %}
 								<td>cool</td>
 							{% endif %}
-
 							<td>
-								{% if (is_granted('ROLE_ADMIN') or app.user.username == link.creator)%}
+								{% if (is_granted('ROLE_ADMIN') or app.user.username == link.creator) and classroom_id is null %}
 									<a href="{{ path('link_edit', {id: link.id, classroom_id: classroom_id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
 									<form method="post" action="{{ path('link_delete', {id: link.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 										<input type="hidden" name="_method" value='DELETE'>
 										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ link.id) }}">
 										<button class="btn btn-danger">Supprimer</button>
 									</form>
-
 								{% endif %}
 								{% if classroom_id %}
 									<a href="{{ path('classroom_link_add', {id: classroom_id, link_id: link.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
@@ -73,10 +71,10 @@
 						</tr>
 					{% endfor %}
 				</tbody>
-			</tbody>
-		</table>
-		<div class="pagination">
-			{{ knp_pagination_render(links) }}
+			</table>
+			<div class="pagination">
+				{{ knp_pagination_render(links) }}
+			</div>
 		</div>
 	</div>
-</div>{% endblock %}
+{% endblock %}

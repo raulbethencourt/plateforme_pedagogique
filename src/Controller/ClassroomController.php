@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Controller\Service\InvitationsController as Invitations;
 use App\Controller\Service\NotificationsController as Notify;
 use App\Entity\Classroom;
@@ -11,6 +10,7 @@ use App\Entity\Notification;
 use App\Form\ClassroomType;
 use App\Form\InviteType;
 use App\Form\NotificationType;
+use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -99,6 +99,7 @@ class ClassroomController extends AbstractController
             'formInvite' => $formInvite->createView(),
             'formNotify' => $formNotify->createView(),
             'classroom' => $classroom,
+            'extra' => $this->request->query->get('extra'),
         ]);
     }
 
@@ -222,6 +223,7 @@ class ClassroomController extends AbstractController
     public function removeLinkFromClass(Classroom $classroom): Response
     {
         $link = $this->find->findLink();
+        $extra = $this->request->query->get('extra');
         // Check the token
         if ($this->isCsrfTokenValid('delete'.$link->getId(), $this->request->get('_token'))) {
             $classroom->removeLink($link);
@@ -232,6 +234,7 @@ class ClassroomController extends AbstractController
 
         return $this->redirectToRoute('classroom_show', [
             'id' => $classroom->getId(),
+            'extra' => $extra
         ]);
     }
 }
