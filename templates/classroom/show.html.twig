@@ -29,6 +29,47 @@
 				{{ wo_render_breadcrumbs() }}
 			</div>
 		</div>
+		{% if classroom_id is defined %}
+			classroom_id
+			<pre>
+		{{ dump(classroom_id) }}
+	</pre>
+		{% else %}
+			<div class="alert alert-danger" role="alert">
+				NOT DEFINED classroom_id
+			</div>
+		{% endif %}
+		{% if list is defined %}
+			list
+			<pre>
+		{{ dump(list) }}
+	</pre>
+		{% else %}
+			<div class="alert alert-danger" role="alert">
+				NOT DEFINED list
+			</div>
+		{% endif %}
+		{% if lonely is defined %}
+			lonely
+			<pre>
+		{{ dump(lonely) }}
+	</pre>
+		{% else %}
+			<div class="alert alert-danger" role="alert">
+				NOT DEFINED lonely
+			</div>
+		{% endif %}
+		{% if extra is defined %}
+			extra
+			<pre>
+		{{ dump(extra) }}
+	</pre>
+		{% else %}
+			<div class="alert alert-danger" role="alert">
+				NOT DEFINED extra
+			</div>
+		{% endif %}
+
 
 		<div class="row">
 			<div class="col-12 d-flex justify-content-center">
@@ -149,7 +190,8 @@
 
 		{% if ((is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and classroom.users|length > 0) %}
 			<div class="row">
-				<div class="col-12">
+				<div
+					class="col-12">
 					{# <a href="{{ path('lesson_new', {classroom_id: classroom.id}) }}" class="btn btn-secondary mb-2" role="button">Statistics</a> #}
 					<h3>
 						<span class="badge badge-pill badge-secondary text-white">Étudiant(s)</span>
@@ -238,7 +280,7 @@
 									{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
 										<div class="d-flex">
 											{% if is_granted('ROLE_ADMIN') or app.user.username == lesson.creator %}
-												<a href="{{ path('lesson_edit', {id: lesson.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+												<a href="{{ path('lesson_edit', {id: lesson.id, classroom_id: classroom.id, extra: extra}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
 											{% endif %}
 											<form method="post" action="{{ path('classroom_lesson_remove', {id: classroom.id, lesson_id: lesson.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 												<input type="hidden" name="_method" value='DELETE'>

@@ -106,6 +106,13 @@
 									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">
 									<button class="btn btn-danger mb-2">Supprimer</button>
 								</form>
+							{% elseif (list or lonely) and (extra is defined and extra is null) and classroom_id is null %}
+								<a href="{{ path('question_edit', {id: question.id, questionnaire_id: questionnaire.id, lesson_id: lesson_id, list: list, lonely: lonely}) }}" class="btn btn-secondary mb-2" role="button">Éditer</a>
+								<form method="post" action="{{ path('question_delete', {id: question.id, questionnaire_id: questionnaire.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+									<input type="hidden" name="_method" value='DELETE'>
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">
+									<button class="btn btn-danger mb-2">Supprimer</button>
+								</form>
 							{% endif %}
 						{% endif %}
 					</td>
@@ -113,7 +120,6 @@
 			{% endfor %}
 		</tbody>
 	</table>
-
 	{% if (is_granted('ROLE_ADMIN') or app.user.username == questionnaire.creator) %}
 		<div class="text-right">
 			{% if classroom_id is not null and (lonely is defined and lonely is not null) %}
@@ -129,9 +135,10 @@
 					Jouer
 				</a>
 			{% endif %}
-
-			{% if (classroom_id is null or list is null) and (lonely is defined and lonely is null)  %}
+			{% if (classroom_id is null and list is null) %}
 				<a href="{{ path('question_new', {questionnaire_id: questionnaire.id}) }}" class="btn btn-primary">Ajouter question</a>
+			{% elseif (list or lonely) and (extra is defined and extra is null) and classroom_id is null %}
+				<a href="{{ path('question_new', {questionnaire_id: questionnaire.id, lesson_id: lesson_id, list: list, lonely: lonely}) }}" class="btn btn-secondary mb-2" role="button">Ajouter question</a>
 			{% endif %}
 		</div>
 	{% endif %}
