@@ -25,20 +25,20 @@ class EditStudentType extends AbstractType
                     'constraints' => [
                         new NotBlank(
                             [
-                                'message' => 'Please enter a username',
+                                'message' => 'Vous devez ajouter un nom d\'utilisateur·rice',
                             ]
                         ),
                         new Length(
                             [
                                 'min' => 3,
-                                'minMessage' => 'Your username should be at least {{ limit }} characters',
+                                'minMessage' => 'Votre nom d\'utilisateur·rice doit contenir au minimum {{ limit }} caratères',
                                 'max' => 15,
-                                'maxMessage' => 'This username should be less than {{ limit }} characters',
+                                'maxMessage' => 'Votre nom d\'utilisateur·rice doit contenir au maximum {{ limit }} caratères',
                             ]
                         ),
                     ],
                     'purify_html' => true,
-                    'label' => 'Nom d\'utilisateur',
+                    'label' => 'Nom d\'utilisateur·rice',
                 ]
             )
             ->add(
@@ -73,7 +73,7 @@ class EditStudentType extends AbstractType
                         new Regex(
                             [
                                 'pattern' => '/^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/',
-                                'message' => 'Votre numero doit faire 10 digits',
+                                'message' => 'Votre numéro doit contenir 10 chiffres et commencer par 0',
                             ]
                         ),
                     ],

@@ -78,10 +78,10 @@ class UserController extends AbstractController
 
         if ('teachers' === $type) {
             $users = $this->find->findUsersByRole('ROLE_TEACHER');
-            $this->breadCrumbs->bcListUsers($type);
+            $this->breadCrumbs->bcListUsers($type, null);
         } else {
             $users = $this->find->findUsersByRole('ROLE_STUDENT');
-            $this->breadCrumbs->bcListUsers($type);
+            $this->breadCrumbs->bcListUsers($type, null);
         }
 
         $users = $paginator->paginate(
@@ -117,9 +117,9 @@ class UserController extends AbstractController
             $this->em->remove($user);
             $this->em->flush();
             if ('ROLE_TEACHER' === $role || 'ROLE_STUDENT' === $role) {
-                $this->addFlash('success', 'Utilisateur supprimée avec succès.');
+                $this->addFlash('success', 'Utilisateur·rice supprimé·e avec succès.');
             } else {
-                $this->addFlash('success', 'Administrateur supprimée avec succès.');
+                $this->addFlash('success', 'Administrateur·rice supprimé·e avec succès.');
             }
         }
 

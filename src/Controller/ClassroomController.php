@@ -153,7 +153,7 @@ class ClassroomController extends AbstractController
 
         $this->em->persist($classroom);
         $this->em->flush();
-        $this->addFlash('success', 'Utilisateur supprimée de la classe avec succès.');
+        $this->addFlash('success', 'Utilisateur·rice supprimé·e de la classe avec succès.');
 
         return $this->redirectToRoute('classroom_show', [
             'id' => $classroom->getId(),

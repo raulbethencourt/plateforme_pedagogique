@@ -189,7 +189,8 @@ class LessonController extends AbstractController
         return $this->render('lesson/edit.html.twig', [
             'lesson' => $lesson,
             'form' => $form->createView(),
-            'extra' => $extra
+            'extra' => $extra,
+            'classroom_id' => $classroom_id,
         ]);
     }
 

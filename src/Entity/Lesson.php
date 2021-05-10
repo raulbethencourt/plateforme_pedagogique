@@ -59,11 +59,6 @@ class Lesson
      */
     private $visibility;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $playable;
-
     public function __construct()
     {
         $this->questionnaires = new ArrayCollection();
@@ -204,18 +199,6 @@ class Lesson
     public function setVisibility(bool $visibility): self
     {
         $this->visibility = $visibility;
-
-        return $this;
-    }
-
-    public function getPlayable(): ?bool
-    {
-        return $this->playable;
-    }
-
-    public function setPlayable(bool $playable): self
-    {
-        $this->playable = $playable;
 
         return $this;
     }

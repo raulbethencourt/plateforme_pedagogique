@@ -61,16 +61,17 @@
 
 		<div class="row">
 			<div class="col-12 d-flex flex-column align-items-center">
-				<a id="inviterBtn" class="nav-link btn btn-secondary w-25" href="#" role="button">Ajuter Admin</a>
+				<a id="inviterBtn" class="nav-link btn btn-secondary w-25" href="#" role="button">Ajouter</a>
+				<h2>Liste des administrateurs·rices</h2>
 				<ul class="list-group w-75">
 					{% for admin in admins %}
 						<li class="list-group-item d-flex justify-content-between align-items-center">
 							{{ admin.name}}
 							{{admin.surname}}
-							<form method="post" action="{{ path('user_delete', {id: admin.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+							<form method="post" action="{{ path('user_delete', {id: admin.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer cet·te administrateur·rice ? \nCette action est irréversible.')">
 								<input type="hidden" name="_method" value='DELETE'>
 								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ admin.id) }}">
-								<button class="btn btn-danger">Supprimer Admin</button>
+								<button class="btn btn-danger">Supprimer</button>
 							</form>
 						</li>
 					{% endfor %}
@@ -81,7 +82,7 @@
 
 	<div class="row">
 		<div class="col-12 d-flex flex-column align-items-center">
-			<a href="{{ path('classroom_new') }}" class="btn btn-secondary w-25 align-self-center">Créer classe</a>
+			<a href="{{ path('classroom_new') }}" class="btn btn-secondary w-25 align-self-center">Créer une classe</a>
 			<h3>Liste des classes</h3>
 			<div class="table-responsive">
 				<table class="table border-bottom">
@@ -91,14 +92,14 @@
 							<th scope="col">Nom</th>
 							<th scope="col">Localisation</th>
 							<th scope="col">Niveau</th>
-							<th scope="col">Formateurs</th>
+							<th scope="col">Formateurs·rices</th>
 							<th scope="col"></th>
 						</tr>
 					</thead>
-					<tbody>
 						{% for classroom in classrooms %}
+					<tbody>
 							<tr>
-								<th scope="row">{{ loop.index }}</th>
+								<th scope="row"></th>
 								<td>
 									<a href="{{ path('classroom_show', {id: classroom.id, extra: true}) }}">{{ classroom.name }}</a>
 								</td>
@@ -115,7 +116,7 @@
 								<td>
 									<div class="d-flex justify-content-center w-50">
 										<a href="{{ path('classroom_edit', {id: classroom.id}) }}" class="btn btn-secondary mr-lg-2" role="button">Éditer</a>
-										<form method="post" action="{{ path('classroom_delete', {id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+										<form method="post" action="{{ path('classroom_delete', {id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer cette classe  ? \nCette action est irréversible.')">
 											<input type="hidden" name="_method" value='DELETE'>
 											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ classroom.id) }}">
 											<button class="btn btn-danger">Supprimer</button>

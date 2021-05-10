@@ -55,19 +55,28 @@
 	{% endif %}
 
 	<h1>{{ lesson.title }}</h1>
+	{% if lesson.classrooms|length > 1 %}
+	<p class="alert alert-warning"><span>Attention !</span> Ce module est utilisé dans d'autres classes. Toutes modifications ou ajouts auront des répercussions dans ces autres classes.</p>
+	{% endif %}
 
 	<h3>Liste des activites</h3>
-
+	{% if lesson.classrooms|length > 1 %}
+	<table class="table border-bottom table-danger">
+	{% elseif lesson.visibility %}
+	<table class="table border-bottom table-success">
+	{% else %}
 	<table class="table border-bottom">
+	{% endif %}
 		<thead class="thead-dark">
 			<tr>
 				<th scope="col"></th>
 				<th scope="col">Titre</th>
-				<th scope="col">Temps estimé de realisation</th>
+				<th scope="col">Temps estimé</th>
 				{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
-					<th scope="col">Author</th>
+					<th scope="col">Auteur·rice</th>
 				{% endif %}
 				<th scope="col">Niveau</th>
+				<th scope="col">Catégorie</th>
 				<th scope="col"></th>
 			</tr>
 		</thead>
@@ -89,10 +98,12 @@
 							{% endif %}
 						</td>
 					{% endif %}
-					<td>{{ questionnaire.realisationTime }}</td>
+					<td>{{ questionnaire.realisationTime }}
+						min</td>
 					{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
 						<td>{{ questionnaire.creator }}</td>
 					{% endif %}
+					<td>{{ questionnaire.level }}</td>
 					<td>{{ questionnaire.difficulty }}</td>
 					<td class="d-flex justify-content-end">
 						{% if (is_granted('ROLE_ADMIN') or app.user.username == questionnaire.creator) %}
@@ -105,7 +116,11 @@
 								</form>
 							{% elseif list is not null and classroom_id is null%}
 								<a href="{{ path('questionnaire_edit', {id: questionnaire.id, lesson_id: lesson.id, list: list}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-								<form method="post" action="{{ path('lesson_questionnaire_remove', {id: lesson.id, questionnaire_id: questionnaire.id }) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+							{% if lesson.classrooms|length > 1 %}
+								<form method="post" action="{{ path('lesson_questionnaire_remove', {id: lesson.id, questionnaire_id: questionnaire.id }) }}" style="display: inline-block" onsubmit="return confirm('Attention cette activité est utilisée dans d\'autres classes.\nSi vous la supprimez, elle sera également supprimée de ces autres classes.')">
+							{% else %}
+								<form method="post" action="{{ path('lesson_questionnaire_remove', {id: lesson.id, questionnaire_id: questionnaire.id }) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous sur·e de vouloir supprimer cette activité ? \nCette action est irréversible.')">
+							{% endif %}
 									<input type="hidden" name="_method" value='DELETE'>
 									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
 									<button class="btn btn-danger mr-2">Supprimer</button>

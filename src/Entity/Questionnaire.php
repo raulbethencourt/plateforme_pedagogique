@@ -92,11 +92,6 @@ class Questionnaire implements Serializable
     private $visibility;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $playable;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $realisation_time;
@@ -120,6 +115,11 @@ class Questionnaire implements Serializable
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $link;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $instructions;
 
     public const DIFFICULTIES = ["cEcrite", "cOrale", "eEcrite", "lexique", "phonetique", "grammaire"];
 
@@ -366,18 +366,6 @@ class Questionnaire implements Serializable
         return $this;
     }
 
-    public function getPlayable(): ?bool
-    {
-        return $this->playable;
-    }
-
-    public function setPlayable(bool $playable): self
-    {
-        $this->playable = $playable;
-
-        return $this;
-    }
-
     public function getRealisationTime(): ?int
     {
         return $this->realisation_time;
@@ -434,6 +422,18 @@ class Questionnaire implements Serializable
     public function setLink(?string $link): self
     {
         $this->link = $link;
+
+        return $this;
+    }
+
+    public function getInstructions(): ?string
+    {
+        return $this->instructions;
+    }
+
+    public function setInstructions(?string $instructions): self
+    {
+        $this->instructions = $instructions;
 
         return $this;
     }

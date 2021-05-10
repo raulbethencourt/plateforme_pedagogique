@@ -34,14 +34,13 @@ class ClassroomType extends AbstractType
                     'choices' => [
                         'NS 1' => 'NS 1',
                         'NS 2' => 'NS 2',
-                        'A1.1' => 'a1.1',
-                        'A1' => 'a1',
-                        'A2' => 'a2',
-                        'B1' => 'b1',
-                        'B2' => 'b2',
-                        'CléA' => 'clea',
-                        'Voltaire' => 'voltaire',
-
+                        'A1.1' => 'A1.1',
+                        'A1' => 'A1',
+                        'A2' => 'A2',
+                        'B1' => 'B1',
+                        'B2' => 'B2',
+                        'CléA' => 'CléA',
+                        'Voltaire' => 'Voltaire',
                     ],
                 ]
             )
@@ -51,9 +50,10 @@ class ClassroomType extends AbstractType
                 [
                     'label' => 'Localisation',
                     'choices' => [
-                        'Koenigshoffen' => 'koenigshoffen',
-                        'Le Marais' => 'le marais',
-                        'Hautepierre' => 'hautepierre',
+                        'Koenigshoffen' => 'Koenigshoffen',
+                        'Le Marais' => 'Le marais',
+                        'Hautepierre' => 'Hautepierre',
+                        'Autre' => 'Autre',
                     ],
                 ]
             )

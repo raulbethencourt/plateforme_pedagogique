@@ -4,13 +4,14 @@ namespace App\Form;
 
 use App\Entity\Questionnaire;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\Regex;
 use Vich\UploaderBundle\Form\Type\VichImageType;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class QuestionnaireType extends AbstractType
 {
@@ -26,11 +27,19 @@ class QuestionnaireType extends AbstractType
                 ]
             )
             ->add(
+                'instructions',
+                TextareaType::class,
+                [
+                    'label' => 'Consigne',
+                    'required' => false,
+                ]
+            )
+            ->add(
                 'imageFile',
                 VichImageType::class,
                 [
                     'label' => 'Choisissez votre image :',
-                    'delete_label' => 'Supprimer l\'ancienne image.',
+                    'delete_label' => 'Supprimez l\'ancienne image.',
                     'imagine_pattern' => 'thumb',
                     'required' => false,
                 ]
@@ -40,7 +49,7 @@ class QuestionnaireType extends AbstractType
                 TextType::class,
                 [
                     'purify_html' => true,
-                    'label' => 'Descrition de lien',
+                    'label' => 'Descrition du lien',
                     'required' => false,
                 ]
             )
@@ -54,7 +63,7 @@ class QuestionnaireType extends AbstractType
                         new Regex(
                             [
                                 'pattern' => '$https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?$',
-                                'message' => 'Votre url doit commencer avec http or https et avoir . quelque chose',
+                                'message' => 'Votre lien doit commencer avec http:// ou https:// et doit finir avec un pointquelquechose.',
                             ]
                         ),
                     ],
@@ -69,14 +78,14 @@ class QuestionnaireType extends AbstractType
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'Compréhension écrite' => 'cEcrite',
-                        'Compréhension orale' => 'cOrale',
-                        'Expression écrite' => 'eEcrite',
-                        'Lexique' => 'lexique',
-                        'Phonétique' => 'phonetique',
-                        'Grammaire' => 'grammaire',
+                        'Compréhension écrite' => 'Compréhension écrite',
+                        'Compréhension orale' => 'Compréhension orale',
+                        'Expression écrite' => 'Expression écrite',
+                        'Lexique' => 'Lexique',
+                        'Phonétique' => 'Phonetique',
+                        'Grammaire' => 'Grammaire',
                     ],
-                    'label' => 'Categorie',
+                    'label' => 'Catégorie',
                 ]
             )
             ->add(
@@ -84,12 +93,15 @@ class QuestionnaireType extends AbstractType
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'Alpha 1' => 'alpha1',
-                        'Alpha 2' => 'alpha2',
-                        'A1.1' => 'a1.1',
-                        'A1' => 'a1',
-                        'A2' => 'a2',
-                        'B1' => 'b1',
+                        'Alpha 1' => 'Alpha1',
+                        'Alpha 2' => 'Alpha2',
+                        'A1.1' => 'A1.1',
+                        'A1' => 'A1',
+                        'A2' => 'A2',
+                        'B1' => 'B1',
+                        'B2' => 'B2',
+                        'CléA' => 'CléA',
+                        'Voltaire' => 'Voltaire',
                     ],
                     'label' => 'Niveau',
                 ]
@@ -103,7 +115,7 @@ class QuestionnaireType extends AbstractType
                         'Vrai/faux 2' => 'vf',
                         'Text a trous' => 'tous',
                     ],
-                    'label' => 'Tipe de activité',
+                    'label' => 'Type d\'activité',
                 ]
             )
             ->add(
@@ -111,12 +123,12 @@ class QuestionnaireType extends AbstractType
                 ChoiceType::class,
                 [
                     'choices' => [
-                        '2 mnts' => 2,
-                        '5 mnts' => 5,
-                        '10 mnts' => 10,
-                        '15 mnts' => 15,
-                        '20 mnts' => 20,
-                        '30 mnts' => 30,
+                        '2 min' => 2,
+                        '5 min' => 5,
+                        '10 min' => 10,
+                        '15 min' => 15,
+                        '20 min' => 20,
+                        '30 min' => 30,
                     ],
                     'label' => 'Temps de realisation',
                 ]
@@ -126,14 +138,6 @@ class QuestionnaireType extends AbstractType
                 CheckboxType::class,
                 [
                     'label' => 'Rendre visible',
-                    'required' => false,
-                ]
-            )
-            ->add(
-                'playable',
-                CheckboxType::class,
-                [
-                    'label' => 'Rendre juable',
                     'required' => false,
                 ]
             )

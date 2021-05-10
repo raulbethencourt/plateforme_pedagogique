@@ -38,7 +38,7 @@ class EditTeacherType extends AbstractType
                         ),
                     ],
                     'purify_html' => true,
-                    'label' => 'Nom d\'utilisateur',
+                    'label' => 'Nom d\'utilisateur·rice',
                 ]
             )
             ->add(

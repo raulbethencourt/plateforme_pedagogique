@@ -2,14 +2,14 @@
 
 namespace App\Controller;
 
-use App\Service\FindEntity;
 use App\Entity\Questionnaire;
 use App\Form\EditStudentType;
+use App\Service\BreadCrumbsService as BreadCrumbs;
+use App\Service\FindEntity;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\BreadCrumbsService as BreadCrumbs;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/student")
@@ -131,7 +131,11 @@ class StudentController extends AbstractController
      */
     public function editProfile(Request $request): Response
     {
-        $this->breadCrumbs->bcProfile(true, $request->query->get('list_profile_edit'));
+        if ($request->query->get('list_profile_edit')) {
+            $this->breadCrumbs->bcListUsers('students', $request->query->get('list_profile_edit'));
+        } else {
+            $this->breadCrumbs->bcProfile(true);
+        }
 
         $student_name = $request->query->get('username');
 
@@ -151,7 +155,9 @@ class StudentController extends AbstractController
             $this->addFlash('success', 'Profil édité avec succès.');
 
             if (isset($student_name)) {
-                return $this->redirectToRoute('user_list');
+                return $this->redirectToRoute('user_list', [
+                    'type' => 'students',
+                ]);
             }
 
             return $this->redirectToRoute('student_profile');
