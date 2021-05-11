@@ -50,10 +50,10 @@ class ClassroomType extends AbstractType
                 [
                     'label' => 'Localisation',
                     'choices' => [
-                        'Koenigshoffen' => 'Koenigshoffen',
-                        'Le Marais' => 'Le marais',
+                        'Ecole des Romains' => 'Ecole des Romains',
+                        'Ecole Jacqueline' => 'Ecole Jacqueline',
                         'Hautepierre' => 'Hautepierre',
-                        'Autre' => 'Autre',
+                        'Centre de formation' => 'Centre de formation',
                     ],
                 ]
             )

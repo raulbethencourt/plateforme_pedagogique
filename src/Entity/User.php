@@ -81,14 +81,14 @@ class User implements UserInterface
     private $lessons;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $telephone;
-
-    /**
      * @ORM\ManyToMany(targetEntity=Classroom::class, inversedBy="users")
      */
     private $classrooms;
+
+    /**
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    private $telephone;
 
     public function __construct()
     {
@@ -259,18 +259,6 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getTelephone(): ?int
-    {
-        return $this->telephone;
-    }
-
-    public function setTelephone(?int $telephone): self
-    {
-        $this->telephone = $telephone;
-
-        return $this;
-    }
-
     /**
      * @return Collection|Classroom[]
      */
@@ -291,6 +279,18 @@ class User implements UserInterface
     public function removeClassroom(Classroom $classroom): self
     {
         $this->classrooms->removeElement($classroom);
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(?string $telephone): self
+    {
+        $this->telephone = $telephone;
 
         return $this;
     }
