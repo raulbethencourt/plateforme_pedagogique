@@ -125,8 +125,10 @@
 													<button class="btn btn-danger mr-2">Supprimer</button>
 												</form>
 											{% endif %}
-											{% if lesson_id is defined and lesson_id is not null %}
-												<a href="{{ path('lesson_questionnaire_add', {id: lesson_id, questionnaire_id: questionnaire.id, classroom_id: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+											{% if lonely is defined and lonely is not null %}
+												<a href="{{ path('lesson_questionnaire_add', {id: lesson_id, questionnaire_id: questionnaire.id, classroom_id: classroom_id, lonely: lonely}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+											{% elseif list is defined and list is not null %}
+												<a href="{{ path('lesson_questionnaire_add', {id: lesson_id, questionnaire_id: questionnaire.id, list: list}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
 											{% endif %}
 										</td>
 									</td>

@@ -109,6 +109,7 @@ class LessonController extends AbstractController
 
             return $this->redirectToRoute('lesson_show', [
                 'id' => $lesson->getId(),
+                'list' => true,
             ]);
         }
 
@@ -177,9 +178,8 @@ class LessonController extends AbstractController
             $this->addFlash('success', 'Module modifiée avec succès.');
 
             if ($classroom_id) {
-                return $this->redirectToRoute('lesson_index', [
-                    'classroom_id' => $classroom_id,
-                    'list' => true,
+                return $this->redirectToRoute('classroom_show', [
+                    'id' => $classroom_id,
                 ]);
             }
 
@@ -189,7 +189,6 @@ class LessonController extends AbstractController
         return $this->render('lesson/edit.html.twig', [
             'lesson' => $lesson,
             'form' => $form->createView(),
-            'extra' => $extra,
             'classroom_id' => $classroom_id,
         ]);
     }
@@ -231,7 +230,9 @@ class LessonController extends AbstractController
 
         return $this->redirectToRoute('lesson_show', [
             'id' => $lesson->getId(),
-            'classroom' => $this->request->query->get('classroom'),
+            'classroom_id' => $this->request->query->get('classroom_id'),
+            'list' => $this->request->query->get('list'),
+            'lonely' => $this->request->query->get('lonely'),
         ]);
     }
 
@@ -251,7 +252,9 @@ class LessonController extends AbstractController
 
         return $this->redirectToRoute('lesson_show', [
             'id' => $lesson->getId(),
-            'classroom_id' => $this->request->query->get('classroom'),
+            'classroom_id' => $this->request->query->get('classroom_id'),
+            'list' => $this->request->query->get('list'),
+            'lonely' => $this->request->query->get('lonely'),
         ]);
     }
 }

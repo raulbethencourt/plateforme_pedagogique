@@ -116,11 +116,11 @@
 								</form>
 							{% elseif list is not null and classroom_id is null%}
 								<a href="{{ path('questionnaire_edit', {id: questionnaire.id, lesson_id: lesson.id, list: list}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-							{% if lesson.classrooms|length > 1 %}
-								<form method="post" action="{{ path('lesson_questionnaire_remove', {id: lesson.id, questionnaire_id: questionnaire.id }) }}" style="display: inline-block" onsubmit="return confirm('Attention cette activité est utilisée dans d\'autres classes.\nSi vous la supprimez, elle sera également supprimée de ces autres classes.')">
-							{% else %}
-								<form method="post" action="{{ path('lesson_questionnaire_remove', {id: lesson.id, questionnaire_id: questionnaire.id }) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous sur·e de vouloir supprimer cette activité ? \nCette action est irréversible.')">
-							{% endif %}
+								{% if lesson.classrooms|length > 1 %}
+									<form method="post" action="{{ path('lesson_questionnaire_remove', {id: lesson.id, questionnaire_id: questionnaire.id, list: list }) }}" style="display: inline-block" onsubmit="return confirm('Attention cette activité est utilisée dans d\'autres classes.\nSi vous la supprimez, elle sera également supprimée de ces autres classes.')">
+								{% else %}
+									<form method="post" action="{{ path('lesson_questionnaire_remove', {id: lesson.id, questionnaire_id: questionnaire.id, list: list}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous sur·e de vouloir supprimer cette activité ? \nCette action est irréversible.')">
+								{% endif %}
 									<input type="hidden" name="_method" value='DELETE'>
 									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
 									<button class="btn btn-danger mr-2">Supprimer</button>

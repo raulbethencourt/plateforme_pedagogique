@@ -3,17 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Question;
-use App\Form\QuestionType;
-use App\Service\FindEntity;
 use App\Entity\Questionnaire;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use App\Form\QuestionType;
 use App\Service\BreadCrumbsService as BreadCrumbs;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\Service\FindEntity;
+use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs as ModelBreadcrumbs;
 
 /**
@@ -64,6 +64,10 @@ class QuestionController extends AbstractController
                 [
                     'questionnaire_id' => $questionnaire_id,
                     'lesson_id' => $lesson_id,
+                    'classroom_id' => $this->request->get('classroom_id'),
+                    'list' => $this->request->get('list'),
+                    'lonely' => $this->request->get('lonely'),
+                    'extra' => $this->request->get('extra'),
                 ]
             );
         }
@@ -78,7 +82,7 @@ class QuestionController extends AbstractController
             'classroom_id' => $this->request->get('classroom_id'),
             'list' => $this->request->get('list'),
             'lonely' => $this->request->get('lonely'),
-            'extra' => $this->request->get('extra'),            
+            'extra' => $this->request->get('extra'),
         ]);
     }
 
@@ -101,6 +105,10 @@ class QuestionController extends AbstractController
 
             return $this->redirectToRoute('questionnaire_show', [
                 'id' => $this->request->query->get('questionnaire_id'),
+                'lesson_id' => $this->request->get('lesson_id'),
+                'list' => $this->request->get('list'),
+                'lonely' => $this->request->get('lonely'),
+                'extra' => $this->request->get('extra'),
             ]);
         }
 
@@ -112,7 +120,7 @@ class QuestionController extends AbstractController
             'classroom_id' => $this->request->get('classroom_id'),
             'list' => $this->request->get('list'),
             'lonely' => $this->request->get('lonely'),
-            'extra' => $this->request->get('extra'),            
+            'extra' => $this->request->get('extra'),
         ]);
     }
 
@@ -130,6 +138,10 @@ class QuestionController extends AbstractController
 
         return $this->redirectToRoute('questionnaire_show', [
             'id' => $this->request->query->get('questionnaire_id'),
+            'lesson_id' => $this->request->get('lesson_id'),
+            'list' => $this->request->get('list'),
+            'lonely' => $this->request->get('lonely'),
+            'extra' => $this->request->get('extra'),
         ]);
     }
 
