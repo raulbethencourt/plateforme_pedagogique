@@ -99,7 +99,7 @@ class ClassroomController extends AbstractController
             'formInvite' => $formInvite->createView(),
             'formNotify' => $formNotify->createView(),
             'classroom' => $classroom,
-            'extra' => $this->request->query->get('extra'),
+            'extra' => true,
         ]);
     }
 
@@ -153,7 +153,7 @@ class ClassroomController extends AbstractController
 
         $this->em->persist($classroom);
         $this->em->flush();
-        $this->addFlash('success', 'Utilisateur supprimée de la classe avec succès.');
+        $this->addFlash('success', 'Utilisateur·rice supprimé·e de la classe avec succès.');
 
         return $this->redirectToRoute('classroom_show', [
             'id' => $classroom->getId(),
@@ -223,7 +223,6 @@ class ClassroomController extends AbstractController
     public function removeLinkFromClass(Classroom $classroom): Response
     {
         $link = $this->find->findLink();
-        $extra = $this->request->query->get('extra');
         // Check the token
         if ($this->isCsrfTokenValid('delete'.$link->getId(), $this->request->get('_token'))) {
             $classroom->removeLink($link);
@@ -234,7 +233,6 @@ class ClassroomController extends AbstractController
 
         return $this->redirectToRoute('classroom_show', [
             'id' => $classroom->getId(),
-            'extra' => $extra
         ]);
     }
 }

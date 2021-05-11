@@ -115,16 +115,20 @@ class BreadCrumbsService
     public function bcListUsers(string $type, ?bool $listProfileEdit): Breadcrumbs
     {
         $this->bC->addRouteItem('Accueil', 'user_show');
+
         if ('teachers' === $type) {
-            $this->bC->addRouteItem('formateurs', 'user_list');
-            if ($listProfileEdit) {
-                $this->bC->addRouteItem('Editer Profile', 'teacher_edit_profile');
-            }
+            $list = 'Formateurs·rices';
+            $route = 'teacher_edit_profile';
         } else {
-            $this->bC->addRouteItem('apprenantes', 'user_list');
-            if ($listProfileEdit) {
-                $this->bC->addRouteItem('Editer Profile', 'teacher_edit_profile');
-            }
+            $list = 'Apprenants·es';
+            $route = 'student_edit_profile';
+        }
+
+        $this->bC->addRouteItem($list, 'user_list', [
+            'type' => $type,
+        ]);
+        if ($listProfileEdit) {
+            $this->bC->addRouteItem('Éditer profil', $route);
         }
 
         return $this->bC;
@@ -198,12 +202,12 @@ class BreadCrumbsService
                 break;
             case 'new':
                 $this->bC->addRouteItem('Accueil', 'user_show');
-                $this->bC->addRouteItem('Créer une Classe', 'classroom_new')
+                $this->bC->addRouteItem('Créer une classe', 'classroom_new')
                 ;
                 break;
             case 'edit':
                 $this->bC->addRouteItem('Accueil', 'user_show');
-                $this->bC->addRouteItem('Editer une Classe', 'classroom_edit', ['id' => $classroom->getId()])
+                $this->bC->addRouteItem('Éditer une classe', 'classroom_edit', ['id' => $classroom->getId()])
                 ;
                 break;
         }
@@ -271,18 +275,18 @@ class BreadCrumbsService
             case 'index':
                 if (isset($classroom_id)) {
                     $this->bC
-                        ->addRouteItem('Créer une Module', 'lesson_new', ['classroom_id' => $classroom_id])
+                        ->addRouteItem('Créer un module', 'lesson_new', ['classroom_id' => $classroom_id])
                         ->addRouteItem('Modules', 'lesson_index')
                     ;
                 }
                 break;
             case 'new':
-                $this->bC->addRouteItem('Créer une Module', 'lesson_new');
+                $this->bC->addRouteItem('Créer un module', 'lesson_new');
                 break;
             case 'show':
                 if ($list && isset($classroom_id)) {
                     $this->bC
-                        ->addRouteItem('Créer un Module', 'lesson_new', ['classroom_id' => $classroom_id])
+                        ->addRouteItem('Créer un module', 'lesson_new', ['classroom_id' => $classroom_id])
                         ->addRouteItem('Modules', 'lesson_index', [
                             'classroom_id' => $classroom_id,
                             'list' => $list,
@@ -300,15 +304,15 @@ class BreadCrumbsService
             case 'edit':
                 if (isset($classroom_id) && !$extra) {
                     $this->bC
-                        ->addRouteItem('Créer une Module', 'lesson_new', ['classroom_id' => $classroom_id])
+                        ->addRouteItem('Créer un module', 'lesson_new', ['classroom_id' => $classroom_id])
                         ->addRouteItem('Modules', 'lesson_index', [
                             'classroom_id' => $classroom_id,
                             'list' => $list,
                         ])
-                        ->addRouteItem('Editer une Module', 'lesson_edit', ['id' => $lesson->getId()])
+                        ->addRouteItem('Éditer un module', 'lesson_edit', ['id' => $lesson->getId()])
                     ;
                 } else {
-                    $this->bC->addRouteItem('Editer un Module', 'lesson_edit', ['id' => $lesson->getId()]);
+                    $this->bC->addRouteItem('Éditer un module', 'lesson_edit', ['id' => $lesson->getId()]);
                 }
                 break;
         }

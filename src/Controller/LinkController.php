@@ -21,12 +21,9 @@ class LinkController extends AbstractController
 {
     private $breadCrumbs;
 
-    private $find;
-
-    public function __construct(BreadCrumbs $breadCrumbs, FindEntity $find)
+    public function __construct(BreadCrumbs $breadCrumbs)
     {
         $this->breadCrumbs = $breadCrumbs;
-        $this->find = $find;
     }
 
     /**
@@ -122,8 +119,8 @@ class LinkController extends AbstractController
             $this->addFlash('success', 'Lien modifiée avec succès.');
 
             if (isset($classroom_id)) {
-                return $this->redirectToRoute('link_index', [
-                    'classroom_id' => $classroom_id,
+                return $this->redirectToRoute('classroom_show', [
+                    'id' => $classroom_id,
                 ]);
             }
 
@@ -134,7 +131,6 @@ class LinkController extends AbstractController
             'link' => $link,
             'form' => $form->createView(),
             'classroom_id' => $classroom_id,
-            'extra' => $extra,
         ]);
     }
 

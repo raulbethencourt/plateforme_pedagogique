@@ -22,7 +22,7 @@ class InviteType extends AbstractType
                 [
                     'label' => false,
                     'attr' => [
-                        'placeholder' => 'email...',
+                        'placeholder' => 'Email...',
                     ],
                     'purify_html' => true,
                 ]
@@ -33,7 +33,7 @@ class InviteType extends AbstractType
                 [
                     'label' => false,
                     'attr' => [
-                        'placeholder' => 'prenom...',
+                        'placeholder' => 'Prénom...',
                     ],
                     'purify_html' => true,
                 ]
@@ -44,7 +44,7 @@ class InviteType extends AbstractType
                 [
                     'label' => false,
                     'attr' => [
-                        'placeholder' => 'nom...',
+                        'placeholder' => 'Nom...',
                     ],
                     'purify_html' => true,
                 ]
@@ -69,7 +69,7 @@ class InviteType extends AbstractType
                     [
                         'label' => false,
                         'choices' => [
-                            'étudiant' => 'student',
+                            'Apprenant·e' => 'student',
                         ],
                     ]
                     )
@@ -82,8 +82,8 @@ class InviteType extends AbstractType
                         [
                             'label' => false,
                             'choices' => [
-                                'formateur' => 'teacher',
-                                'étudiant' => 'student',
+                                'Formateur·rice' => 'teacher',
+                                'Apprenant·e' => 'student',
                             ],
                         ]
                 )

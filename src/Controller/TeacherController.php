@@ -58,9 +58,8 @@ class TeacherController extends AbstractController
      */
     public function editProfile(Request $request, FindEntity $find): Response
     {
-        // TODO continuar por aqui
         if ($request->query->get('list_profile_edit')) {
-            $this->breadCrumbs->bcListUsers('teacher', $request->query->get('list_profile_edit'));
+            $this->breadCrumbs->bcListUsers('teachers', $request->query->get('list_profile_edit'));
         } else {
             $this->breadCrumbs->bcProfile(true);
         }
@@ -82,7 +81,9 @@ class TeacherController extends AbstractController
             $this->addFlash('success', 'Profil édité avec succès.');
 
             if (isset($teacher_name)) {
-                return $this->redirectToRoute('user_list');
+                return $this->redirectToRoute('user_list', [
+                    'type' => 'teachers',
+                ]);
             }
 
             return $this->redirectToRoute('teacher_profile');

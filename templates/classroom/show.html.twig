@@ -173,7 +173,7 @@
 										<td>{{ user.surname }}</td>
 										<td>{{ user.subject }}</td>
 										<td>
-											<form method="post" action="{{ path('classroom_user_remove', {id: classroom.id, user_id: user.id }) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+											<form method="post" action="{{ path('classroom_user_remove', {id: classroom.id, user_id: user.id, extra: extra }) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 												<input type="hidden" name="_method" value='DELETE'>
 												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
 												<button class="btn btn-danger">Supprimer</button>
@@ -215,7 +215,7 @@
 										<td>{{ user.surname }}</td>
 										<td>{{ user.hobby }}</td>
 										<td>
-											<form method="post" action="{{ path('classroom_user_remove', {id: classroom.id, user_id: user.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+											<form method="post" action="{{ path('classroom_user_remove', {id: classroom.id, user_id: user.id, extra: extra}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 												<input type="hidden" name="_method" value='DELETE'>
 												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
 												<button class="btn btn-danger">Supprimer</button>
@@ -244,7 +244,7 @@
 		<div class="row">
 			<div class="col-12">
 				{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
-					<a href="{{ path('link_new', {classroom_id: classroom.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter une Lien</a>
+					<a href="{{ path('link_new', {classroom_id: classroom.id, extra: extra}) }}" class="btn btn-secondary mb-2" role="button">Ajouter une Lien</a>
 				{% endif %}
 				{% if classroom.links|length > 0 %}
 					<ul class="list-group">
@@ -279,7 +279,7 @@
 				{% endif %}
 				<div class="d-flex flex-wrap">
 					{% for lesson in classroom.lessons %}
-						{% if lesson.playable or is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+						{% if lesson.visibility or is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
 							<div class="card">
 								<div class="card-body">
 									<a href="{{ path('lesson_show', {id: lesson.id, classroom_id: classroom.id, lonely: true}) }}">

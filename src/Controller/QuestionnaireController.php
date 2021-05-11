@@ -36,7 +36,7 @@ class QuestionnaireController extends AbstractController
     {
         $this->em = $em;
         $this->find = $find;
-        $this->request = $request->getCurrentRequest()->query;
+        $this->request = $request->getCurrentRequest();
         $this->breadCrumbs = $breadCrumbs;
     }
 
@@ -57,7 +57,7 @@ class QuestionnaireController extends AbstractController
 
         $questionnaires = $paginator->paginate(
             $questionnaires,
-            $this->request->getInt('page', 1),
+            $this->request->query->getInt('page', 1),
             10
         );
         $questionnaires->setCustomParameters([
@@ -67,11 +67,11 @@ class QuestionnaireController extends AbstractController
 
         return $this->render('questionnaire/index.html.twig', [
             'questionnaires' => $questionnaires,
-            'lesson_id' => $this->request->get('lesson_id'),
-            'classroom_id' => $this->request->get('classroom_id'),
-            'list' => $this->request->get('list'),
-            'lonely' => $this->request->get('lonely'),
-            'extra' => $this->request->get('extra'),
+            'lesson_id' => $this->request->query->get('lesson_id'),
+            'classroom_id' => $this->request->query->get('classroom_id'),
+            'list' => $this->request->query->get('list'),
+            'lonely' => $this->request->query->get('lonely'),
+            'extra' => $this->request->query->get('extra'),
         ]);
     }
 
@@ -103,10 +103,10 @@ class QuestionnaireController extends AbstractController
 
             return $this->redirectToRoute('question_new', [
                 'questionnaire_id' => $questionnaire->getId(),
-                'lesson_id' => $this->request->get('lesson_id'),
-                'classroom_id' => $this->request->get('classroom_id'),
-                'list' => $this->request->get('list'),
-                'lonely' => $this->request->get('lonely'),
+                'lesson_id' => $this->request->query->get('lesson_id'),
+                'classroom_id' => $this->request->query->get('classroom_id'),
+                'list' => $this->request->query->get('list'),
+                'lonely' => $this->request->query->get('lonely'),
             ]);
         }
 
@@ -114,10 +114,10 @@ class QuestionnaireController extends AbstractController
             'questionnaire' => $questionnaire,
             'form' => $form->createView(),
             'user' => $this->getUser(),
-            'lesson_id' => $this->request->get('lesson_id'),
-            'classroom_id' => $this->request->get('classroom_id'),
-            'list' => $this->request->get('list'),
-            'lonely' => $this->request->get('lonely'),
+            'lesson_id' => $this->request->query->get('lesson_id'),
+            'classroom_id' => $this->request->query->get('classroom_id'),
+            'list' => $this->request->query->get('list'),
+            'lonely' => $this->request->query->get('lonely'),
         ]);
     }
 
@@ -132,11 +132,11 @@ class QuestionnaireController extends AbstractController
         return $this->render('questionnaire/show.html.twig', [
             'questionnaire' => $questionnaire,
             'questions' => $questionnaire->getQuestions(),
-            'lesson_id' => $this->request->get('lesson_id'),
-            'classroom_id' => $this->request->get('classroom_id'),
-            'list' => $this->request->get('list'),
-            'lonely' => $this->request->get('lonely'),
-            'extra' => $this->request->get('extra'),
+            'lesson_id' => $this->request->query->get('lesson_id'),
+            'classroom_id' => $this->request->query->get('classroom_id'),
+            'list' => $this->request->query->get('list'),
+            'lonely' => $this->request->query->get('lonely'),
+            'extra' => $this->request->query->get('extra'),
         ]);
     }
 
@@ -161,10 +161,10 @@ class QuestionnaireController extends AbstractController
                 'questionnaire_show',
                 [
                     'id' => $questionnaire->getId(),
-                    'lesson_id' => $this->request->get('lesson_id'),
-                    'classroom_id' => $this->request->get('classroom_id'),
-                    'list' => $this->request->get('list'),
-                    'lonely' => $this->request->get('lonely'),
+                    'lesson_id' => $this->request->query->get('lesson_id'),
+                    'classroom_id' => $this->request->query->get('classroom_id'),
+                    'list' => $this->request->query->get('list'),
+                    'lonely' => $this->request->query->get('lonely'),
                 ]
             );
         }
@@ -175,10 +175,10 @@ class QuestionnaireController extends AbstractController
                 'questionnaire' => $questionnaire,
                 'form' => $form->createView(),
                 'user' => $this->getUser(),
-                'lesson_id' => $this->request->get('lesson_id'),
-                'classroom_id' => $this->request->get('classroom_id'),
-                'list' => $this->request->get('list'),
-                'lonely' => $this->request->get('lonely'),
+                'lesson_id' => $this->request->query->get('lesson_id'),
+                'classroom_id' => $this->request->query->get('classroom_id'),
+                'list' => $this->request->query->get('list'),
+                'lonely' => $this->request->query->get('lonely'),
             ]
         );
     }
@@ -190,17 +190,17 @@ class QuestionnaireController extends AbstractController
     public function delete(Questionnaire $questionnaire): Response
     {
         // check the token to delete
-        if ($this->isCsrfTokenValid('delete'.$questionnaire->getId(), $this->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$questionnaire->getId(), $this->request->query->get('_token'))) {
             $this->em->remove($questionnaire);
             $this->em->flush();
             $this->addFlash('success', 'Activité supprimé avec succès.');
         }
 
         return $this->redirectToRoute('questionnaire_index', [
-            'lesson_id' => $this->request->get('lesson_id'),
-            'classroom_id' => $this->request->get('classroom_id'),
-            'list' => $this->request->get('list'),
-            'lonely' => $this->request->get('lonely'),
+            'lesson_id' => $this->request->query->get('lesson_id'),
+            'classroom_id' => $this->request->query->get('classroom_id'),
+            'list' => $this->request->query->get('list'),
+            'lonely' => $this->request->query->get('lonely'),
         ]);
     }
 
@@ -215,14 +215,16 @@ class QuestionnaireController extends AbstractController
         // Check if we can play the questionnaire or not
         if (!$questionnaire->isPlayable()) {
             $this->addFlash('error', 'Activité indisponible !');
-            $lesson_id = $this->request->get('lesson_id');
-            if (isset($lesson_id)) {
-                return $this->redirectToRoute('lesson_show', [
-                    'id' => $lesson_id,
-                ]);
-            }
+            $lesson_id = $this->request->query->get('lesson_id');
 
-            return $this->redirectToRoute('questionnaire_index');
+            return $this->redirectToRoute('questionnaire_show', [
+                'id' => $questionnaire->getId(),
+                'classroom_id' => $this->request->query->get('classroom_id'),
+                'lesson_id' => $this->request->query->get('lesson_id'),
+                'list' => $this->request->query->get('list'),
+                'lonely' => $this->request->query->get('lonely'),
+                'extra' => $this->request->query->get('extra'),
+            ]);
         }
 
         // Creates the variables that I'm gonna need later on
@@ -261,11 +263,11 @@ class QuestionnaireController extends AbstractController
                 'rights' => $rights,
             ],
             'user' => $this->getUser(),
-            'lesson_id' => $this->request->get('lesson_id'),
-            'classroom_id' => $this->request->get('classroom_id'),
-            'list' => $this->request->get('list'),
-            'lonely' => $this->request->get('lonely'),
-            'extra' => $this->request->get('extra'),            
+            'lesson_id' => $this->request->query->get('lesson_id'),
+            'classroom_id' => $this->request->query->get('classroom_id'),
+            'list' => $this->request->query->get('list'),
+            'lonely' => $this->request->query->get('lonely'),
+            'extra' => $this->request->query->get('extra'),
         ]);
     }
 
@@ -302,11 +304,11 @@ class QuestionnaireController extends AbstractController
         return $this->breadCrumbs->bcQuestionnaire(
             $questionnaire,
             $method,
-            $this->request->get('classroom_id'),
-            $this->request->get('lesson_id'),
-            $this->request->get('list'),
-            $this->request->get('lonely'),
-            $this->request->get('extra')
+            $this->request->query->get('classroom_id'),
+            $this->request->query->get('lesson_id'),
+            $this->request->query->get('list'),
+            $this->request->query->get('lonely'),
+            $this->request->query->get('extra')
         );
     }
 

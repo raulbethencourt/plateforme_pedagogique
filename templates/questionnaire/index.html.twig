@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Liste des Activites
+{% block title %}Liste des activités
 {% endblock %}
 
 {% block body %}
@@ -51,10 +51,7 @@
 			NOT DEFINED lonely
 		</div>
 	{% endif %}
-	{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and lesson_id is null %}
-		<a href="{{ path('questionnaire_new') }}" class="btn btn-secondary mb-2" role="button">Créer Activité</a>
-	{% endif %}
-		{% if extra is defined %}
+	{% if extra is defined %}
 		extra
 		<pre>
 		{{ dump(extra) }}
@@ -65,69 +62,83 @@
 		</div>
 	{% endif %}
 
+	{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and lesson_id is null %}
+		<a href="{{ path('questionnaire_new') }}" class="btn btn-secondary mb-2" role="button">Créer nouvelle</a>
+	{% endif %}
+
 
 	<div class="row">
 		<div class="col-12">
-			<h1>Liste des Activites</h1>
+			<h1>Liste des activités</h1>
 			<table class="table border-bottom">
 				<thead class="thead-dark">
 					<tr>
 						<th scope="col"></th>
 						<th scope="col">Titre</th>
-						<th scope="col">Author</th>
+						<th scope="col">Auteur·rice</th>
 						<th scope="col">Niveau</th>
-						<th scope="col">Date creation</th>
-						<th scope="col">Lessons</th>
+						<th scope="col">Catégorie</th>
+						<th scope="col">Date de création</th>
 						<th scope="col"></th>
 					</tr>
 				</thead>
 				<tbody>
 					{% for questionnaire in questionnaires %}
-						<tr>
-							<th scope="row"></th>
-							<td>
-								{% if classroom_id is not null and (lonely is defined and lonely is not null) %}
-									<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson_id, classroom_id: classroom_id, lonely: lonely}) }}">
-										{{ questionnaire.title }}
-									</a>
-								{% elseif list is not null %}
-									<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson_id, list: list,  extra: extra}) }}">
-										{{ questionnaire.title }}
-									</a>
+						{% if questionnaire.lessons|length > 1 %}
+							<tr class="table-danger">
+							{% elseif questionnaire.visibility %}
+								<tr class="table-success">
 								{% else %}
-									<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson_id}) }}">
-										{{ questionnaire.title }}
-									</a>
-								{% endif %}
-							</td>
-							<td>{{ questionnaire.creator }}</td>
-							<td>{{ questionnaire.difficulty }}</td>
-							<td>{{ questionnaire.dateCreation }}</td>
-							{% if questionnaire.lessons|length > 1 %}
-								<td>danger</td>
-							{% else %}
-								<td>cool</td>
-							{% endif %}
-							<td>
-								{% if (is_granted('ROLE_ADMIN') or app.user.username == questionnaire.creator) and lesson_id is null %}
-									<a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-									<form method="post" action="{{ path('questionnaire_delete', {id: questionnaire.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-										<input type="hidden" name="_method" value='DELETE'>
-										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ questionnaire.id) }}">
-										<button class="btn btn-danger mr-2">Supprimer</button>
-									</form>
-								{% endif %}
-								{% if lesson_id is defined and lesson_id is not null %}
-									<a href="{{ path('lesson_questionnaire_add', {id: lesson_id, questionnaire_id: questionnaire.id, classroom_id: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
-								{% endif %}
-							</td>
-						</tr>
-					{% endfor %}
+									<tr>
+									{% endif %}
+									<th scope="row"></th>
+									<td>
+										{% if classroom_id is not null and (lonely is defined and lonely is not null) %}
+											<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson_id, classroom_id: classroom_id, lonely: lonely}) }}">
+												{{ questionnaire.title }}
+											</a>
+										{% elseif list is not null %}
+											<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson_id, list: list, extra: extra}) }}">
+												{{ questionnaire.title }}
+											</a>
+										{% else %}
+											<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson_id}) }}">
+												{{ questionnaire.title }}
+											</a>
+										{% endif %}
+									</td>
+									<td>{{ questionnaire.creator }}</td>
+									<td>{{ questionnaire.level }}</td>
+									<td>{{ questionnaire.difficulty }}</td>
+									<td>{{ questionnaire.dateCreation }}</td>
+									<td>
+										{% if (is_granted('ROLE_ADMIN') or app.user.username == questionnaire.creator) and lesson_id is null %}
+											<a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}" {% if questionnaire.lessons|length > 1 %} id="editerInList" {% endif %} class="btn btn-secondary mr-2" role="button">Éditer</a>
+											{% if questionnaire.lessons|length > 1 %}
+												<form method="post" action="{{ path('questionnaire_delete', {id: questionnaire.id}) }}" style="display: inline-block" onsubmit="return confirm('Attention cette activité est utilisée dans d\'autres modules.\nSi vous la supprimez, elle sera également supprimée de ces autres modules.')">
+												{% else %}
+													<form method="post" action="{{ path('questionnaire_delete', {id: questionnaire.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous sur·e de vouloir supprimer cette activité ? \nCette action est irréversible.')">
+
+													{% endif %}
+													<input type="hidden" name="_method" value='DELETE'>
+													<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ questionnaire.id) }}">
+													<button class="btn btn-danger mr-2">Supprimer</button>
+												</form>
+											{% endif %}
+											{% if lonely is defined and lonely is not null %}
+												<a href="{{ path('lesson_questionnaire_add', {id: lesson_id, questionnaire_id: questionnaire.id, classroom_id: classroom_id, lonely: lonely}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+											{% elseif list is defined and list is not null %}
+												<a href="{{ path('lesson_questionnaire_add', {id: lesson_id, questionnaire_id: questionnaire.id, list: list}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+											{% endif %}
+										</td>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					<div class="pagination">
+						{{ knp_pagination_render(questionnaires) }}</div>
 				</tbody>
-			</table>
-			<div class="pagination">
-				{{ knp_pagination_render(questionnaires) }}
 			</div>
 		</div>
-	</div>
-{% endblock %}
+	{% endblock %}

@@ -1,7 +1,15 @@
 {{ form_start(form) }}
 {{ form_row(form.title) }}
 {{ form_row(form.level) }}
-{{ form_row(form.visibility) }}
-{{ form_row(form.playable) }}
+<div class="d-flex">
+	{{ form_row(form.visibility) }}
+	<div class="alert alert-info" role="alert">
+		{% if classroom_id is defined  %}
+			Cette action rendra visible votre module dans votre classe et dans la boîte à outils.
+        {% else %}
+            Cette action rendra visible votre module dans la boîte à outils.
+		{% endif %}
+	</div>
+</div>
 <button type="submit" class="btn btn-primary">{{ button|default('Create') }}</button>
 {{ form_end(form) }}

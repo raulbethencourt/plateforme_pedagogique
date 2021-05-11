@@ -57,6 +57,8 @@
 		{{ questionnaire.title }}
 	</h2>
 
+	<p class="alert alert-info">{{ questionnaire.instructions }}</p>
+
 	{% if questionnaire.imageName is not null %}
 		<div class="m-3 text-center">
 			<img src="{{ vich_uploader_asset(questionnaire, 'imageFile') }}" alt="Image" class="play__img">

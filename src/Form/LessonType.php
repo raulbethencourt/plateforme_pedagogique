@@ -28,14 +28,17 @@ class LessonType extends AbstractType
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'Alpha 1' => 'alpha1',
-                        'Alpha 2' => 'alpha2',
-                        'A1.1' => 'a1.1',
-                        'A1' => 'a1',
-                        'A2' => 'a2',
-                        'B1' => 'b1',
+                        'Alpha 1' => 'Alpha1',
+                        'Alpha 2' => 'Alpha2',
+                        'A1.1' => 'A1.1',
+                        'A1' => 'A1',
+                        'A2' => 'A2',
+                        'B1' => 'B1',
+                        'B2' => 'B2',
+                        'CléA' => 'CléA',
+                        'Voltaire' => 'Voltaire',
                     ],
-                    'label' => 'Niveau'
+                    'label' => 'Niveau',
                 ]
             )
             ->add(
@@ -43,14 +46,6 @@ class LessonType extends AbstractType
                 CheckboxType::class,
                 [
                     'label' => 'Rendre visible',
-                    'required' => false,
-                ]
-            )
-            ->add(
-                'playable',
-                CheckboxType::class,
-                [
-                    'label' => 'Rendre juable',
                     'required' => false,
                 ]
             )

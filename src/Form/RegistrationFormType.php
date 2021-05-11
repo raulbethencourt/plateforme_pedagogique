@@ -66,7 +66,7 @@ class RegistrationFormType extends AbstractType
                 'email',
                 EmailType::class,
                 [
-                    'constraint' => [
+                    'constraints' => [
                         new NotBlank(
                             [
                                 'message' => 'Please enter your email address',
