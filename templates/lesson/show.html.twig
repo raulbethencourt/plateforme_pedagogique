@@ -23,122 +23,94 @@
 		</div>
 	</div>
 
-	{% if classroom_id is defined %}
-		classroom_id
-		<pre>
-		{{ dump(classroom_id) }}
-	</pre>
-	{% else %}
-		<div class="alert alert-danger" role="alert">
-			NOT DEFINED classroom_id
-		</div>
-	{% endif %}
-	{% if list is defined %}
-		list
-		<pre>
-		{{ dump(list) }}
-	</pre>
-	{% else %}
-		<div class="alert alert-danger" role="alert">
-			NOT DEFINED list
-		</div>
-	{% endif %}
-	{% if lonely is defined %}
-		lonely
-		<pre>
-		{{ dump(lonely) }}
-	</pre>
-	{% else %}
-		<div class="alert alert-danger" role="alert">
-			NOT DEFINED lonely
-		</div>
-	{% endif %}
-
 	<h1>{{ lesson.title }}</h1>
 	{% if lesson.classrooms|length > 1 %}
-	<p class="alert alert-warning"><span>Attention !</span> Ce module est utilisé dans d'autres classes. Toutes modifications ou ajouts auront des répercussions dans ces autres classes.</p>
+		<p class="alert alert-warning">
+			<span>Attention !</span>
+			Ce module est utilisé dans d'autres classes. Toutes modifications ou ajouts auront des répercussions dans ces autres classes.</p>
 	{% endif %}
 
 	<h3>Liste des activites</h3>
 	{% if lesson.classrooms|length > 1 %}
-	<table class="table border-bottom table-danger">
-	{% elseif lesson.visibility %}
-	<table class="table border-bottom table-success">
-	{% else %}
-	<table class="table border-bottom">
-	{% endif %}
-		<thead class="thead-dark">
-			<tr>
-				<th scope="col"></th>
-				<th scope="col">Titre</th>
-				<th scope="col">Temps estimé</th>
-				{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
-					<th scope="col">Auteur·rice</th>
+		<table class="table border-bottom table-danger">
+		{% elseif lesson.visibility %}
+			<table class="table border-bottom table-success">
+			{% else %}
+				<table class="table border-bottom">
 				{% endif %}
-				<th scope="col">Niveau</th>
-				<th scope="col">Catégorie</th>
-				<th scope="col"></th>
-			</tr>
-		</thead>
-
-		<tbody>
-			{% for questionnaire in questionnaires %}
-				<tr>
-					<th scope="row"></th>
-					{% if is_granted('ROLE_STUDENT') %}
-						<td>{{ questionnaire.title }}</td>
-					{% else %}
-						<td>
-							{% if classroom_id is not null and list is not null %}
-								<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson.id, classroom_id: classroom_id, list: list}) }}" role="button">{{ questionnaire.title }}</a>
-							{% elseif list is not null %}
-								<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson.id, list: list}) }}" role="button">{{ questionnaire.title }}</a>
-							{% else %}
-								<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson.id,classroom_id: classroom_id, lonely: lonely, extra: true}) }}" role="button">{{ questionnaire.title }}</a>
-							{% endif %}
-						</td>
-					{% endif %}
-					<td>{{ questionnaire.realisationTime }}
-						min</td>
-					{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
-						<td>{{ questionnaire.creator }}</td>
-					{% endif %}
-					<td>{{ questionnaire.level }}</td>
-					<td>{{ questionnaire.difficulty }}</td>
-					<td class="d-flex justify-content-end">
-						{% if (is_granted('ROLE_ADMIN') or app.user.username == questionnaire.creator) %}
-							{% if lonely is defined and lonely is not null %}
-								<a href="{{ path('questionnaire_edit', {id: questionnaire.id, lesson_id: lesson.id, classroom_id: classroom_id, lonely: lonely}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-								<form method="post" action="{{ path('lesson_questionnaire_remove', {id: lesson.id, questionnaire_id: questionnaire.id }) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-									<input type="hidden" name="_method" value='DELETE'>
-									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
-									<button class="btn btn-danger mr-2">Supprimer</button>
-								</form>
-							{% elseif list is not null and classroom_id is null%}
-								<a href="{{ path('questionnaire_edit', {id: questionnaire.id, lesson_id: lesson.id, list: list}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-								{% if lesson.classrooms|length > 1 %}
-									<form method="post" action="{{ path('lesson_questionnaire_remove', {id: lesson.id, questionnaire_id: questionnaire.id, list: list }) }}" style="display: inline-block" onsubmit="return confirm('Attention cette activité est utilisée dans d\'autres classes.\nSi vous la supprimez, elle sera également supprimée de ces autres classes.')">
-								{% else %}
-									<form method="post" action="{{ path('lesson_questionnaire_remove', {id: lesson.id, questionnaire_id: questionnaire.id, list: list}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous sur·e de vouloir supprimer cette activité ? \nCette action est irréversible.')">
-								{% endif %}
-									<input type="hidden" name="_method" value='DELETE'>
-									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
-									<button class="btn btn-danger mr-2">Supprimer</button>
-								</form>
-							{% endif %}
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col"></th>
+						<th scope="col">Titre</th>
+						<th scope="col">Temps estimé</th>
+						{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+							<th scope="col">Auteur·rice</th>
 						{% endif %}
-					</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-	{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
-		<div class="text-right">
-			{% if lonely is defined and lonely is not null %}
-				<a href="{{ path('questionnaire_new', {lesson_id: lesson.id, classroom_id: classroom_id, lonely: lonely }) }}" class="btn btn-primary">Créer activité</a>
-			{% elseif list is not null and classroom_id is null%}
-				<a href="{{ path('questionnaire_new', {lesson_id: lesson.id, classroom_id: classroom_id, list: list }) }}" class="btn btn-primary">Créer activité</a>
+						<th scope="col">Niveau</th>
+						<th scope="col">Catégorie</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+
+				<tbody>
+					{% for questionnaire in questionnaires %}
+						<tr>
+							<th scope="row"></th>
+							{% if is_granted('ROLE_STUDENT') %}
+								<td>{{ questionnaire.title }}</td>
+							{% else %}
+								<td>
+									{% if classroom_id is not null and list is not null %}
+										<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson.id, classroom_id: classroom_id, list: list}) }}" role="button">{{ questionnaire.title }}</a>
+									{% elseif list is not null %}
+										<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson.id, list: list}) }}" role="button">{{ questionnaire.title }}</a>
+									{% else %}
+										<a href="{{ path('questionnaire_show', {id: questionnaire.id, lesson_id: lesson.id,classroom_id: classroom_id, lonely: lonely, extra: true}) }}" role="button">{{ questionnaire.title }}</a>
+									{% endif %}
+								</td>
+							{% endif %}
+							<td>{{ questionnaire.realisationTime }}
+								min</td>
+							{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+								<td>{{ questionnaire.creator }}</td>
+							{% endif %}
+							<td>{{ questionnaire.level }}</td>
+							<td>{{ questionnaire.difficulty }}</td>
+							<td class="d-flex justify-content-end">
+								{% if (is_granted('ROLE_ADMIN') or app.user.username == questionnaire.creator) %}
+									{% if lonely is defined and lonely is not null %}
+										<a href="{{ path('questionnaire_edit', {id: questionnaire.id, lesson_id: lesson.id, classroom_id: classroom_id, lonely: lonely}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+										<form method="post" action="{{ path('lesson_questionnaire_remove', {id: lesson.id, questionnaire_id: questionnaire.id }) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+											<input type="hidden" name="_method" value='DELETE'>
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
+											<button class="btn btn-danger mr-2">Supprimer</button>
+										</form>
+									{% elseif list is not null and classroom_id is null%}
+										<a href="{{ path('questionnaire_edit', {id: questionnaire.id, lesson_id: lesson.id, list: list}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+										{% if lesson.classrooms|length > 1 %}
+											<form method="post" action="{{ path('lesson_questionnaire_remove', {id: lesson.id, questionnaire_id: questionnaire.id, list: list }) }}" style="display: inline-block" onsubmit="return confirm('Attention cette activité est utilisée dans d\'autres classes.\nSi vous la supprimez, elle sera également supprimée de ces autres classes.')">
+											{% else %}
+												<form method="post" action="{{ path('lesson_questionnaire_remove', {id: lesson.id, questionnaire_id: questionnaire.id, list: list}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous sur·e de vouloir supprimer cette activité ? \nCette action est irréversible.')">
+												{% endif %}
+												<input type="hidden" name="_method" value='DELETE'>
+												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
+												<button class="btn btn-danger mr-2">Supprimer</button>
+											</form>
+										{% endif %}
+									{% endif %}
+								</td>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
+				<div class="text-right">
+					{% if lonely is defined and lonely is not null %}
+						<a href="{{ path('questionnaire_new', {lesson_id: lesson.id, classroom_id: classroom_id, lonely: lonely, extra: true }) }}" class="btn btn-primary">Créer activité</a>
+					{% elseif list is not null and classroom_id is null%}
+						<a href="{{ path('questionnaire_new', {lesson_id: lesson.id, classroom_id: classroom_id, list: list }) }}" class="btn btn-primary">Créer activité</a>
+					{% endif %}
+				</div>
 			{% endif %}
-		</div>
-	{% endif %}
-{% endblock %}
+		{% endblock %}

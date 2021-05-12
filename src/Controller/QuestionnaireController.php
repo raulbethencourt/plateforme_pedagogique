@@ -107,6 +107,7 @@ class QuestionnaireController extends AbstractController
                 'classroom_id' => $this->request->query->get('classroom_id'),
                 'list' => $this->request->query->get('list'),
                 'lonely' => $this->request->query->get('lonely'),
+                'extra' => $this->request->query->get('extra'),
             ]);
         }
 
@@ -118,6 +119,7 @@ class QuestionnaireController extends AbstractController
             'classroom_id' => $this->request->query->get('classroom_id'),
             'list' => $this->request->query->get('list'),
             'lonely' => $this->request->query->get('lonely'),
+            'extra' => $this->request->query->get('extra'),
         ]);
     }
 

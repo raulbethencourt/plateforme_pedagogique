@@ -16,38 +16,6 @@
 		</div>
 	</div>
 
-	{% if classroom_id is defined %}
-		classroom_id
-		<pre>
-		{{ dump(classroom_id) }}
-	</pre>
-	{% else %}
-		<div class="alert alert-danger" role="alert">
-			NOT DEFINED classroom_id
-		</div>
-	{% endif %}
-	{% if list is defined %}
-		list
-		<pre>
-		{{ dump(list) }}
-	</pre>
-	{% else %}
-		<div class="alert alert-danger" role="alert">
-			NOT DEFINED list
-		</div>
-	{% endif %}
-	{% if lonely is defined %}
-		lonely
-		<pre>
-		{{ dump(lonely) }}
-	</pre>
-	{% else %}
-		<div class="alert alert-danger" role="alert">
-			NOT DEFINED lonely
-		</div>
-	{% endif %}
-
-
 	<div class="row">
 		<div class="col-12">
 			<div class="d-flex justify-content-around">
@@ -96,16 +64,16 @@
 										{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
 											{% if classroom_id is null%}
 												<a href="{{ path('lesson_edit', {id: lesson.id, list: list}) }}" {% if lesson.classrooms|length > 1 %} id="editerInList" {% endif %} class=" btn btn-secondary mr-2" role="button">Éditer</a>
-											{% if lesson.classrooms|length > 1 %}
-												<form method="post" action="{{ path('lesson_delete', {id: lesson.id, list: list}) }}" style="display: inline-block" onsubmit="return confirm('Attention ce module est utilisé dans d\'autres classes.\nSi vous le supprimez, il sera également supprimé de ces autres classes.')">
-												{% else %}
-													<form method="post" action="{{ path('lesson_delete', {id: lesson.id, list: list}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous sur·e de vouloir supprimer ce module ? \nCette action est irréversible.')">
-													{% endif %}
-													<input type="hidden" name="_method" value='DELETE'>
-													<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
-													<button class="btn btn-danger">Supprimer</button>
-												</form>
-											{% endif %}
+												{% if lesson.classrooms|length > 1 %}
+													<form method="post" action="{{ path('lesson_delete', {id: lesson.id, list: list}) }}" style="display: inline-block" onsubmit="return confirm('Attention ce module est utilisé dans d\'autres classes.\nSi vous le supprimez, il sera également supprimé de ces autres classes.')">
+													{% else %}
+														<form method="post" action="{{ path('lesson_delete', {id: lesson.id, list: list}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous sur·e de vouloir supprimer ce module ? \nCette action est irréversible.')">
+														{% endif %}
+														<input type="hidden" name="_method" value='DELETE'>
+														<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
+														<button class="btn btn-danger">Supprimer</button>
+													</form>
+												{% endif %}
 												{% if classroom_id is not null %}
 													<a href="{{ path('classroom_lesson_add', {id: classroom_id, lesson_id: lesson.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
 												{% endif %}
