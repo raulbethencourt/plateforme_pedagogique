@@ -34,6 +34,7 @@
 			<p class="alert alert-info">{{questionnaire.instructions}}</p>
 		</div>
 	</div>
+
 	<div class="row">
 		<div class="col-12">
 			<h3>Lien</h3>
@@ -55,9 +56,9 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for question in questionnaire.questions %}
+			{% for question in questions %}
 				<tr>
-					<th scope="row">{{ loop.index }}</th>
+					<th scope="row"></th>
 					<td>{{ question.title }}</td>
 					<td>
 						{% for proposition in question.propositions %}
@@ -91,6 +92,11 @@
 			{% endfor %}
 		</tbody>
 	</table>
+
+	<div class="pagination">
+		{{ knp_pagination_render(questions) }}
+	</div>
+
 	<div class="text-right">
 		{% if classroom_id is not null and (lonely is defined and lonely is not null) %}
 			<a href="{{ path('questionnaire_play', {id: questionnaire.id, lesson_id: lesson_id, classroom_id: classroom_id, lonely: lonely, extra: extra}) }}" class="btn btn-success mr-2" role="button">

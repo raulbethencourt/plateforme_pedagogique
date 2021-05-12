@@ -77,11 +77,18 @@
 			</article>
 		{% endfor %}
 
-		<footer class="text-center mt-3">
-			<button class="btn btn-primary" type="submit">
-				<i class="fas fa-check"></i>&nbsp;Je valide mes réponses
-			</button>
-		</footer>
+		<div class="pagination">
+			{{ knp_pagination_render(questions) }}
+		</div>
+
+
+		{% if count < 10 %}
+			<footer class="text-center mt-3">
+				<button class="btn btn-primary" type="submit">
+					<i class="fas fa-check"></i>&nbsp;Je valide mes réponses
+				</button>
+			</footer>
+		{% endif %}
 
 	</form>
 {% endblock %}

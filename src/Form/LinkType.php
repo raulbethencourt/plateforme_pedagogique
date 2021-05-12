@@ -63,14 +63,6 @@ class LinkType extends AbstractType
                     'required' => false,
                 ]
             )
-            ->add(
-                'usable',
-                CheckboxType::class,
-                [
-                    'label' => 'Rendre le lien utilisable',
-                    'required' => false,
-                ]
-            )
         ;
     }
 

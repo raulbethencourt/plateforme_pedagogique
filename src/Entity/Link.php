@@ -45,11 +45,6 @@ class Link
     private $visibility;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $usable;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $category;
@@ -132,18 +127,6 @@ class Link
     public function setVisibility(bool $visibility): self
     {
         $this->visibility = $visibility;
-
-        return $this;
-    }
-
-    public function getUsable(): ?bool
-    {
-        return $this->usable;
-    }
-
-    public function setUsable(bool $usable): self
-    {
-        $this->usable = $usable;
 
         return $this;
     }

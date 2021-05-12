@@ -98,12 +98,23 @@
 											</form>
 										{% endif %}
 									{% endif %}
+									{% if is_granted('ROLE_STUDENT') %}
+										<a href="{{ path('questionnaire_play', {id: questionnaire.id}) }}" class="btn btn-success mr-2" role="button">
+											Jouer
+										</a>
+									{% endif %}
 								</td>
 							</td>
 						</tr>
 					{% endfor %}
 				</tbody>
 			</table>
+
+			<div class="pagination">
+				{{ knp_pagination_render(questionnaires) }}
+			</div>
+
+
 			{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
 				<div class="text-right">
 					{% if lonely is defined and lonely is not null %}

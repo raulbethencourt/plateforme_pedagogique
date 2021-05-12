@@ -28,19 +28,22 @@ class LessonController extends AbstractController
 
     private $breadCrumbs;
 
-    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, BreadCrumbs $breadCrumbs)
+    private $paginator;
+
+    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, BreadCrumbs $breadCrumbs, PaginatorInterface $paginator)
     {
         $this->em = $em;
         $this->find = $find;
         $this->request = $requestStack->getCurrentRequest();
         $this->breadCrumbs = $breadCrumbs;
+        $this->paginator = $paginator;
     }
 
     /**
      * @Route("/", name="lesson_index", methods={"GET"})
      * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
      */
-    public function index(LessonRepository $lessonRepo, PaginatorInterface $paginator): Response
+    public function index(LessonRepository $lessonRepo): Response
     {
         $request = $this->request->query;
         $classroom_id = $request->get('classroom_id');
@@ -55,16 +58,7 @@ class LessonController extends AbstractController
 
         $this->breadCrumbs->bcLesson(null, 'index', $classroom_id, $list, null, null);
 
-        $lessons = $paginator->paginate(
-            $lessons,
-            $request->getInt('page', 1),
-            10
-        );
-
-        $lessons->setCustomParameters([
-            'align' => 'center',
-            'rounded' => true,
-        ]);
+        $lessons = $this->paginator->paginate($lessons, $request->getInt('page', 1), 10);
 
         return $this->render('lesson/index.html.twig', [
             'lessons' => $lessons,
@@ -134,21 +128,18 @@ class LessonController extends AbstractController
 
         $this->breadCrumbs->bcLesson($lesson, 'show', $classroom_id, $list, $lonely, null);
 
-        $user = $this->getUser()->getRoles()[0];
-        switch ($user) {
-            case 'ROLE_ADMIN':
-            case 'ROLE_SUPER_ADMIN':
-            case 'ROLE_TEACHER':
-                $questionnaires = $lesson->getQuestionnaires();
-                break;
-            default:
-                $questionnaires = [];
-                foreach ($lesson->getQuestionnaires() as $questionnaire) {
-                    if ($questionnaire->getPlayable() && $questionnaire->isPlayable()) {
-                        $questionnaires[] = $questionnaire;
-                    }
+        if ('ROLE_STUDENT' === $this->getUser()->getRoles()[0]) {
+            $questionnaires = [];
+            foreach ($lesson->getQuestionnaires() as $questionnaire) {
+                if ($questionnaire->isPlayable()) {
+                    $questionnaires[] = $questionnaire;
                 }
+            }
+        } else {
+            $questionnaires = $lesson->getQuestionnaires();
         }
+
+        $questionnaires = $this->paginator->paginate($questionnaires, $this->request->query->getInt('page', 1), 10);
 
         return $this->render('lesson/show.html.twig', [
             'lesson' => $lesson,

@@ -38,43 +38,49 @@
 
 				<tbody>
 					{% for link in links %}
-						<tr>
-							<th scope="row">{{ loop.index }}</th>
-							<td>{{ link.name }}</td>
-							<td>
-								<a href="{{ link.link }}" target="_blank" rel="noopener noreferrer">{{ link.link }}</a>
-							</td>
-							<td>{{ link.category }}</td>
-							<td>{{ link.creator }}</td>
-							{% if link.classrooms|length > 1 %}
-								<td>danger</td>
+						{% if link.classrooms|length > 1 %}
+							<tr class="table-danger">
+							{% elseif link.visibility %}
+								<tr class="table-success">
+								{% else %}
+									<tr>
+									{% endif %}
+									<th scope="row">{{ loop.index }}</th>
+									<td>{{ link.name }}</td>
+									<td>
+										<a href="{{ link.link }}" target="_blank" rel="noopener noreferrer">{{ link.link }}</a>
+									</td>
+									<td>{{ link.category }}</td>
+									<td>{{ link.creator }}</td>
+									{% if link.classrooms|length > 1 %}
+										<td>danger</td>
+									{% else %}
+										<td>cool</td>
+									{% endif %}
+									<td>
+										{% if (is_granted('ROLE_ADMIN') or app.user.username == link.creator) and classroom_id is null %}
+											<a href="{{ path('link_edit', {id: link.id, classroom_id: classroom_id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+											<form method="post" action="{{ path('link_delete', {id: link.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+												<input type="hidden" name="_method" value='DELETE'>
+												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ link.id) }}">
+												<button class="btn btn-danger">Supprimer</button>
+											</form>
+										{% endif %}
+										{% if classroom_id %}
+											<a href="{{ path('classroom_link_add', {id: classroom_id, link_id: link.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+										{% endif %}
+									</td>
+								</tr>
 							{% else %}
-								<td>cool</td>
-							{% endif %}
-							<td>
-								{% if (is_granted('ROLE_ADMIN') or app.user.username == link.creator) and classroom_id is null %}
-									<a href="{{ path('link_edit', {id: link.id, classroom_id: classroom_id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-									<form method="post" action="{{ path('link_delete', {id: link.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-										<input type="hidden" name="_method" value='DELETE'>
-										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ link.id) }}">
-										<button class="btn btn-danger">Supprimer</button>
-									</form>
-								{% endif %}
-								{% if classroom_id %}
-									<a href="{{ path('classroom_link_add', {id: classroom_id, link_id: link.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
-								{% endif %}
-							</td>
-						</tr>
-					{% else %}
-						<tr>
-							<td colspan="6">no records found</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-			<div class="pagination">
-				{{ knp_pagination_render(links) }}
+								<tr>
+									<td colspan="6">no records found</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					<div class="pagination">
+						{{ knp_pagination_render(links) }}
+					</div>
 			</div>
 		</div>
-	</div>
-{% endblock %}
+	{% endblock %}
