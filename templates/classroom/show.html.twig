@@ -5,72 +5,31 @@
 {% endblock %}
 
 {% block body %}
-	{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
-		{% for message in app.flashes('success') %}
-			<div class="alert alert-success mr-2 mb-0">
-				{{ message }}
-			</div>
-		{% endfor %}
-
-		{% if not formInvite.vars.valid %}
-			<div class="alert alert-danger mr-2 mb-0" role="alert">
-				<strong>Erreur fatal</strong>
-			</div>
-		{% endif %}
-
-		{% if not formNotify.vars.valid %}
-			<div class="alert alert-danger mr-2 mb-0" role="alert">
-				<strong>Erreur fatal</strong>
-			</div>
-		{% endif %}
-
-		<div class="row">
-			<div class="col-12">
-				{{ wo_render_breadcrumbs() }}
-			</div>
+	<div class="row">
+		<div class="col-12">
+			{{ wo_render_breadcrumbs() }}
 		</div>
-		{% if classroom_id is defined %}
-			classroom_id
-			<pre>
-		{{ dump(classroom_id) }}
-	</pre>
-		{% else %}
-			<div class="alert alert-danger" role="alert">
-				NOT DEFINED classroom_id
-			</div>
-		{% endif %}
-		{% if list is defined %}
-			list
-			<pre>
-		{{ dump(list) }}
-	</pre>
-		{% else %}
-			<div class="alert alert-danger" role="alert">
-				NOT DEFINED list
-			</div>
-		{% endif %}
-		{% if lonely is defined %}
-			lonely
-			<pre>
-		{{ dump(lonely) }}
-	</pre>
-		{% else %}
-			<div class="alert alert-danger" role="alert">
-				NOT DEFINED lonely
-			</div>
-		{% endif %}
-		{% if extra is defined %}
-			extra
-			<pre>
-		{{ dump(extra) }}
-	</pre>
-		{% else %}
-			<div class="alert alert-danger" role="alert">
-				NOT DEFINED extra
-			</div>
-		{% endif %}
+	</div>
 
+	{% for message in app.flashes('success') %}
+		<div class="alert alert-success mr-2 mb-0">
+			{{ message }}
+		</div>
+	{% endfor %}
 
+	{% if not formInvite.vars.valid %}
+		<div class="alert alert-danger mr-2 mb-0" role="alert">
+			<strong>Erreur fatal</strong>
+		</div>
+	{% endif %}
+
+	{% if not formNotify.vars.valid %}
+		<div class="alert alert-danger mr-2 mb-0" role="alert">
+			<strong>Erreur fatal</strong>
+		</div>
+	{% endif %}
+
+	{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
 		<div class="row">
 			<div class="col-12 d-flex justify-content-center">
 				<h1>{{ classroom.name }}
@@ -250,60 +209,80 @@
 					<ul class="list-group">
 						<p class="list-group-item list-group-item-dark">Liste des Liens</p>
 						{% for link in classroom.links %}
-							<div class="list-group-item d-flex justify-content-between">
-								<a href="{{ link.link }}" target="_blank" rel="noopener noreferrer">{{ link.name }}
-									//
-									{{ link.category }}</a>
-								<div class="d-flex">
-									<a href="{{ path('link_edit', {id: link.id, classroom_id: classroom.id, extra: extra}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-									<form method="post" action="{{ path('classroom_link_remove', {id: classroom.id, link_id: link.id, extra: extra}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-										<input type="hidden" name="_method" value='DELETE'>
-										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ link.id) }}">
-										<button class="btn btn-danger">Supprimer</button>
-									</form>
-								</div>
-							</div>
-						{% endfor %}
-					</ul>
-				{% endif %}
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-12 d-flex flex-column align-items-center">
-				{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
-					<a href="{{ path('lesson_new', {classroom_id: classroom.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter Module</a>
-				{% endif %}
-				{% if classroom.lessons|length > 0 %}
-					<h3>MES COURS</h3>
-				{% endif %}
-				<div class="d-flex flex-wrap">
-					{% for lesson in classroom.lessons %}
-						{% if lesson.visibility or is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
-							<div class="card">
-								<div class="card-body">
-									<a href="{{ path('lesson_show', {id: lesson.id, classroom_id: classroom.id, lonely: true}) }}">
-										<h4 class="card-title">{{lesson.title}}</h4>
-									</a>
-
-									<h6 class="card-subtitle mb-2 text-muted">{{lesson.level}}</h6>
-									{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
-										<div class="d-flex">
-											{% if is_granted('ROLE_ADMIN') or app.user.username == lesson.creator %}
-												<a href="{{ path('lesson_edit', {id: lesson.id, classroom_id: classroom.id, extra: extra}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-											{% endif %}
-											<form method="post" action="{{ path('classroom_lesson_remove', {id: classroom.id, lesson_id: lesson.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-												<input type="hidden" name="_method" value='DELETE'>
-												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
-												<button class="btn btn-danger">Supprimer</button>
-											</form>
-										</div>
-									{% endif %}
-								</div>
-							</div>
+							{% if link.classrooms|length > 1 %}
+								<div class="list-group-item list-group-item-danger d-flex justify-content-between">
+								{% elseif link.visibility %}
+									<div class="list-group-item list-group-item-success d-flex justify-content-between">
+									{% else %}
+										<div class="list-group-item d-flex justify-content-between">
+										{% endif %}
+										<a href="{{ link.link }}" target="_blank" rel="noopener noreferrer">{{ link.name }}
+											//
+											{{ link.category }}</a>
+										{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+											<div class="d-flex">
+												<a href="{{ path('link_edit', {id: link.id, classroom_id: classroom.id, extra: extra}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+												<form method="post" action="{{ path('classroom_link_remove', {id: classroom.id, link_id: link.id, extra: extra}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+													<input type="hidden" name="_method" value='DELETE'>
+													<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ link.id) }}">
+													<button class="btn btn-danger">Supprimer</button>
+												</form>
+											</div>
+										{% endif %}
+									</div>
+								{% endfor %}
+							</ul>
 						{% endif %}
-					{% endfor %}
+					</div>
 				</div>
-			</div>
-		</div>
-	{% endblock %}
+
+				<div class="row">
+					<div class="col-12 d-flex flex-column align-items-center">
+						{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+							<a href="{{ path('lesson_new', {classroom_id: classroom.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter Module</a>
+						{% endif %}
+						{% if classroom.lessons|length > 0 %}
+							<h3>MES COURS</h3>
+						{% endif %}
+						<div class="d-flex flex-wrap">
+							{% for lesson in lessons %}
+								{% if lesson.visibility or is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+									{% if lesson.classrooms|length > 1 %}
+										<div class="card bg-danger text-white">
+										{% elseif lesson.visibility %}
+											<div class="card bg-success">
+											{% else %}
+												<div class="card">
+												{% endif %}
+												<div class="card-header">
+													<a href="{{ path('lesson_show', {id: lesson.id, classroom_id: classroom.id, lonely: true}) }}">
+														<h4 class="card-title">{{lesson.title}}</h4>
+													</a>
+												</div>
+												<div class="card-body">
+													<h6 class="card-subtitle mb-2 text-muted">{{lesson.level}}</h6>
+													{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+														<div class="d-flex">
+															{% if is_granted('ROLE_ADMIN') or app.user.username == lesson.creator %}
+																<a href="{{ path('lesson_edit', {id: lesson.id, classroom_id: classroom.id, extra: extra}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+															{% endif %}
+															<form method="post" action="{{ path('classroom_lesson_remove', {id: classroom.id, lesson_id: lesson.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+																<input type="hidden" name="_method" value='DELETE'>
+																<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
+																<button class="btn btn-danger">Supprimer</button>
+															</form>
+														</div>
+													{% endif %}
+												</div>
+											</div>
+										{% endif %}
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+						<div class="pagination">
+							{{ knp_pagination_render(lessons) }}
+						</div>
+					</div>
+				</div>
+			{% endblock %}

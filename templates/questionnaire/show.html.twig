@@ -23,47 +23,6 @@
 		</div>
 	</div>
 
-	{% if classroom_id is defined %}
-		classroom_id
-		<pre>
-		{{ dump(classroom_id) }}
-	</pre>
-	{% else %}
-		<div class="alert alert-danger" role="alert">
-			NOT DEFINED classroom_id
-		</div>
-	{% endif %}
-	{% if list is defined %}
-		list
-		<pre>
-		{{ dump(list) }}
-	</pre>
-	{% else %}
-		<div class="alert alert-danger" role="alert">
-			NOT DEFINED list
-		</div>
-	{% endif %}
-	{% if lonely is defined %}
-		lonely
-		<pre>
-		{{ dump(lonely) }}
-	</pre>
-	{% else %}
-		<div class="alert alert-danger" role="alert">
-			NOT DEFINED lonely
-		</div>
-	{% endif %}
-	{% if extra is defined %}
-		extra
-		<pre>
-		{{ dump(extra) }}
-	</pre>
-	{% else %}
-		<div class="alert alert-danger" role="alert">
-			NOT DEFINED extra
-		</div>
-	{% endif %}
-
 	<div class="row">
 		<div class="col-12">
 			<h1>{{ questionnaire.title }}</h1>
@@ -71,8 +30,11 @@
 	</div>
 
 	<div class="row">
-		<div class="col-12"><p class="alert alert-info">{{questionnaire.instructions}}</p></div>
+		<div class="col-12">
+			<p class="alert alert-info">{{questionnaire.instructions}}</p>
+		</div>
 	</div>
+
 	<div class="row">
 		<div class="col-12">
 			<h3>Lien</h3>
@@ -94,9 +56,9 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for question in questionnaire.questions %}
+			{% for question in questions %}
 				<tr>
-					<th scope="row">{{ loop.index }}</th>
+					<th scope="row"></th>
 					<td>{{ question.title }}</td>
 					<td>
 						{% for proposition in question.propositions %}
@@ -116,9 +78,9 @@
 									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">
 									<button class="btn btn-danger mb-2">Supprimer</button>
 								</form>
-							{% elseif (list or lonely) and (extra is defined and extra is null) and classroom_id is null %}
-								<a href="{{ path('question_edit', {id: question.id, questionnaire_id: questionnaire.id, lesson_id: lesson_id, list: list, lonely: lonely}) }}" class="btn btn-secondary mb-2" role="button">Éditer</a>
-								<form method="post" action="{{ path('question_delete', {id: question.id, questionnaire_id: questionnaire.id, lesson_id: lesson_id, list: list, lonely: lonely}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+							{% elseif (lonely is defined and lonely == true) and (extra is defined and extra == true) and classroom_id is not null %}
+								<a href="{{ path('question_edit', {id: question.id, questionnaire_id: questionnaire.id, classroom_id: classroom_id, lesson_id: lesson_id, extra: extra, lonely: lonely}) }}" class="btn btn-secondary mb-2" role="button">Éditer</a>
+								<form method="post" action="{{ path('question_delete', {id: question.id, questionnaire_id: questionnaire.id, classroom_id: classroom_id, lesson_id: lesson_id, extra: extra, lonely: lonely}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
 									<input type="hidden" name="_method" value='DELETE'>
 									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">
 									<button class="btn btn-danger mb-2">Supprimer</button>
@@ -130,6 +92,11 @@
 			{% endfor %}
 		</tbody>
 	</table>
+
+	<div class="pagination">
+		{{ knp_pagination_render(questions) }}
+	</div>
+
 	<div class="text-right">
 		{% if classroom_id is not null and (lonely is defined and lonely is not null) %}
 			<a href="{{ path('questionnaire_play', {id: questionnaire.id, lesson_id: lesson_id, classroom_id: classroom_id, lonely: lonely, extra: extra}) }}" class="btn btn-success mr-2" role="button">
@@ -147,8 +114,8 @@
 		{% if (is_granted('ROLE_ADMIN') or app.user.username == questionnaire.creator) %}
 			{% if (classroom_id is null and list is null) %}
 				<a href="{{ path('question_new', {questionnaire_id: questionnaire.id}) }}" class="btn btn-primary">Ajouter question</a>
-			{% elseif (list or lonely) and (extra is defined and extra is null) and classroom_id is null %}
-				<a href="{{ path('question_new', {questionnaire_id: questionnaire.id, lesson_id: lesson_id, list: list, lonely: lonely}) }}" class="btn btn-secondary mb-2" role="button">Ajouter question</a>
+			{% elseif (lonely is defined and lonely == true) and (extra is defined and extra == true) and classroom_id is not null %}
+				<a href="{{ path('question_new', {questionnaire_id: questionnaire.id, classroom_id: classroom_id, lesson_id: lesson_id, extra: extra, lonely: lonely}) }}" class="btn btn-secondary mb-2" role="button">Ajouter question</a>
 			{% endif %}
 		{% endif %}
 	</div>

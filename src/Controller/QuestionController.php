@@ -106,6 +106,7 @@ class QuestionController extends AbstractController
             return $this->redirectToRoute('questionnaire_show', [
                 'id' => $this->request->query->get('questionnaire_id'),
                 'lesson_id' => $this->request->get('lesson_id'),
+                'classroom_id' => $this->request->get('classroom_id'),
                 'list' => $this->request->get('list'),
                 'lonely' => $this->request->get('lonely'),
                 'extra' => $this->request->get('extra'),
@@ -139,6 +140,7 @@ class QuestionController extends AbstractController
         return $this->redirectToRoute('questionnaire_show', [
             'id' => $this->request->query->get('questionnaire_id'),
             'lesson_id' => $this->request->get('lesson_id'),
+            'classroom_id' => $this->request->get('classroom_id'),
             'list' => $this->request->get('list'),
             'lonely' => $this->request->get('lonely'),
             'extra' => $this->request->get('extra'),

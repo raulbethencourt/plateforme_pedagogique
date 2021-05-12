@@ -13,6 +13,7 @@ use App\Form\NotificationType;
 use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -79,9 +80,11 @@ class ClassroomController extends AbstractController
      * @Route("/{id}", name="classroom_show", methods={"GET", "POST"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN') or is_granted('ROLE_STUDENT')")
      */
-    public function show(Classroom $classroom): Response
+    public function show(Classroom $classroom, PaginatorInterface $paginator): Response
     {
         $this->breadCrumbs->bcClassroom($classroom, 'show');
+
+        $lessons = $paginator->paginate($classroom->getLessons(), $this->request->query->getInt('page', 1), 10);
 
         // here i handle notifications
         $notification = new Notification();
@@ -99,6 +102,7 @@ class ClassroomController extends AbstractController
             'formInvite' => $formInvite->createView(),
             'formNotify' => $formNotify->createView(),
             'classroom' => $classroom,
+            'lessons' => $lessons,
             'extra' => true,
         ]);
     }

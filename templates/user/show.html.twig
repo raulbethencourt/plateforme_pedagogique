@@ -96,8 +96,8 @@
 							<th scope="col"></th>
 						</tr>
 					</thead>
-						{% for classroom in classrooms %}
 					<tbody>
+						{% for classroom in classrooms %}
 							<tr>
 								<th scope="row"></th>
 								<td>
@@ -124,10 +124,13 @@
 									</div>
 								</td>
 							</tr>
-						</div>
+						{% endfor %}
 					</tbody>
-				</td>
-			</tr>
-		{% endfor %}
-	</tbody>
-</table></div></div></div>{% endblock %}
+				</table>
+			</div>
+			<div class="pagination">
+				{{ knp_pagination_render(classrooms) }}
+			</div>
+		</div>
+	</div>
+{% endblock %}

@@ -31,12 +31,15 @@ class UserController extends AbstractController
 
     private $breadCrumbs;
 
-    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, BreadCrumbs $breadCrumbs)
+    private $paginator;
+
+    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, BreadCrumbs $breadCrumbs, PaginatorInterface $paginator)
     {
         $this->em = $em;
         $this->find = $find;
         $this->request = $requestStack->getCurrentRequest();
         $this->breadCrumbs = $breadCrumbs;
+        $this->paginator = $paginator;
     }
 
     /**
@@ -50,7 +53,8 @@ class UserController extends AbstractController
         } else {
             $classrooms = $this->find->findAllClassrooms();
         }
-        $admins = $this->find->findUsersByRole('ROLE_ADMIN');
+
+        $classrooms = $this->paginator->paginate($classrooms, $this->request->query->getInt('page', 1), 10);
 
         // admin invitation
         $invite = new Invite();
@@ -60,7 +64,7 @@ class UserController extends AbstractController
         return $this->render(
             'user/show.html.twig',
             [
-                'admins' => $admins,
+                'admins' => $this->find->findUsersByRole('ROLE_ADMIN'),
                 'classrooms' => $classrooms,
                 'user' => $user,
                 'form' => $form->createView(),
@@ -71,7 +75,7 @@ class UserController extends AbstractController
     /**
      * @Route("/list", name="user_list")
      */
-    public function listUsers(PaginatorInterface $paginator): Response
+    public function listUsers(): Response
     {
         $type = $this->request->query->get('type');
         $listProfileEdit = $this->request->query->get('list_profile_edit');
@@ -84,16 +88,7 @@ class UserController extends AbstractController
             $this->breadCrumbs->bcListUsers($type, null);
         }
 
-        $users = $paginator->paginate(
-                $users,
-                $this->request->query->getInt('page', 1),
-                10
-            );
-
-        $users->setCustomParameters([
-            'align' => 'center',
-            'rounded' => true,
-        ]);
+        $users = $this->paginator->paginate($users, $this->request->query->getInt('page', 1), 10);
 
         return $this->render('user/list.html.twig', [
             'users' => $users,

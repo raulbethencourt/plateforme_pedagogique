@@ -32,19 +32,22 @@ class QuestionnaireController extends AbstractController
 
     private $breadCrumbs;
 
-    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $request, BreadCrumbs $breadCrumbs)
+    private $paginator;
+
+    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $request, BreadCrumbs $breadCrumbs, PaginatorInterface $paginator)
     {
         $this->em = $em;
         $this->find = $find;
         $this->request = $request->getCurrentRequest();
         $this->breadCrumbs = $breadCrumbs;
+        $this->paginator = $paginator;
     }
 
     /**
      * @Route("/", name="questionnaire_index", methods={"GET"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function index(QuestionnaireRepository $questionnaireRepo, PaginatorInterface $paginator): Response
+    public function index(QuestionnaireRepository $questionnaireRepo): Response
     {
         $this->questionnaireBC(null, 'index');
 
@@ -55,15 +58,7 @@ class QuestionnaireController extends AbstractController
             $questionnaires = $questionnaireRepo->findAll();
         }
 
-        $questionnaires = $paginator->paginate(
-            $questionnaires,
-            $this->request->query->getInt('page', 1),
-            10
-        );
-        $questionnaires->setCustomParameters([
-            'align' => 'center',
-            'rounded' => true,
-        ]);
+        $questionnaires = $this->paginator->paginate($questionnaires, $this->request->query->getInt('page', 1), 10);
 
         return $this->render('questionnaire/index.html.twig', [
             'questionnaires' => $questionnaires,
@@ -129,9 +124,11 @@ class QuestionnaireController extends AbstractController
     {
         $this->questionnaireBC($questionnaire, 'show');
 
+        $questions = $this->paginator->paginate($questionnaire->getQuestions(), $this->request->query->getInt('page', 1), 10);
+
         return $this->render('questionnaire/show.html.twig', [
             'questionnaire' => $questionnaire,
-            'questions' => $questionnaire->getQuestions(),
+            'questions' => $questions,
             'lesson_id' => $this->request->query->get('lesson_id'),
             'classroom_id' => $this->request->query->get('classroom_id'),
             'list' => $this->request->query->get('list'),
@@ -212,6 +209,8 @@ class QuestionnaireController extends AbstractController
     {
         $this->questionnaireBC($questionnaire, 'play');
 
+        $questions = $this->paginator->paginate($questionnaire->getQuestions(), $this->request->query->getInt('page', 1), 10);
+
         // Check if we can play the questionnaire or not
         if (!$questionnaire->isPlayable()) {
             $this->addFlash('error', 'Activité indisponible !');
@@ -256,7 +255,8 @@ class QuestionnaireController extends AbstractController
 
         return $this->render('questionnaire/play.html.twig', [
             'questionnaire' => $questionnaire,
-            'questions' => $questionnaire->getQuestions(),
+            'questions' => $questions,
+            'count' => $questions->count(),
             'points' => $points,
             'finalResults' => [
                 'given' => $answers,
@@ -310,41 +310,5 @@ class QuestionnaireController extends AbstractController
             $this->request->query->get('lonely'),
             $this->request->query->get('extra')
         );
-    }
-
-    private function breadCrumbsFunction(string $txt, string $route, ?array $params): Breadcrumbs
-    {
-        //         if ($request->get('classroom_id') && null === $request->get('lonely')) {
-        //     $this->breadCrumbs
-        //         ->bC->addRouteItem('Classe',
-        //             'classroom_show',
-        //             ['id' => $classroom->getId()]
-        //         )
-        //         ->bC->addRouteItem('Créer un Module', 'lesson_new', ['classroom_id' => $classroom->getId()])
-        //         ->bC->addRouteItem('Modules', 'lesson_index', ['classroom_id' => $classroom->getId()])
-        //         ->bC->addRouteItem('Module', 'lesson_show', ['id' => $lesson->getId()])
-        //         ->bC->addRouteItem($txt, $route, $params)
-        //     ;
-        // } elseif ($request->get('lonely')) {
-        //     $this->breadCrumbs
-        //         ->bC->addRouteItem('Classe',
-        //             'classroom_show',
-        //             ['id' => $classroom->getId()]
-        //         )
-        //         ->bC->addRouteItem('Module', 'lesson_show', [
-        //             'id' => $lesson->getId(),
-        //             'classroom_id' => $classroom->getId(),
-        //             'lonely' => true,
-        //         ])
-        //         ->bC->addRouteItem($txt, $route, $params)
-        //     ;
-        // } else {
-        //     $this->breadCrumbs
-        //         ->bC->addRouteItem('Activités', 'questionnaire_index')
-        //         ->bC->addRouteItem($txt, $route, $params)
-        //     ;
-        // }
-
-        return $this->breadCrumbs;
     }
 }
