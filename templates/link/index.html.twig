@@ -22,6 +22,33 @@
 
 	<div class="row">
 		<div class="col-12">
+			{{ form_start(form) }}
+			<div class="invite-form--responsive justify-content-sm-around align-items-center ">
+				<div class="form-group m-2">
+					{{ form_errors(form.text) }}
+					{{ form_widget(form.text) }}
+					{{ form_help(form.text) }}
+				</div>
+				<div class="form-group m-2">
+					{{ form_errors(form.category) }}
+					{{ form_widget(form.category) }}
+					{{ form_help(form.category) }}
+				</div>
+				<div class="form-group m-2">
+					{{ form_errors(form.author) }}
+					{{ form_widget(form.author) }}
+					{{ form_help(form.author) }}
+				</div>
+				<div class="form-group m-2">
+					{{ form_widget(form.submit) }}
+				</div>
+			</div>
+			{{ form_end(form) }}
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-12">
 			<h1>Liste des liens</h1>
 			<table class="table border-bottom">
 				<thead class="thead-dark">
@@ -31,7 +58,6 @@
 						<th scope="col">lien</th>
 						<th scope="col">Categorie</th>
 						<th scope="col">Author</th>
-						<th scope="col">Classes</th>
 						<th scope="col"></th>
 					</tr>
 				</thead>
@@ -52,11 +78,6 @@
 									</td>
 									<td>{{ link.category }}</td>
 									<td>{{ link.creator }}</td>
-									{% if link.classrooms|length > 1 %}
-										<td>danger</td>
-									{% else %}
-										<td>cool</td>
-									{% endif %}
 									<td>
 										{% if (is_granted('ROLE_ADMIN') or app.user.username == link.creator) and classroom_id is null %}
 											<a href="{{ path('link_edit', {id: link.id, classroom_id: classroom_id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
@@ -79,8 +100,8 @@
 						</tbody>
 					</table>
 					<div class="pagination">
-						{{ knp_pagination_render(links) }}
-					</div>
+						{{ knp_pagination_render(links) }}</div>
+				</tbody>
 			</div>
 		</div>
 	{% endblock %}
