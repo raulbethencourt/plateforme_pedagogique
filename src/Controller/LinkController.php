@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Link;
 use App\Form\LinkType;
+use App\Form\SearchLinkType;
 use App\Repository\LinkRepository;
 use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
@@ -32,30 +33,47 @@ class LinkController extends AbstractController
      */
     public function index(LinkRepository $linkRepo, PaginatorInterface $paginator, Request $request): Response
     {
-        $user = $this->getUser();
-        if ('ROLE_ADMIN' === $user->getRoles()[0] || 'ROLE_SUPER_ADMIN' === $user->getRoles()[0]) {
-            $links = $linkRepo->findAll();
-        } else {
-            $links = $linkRepo->findByVisibilityOrCreator(true, $user->getUsername());
+        $classroom_id = $request->query->get('classroom_id');
+        $search = $request->query->get('search');
+        $this->breadCrumbs->bcLink(null, 'index', $classroom_id, null);
+        
+        $form = $this->createForm(SearchLinkType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $name = $form->getData()['text'];
+            $category = $form->getData()['category'];
+            $creator = $form->getData()['author'];
+            $links = $linkRepo->findBy([
+                'name' => $name,
+                'category' => $category,
+                'creator' => $creator,
+            ]);
+
+            $links = $paginator->paginate($links, $request->query->getInt('page', 1), 10);
+
+            return $this->render('link/index.html.twig', [
+                'links' => $links,
+                'classroom_id' => $classroom_id,
+                'form' => $form->createView(),
+                'search' => true,
+            ]);
         }
 
-        $classroom_id = $request->query->get('classroom_id');
-        $this->breadCrumbs->bcLink(null, 'index', $classroom_id, null);
+        if (!isset($search)) {
+            $user = $this->getUser();
+            if ('ROLE_ADMIN' === $user->getRoles()[0] || 'ROLE_SUPER_ADMIN' === $user->getRoles()[0]) {
+                $links = $linkRepo->findAll();
+            } else {
+                $links = $linkRepo->findByVisibilityOrCreator($user->getUsername());
+            }
+        }
 
-        $links = $paginator->paginate(
-            $links,
-            $request->query->getInt('page', 1),
-            10
-        );
-
-        $links->setCustomParameters([
-            'align' => 'center',
-            'rounded' => true,
-        ]);
+        $links = $paginator->paginate($links, $request->query->getInt('page', 1), 10);
 
         return $this->render('link/index.html.twig', [
             'links' => $links,
             'classroom_id' => $classroom_id,
+            'form' => $form->createView(),
         ]);
     }
 

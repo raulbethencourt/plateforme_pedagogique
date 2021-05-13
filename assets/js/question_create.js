@@ -20,12 +20,12 @@ $(document).ready(function () {
   // index when inserting a new item (e.g. 2)
   $collectionHolder.data("index", $collectionHolder.find("input").length);
 
-  $addPropositionButton.on("click", function (e) {
+  $addPropositionButton.on("click", (e) => {
     // add a new tag form (see next code block)
     addPropositionForm($collectionHolder, $newLinkLi);
   });
 
-  $(".remove-tag").click(function (e) {
+  $(".remove-tag").on('click', (e) => {
     e.preventDefault();
 
     $(this).parent().remove();

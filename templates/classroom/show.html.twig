@@ -259,6 +259,7 @@
 														<h4 class="card-title">{{lesson.title}}</h4>
 													</a>
 												</div>
+												<img src="{{ asset('images/lesson_category/books.webp') }}" alt="books" width="250" height="auto">
 												<div class="card-body">
 													<h6 class="card-subtitle mb-2 text-muted">{{lesson.level}}</h6>
 													{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
