@@ -40,11 +40,6 @@ class Link
     private $classrooms;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $visibility;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $category;
@@ -115,18 +110,6 @@ class Link
     public function removeClassroom(Classroom $classroom): self
     {
         $this->classrooms->removeElement($classroom);
-
-        return $this;
-    }
-
-    public function getVisibility(): ?bool
-    {
-        return $this->visibility;
-    }
-
-    public function setVisibility(bool $visibility): self
-    {
-        $this->visibility = $visibility;
 
         return $this;
     }

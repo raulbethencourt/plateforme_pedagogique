@@ -4,10 +4,10 @@ namespace App\Form;
 
 use App\Entity\Notification;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class NotificationType extends AbstractType
 {
@@ -19,6 +19,7 @@ class NotificationType extends AbstractType
                 TextareaType::class,
                 [
                     'required' => true,
+                    'label' => false,
                 ]
             )
             ->add(
@@ -30,7 +31,8 @@ class NotificationType extends AbstractType
                         'class' => 'btn btn-secondary',
                     ],
                 ]
-            );
+            )
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
