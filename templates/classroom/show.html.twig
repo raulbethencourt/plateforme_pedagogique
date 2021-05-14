@@ -29,7 +29,6 @@
 		</div>
 	{% endif %}
 
-	{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
 		<div class="row">
 			<div class="col-12 d-flex justify-content-center">
 				<h1>{{ classroom.name }}
@@ -43,7 +42,7 @@
 		<div class="row">
 			<div class="col-12">
 				<div class="d-flex justify-content-center">
-					<a id="inviterBtn" class="btn btn-primary w-25" href="#" role="button" {% if formInvite.vars.submitted %} style="display:none;" {% endif %}>Inviter Utilisateur</a>
+					<a id="inviterBtn" class="btn btn-primary w-25" href="#" role="button" {% if formInvite.vars.submitted %} style="display:none;" {% endif %}>Inviter</a>
 					<div id="inviterForm" {% if not formInvite.vars.submitted %} style="display: none;" {% endif %} class="w-100">
 						<button type="button" id="closeInviter" class="close">
 							<span aria-hidden="true" class="text-danger">&times;</span>
@@ -103,14 +102,14 @@
 					{{ form_end(formNotify) }}
 				</div>
 			</div>
-		{% endif %}
 
 		{% if is_granted('ROLE_ADMIN') and classroom.users|length > 0 %}
 			<div class="row">
 				<div class="col-12">
+					<h3>Liste des utilisateurs·rices</h3>
 					<div class="d-flex align-items-center">
 						<h3>
-							<span class="badge badge-pill badge-secondary text-white">Formateur(s)</span>
+							<span class="badge badge-pill badge-secondary text-white">Formateur(s)·rice(s)</span>
 						</h3>
 					</div>
 					<table class="table border-bottom">
@@ -119,7 +118,6 @@
 								<th scope="col"></th>
 								<th scope="col">Prénom</th>
 								<th scope="col">Nom</th>
-								<th scope="col">Matière(s)</th>
 								<th scope="col"></th>
 							</tr>
 						</thead>
@@ -130,9 +128,8 @@
 										<th scope="row">{{ loop.index }}</th>
 										<td>{{ user.name }}</td>
 										<td>{{ user.surname }}</td>
-										<td>{{ user.subject }}</td>
 										<td>
-											<form method="post" action="{{ path('classroom_user_remove', {id: classroom.id, user_id: user.id, extra: extra }) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+											<form method="post" action="{{ path('classroom_user_remove', {id: classroom.id, user_id: user.id, extra: extra }) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer ce·tte formateur·rice de cette classe ?')">
 												<input type="hidden" name="_method" value='DELETE'>
 												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
 												<button class="btn btn-danger">Supprimer</button>
@@ -153,7 +150,7 @@
 					class="col-12">
 					{# <a href="{{ path('lesson_new', {classroom_id: classroom.id}) }}" class="btn btn-secondary mb-2" role="button">Statistics</a> #}
 					<h3>
-						<span class="badge badge-pill badge-secondary text-white">Étudiant(s)</span>
+						<span class="badge badge-pill badge-secondary text-white">Apprenant(s)·e(s)</span>
 					</h3>
 					<table class="table border-bottom">
 						<thead class="thead-dark ">
@@ -161,7 +158,6 @@
 								<th scope="col"></th>
 								<th scope="col">Prénom</th>
 								<th scope="col">Nom</th>
-								<th scope="col">Statistics</th>
 								<th scope="col"></th>
 							</tr>
 						</thead>
@@ -169,12 +165,11 @@
 							{% for user in classroom.users %}
 								{% if user.roles[0] == 'ROLE_STUDENT' %}
 									<tr>
-										<th scope="row">{{ loop.index }}</th>
+										<th scope="row"></th>
 										<td>{{ user.name }}</td>
 										<td>{{ user.surname }}</td>
-										<td>{{ user.hobby }}</td>
 										<td>
-											<form method="post" action="{{ path('classroom_user_remove', {id: classroom.id, user_id: user.id, extra: extra}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+											<form method="post" action="{{ path('classroom_user_remove', {id: classroom.id, user_id: user.id, extra: extra}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer cet·te apprenant·e de cette classe ?')">
 												<input type="hidden" name="_method" value='DELETE'>
 												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
 												<button class="btn btn-danger">Supprimer</button>
@@ -189,25 +184,13 @@
 			</div>
 		{% endif %}
 
-		{% if is_granted('ROLE_STUDENT') and notification %}
-			<div class="row">
-				<div class="col-12">
-					<div class="alert alert-info">
-						<h3>ESPACE ANNONCE</h3>
-						<p>{{ notification.text }}</p>
-					</div>
-				</div>
-			</div>
-		{% endif %}
-
 		<div class="row">
 			<div class="col-12">
-				{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
-					<a href="{{ path('link_new', {classroom_id: classroom.id, extra: extra}) }}" class="btn btn-secondary mb-2" role="button">Ajouter une Lien</a>
-				{% endif %}
+				<div class="d-flex"></div>
+				<a href="{{ path('link_new', {classroom_id: classroom.id, extra: extra}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
 				{% if classroom.links|length > 0 %}
 					<ul class="list-group">
-						<p class="list-group-item list-group-item-dark">Liste des Liens</p>
+						<p class="list-group-item list-group-item-dark">Liste des liens</p>
 						{% for link in classroom.links %}
 							{% if link.classrooms|length > 1 %}
 								<div class="list-group-item list-group-item-danger d-flex justify-content-between">
@@ -222,7 +205,7 @@
 										{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
 											<div class="d-flex">
 												<a href="{{ path('link_edit', {id: link.id, classroom_id: classroom.id, extra: extra}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-												<form method="post" action="{{ path('classroom_link_remove', {id: classroom.id, link_id: link.id, extra: extra}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+												<form method="post" action="{{ path('classroom_link_remove', {id: classroom.id, link_id: link.id, extra: extra}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer ce lien de cette classe ?')">
 													<input type="hidden" name="_method" value='DELETE'>
 													<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ link.id) }}">
 													<button class="btn btn-danger">Supprimer</button>
@@ -238,11 +221,11 @@
 
 				<div class="row">
 					<div class="col-12 d-flex flex-column align-items-center">
-						{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
-							<a href="{{ path('lesson_new', {classroom_id: classroom.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter Module</a>
-						{% endif %}
 						{% if classroom.lessons|length > 0 %}
-							<h3>MES COURS</h3>
+							<div class="d-flex">
+								<h3>Liste des modules</h3>
+								<a href="{{ path('lesson_new', {classroom_id: classroom.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+							</div>
 						{% endif %}
 						<div class="d-flex flex-wrap">
 							{% for lesson in lessons %}
@@ -267,7 +250,7 @@
 															{% if is_granted('ROLE_ADMIN') or app.user.username == lesson.creator %}
 																<a href="{{ path('lesson_edit', {id: lesson.id, classroom_id: classroom.id, extra: extra}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
 															{% endif %}
-															<form method="post" action="{{ path('classroom_lesson_remove', {id: classroom.id, lesson_id: lesson.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
+															<form method="post" action="{{ path('classroom_lesson_remove', {id: classroom.id, lesson_id: lesson.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer ce module de cette classe ?')">
 																<input type="hidden" name="_method" value='DELETE'>
 																<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
 																<button class="btn btn-danger">Supprimer</button>

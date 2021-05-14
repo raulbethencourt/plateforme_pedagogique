@@ -1,8 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Admin -
-	{{ user.username }}
-{% endblock %}
+{% block title %}Admin profil{% endblock %}
 
 {% block body %}
 	{% for message in app.flashes('success') %}
@@ -24,7 +22,7 @@
 				<div class="flex-column w-75">
 					<ul class="list-group w-100">
 						<li class="list-group-item list-group-item-info">
-							<span class="font-weight-bold">Nom d'utilisateur</span>
+							<span class="font-weight-bold">Nom d'utilisateur·rice</span>
 						</li>
 						<li class="list-group-item">{{ user.username }}</li>
 						{% if user.name and user.surname %}
@@ -44,7 +42,7 @@
 							<li class="list-group-item">{{ user.telephone }}</li>
 						{% endif %}
 					</ul>
-					<a href="{{ path('user_edit_profile') }}" class="btn btn-primary mt-4">Éditer Profil</a>
+					<a href="{{ path('user_edit_profile') }}" class="btn btn-primary mt-4">Éditer profil</a>
 				</div>
 				<a href="{{ path('user_edit_avatar') }}" class="d-flex flex-column align-items-center justify-content-center">
 					{% if user.avatar is defined and user.avatar is not null %}
@@ -56,14 +54,4 @@
 			</div>
 		</div>
 	</div>
-	{# <div class="d-flex justify-content-between mt-4 w-100">
-				        <div class="d-flex flex-column align-items-center w-100">
-				            <h3><span class="badge badge-dark rounded p-2">Nombre de classes créées :</span></h3>
-				            <canvas id="classroomsChart"></canvas>
-				        </div>
-				        <div class="d-flex flex-column align-items-center w-100">
-				            <h3><span class="badge badge-dark rounded p-2">Nombre d'utilisateurs enregistrés :</span></h3>
-				            <canvas id="teacherStudentChart"></canvas>
-				        </div>
-				    </div> #}
 {% endblock %}

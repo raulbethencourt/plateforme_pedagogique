@@ -28,15 +28,15 @@ class RegistrationFormType extends AbstractType
                     'constraints' => [
                         new NotBlank(
                             [
-                                'message' => 'Please enter a username',
+                                'message' => 'Vous devez ajouter un nom d\'utilisateur·rice.',
                             ]
                         ),
                         new Length(
                             [
                                 'min' => 3,
-                                'minMessage' => 'Your username should be at least {{ limit }} characters',
+                                'minMessage' => 'Votre nom d\'utilisateur·rice doit contenir au minimum {{ limit }} caractères.',
                                 'max' => 15,
-                                'maxMessage' => 'This username should be less than {{ limit }} characters',
+                                'maxMessage' => 'Votre nom d\'utilisateur·rice doit contenir au maximum {{ limit }} caractères.',
                             ]
                         ),
                     ],
@@ -69,7 +69,7 @@ class RegistrationFormType extends AbstractType
                     'constraints' => [
                         new NotBlank(
                             [
-                                'message' => 'Please enter your email address',
+                                'message' => 'Vous devez ajouter une adresse email.',
                             ]
                         ),
                     ],
@@ -80,12 +80,12 @@ class RegistrationFormType extends AbstractType
                 'agreeTerms',
                 CheckboxType::class,
                 [
-                    'label' => 'Accepter les conditions d\'utilisation',
+                    'label' => 'Acceptez les conditions d\'utilisation',
                     'mapped' => false,
                     'constraints' => [
                         new IsTrue(
                             [
-                                'message' => 'You should agree to our terms.',
+                                'message' => 'Vous devez accepter les conditions d\'utilisation.',
                             ]
                         ),
                     ],
@@ -100,7 +100,7 @@ class RegistrationFormType extends AbstractType
                     'constraints' => [
                         new NotBlank(
                             [
-                                'message' => 'Please enter a password',
+                                'message' => 'Vous devez ajouter un mot de passe.',
                             ]
                         ),
                         new Regex(
@@ -126,7 +126,7 @@ class RegistrationFormType extends AbstractType
                         new Regex(
                             [
                                 'pattern' => '/^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/',
-                                'message' => 'Votre numero doit faire 10 digits',
+                                'message' => 'Votre numéro doit contenir 10 chiffres et commencer par 0.',
                             ]
                         ),
                     ],
