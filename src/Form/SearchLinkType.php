@@ -21,7 +21,7 @@ class SearchLinkType extends AbstractType
                     'label' => false,
                     'required' => false,
                     'attr' => [
-                        'placeholder' => 'Titre...',
+                        'placeholder' => 'Nom...',
                     ],
                 ]
             )
@@ -30,7 +30,7 @@ class SearchLinkType extends AbstractType
                 ChoiceType::class,
                 [
                     'label' => false,
-                    'placeholder' => 'Categorie...',
+                    'placeholder' => 'Type...',
                     'choices' => [
                         'Images' => 'images',
                         'Pédagogie' => 'pedagogie',

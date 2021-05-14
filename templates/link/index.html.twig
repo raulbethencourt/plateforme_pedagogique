@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Link index
+{% block title %}Liste des liens
 {% endblock %}
 
 {% block body %}
@@ -17,7 +17,7 @@
 	</div>
 
 	{% if not classroom_id %}
-		<a href="{{ path('link_new') }}" class="btn btn-secondary mb-2" role="button">Create new</a>
+		<a href="{{ path('link_new') }}" class="btn btn-secondary mb-2" role="button">Créer nouveau</a>
 	{% endif %}
 
 	<div class="row">
@@ -54,10 +54,10 @@
 				<thead class="thead-dark">
 					<tr>
 						<th scope="col"></th>
-						<th scope="col">Titre</th>
-						<th scope="col">lien</th>
-						<th scope="col">Categorie</th>
-						<th scope="col">Author</th>
+						<th scope="col">Nom</th>
+						<th scope="col">Lien</th>
+						<th scope="col">Type</th>
+						<th scope="col">Auteur·rice</th>
 						<th scope="col"></th>
 					</tr>
 				</thead>
@@ -71,7 +71,7 @@
 								{% else %}
 									<tr>
 									{% endif %}
-									<th scope="row">{{ loop.index }}</th>
+									<th scope="row"></th>
 									<td>{{ link.name }}</td>
 									<td>
 										<a href="{{ link.link }}" target="_blank" rel="noopener noreferrer">{{ link.link }}</a>
@@ -81,15 +81,20 @@
 									<td>
 										{% if (is_granted('ROLE_ADMIN') or app.user.username == link.creator) and classroom_id is null %}
 											<a href="{{ path('link_edit', {id: link.id, classroom_id: classroom_id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-											<form method="post" action="{{ path('link_delete', {id: link.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr ?')">
-												<input type="hidden" name="_method" value='DELETE'>
-												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ link.id) }}">
-												<button class="btn btn-danger">Supprimer</button>
-											</form>
-										{% endif %}
-										{% if classroom_id %}
-											<a href="{{ path('classroom_link_add', {id: classroom_id, link_id: link.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
-										{% endif %}
+											{% if link.classrooms|length > 1 %}
+												<form method="post" action="{{ path('link_delete', {id: link.id}) }}" style="display: inline-block" onsubmit="return confirm('Attention ce lien est utilisé dans d\'autres classes.\nSi vous le supprimez, il sera également supprimé de ces autres classes.')">
+												{% else %}
+													<form method="post" action="{{ path('link_delete', {id: link.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous sur·e de vouloir supprimer ce lien ? \nCette action est irréversible.')">
+													{% endif %}
+													<input type="hidden" name="_method" value='DELETE'>
+													<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ link.id) }}">
+													<button class="btn btn-danger">Supprimer</button>
+												</form>
+											{% endif %}
+											{% if classroom_id %}
+												<a href="{{ path('classroom_link_add', {id: classroom_id, link_id: link.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+											{% endif %}
+										</td>
 									</td>
 								</tr>
 							{% else %}

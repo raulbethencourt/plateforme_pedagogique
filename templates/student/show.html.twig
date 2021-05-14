@@ -7,43 +7,9 @@
 {% block body %}
 	<div class="row">
 		<div class="col-12 d-flex flex-column align-items-center">
-			<h3>Liste des classes</h3>
-			<div class="table-responsive">
-				<table class="table border-bottom">
-					<thead class="thead-dark">
-						<tr>
-							<th scope="col"></th>
-							<th scope="col">Nom</th>
-							<th scope="col">Niveau</th>
-							<th scope="col">Formateurs</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for classroom in classrooms %}
-							<tr>
-								<th scope="row">{{ loop.index }}</th>
-								<td>
-									<a href="{{ path('classroom_show', {id: classroom.id}) }}">{{ classroom.name }}</a>
-								</td>
-								<td>
-									<div class="d-flex justify-content-between ">
-										{{ classroom.discipline }}</div>
-								</td>
-								<td>
-									<div class="d-flex justify-content-between">
-										{% for teacher in classroom.users %}
-											{% if teacher.roles[0] == 'ROLE_TEACHER' %}
-												/
-												{{ teacher.name }}
-											{% endif %}
-										{% endfor %}
-									</div>
-								</td>
-							</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
+		<pre>
+			{{ dump(classrooms[0].lessons[0]) }}
+		</pre>
 		</div>
 	</div>
 {% endblock %}

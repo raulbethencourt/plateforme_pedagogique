@@ -134,6 +134,14 @@ class FindEntity
     }
 
     /**
+     * find links with search bar
+     */
+    public function searchLink(?string $name, ?string $category, ?string $creator): array
+    {
+        return $this->linkRepo->findBySearch($name, $category, $creator);
+    }
+
+    /**
      * find pass.
      */
     public function findPass(User $user, ?Questionnaire $questionnaire): ?Pass

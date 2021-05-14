@@ -19,7 +19,7 @@ class AvatarType extends AbstractType
                 VichImageType::class,
                 [
                     'label' => 'Choisissez votre image :',
-                    'delete_label' => 'Supprimer l\'ancienne image.',
+                    'allow_delete' => false,
                     'imagine_pattern' => 'thumb'
                 ]
             )
@@ -27,7 +27,7 @@ class AvatarType extends AbstractType
                 'submit',
                 SubmitType::class,
                 [
-                    'label' => 'Ajouter Photo',
+                    'label' => 'Ajouter photo',
                 ]
             );
     }

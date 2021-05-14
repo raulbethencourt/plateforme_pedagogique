@@ -35,6 +35,15 @@
 	</div>
 </div>
 
-{{ form_row(form.visibility) }}
+<div class="d-flex">
+	{{ form_row(form.visibility) }}
+	<div class="alert alert-info" role="alert">
+	{% if questionnaire.lessons|length > 0 %}
+			Cette action rendra visible votre activité dans votre module et dans la boîte à outils.
+        {% else %}
+            Cette action rendra visible votre activité dans la boîte à outils.
+		{% endif %}
+	</div>
+</div>
 <button type="submit" class="btn btn-primary">{{ button|default('Create') }}</button>
 {{ form_end(form) }}

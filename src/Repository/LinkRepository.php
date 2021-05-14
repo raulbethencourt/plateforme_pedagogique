@@ -3,8 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Link;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Link|null find($id, $lockMode = null, $lockVersion = null)
@@ -34,5 +34,21 @@ class LinkRepository extends ServiceEntityRepository
         ;
     }
 
-    //TODO crear la requet pour search
+    /**
+     * This method find the links with search bar data.
+     */
+    public function findBySearch(?string $name, ?string $category, ?string $creator): array
+    {
+        $query = $this->createQueryBuilder('l');
+        if (isset($name)) {
+            $query->where('l.name LIKE :val')
+                ->setParameter('val', "%$name%")
+            ;
+        }
+
+        return $query->orderBy('l.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

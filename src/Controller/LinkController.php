@@ -11,7 +11,7 @@ use App\Service\FindEntity;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -22,34 +22,35 @@ class LinkController extends AbstractController
 {
     private $breadCrumbs;
 
-    public function __construct(BreadCrumbs $breadCrumbs)
+    private $request;
+
+    private $find;
+
+    public function __construct(BreadCrumbs $breadCrumbs, RequestStack $request, FindEntity $find)
     {
         $this->breadCrumbs = $breadCrumbs;
+        $this->request = $request->getCurrentRequest();
+        $this->find = $find;
     }
 
     /**
      * @Route("/", name="link_index", methods={"GET"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function index(LinkRepository $linkRepo, PaginatorInterface $paginator, Request $request): Response
+    public function index(LinkRepository $linkRepo, PaginatorInterface $paginator): Response
     {
-        $classroom_id = $request->query->get('classroom_id');
-        $search = $request->query->get('search');
+        $classroom_id = $this->request->query->get('classroom_id');
+        $search = $this->request->query->get('search');
         $this->breadCrumbs->bcLink(null, 'index', $classroom_id, null);
-        
+
         $form = $this->createForm(SearchLinkType::class);
-        $form->handleRequest($request);
+        $form->handleRequest($this->request);
         if ($form->isSubmitted() && $form->isValid()) {
             $name = $form->getData()['text'];
             $category = $form->getData()['category'];
             $creator = $form->getData()['author'];
-            $links = $linkRepo->findBy([
-                'name' => $name,
-                'category' => $category,
-                'creator' => $creator,
-            ]);
-
-            $links = $paginator->paginate($links, $request->query->getInt('page', 1), 10);
+            $links = $this->find->searchLink($name, $category, $creator);
+            $links = $paginator->paginate($links, $this->request->query->getInt('page', 1), 10);
 
             return $this->render('link/index.html.twig', [
                 'links' => $links,
@@ -59,16 +60,14 @@ class LinkController extends AbstractController
             ]);
         }
 
-        if (!isset($search)) {
-            $user = $this->getUser();
-            if ('ROLE_ADMIN' === $user->getRoles()[0] || 'ROLE_SUPER_ADMIN' === $user->getRoles()[0]) {
-                $links = $linkRepo->findAll();
-            } else {
-                $links = $linkRepo->findByVisibilityOrCreator($user->getUsername());
-            }
+        $user = $this->getUser();
+        if ('ROLE_ADMIN' === $user->getRoles()[0] || 'ROLE_SUPER_ADMIN' === $user->getRoles()[0]) {
+            $links = $linkRepo->findAll();
+        } else {
+            $links = $linkRepo->findByVisibilityOrCreator($user->getUsername());
         }
 
-        $links = $paginator->paginate($links, $request->query->getInt('page', 1), 10);
+        $links = $paginator->paginate($links, $this->request->query->getInt('page', 1), 10);
 
         return $this->render('link/index.html.twig', [
             'links' => $links,
@@ -81,21 +80,21 @@ class LinkController extends AbstractController
      * @Route("/new", name="link_new", methods={"GET", "POST"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function new(Request $request, FindEntity $find): Response
+    public function new(): Response
     {
         $link = new Link();
         $link->setCreator($this->getUser()->getUsername());
 
-        $classroom_id = $request->query->get('classroom_id');
+        $classroom_id = $this->request->query->get('classroom_id');
         if (isset($classroom_id)) {
-            $classroom = $find->findClassroom();
+            $classroom = $this->find->findClassroom();
             $link->addClassroom($classroom);
         }
 
         $this->breadCrumbs->bcLink(null, 'new', $classroom_id, null);
 
         $form = $this->createForm(LinkType::class, $link);
-        $form->handleRequest($request);
+        $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
@@ -123,14 +122,14 @@ class LinkController extends AbstractController
      * @Route("/{id}/edit", name="link_edit", methods={"GET", "POST"})
      * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
      */
-    public function edit(Request $request, Link $link): Response
+    public function edit(Link $link): Response
     {
-        $classroom_id = $request->query->get('classroom_id');
-        $extra = $request->query->get('extra');
+        $classroom_id = $this->request->query->get('classroom_id');
+        $extra = $this->request->query->get('extra');
         $this->breadCrumbs->bcLink($link, 'edit', $classroom_id, $extra);
 
         $form = $this->createForm(LinkType::class, $link);
-        $form->handleRequest($request);
+        $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
@@ -155,9 +154,9 @@ class LinkController extends AbstractController
     /**
      * @Route("/{id}", name="link_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Link $link): Response
+    public function delete(Link $link): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$link->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$link->getId(), $this->request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($link);
             $entityManager->flush();

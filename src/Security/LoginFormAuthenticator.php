@@ -131,12 +131,12 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
                     )
                 );
             case $student:
-                return new RedirectResponse(
-                    $this->urlGenerator->generate(
-                        'student_show',
-                        ['user' => $this->userConnected]
-                    )
-                );
+                    return new RedirectResponse(
+                        $this->urlGenerator->generate(
+                            'student_show',
+                            ['user' => $this->userConnected]
+                        )
+                    );
             default:
                 return new RedirectResponse($this->urlGenerator->generate('user_show'));
         }

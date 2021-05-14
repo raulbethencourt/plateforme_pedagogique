@@ -72,7 +72,7 @@ class BreadCrumbsService
     ): Breadcrumbs {
         if (isset($classroom_id) && $list) {
             $this->classroomStart($classroom_id, null)
-                ->addRouteItem('Créer un Module', 'lesson_new', ['classroom_id' => $classroom_id])
+                ->addRouteItem('Créer un module', 'lesson_new', ['classroom_id' => $classroom_id])
                 ->addRouteItem('Modules', 'lesson_index', [
                     'classroom_id' => $classroom_id,
                     'list' => $list,
@@ -142,28 +142,28 @@ class BreadCrumbsService
             case 'ROLE_TEACHER':
                 $this->bC
                     ->addRouteItem('Accueil', 'teacher_show')
-                    ->addRouteItem('Profile', 'teacher_profile')
+                    ->addRouteItem('Profil', 'teacher_profile')
                 ;
                 if ($edit) {
-                    $this->bC->addRouteItem('Editer Profile', 'teacher_edit_profile');
+                    $this->bC->addRouteItem('Éditer profil', 'teacher_edit_profile');
                 }
                 break;
             case 'ROLE_STUDENT':
                 $this->bC
                     ->addRouteItem('Accueil', 'student_show')
-                    ->addRouteItem('Profile', 'student_profile')
+                    ->addRouteItem('Profil', 'student_profile')
                 ;
                 if ($edit) {
-                    $this->bC->addRouteItem('Editer Profile', 'student_edit_profile');
+                    $this->bC->addRouteItem('Éditer profil', 'student_edit_profile');
                 }
                 break;
             default:
                 $this->bC
                     ->addRouteItem('Accueil', 'user_show')
-                    ->addRouteItem('Profile', 'user_profile')
+                    ->addRouteItem('Profil', 'user_profile')
                 ;
                 if ($edit) {
-                    $this->bC->addRouteItem('Editer Profile', 'user_edit_profile');
+                    $this->bC->addRouteItem('Éditer profil', 'user_edit_profile');
                 }
         }
 
@@ -229,23 +229,23 @@ class BreadCrumbsService
             case 'index':
                 if (isset($classroom_id)) {
                     $this->bC
-                        ->addRouteItem('Créer une lien', 'link_new', ['classroom_id' => $classroom_id])
+                        ->addRouteItem('Créer un lien', 'link_new', ['classroom_id' => $classroom_id])
                         ->addRouteItem('Liens', 'link_index')
                     ;
                 }
                 break;
             case 'new':
-                $this->bC->addRouteItem('Créer une lien', 'link_new');
+                $this->bC->addRouteItem('Créer un lien', 'link_new');
                 break;
             case 'edit':
                 if (isset($classroom_id) && !$extra) {
                     $this->bC
-                        ->addRouteItem('Créer une lien', 'link_new', ['classroom_id' => $classroom_id])
+                        ->addRouteItem('Créer un lien', 'link_new', ['classroom_id' => $classroom_id])
                         ->addRouteItem('Liens', 'link_index', ['classroom_id' => $classroom_id])
-                        ->addRouteItem('Editer une lien', 'link_edit', ['id' => $link->getId()])
+                        ->addRouteItem('Éditer un lien', 'link_edit', ['id' => $link->getId()])
                     ;
                 } else {
-                    $this->bC->addRouteItem('Editer une lien', 'link_edit', ['id' => $link->getId()]);
+                    $this->bC->addRouteItem('Éditer un lien', 'link_edit', ['id' => $link->getId()]);
                 }
                 break;
         }
@@ -334,7 +334,7 @@ class BreadCrumbsService
             case 'index':
                 if ($list) {
                     $this->bC
-                        ->addRouteItem('Créer une Activité', 'questionnaire_new', [
+                        ->addRouteItem('Créer une activité', 'questionnaire_new', [
                             'list' => $list,
                             'lesson_id' => $lesson_id,
                         ])
@@ -342,7 +342,7 @@ class BreadCrumbsService
                     ;
                 } elseif ($lonely) {
                     $this->bC
-                        ->addRouteItem('Créer une Activité', 'questionnaire_new', [
+                        ->addRouteItem('Créer une activité', 'questionnaire_new', [
                             'lesson_id' => $lesson_id,
                             'classroom_id' => $classroom_id,
                             'lonely' => $lonely,
@@ -352,15 +352,15 @@ class BreadCrumbsService
                 }
                 break;
             case 'new':
-                $this->bC->addRouteItem('Créer une Activité', 'questionnaire_new');
+                $this->bC->addRouteItem('Créer une activité', 'questionnaire_new');
                 break;
             case 'edit':
-                $this->bC->addRouteItem('Editer une Activité', 'questionnaire_edit', ['id' => $questionnaire->getId()]);
+                $this->bC->addRouteItem('Éditer une activité', 'questionnaire_edit', ['id' => $questionnaire->getId()]);
                 break;
             case 'show':
                 if ($lonely && !isset($extra)) {
                     $this->bC
-                        ->addRouteItem('Créer une Activité', 'questionnaire_new', [
+                        ->addRouteItem('Créer une activité', 'questionnaire_new', [
                             'lesson_id' => $lesson_id,
                             'classroom_id' => $classroom_id,
                             'lonely' => $lonely,
@@ -374,7 +374,7 @@ class BreadCrumbsService
                     ;
                 } elseif ($extra && !isset($classroom_id)) {
                     $this->bC
-                        ->addRouteItem('Créer une Activité', 'questionnaire_new', [
+                        ->addRouteItem('Créer une activité', 'questionnaire_new', [
                             'lesson_id' => $lesson_id,
                             'list' => $list,
                         ])
@@ -399,7 +399,7 @@ class BreadCrumbsService
             case 'play':
                 if ($lonely && !isset($extra)) {
                     $this->bC
-                        ->addRouteItem('Créer une Activité', 'questionnaire_new', [
+                        ->addRouteItem('Créer une activité', 'questionnaire_new', [
                             'lesson_id' => $lesson_id,
                             'classroom_id' => $classroom_id,
                             'lonely' => $lonely,
@@ -415,11 +415,11 @@ class BreadCrumbsService
                             'classroom_id' => $classroom_id,
                             'lonely' => $lonely,
                         ])
-                        ->addRouteItem('Realiser une Activité', 'questionnaire_play', ['id' => $questionnaire->getId()])
+                        ->addRouteItem('Tester une activité', 'questionnaire_play', ['id' => $questionnaire->getId()])
                     ;
                 } elseif ($extra && !isset($classroom_id)) {
                     $this->bC
-                        ->addRouteItem('Créer une Activité', 'questionnaire_new', [
+                        ->addRouteItem('Créer une activité', 'questionnaire_new', [
                             'lesson_id' => $lesson_id,
                             'list' => $list,
                         ])
@@ -434,7 +434,7 @@ class BreadCrumbsService
                             'list' => $list,
                             'extra' => $extra,
                         ])
-                        ->addRouteItem('Realiser une Activité', 'questionnaire_play', ['id' => $questionnaire->getId()])
+                        ->addRouteItem('Tester une activité', 'questionnaire_play', ['id' => $questionnaire->getId()])
                     ;
                 // } if (isset($classroom_id) && $list) {
                 } else {
@@ -447,7 +447,7 @@ class BreadCrumbsService
                             'list' => $list,
                             'extra' => $extra,
                         ])
-                        ->addRouteItem('Realiser une Activité', 'questionnaire_play', ['id' => $questionnaire->getId()])
+                        ->addRouteItem('Tester une activité', 'questionnaire_play', ['id' => $questionnaire->getId()])
                     ;
                 }
                 break;

@@ -47,7 +47,7 @@ class LinkType extends AbstractType
                 'category',
                 ChoiceType::class,
                 [
-                    'label' => 'Categories',
+                    'label' => 'Type',
                     'choices' => [
                         'Images' => 'images',
                         'Pédagogie' => 'pedagogie',
