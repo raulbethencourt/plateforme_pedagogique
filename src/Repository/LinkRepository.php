@@ -40,9 +40,22 @@ class LinkRepository extends ServiceEntityRepository
     public function findBySearch(?string $name, ?string $category, ?string $creator): array
     {
         $query = $this->createQueryBuilder('l');
+
         if (isset($name)) {
-            $query->where('l.name LIKE :val')
-                ->setParameter('val', "%$name%")
+            $query = $query->andWhere('l.name LIKE :name')
+                ->setParameter('name', "%{$name}%")
+            ;
+        }
+
+        if (isset($category)) {
+            $query = $query->andWhere('l.category = :category')
+                ->setParameter('category', $category)
+            ;
+        }
+
+        if (isset($creator)) {
+            $query = $query->andWhere('l.creator = :creator')
+                ->setParameter('creator', $creator)
             ;
         }
 

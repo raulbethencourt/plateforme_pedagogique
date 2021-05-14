@@ -40,7 +40,6 @@ class LinkController extends AbstractController
     public function index(LinkRepository $linkRepo, PaginatorInterface $paginator): Response
     {
         $classroom_id = $this->request->query->get('classroom_id');
-        $search = $this->request->query->get('search');
         $this->breadCrumbs->bcLink(null, 'index', $classroom_id, null);
 
         $form = $this->createForm(SearchLinkType::class);
@@ -56,7 +55,6 @@ class LinkController extends AbstractController
                 'links' => $links,
                 'classroom_id' => $classroom_id,
                 'form' => $form->createView(),
-                'search' => true,
             ]);
         }
 
