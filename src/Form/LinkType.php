@@ -9,7 +9,6 @@ use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class LinkType extends AbstractType
 {
@@ -53,14 +52,6 @@ class LinkType extends AbstractType
                         'Pédagogie' => 'pedagogie',
                         'Autres' => 'autres',
                     ],
-                ]
-            )
-            ->add(
-                'visibility',
-                CheckboxType::class,
-                [
-                    'label' => 'Rendre le lien visible',
-                    'required' => false,
                 ]
             )
         ;

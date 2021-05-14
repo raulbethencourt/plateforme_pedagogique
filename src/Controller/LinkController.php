@@ -4,16 +4,16 @@ namespace App\Controller;
 
 use App\Entity\Link;
 use App\Form\LinkType;
+use App\Service\FindEntity;
 use App\Form\SearchLinkType;
 use App\Repository\LinkRepository;
-use App\Service\BreadCrumbsService as BreadCrumbs;
-use App\Service\FindEntity;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\BreadCrumbsService as BreadCrumbs;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/link")
@@ -58,14 +58,7 @@ class LinkController extends AbstractController
             ]);
         }
 
-        $user = $this->getUser();
-        if ('ROLE_ADMIN' === $user->getRoles()[0] || 'ROLE_SUPER_ADMIN' === $user->getRoles()[0]) {
-            $links = $linkRepo->findAll();
-        } else {
-            $links = $linkRepo->findByVisibilityOrCreator($user->getUsername());
-        }
-
-        $links = $paginator->paginate($links, $this->request->query->getInt('page', 1), 10);
+        $links = $paginator->paginate($linkRepo->findAll(), $this->request->query->getInt('page', 1), 10);
 
         return $this->render('link/index.html.twig', [
             'links' => $links,
