@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ classroom.name }}{% endblock %}
+{% block title %}
+	{{ classroom.name }}
+{% endblock %}
 
 {% block body %}
 	<div class="row">
@@ -56,133 +58,135 @@
 							{{ form_row(formInvite.email) }}
 						</div>
 						{% if is_granted('ROLE_TEACHER') %}
-						<div class="form-group m-2 d-none">
-						{% else %}
-						<div class="form-group m-2">
-						{% endif %}
-							{{ form_row(formInvite.type) }}
+							<div class="form-group m-2 d-none">
+							{% else %}
+								<div class="form-group m-2">
+								{% endif %}
+								{{ form_row(formInvite.type) }}
 							</div>
-						<div class="form-group m-2">
+							<div class="form-group m-2">
 								{{ form_widget(formInvite.submit) }}
+							</div>
 						</div>
+						{{ form_end(formInvite) }}
 					</div>
-					{{ form_end(formInvite) }}
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<div class="row">
-		<div class="col-12">
-			<h3>ESPACE ANNONCE</h3>
-			{% if notification %}
-			<p>{{ notification.text }}</p>
-			{% endif %}
-			{{ form_start(formNotify) }}
-			<div class="input-group">
+		<div class="row">
+			<div class="col-12">
+				<h3>ESPACE ANNONCE</h3>
+				{% if notification %}
+					<p>{{ notification.text }}</p>
+				{% endif %}
+				{{ form_start(formNotify) }}
+				<div class="input-group">
 					{{ form_errors(formNotify.text)}}
 					{{ form_widget(formNotify.text)}}
 					{{ form_help(formNotify.text)}}
-				<div class="input-group-append">
-					{{ form_widget(formNotify.submit) }}
+					<div class="input-group-append">
+						{{ form_widget(formNotify.submit) }}
+					</div>
+				</div>
+				{{ form_end(formNotify) }}
+			</div>
+		</div>
+
+		{% if classroom.users|length > 0 %}
+			<div class="row">
+				<div class="col-12">
+					<h3>Liste des utilisateurs·rices</h3>
+					<div class="d-flex align-items-center">
+						<h3>
+							<span class="badge badge-pill badge-secondary text-white">Formateur(s)·rice(s)</span>
+						</h3>
+					</div>
+					<table class="table border-bottom">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col"></th>
+								<th scope="col">Prénom</th>
+								<th scope="col">Nom</th>
+								<th scope="col"></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for user in classroom.users %}
+								{% if user.roles[0] == 'ROLE_TEACHER' %}
+									<tr>
+										<th scope="row">{{ loop.index }}</th>
+										<td>{{ user.name }}</td>
+										<td>{{ user.surname }}</td>
+										<td>
+											<form method="post" action="{{ path('classroom_user_remove', {id: classroom.id, user_id: user.id, extra: extra }) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer ce·tte formateur·rice de cette classe ?')">
+												<input type="hidden" name="_method" value='DELETE'>
+												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+												<button class="btn btn-danger">Supprimer</button>
+											</form>
+										</td>
+									</tr>
+								{% endif %}
+							{% endfor %}
+						</tbody>
+					</table>
 				</div>
 			</div>
-			{{ form_end(formNotify) }}
-		</div>
-	</div>
 
-	{% if classroom.users|length > 0 %}
-		<div class="row">
-			<div class="col-12">
-				<h3>Liste des utilisateurs·rices</h3>
-				<div class="d-flex align-items-center">
+			<div class="row">
+				<div class="col-12">
 					<h3>
-						<span class="badge badge-pill badge-secondary text-white">Formateur(s)·rice(s)</span>
+						<span class="badge badge-pill badge-secondary text-white">Apprenant(s)·e(s)</span>
 					</h3>
+					<table class="table border-bottom">
+						<thead class="thead-dark ">
+							<tr>
+								<th scope="col"></th>
+								<th scope="col">Prénom</th>
+								<th scope="col">Nom</th>
+								<th scope="col"></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for user in classroom.users %}
+								{% if user.roles[0] == 'ROLE_STUDENT' %}
+									<tr>
+										<th scope="row"></th>
+										<td>{{ user.name }}</td>
+										<td>{{ user.surname }}</td>
+										<td>
+											<form method="post" action="{{ path('classroom_user_remove', {id: classroom.id, user_id: user.id, extra: extra}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer cet·te apprenant·e de cette classe ?')">
+												<input type="hidden" name="_method" value='DELETE'>
+												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+												<button class="btn btn-danger">Supprimer</button>
+											</form>
+										</td>
+									</tr>
+								{% endif %}
+							{% endfor %}
+						</tbody>
+					</table>
 				</div>
-				<table class="table border-bottom">
-					<thead class="thead-dark">
-						<tr>
-							<th scope="col"></th>
-							<th scope="col">Prénom</th>
-							<th scope="col">Nom</th>
-							<th scope="col"></th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for user in classroom.users %}
-							{% if user.roles[0] == 'ROLE_TEACHER' %}
-								<tr>
-									<th scope="row">{{ loop.index }}</th>
-									<td>{{ user.name }}</td>
-									<td>{{ user.surname }}</td>
-									<td>
-										<form method="post" action="{{ path('classroom_user_remove', {id: classroom.id, user_id: user.id, extra: extra }) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer ce·tte formateur·rice de cette classe ?')">
-											<input type="hidden" name="_method" value='DELETE'>
-											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-											<button class="btn btn-danger">Supprimer</button>
-										</form>
-									</td>
-								</tr>
-							{% endif %}
-						{% endfor %}
-					</tbody>
-				</table>
 			</div>
-		</div>
+		{% endif %}
 
 		<div class="row">
 			<div class="col-12">
-				<h3>
-					<span class="badge badge-pill badge-secondary text-white">Apprenant(s)·e(s)</span>
-				</h3>
-				<table class="table border-bottom">
-					<thead class="thead-dark ">
-						<tr>
-							<th scope="col"></th>
-							<th scope="col">Prénom</th>
-							<th scope="col">Nom</th>
-							<th scope="col"></th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for user in classroom.users %}
-							{% if user.roles[0] == 'ROLE_STUDENT' %}
-								<tr>
-									<th scope="row"></th>
-									<td>{{ user.name }}</td>
-									<td>{{ user.surname }}</td>
-									<td>
-										<form method="post" action="{{ path('classroom_user_remove', {id: classroom.id, user_id: user.id, extra: extra}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer cet·te apprenant·e de cette classe ?')">
-											<input type="hidden" name="_method" value='DELETE'>
-											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-											<button class="btn btn-danger">Supprimer</button>
-										</form>
-									</td>
-								</tr>
-							{% endif %}
-						{% endfor %}
-					</tbody>
-				</table>
-			</div>
-		</div>
-	{% endif %}
-
-	<div class="row">
-		<div class="col-12">
-			<a href="{{ path('link_new', {classroom_id: classroom.id, extra: extra}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
-			{% if classroom.links|length > 0 %}
-				<ul class="list-group">
-					<p class="list-group-item list-group-item-dark">Liste des liens</p>
-					{% for link in classroom.links %}
-						{% if link.classrooms|length > 1 %}
-							<div class="list-group-item list-group-item-danger d-flex justify-content-between">
+				{% if classroom.links|length > 0 %}
+					<ul class="list-group">
+						<div class="list-group-item  list-group-item-dark d-flex justify-content-around">
+							<p>Liste des liens</p>
+							<a href="{{ path('link_new', {classroom_id: classroom.id, extra: extra}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+						</div>
+						{% for link in classroom.links %}
+							{% if link.classrooms|length > 1 %}
+								<div class="list-group-item list-group-item-danger d-flex justify-content-between">
 							{% else %}
 								<div class="list-group-item d-flex justify-content-between">
-								{% endif %}
-								<a href="{{ link.link }}" target="_blank" rel="noopener noreferrer">{{ link.name }}
-									//
-									{{ link.category }}</a>
+							{% endif %}
+									<a href="{{ link.link }}" target="_blank" rel="noopener noreferrer">{{ link.name }}
+										//
+										{{ link.category }}</a>
 								{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
 									<div class="d-flex">
 										<a href="{{ path('link_edit', {id: link.id, classroom_id: classroom.id, extra: extra}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
@@ -193,34 +197,33 @@
 										</form>
 									</div>
 								{% endif %}
-							</div>
+								</div>
 						{% endfor %}
 					</ul>
 				{% endif %}
 			</div>
 		</div>
-	</div>
 
-	<div class="row">
-		<div class="col-12 d-flex flex-column align-items-center">
-			{% if classroom.lessons|length > 0 %}
-				<div class="d-flex">
-					<h3>Liste des modules</h3>
-					<a href="{{ path('lesson_new', {classroom_id: classroom.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
-				</div>
-			{% endif %}
-			<div class="d-flex flex-wrap">
-				{% for lesson in lessons %}
-					{% if lesson.classrooms|length > 1 %}
-						<div class="card bg-danger text-white">
+		<div class="row">
+			<div class="col-12 d-flex flex-column align-items-center">
+				{% if classroom.lessons|length > 0 %}
+					<div class="d-flex">
+						<h3>Liste des modules</h3>
+						<a href="{{ path('lesson_new', {classroom_id: classroom.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+					</div>
+				{% endif %}
+					<div class="d-flex flex-wrap">
+					{% for lesson in lessons %}
+						{% if lesson.classrooms|length > 1 %}
+							<div class="card bg-danger text-white">
 						{% elseif lesson.visibility %}
 							<div class="card bg-success">
-							{% else %}
-								<div class="card">
-								{% endif %}
+						{% else %}
+							<div class="card">
+						{% endif %}
 								<div class="card-header">
 									<a href="{{ path('lesson_show', {id: lesson.id, classroom_id: classroom.id, lonely: true}) }}">
-										<h4 class="card-title">{{lesson.title}}</h4>
+											<h4 class="card-title">{{lesson.title}}</h4>
 									</a>
 								</div>
 								<img src="{{ asset('images/lesson_category/books.webp') }}" alt="books" width="250" height="auto">
@@ -240,13 +243,12 @@
 									{% endif %}
 								</div>
 							</div>
-						{% endfor %}
+							{% endfor %}
 					</div>
+					
+				<div class="pagination">
+					{{ knp_pagination_render(lessons) }}
 				</div>
 			</div>
-			<div class="pagination">
-				{{ knp_pagination_render(lessons) }}
-			</div>
 		</div>
-	</div>
-{% endblock %}
+	{% endblock %}
