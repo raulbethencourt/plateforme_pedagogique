@@ -17,18 +17,12 @@
 
 	<p class="alert alert-info">{{ questionnaire.instructions }}</p>
 
-	{% if questionnaire.imageName is not null %}
-		<div class="m-3 text-center">
-			<img src="{{ vich_uploader_asset(questionnaire, 'imageFile') }}" alt="Image" class="play__img">
-		</div>
-	{% endif %}
-
 	<div class="m-3 text-center">
 		{% if questionnaire.linkdescription %}
 			<a href="{{ questionnaire.link }}" target="_blank" rel="noopener noreferrer">{{ questionnaire.linkdescription }}</a>
 		{% endif %}
 		{% if vich_uploader_asset(questionnaire, 'imageFile') %}
-			<img src="{{ vich_uploader_asset(questionnaire, 'imageFile') }}" alt="Image" class="play__img">
+			<img src="{{ vich_uploader_asset(questionnaire, 'imageFile')  | imagine_filter('questionnaire')}}" alt="Image" class="play__img">
 		{% endif %}
 	</div>
 
@@ -46,7 +40,7 @@
 
 				<div class="m-3 text-center">
 					{% if question.imageName is defined and question.imageName is not null %}
-						<img src="{{ vich_uploader_asset(question, 'imageFile') }}" alt="profile" class="play__question-img">
+						<img src="{{ vich_uploader_asset(question, 'imageFile') | imagine_filter('question') }}" alt="profile" class="play__question-img">
 					{% endif %}
 				</div>
 

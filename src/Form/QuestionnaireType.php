@@ -39,8 +39,8 @@ class QuestionnaireType extends AbstractType
                 VichImageType::class,
                 [
                     'label' => 'Choisissez votre image :',
-                    'delete_label' => 'Supprimez l\'ancienne image.',
-                    'imagine_pattern' => 'thumb',
+                    'allow_delete' => false,
+                    'imagine_pattern' => 'questionnaire',
                     'required' => false,
                 ]
             )

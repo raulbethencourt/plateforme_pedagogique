@@ -29,21 +29,30 @@
 		</div>
 	</div>
 
-	<div class="row">
-		<div class="col-12">
-			<p class="alert alert-info">{{questionnaire.instructions}}</p>
+	{% if questionnaire.instructions %}
+		<div class="row">
+			<div class="col-12">
+				<p class="alert alert-info">{{questionnaire.instructions}}</p>
+			</div>
 		</div>
-	</div>
+	{% endif %}
 
-	<div class="row">
-		<div class="col-12">
-			<h3>Lien</h3>
-			<a href="{{ questionnaire.link }}" target="_blank" rel="noopener noreferrer">{{ questionnaire.linkdescription }}</a>
+	{% if questionnaire.link %}
+		<div class="row">
+			<div class="col-12">
+				<h3>Lien</h3>
+				<a href="{{ questionnaire.link }}" target="_blank" rel="noopener noreferrer">{{ questionnaire.linkdescription }}</a>
+			</div>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col-12"></div>
-	</div>
+	{% endif %}
+
+	{% if vich_uploader_asset(questionnaire, 'imageFile') %}
+		<div class="row">
+			<div class="col-12">
+				<img src="{{ vich_uploader_asset(questionnaire, 'imageFile') | imagine_filter('questionnaire')}}" alt="Image" class="play__img">
+			</div>
+		</div>
+	{% endif %}
 
 	<h3>Liste des questions</h3>
 	<table class="table border-bottom">
@@ -112,7 +121,7 @@
 			</a>
 		{% endif %}
 		{% if (is_granted('ROLE_ADMIN') or app.user.username == questionnaire.creator) %}
-			{% if (classroom_id is null) %}
+			{% if (classroom_id is null and list is null) %}
 				<a href="{{ path('question_new', {questionnaire_id: questionnaire.id}) }}" class="btn btn-primary">Nouvelle</a>
 			{% elseif (lonely is defined and lonely == true) and (extra is defined and extra == true) and classroom_id is not null %}
 				<a href="{{ path('question_new', {questionnaire_id: questionnaire.id, classroom_id: classroom_id, lesson_id: lesson_id, extra: extra, lonely: lonely}) }}" class="btn btn-secondary mb-2" role="button">Nouvelle</a>

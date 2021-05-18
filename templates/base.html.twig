@@ -73,9 +73,9 @@
 					<li class="nav-item d-flex justify-content-center ml-5">
 						<a class="nav-link mr-2" {% if is_granted('ROLE_TEACHER') %} href="{{ path('teacher_profile') }} {% elseif is_granted('ROLE_STUDENT') %} href=" {{ path('student_profile') }} {% else %} href="{{ path('user_profile') }} {% endif %}">PROFIL</a>
 						{% if app.user.avatar %}
-							<img class="profile rounded-circle bg-black" src="{{ vich_uploader_asset(app.user.avatar) }}" alt="profil icon">
+							<img class="profile rounded-circle bg-black" src="{{ vich_uploader_asset(app.user.avatar) | imagine_filter('nav') }}" alt="profil icon">
 						{% else %}
-							<img class="profile" src="{{ asset('images/image-profile.png') }}" alt="profil icon">
+							<img class="profile" src="{{ asset('images/image-profile.png') | imagine_filter('profile') }}" alt="profil icon">
 						{% endif %}
 					</li>
 				</ul>

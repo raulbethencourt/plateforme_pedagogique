@@ -48,9 +48,9 @@
 				<div class="d-flex flex-column justify-content-center align-items-center mr-3">
 					<a href="{{ path('teacher_edit_avatar') }}">
 						{% if teacher.avatar is defined and teacher.avatar is not null %}
-							<img src="{{ vich_uploader_asset(teacher.avatar) }}" alt="profile" class="rounded-circle profile__img">
+							<img src="{{ vich_uploader_asset(teacher.avatar) | imagine_filter('profile') }}" alt="profile" class="rounded-circle profile__img">
 						{% else %}
-							<img src="{{ asset('images/image-profile.png') }}" alt="profile" class="rounded-circle profile__img">
+							<img src="{{ asset('images/image-profile.png') | imagine_filter('profile') }}" alt="profile" class="rounded-circle profile__img">
 						{% endif %}
 					</a>
 					<a href="{{ path('teacher_edit_profile') }}" class="btn btn-primary w-75 mt-4">Éditer Profil</a>
@@ -58,8 +58,4 @@
 			</div>
 		</div>
 	</div>
-	{# <div class="mr-auto ml-auto text-center mt-3 w-75">
-				        <h2><span class="badge badge-dark rounded p-2">Nombre de questionnaires créés :</span></h2>
-				        <canvas id="questionnairesChart"></canvas>
-				    </div> #}
 {% endblock %}

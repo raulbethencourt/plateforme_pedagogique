@@ -35,7 +35,7 @@ class QuestionType extends AbstractType
                 [
                     'label' => 'Choisissez votre image :',
                     'delete_label' => 'Supprimer l\'ancienne image.',
-                    'imagine_pattern' => 'thumb',
+                    'imagine_pattern' => 'question',
                     'required' => false,
                 ]
             )
