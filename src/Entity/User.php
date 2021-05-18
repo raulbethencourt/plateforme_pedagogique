@@ -2,16 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
 use DateTimeInterface;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\DiscriminatorColumn;
-use Doctrine\ORM\Mapping\DiscriminatorMap;
+use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping\InheritanceType;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\ORM\Mapping\DiscriminatorMap;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping\DiscriminatorColumn;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -111,8 +111,6 @@ class User implements UserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -232,9 +230,6 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Lesson[]
-     */
     public function getLessons(): Collection
     {
         return $this->lessons;
@@ -259,9 +254,6 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Classroom[]
-     */
     public function getClassrooms(): Collection
     {
         return $this->classrooms;
@@ -269,7 +261,7 @@ class User implements UserInterface
 
     public function addClassroom(Classroom $classroom): self
     {
-        if (!$this->classrooms->contains($classroom)) {
+        if (!$this->classrooms->contains($classroom) || !isset($this->classrooms)) {
             $this->classrooms[] = $classroom;
         }
 

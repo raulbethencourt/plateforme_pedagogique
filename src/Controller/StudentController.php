@@ -32,15 +32,24 @@ class StudentController extends AbstractController
     public function show(): Response
     {
         $student = $this->getUser();
+
+        return $this->render('student/show.html.twig', [
+            'student' => $student,
+        ]);
+    }
+
+    /**
+     * @Route("/", name="student_classrooms")
+     */
+    public function showClassrooms(): Response
+    {
+        $student = $this->getUser();
         $classrooms = $student->getClassrooms();
 
-        return $this->render(
-            'student/show.html.twig',
-            [
-                'student' => $student,
-                'classrooms' => $classrooms,
-            ]
-        );
+        return $this->render('student/classrooms.html.twig', [
+            'student' => $student,
+            'classrooms' => $classrooms,
+        ]);
     }
 
     /**

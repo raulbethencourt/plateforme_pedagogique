@@ -4,11 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Avatar;
 use App\Form\AvatarType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\BreadCrumbsService as BreadCrumbs;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AvatarController extends AbstractController
 {
@@ -50,9 +50,6 @@ class AvatarController extends AbstractController
 
         return $this->render('avatar/edit.html.twig', [
             'form' => $form->createView(),
-            'student' => $this->getUser(),
-            'teacher' => $this->getUser(),
-            'user' => $this->getUser(),
         ]);
     }
 }

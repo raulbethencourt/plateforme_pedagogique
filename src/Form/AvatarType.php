@@ -20,7 +20,7 @@ class AvatarType extends AbstractType
                 [
                     'label' => 'Choisissez votre image :',
                     'allow_delete' => false,
-                    'imagine_pattern' => 'thumb'
+                    'imagine_pattern' => 'profile'
                 ]
             )
             ->add(
