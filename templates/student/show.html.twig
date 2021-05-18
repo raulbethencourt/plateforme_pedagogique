@@ -7,9 +7,12 @@
 {% block body %}
 	<div class="row">
 		<div class="col-12 d-flex flex-column align-items-center">
+		{% for classroom in student.classrooms %}
+			
 		<pre>
-			{{ dump(classrooms[0].lessons[0]) }}
+			{{ dump(classroom) }}
 		</pre>
+		{% endfor %}
 		</div>
 	</div>
 {% endblock %}

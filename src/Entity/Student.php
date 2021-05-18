@@ -25,7 +25,6 @@ class Student extends User
     public function __construct()
     {
         $this->pass = new ArrayCollection();
-        $this->classrooms = new ArrayCollection();
     }
 
     public function getPass(): Collection

@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\TeacherRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,12 +14,6 @@ class Teacher extends User
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $subject;
-
-    public function __construct()
-    {
-        $this->classrooms = new ArrayCollection();
-    }
-
 
     public function getSubject(): ?string
     {

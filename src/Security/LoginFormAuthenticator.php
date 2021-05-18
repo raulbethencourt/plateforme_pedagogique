@@ -2,8 +2,6 @@
 
 namespace App\Security;
 
-use App\Entity\Student;
-use App\Entity\Teacher;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -113,13 +111,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             return new RedirectResponse($this->urlGenerator->generate('confirm_mail'));
         }
 
-        if (!$request->get('type')) {
-            $teacher = Teacher::class === get_class($this->userConnected);
-            $student = Student::class === get_class($this->userConnected);
-        } else {
-            $teacher = 'teacher' === $request->get('type');
-            $student = 'student' === $request->get('type');
-        }
+        $role = $this->userConnected->getRoles()[0];
+        $teacher = 'ROLE_TEACHER' === $role;
+        $student = 'ROLE_STUDENT' === $role;
 
         // I do a redirection using the user type to arrive a different parts of the application
         switch (true) {
@@ -131,12 +125,22 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
                     )
                 );
             case $student:
+                if (1 === count($this->userConnected->getClassrooms())) {
                     return new RedirectResponse(
                         $this->urlGenerator->generate(
                             'student_show',
                             ['user' => $this->userConnected]
                         )
                     );
+                }
+
+                return new RedirectResponse(
+                    $this->urlGenerator->generate(
+                        'student_classrooms',
+                        ['user' => $this->userConnected]
+                    )
+                );
+
             default:
                 return new RedirectResponse($this->urlGenerator->generate('user_show'));
         }

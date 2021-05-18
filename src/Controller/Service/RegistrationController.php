@@ -2,28 +2,28 @@
 
 namespace App\Controller\Service;
 
-use App\Entity\User;
 use App\Entity\Student;
 use App\Entity\Teacher;
-use App\Service\FindEntity;
-use App\Security\EmailVerifier;
+use App\Entity\User;
 use App\Form\RegistrationFormType;
-use Symfony\Component\Mime\Address;
+use App\Security\EmailVerifier;
 use App\Security\LoginFormAuthenticator;
+use App\Service\FindEntity;
+use function PHPSTORM_META\type;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 /**
  * Class RegistrationController
- * This class manage the different users registrations
- * @package App\Controller
+ * This class manage the different users registrations.
  */
 class RegistrationController extends AbstractController
 {
@@ -42,11 +42,8 @@ class RegistrationController extends AbstractController
 
     /**
      * @Route("/register", name="app_register")
+     *
      * @param Request $request
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     * @param GuardAuthenticatorHandler $guardHandler
-     * @param LoginFormAuthenticator $authenticator
-     * @return Response
      */
     public function register(
         UserPasswordEncoderInterface $passwordEncoder,
@@ -54,7 +51,7 @@ class RegistrationController extends AbstractController
         LoginFormAuthenticator $authenticator
     ): Response {
         // I get User type property to change the registration way
-        $type = $this->request->query->get("type");
+        $type = $this->request->query->get('type');
         $classroom = $this->find->findClassroom();
 
         // In depends of type we creates different user
@@ -86,7 +83,7 @@ class RegistrationController extends AbstractController
                 )
             );
 
-            if ($type === 'teacher' || $type === 'student') {
+            if ('teacher' === $type || 'student' === $type) {
                 $user->addClassroom($classroom);
             }
 
@@ -127,7 +124,6 @@ class RegistrationController extends AbstractController
      */
     public function verifyUserEmail(): Response
     {
-
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
@@ -142,7 +138,7 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route ("/confirmation", name="confirm_mail")
+     * @Route("/confirmation", name="confirm_mail")
      */
     public function renderConfirmation()
     {
