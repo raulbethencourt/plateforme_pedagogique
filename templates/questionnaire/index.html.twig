@@ -22,6 +22,43 @@
 		</div>
 	</div>
 
+	<div class="row">
+		<div class="col-12">
+			{{ form_start(form) }}
+			<div class="invite-form--responsive justify-content-sm-around align-items-center ">
+				<div class="form-group m-2">
+					{{ form_errors(form.title) }}
+					{{ form_widget(form.title) }}
+					{{ form_help(form.title) }}
+				</div>
+				<div class="form-group m-2">
+					{{ form_errors(form.level) }}
+					{{ form_widget(form.level) }}
+					{{ form_help(form.level) }}
+				</div>
+				<div class="form-group m-2">
+					{{ form_errors(form.category) }}
+					{{ form_widget(form.category) }}
+					{{ form_help(form.category) }}
+				</div>
+				<div class="form-group m-2">
+					{{ form_errors(form.author) }}
+					{{ form_widget(form.author) }}
+					{{ form_help(form.author) }}
+				</div>
+				<div class="form-group m-2">
+					{{ form_errors(form.date) }}
+					{{ form_widget(form.date) }}
+					{{ form_help(form.date) }}
+				</div>
+				<div class="form-group m-2">
+					{{ form_widget(form.submit) }}
+				</div>
+			</div>
+			{{ form_end(form) }}
+		</div>
+	</div>
+
 	{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and lesson_id is null %}
 		<a href="{{ path('questionnaire_new') }}" class="btn btn-secondary mb-2" role="button">Créer nouvelle</a>
 	{% endif %}
@@ -98,6 +135,7 @@
 					</table>
 					<div class="pagination">
 						{{ knp_pagination_render(questionnaires) }}</div>
+				</tbody>
 			</div>
 		</div>
 	{% endblock %}

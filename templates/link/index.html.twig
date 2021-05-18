@@ -16,10 +16,6 @@
 		</div>
 	</div>
 
-	{% if not classroom_id %}
-		<a href="{{ path('link_new') }}" class="btn btn-secondary mb-2" role="button">Créer nouveau</a>
-	{% endif %}
-
 	<div class="row">
 		<div class="col-12">
 			{{ form_start(form) }}
@@ -46,6 +42,10 @@
 			{{ form_end(form) }}
 		</div>
 	</div>
+	
+	{% if not classroom_id %}
+		<a href="{{ path('link_new') }}" class="btn btn-secondary mb-2" role="button">Créer nouveau</a>
+	{% endif %}
 
 	<div class="row">
 		<div class="col-12">

@@ -22,6 +22,7 @@ use App\Repository\QuestionRepository;
 use App\Repository\ClassroomRepository;
 use App\Repository\NotificationRepository;
 use App\Repository\QuestionnaireRepository;
+use DateTime;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class FindEntity
@@ -103,6 +104,14 @@ class FindEntity
         }
 
         return $this->questionnaireRepo->findOneById($questionnaire_id);
+    }
+
+    /**
+     * find questionnaires with search bar
+     */
+    public function searchQuestionnaire(?string $title, ?string $level, ?string $category, ?string $creator, ?DateTime $date): array
+    {
+        return $this->questionnaireRepo->findBySearch($title, $level, $category, $creator, $date);
     }
 
     /**

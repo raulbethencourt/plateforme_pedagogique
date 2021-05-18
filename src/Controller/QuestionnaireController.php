@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Pass;
 use App\Entity\Questionnaire;
 use App\Form\QuestionnaireType;
+use App\Form\SearchQuestionnaireType;
 use App\Repository\QuestionnaireRepository;
 use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
@@ -51,6 +52,28 @@ class QuestionnaireController extends AbstractController
     {
         $this->questionnaireBC(null, 'index');
 
+        $form = $this->createForm(SearchQuestionnaireType::class);
+        $form->handleRequest($this->request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $title = $form->getData()['title'];
+            $level = $form->getData()['level'];
+            $category = $form->getData()['category'];
+            $creator = $form->getData()['author'];
+            $date = $form->getData()['date'];
+            $questionnaires = $this->find->searchQuestionnaire($title, $level, $category, $creator, $date);
+            $questionnaires = $this->paginator->paginate($questionnaires, $this->request->query->getInt('page', 1), 10);
+
+            return $this->render('questionnaire/index.html.twig', [
+                'questionnaires' => $questionnaires,
+                'lesson_id' => $this->request->query->get('lesson_id'),
+                'classroom_id' => $this->request->query->get('classroom_id'),
+                'list' => $this->request->query->get('list'),
+                'lonely' => $this->request->query->get('lonely'),
+                'extra' => $this->request->query->get('extra'),
+                'form' => $form->createView(),
+            ]);
+        }
+
         $user = $this->getUser();
         if ('ROLE_TEACHER' === $user->getRoles()[0]) {
             $questionnaires = $questionnaireRepo->findByVisibilityOrCreator(true, $user->getUsername());
@@ -67,6 +90,7 @@ class QuestionnaireController extends AbstractController
             'list' => $this->request->query->get('list'),
             'lonely' => $this->request->query->get('lonely'),
             'extra' => $this->request->query->get('extra'),
+            'form' => $form->createView(),
         ]);
     }
 
