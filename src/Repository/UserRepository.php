@@ -50,15 +50,40 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         ;
     }
 
-    /*
-    public function findOneBySomeField($value): ?User
+    /**
+     * This method find the links with search bar data.
+     */
+    public function findBySearch(?string $name, ?string $surname, ?string $email, ?string $phone): array
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
+        $query = $this->createQueryBuilder('l');
+
+        if (isset($name)) {
+            $query = $query->andWhere('l.name LIKE :name')
+                ->setParameter('name', "%{$name}%")
+            ;
+        }
+
+        if (isset($surname)) {
+            $query = $query->andWhere('l.surname LIKE :surname')
+                ->setParameter('surname', "%{$surname}%")
+            ;
+        }
+
+        if (isset($email)) {
+            $query = $query->andWhere('l.email LIKE :email')
+                ->setParameter('email', "%{$email}%")
+            ;
+        }
+
+        if (isset($phone)) {
+            $query = $query->andWhere('l.telephone = :phone')
+                ->setParameter('phone', $phone)
+            ;
+        }
+
+        return $query->orderBy('l.id', 'ASC')
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
-    */
 }

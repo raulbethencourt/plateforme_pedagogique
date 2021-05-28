@@ -12,12 +12,40 @@
 
 	{{ wo_render_breadcrumbs() }}
 
+	{{ form_start(form) }}
+	<div class="row">
+		<div class="form-group col-3">
+			{{ form_errors(form.name) }}
+			{{ form_widget(form.name) }}
+			{{ form_help(form.name) }}
+		</div>
+		<div class="form-group col-2">
+			{{ form_errors(form.surname) }}
+			{{ form_widget(form.surname) }}
+			{{ form_help(form.surname) }}
+		</div>
+		<div class="form-group col-3">
+			{{ form_errors(form.email) }}
+			{{ form_widget(form.email) }}
+			{{ form_help(form.email) }}
+		</div>
+		<div class="form-group col-3">
+			{{ form_errors(form.telephone) }}
+			{{ form_widget(form.telephone) }}
+			{{ form_help(form.telephone) }}
+		</div>
+		<div class="form-group col-1">
+			{{ form_widget(form.submit) }}
+		</div>
+	</div>
+	{{ form_end(form) }}
+	
 	<div class="row">
 		<div class="col-12">
 			{% if type == 'teachers' %}
-				<h1>Liste des formateurs·rices</h1>
+				<h3>Liste des formateurs·rices</h3>
 			{% else %}
-				<h1>Liste des apprenants·es</h1>
+				<h3>Liste des apprenants·es</h3>
 			{% endif %}
 		</div>
 	</div>

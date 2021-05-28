@@ -16,14 +16,43 @@
 		</div>
 	</div>
 
+	{{ form_start(form) }}
+	<div class="row">
+		<div class="form-group col-3">
+			{{ form_errors(form.title) }}
+			{{ form_widget(form.title) }}
+			{{ form_help(form.title) }}
+		</div>
+		<div class="form-group col-2">
+			{{ form_errors(form.level) }}
+			{{ form_widget(form.level) }}
+			{{ form_help(form.level) }}
+		</div>
+		<div class="form-group col-3">
+			{{ form_errors(form.author) }}
+			{{ form_widget(form.author) }}
+			{{ form_help(form.author) }}
+		</div>
+		<div class="form-group col-3">
+			{{ form_errors(form.date) }}
+			{{ form_widget(form.date) }}
+			{{ form_help(form.date) }}
+		</div>
+		<div class="form-group col-1">
+			{{ form_widget(form.submit) }}
+		</div>
+	</div>
+	{{ form_end(form) }}
+
+	<div class="d-flex justify-content-around">
+		<h3>Liste des modules</h3>
+		{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and classroom_id is null %}
+			<a href="{{ path('lesson_new') }}" class="btn btn-secondary mb-2" role="button">Créer nouveau</a>
+		{% endif %}
+	</div>
+
 	<div class="row">
 		<div class="col-12">
-			<div class="d-flex justify-content-around">
-				<h1>Liste des modules</h1>
-				{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and classroom_id is null %}
-					<a href="{{ path('lesson_new') }}" class="btn btn-secondary mb-2" role="button">Créer nouveau</a>
-				{% endif %}
-			</div>
 			<table class="table border-bottom">
 				<thead class="thead-dark">
 					<tr>

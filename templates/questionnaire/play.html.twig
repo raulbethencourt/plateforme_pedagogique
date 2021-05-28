@@ -6,70 +6,84 @@
 
 {% block body %}
 	<div class="row">
-		<div class="col-12">
+		<div class="col-12 mb-4">
 			{{ wo_render_breadcrumbs() }}
 		</div>
 	</div>
 
-	<h2 class="m-3">
-		{{ questionnaire.title }}
-	</h2>
+	<div class="row">
+		<div class="col-10 offset-1">
+			<h3>
+				{{ questionnaire.title }}
+			</h3>
 
-	<p class="alert alert-info">{{ questionnaire.instructions }}</p>
+			{% if questionnaire.instructions %}
+				<p class="alert alert-info">{{ questionnaire.instructions }}</p>
+			{% endif %}
 
-	<div class="m-3 text-center">
-		{% if questionnaire.linkdescription %}
-			<a href="{{ questionnaire.link }}" target="_blank" rel="noopener noreferrer">{{ questionnaire.linkdescription }}</a>
-		{% endif %}
-		{% if vich_uploader_asset(questionnaire, 'imageFile') %}
-			<img src="{{ vich_uploader_asset(questionnaire, 'imageFile')  | imagine_filter('questionnaire')}}" alt="Image" class="play__img">
-		{% endif %}
+
+			<div class="d-flex flex-column align-items-center">
+				{% if questionnaire.linkdescription %}
+					<div class="d-flex align-items-center m-3">
+						<img src="{{ asset('images/link-icon.webp') }}" alt="link icon" class="link-icon mr-3">
+						<a href="{{ questionnaire.link }}" target="_blank" rel="noopener noreferrer" class="play-link">{{ questionnaire.linkdescription }}</a>
+					</div>
+				{% endif %}
+				{% if vich_uploader_asset(questionnaire, 'imageFile') %}
+					<img src="{{ vich_uploader_asset(questionnaire, 'imageFile') | imagine_filter('questionnaire')}}" alt="Image" class="m-3">
+				{% endif %}
+			</div>
+
+			{% if finalResults['given'] is not null %}
+				<div class="alert alert-primary mt-3">Vos points :
+					{{ points }}
+					/
+					{{ questionnaire.totalScore }}</div>
+			{% endif %}
+		</div>
 	</div>
 
-	{% if finalResults['given'] is not null %}
-		<div class="alert alert-primary">Votre points :
-			{{ points }}/{{ questionnaire.totalScore }}</div>
-	{% endif %}
+	<div class="row">
+		<div class="col-10 offset-1">
+			<form method="post">
+				{% for question in questions %}
+					<h5 class="pt-3">{{ loop.index }}
+						-
+						{{ question.title }}</h5>
 
-	<form method="post">
-		{% for question in questions %}
-			<article class="container">
-				<h5 class="pt-3 mb-0">{{ loop.index }}
-					-
-					{{ question.title }}</h5>
-
-				<div class="m-3 text-center">
 					{% if question.imageName is defined and question.imageName is not null %}
-						<img src="{{ vich_uploader_asset(question, 'imageFile') | imagine_filter('question') }}" alt="profile" class="play__question-img">
+						<div class="m-4 text-center">
+							<img src="{{ vich_uploader_asset(question, 'imageFile') | imagine_filter('question') }}" alt="profile">
+						</div>
 					{% endif %}
-				</div>
 
-				<small class="text-muted">{{ question.score }}
-					{{ question.score > 1 ? "points" : "point" }}</small>
+					<small class="text-muted">{{ question.score }}
+						{{ question.score > 1 ? "points" : "point" }}</small>
 
-				<ul class="list-group">
-					{% for proposition in question.propositions %}
+					<ul class="list-group mb-4">
+						{% for proposition in question.propositions %}
 
-						{% set lgi_class, checked = "", "" %}
-						{% if finalResults['given'] is not null and proposition.id in finalResults['given'] %}
-							{% set checked = "checked" %}
-							{% if proposition.id in finalResults['rights'] %}
-								{% set lgi_class = "correct" %}
-							{% else %}
-								{% set lgi_class = "wrong" %}
+							{% set lgi_class, checked = "", "" %}
+							{% if finalResults['given'] is not null and proposition.id in finalResults['given'] %}
+								{% set checked = "checked" %}
+								{% if proposition.id in finalResults['rights'] %}
+									{% set lgi_class = "correct" %}
+								{% else %}
+									{% set lgi_class = "wrong" %}
+								{% endif %}
 							{% endif %}
-						{% endif %}
 
-						<li class="list-group-item {{ lgi_class }}">
-							<label>
-								<input type="radio" name="{{ question.id }}" value="{{ proposition.id }}" {{ checked }}>
-								{{ proposition.text }}
-							</label>
-						</li>
-					{% endfor %}
-				</ul>
-			</article>
-		{% endfor %}
+							<li class="list-group-item {{ lgi_class }}">
+								<label>
+									<input type="radio" name="{{ question.id }}" value="{{ proposition.id }}" {{ checked }}>
+									{{ proposition.text }}
+								</label>
+							</li>
+						{% endfor %}
+					</ul>
+				{% endfor %}
+			</div>
+		</div>
 
 		<div class="pagination">
 			{{ knp_pagination_render(questions) }}

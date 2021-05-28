@@ -20,50 +20,10 @@
 	</div>
 
 	{% if is_granted('ROLE_SUPER_ADMIN') %}
-		<div class="row">
-			<div class="col-12">
-				<div id="inviterForm" {% if not form.vars.submitted %} style="display: none;" {% endif %} class="w-100">
-					<button type="button" id="closeInviter" class="close">
-						<span aria-hidden="true" class="text-danger">&times;</span>
-					</button>
-					{{ form_start(form) }}
-					<div class="invite-form--responsive justify-content-sm-around align-items-center ">
-						<div class="form-group m-2">
-							{{ form_errors(form.name) }}
-							{{ form_widget(form.name) }}
-							{{ form_help(form.name) }}
-						</div>
-						<div class="form-group m-2">
-							{{ form_errors(form.surname) }}
-							{{ form_widget(form.surname) }}
-							{{ form_help(form.surname) }}
-						</div>
-						<div class="form-group m-2">
-							{{ form_errors(form.email) }}
-							{{ form_widget(form.email) }}
-							{{ form_help(form.email) }}
-						</div>
-						{% if is_granted('ROLE_SUPER_ADMIN') %}
-							<div class="form-group m-2 d-none">
-								{{ form_errors(form.type) }}
-								{{ form_widget(form.type) }}
-								{{ form_help(form.type) }}
-							</div>
-						{% endif %}
-						<div class="form-group m-2">
-							{{ form_widget(form.submit) }}
-						</div>
-					</div>
-					{{ form_end(form) }}
-				</div>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-12 d-flex flex-column align-items-center">
-				<a id="inviterBtn" class="nav-link btn btn-secondary w-25" href="#" role="button">Ajouter</a>
-				<h2>Liste des administrateurs·rices</h2>
-				<ul class="list-group w-75">
+		<div class="row mt-5">
+			<div class="col-5 offset-1">
+				<h3 class="mb-3">Liste des administrateurs·rices</h3>
+				<ul class="list-group w-100">
 					{% for admin in admins %}
 						<li class="list-group-item d-flex justify-content-between align-items-center">
 							{{ admin.name}}
@@ -77,13 +37,46 @@
 					{% endfor %}
 				</ul>
 			</div>
+
+			<div class="col-5">
+				<h3 class="mb-3">Formulaire d'invitation</h3>
+				{{ form_start(form) }}
+				<div class="form-group mb-3">
+					{{ form_errors(form.name) }}
+					{{ form_widget(form.name) }}
+					{{ form_help(form.name) }}
+				</div>
+				<div class="form-group mb-3">
+					{{ form_errors(form.surname) }}
+					{{ form_widget(form.surname) }}
+					{{ form_help(form.surname) }}
+				</div>
+				<div class="form-group mb-3">
+					{{ form_errors(form.email) }}
+					{{ form_widget(form.email) }}
+					{{ form_help(form.email) }}
+				</div>
+				{% if is_granted('ROLE_SUPER_ADMIN') %}
+					<div class="form-group mb-3 d-none">
+						{{ form_errors(form.type) }}
+						{{ form_widget(form.type) }}
+						{{ form_help(form.type) }}
+					</div>
+				{% endif %}
+				<div class="form-group mb-3">
+					{{ form_widget(form.submit) }}
+				</div>
+				{{ form_end(form) }}
+			</div>
 		</div>
 	{% endif %}
 
-	<div class="row">
-		<div class="col-12 d-flex flex-column align-items-center">
-			<a href="{{ path('classroom_new') }}" class="btn btn-secondary w-25 align-self-center">Créer une classe</a>
-			<h3>Liste des classes</h3>
+	<div class="row mt-5">
+		<div class="col-10 offset-1 d-flex flex-column align-items-start">
+			<div class="d-flex w-100 justify-content-between">
+				<h3>Liste des classes</h3>
+				<a href="{{ path('classroom_new') }}" class="btn btn-primary">Créer une classe</a>
+			</div>
 			<div class="table-responsive">
 				<table class="table border-bottom">
 					<thead class="thead-dark">
@@ -107,14 +100,14 @@
 								<td>{{ classroom.discipline }}</td>
 								<td>
 									{% for user in classroom.users %}
-										/
 										{% if user.roles[0] == 'ROLE_TEACHER' %}
+										/
 											{{ user.name }}
 										{% endif %}
 									{% endfor %}
 								</td>
 								<td>
-									<div class="d-flex justify-content-center w-50">
+									<div class="d-flex">
 										<a href="{{ path('classroom_edit', {id: classroom.id}) }}" class="btn btn-secondary mr-lg-2" role="button">Éditer</a>
 										<form method="post" action="{{ path('classroom_delete', {id: classroom.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer cette classe  ? \nCette action est irréversible.')">
 											<input type="hidden" name="_method" value='DELETE'>

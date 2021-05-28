@@ -9,7 +9,7 @@ $white:         #fff !default;
 $gray-100: #d8e6e7 !default;
 $gray-200: #e9ecef !default;
 $gray-300: #f4f4f4 !default;
-$gray-400: #ced4da !default;
+$gray-400: #c0c2cc !default;
 $gray-500: #adb5bd !default;
 $gray-600: #9cc3c1 !default;
 $gray-700: #585858 !default;
@@ -33,14 +33,14 @@ $grays: map-merge(
   $grays
 );
 
-$blue: #0f858d !default;
+$blue: #5077ca !default;
 $indigo:  #6610f2 !default;
-$purple:  #6f42c1 !default;
+$purple:  #9566ed !default;
 $pink: #f2bbb9 !default;
-$red: #d14b3c !default;
+$red: #c76f66 !default;
 $orange:  #fd7e14 !default;
 $yellow: #f2c538 !default;
-$green: #dde7c7 !default;
+$green: #b2c48b !default;
 $teal:    #20c997 !default;
 $cyan: #a8bcd1 !default;
 
@@ -234,7 +234,7 @@ $grid-row-columns:            6 !default;
 $line-height-lg:              1.5 !default;
 $line-height-sm:              1.5 !default;
 
-$border-width:                1px !default;
+$border-width:                2px !default;
 $border-color:                $gray-300 !default;
 
 $border-radius:               .25rem !default;
@@ -274,12 +274,12 @@ $embed-responsive-aspect-ratios: join(
 // Font, line-height, and color for body text, headings, and more.
 
 // stylelint-disable value-keyword-case
-$font-family-sans-serif:      "Quicksand",;
+$font-family-sans-serif:      Quicksand;
 $font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
 $font-family-base:            $font-family-sans-serif !default;
 // stylelint-enable value-keyword-case
 
-$font-size-base:              1rem !default; // Assumes the browser default, typically `16px`
+$font-size-base:              1.1rem !default; // Assumes the browser default, typically `16px`
 $font-size-lg:                $font-size-base * 1.25 !default;
 $font-size-sm:                $font-size-base * .875 !default;
 

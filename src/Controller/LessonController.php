@@ -4,16 +4,17 @@ namespace App\Controller;
 
 use App\Entity\Lesson;
 use App\Form\LessonType;
-use App\Repository\LessonRepository;
-use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
+use App\Form\SearchLessonType;
+use App\Repository\LessonRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\BreadCrumbsService as BreadCrumbs;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/lesson")
@@ -50,6 +51,24 @@ class LessonController extends AbstractController
         $list = $request->get('list');
         $user = $this->getUser();
 
+        $form = $this->createForm(SearchLessonType::class);
+        $form->handleRequest($this->request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $title = $form->getData()['title'];
+            $level = $form->getData()['level'];
+            $creator = $form->getData()['author'];
+            $date = $form->getData()['date'];
+            $lessons = $this->find->searchLesson($title, $level, $creator, $date);
+            $lessons = $this->paginator->paginate($lessons, $this->request->query->getInt('page', 1), 10);
+
+            return $this->render('lesson/index.html.twig', [
+                'lessons' => $lessons,
+                'classroom_id' => $classroom_id,
+                'list' => $list,
+                'form' => $form->createView(),
+            ]);
+        }
+
         if ('ROLE_TEACHER' === $user->getRoles()[0]) {
             $lessons = $lessonRepo->findByVisibilityOrCreator(true, $user->getUsername());
         } else {
@@ -64,6 +83,7 @@ class LessonController extends AbstractController
             'lessons' => $lessons,
             'classroom_id' => $classroom_id,
             'list' => $list,
+            'form' => $form->createView(),
         ]);
     }
 
