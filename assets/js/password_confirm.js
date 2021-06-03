@@ -4,7 +4,7 @@ import $ from "jquery";
 let allowsubmit = false;
 //on keypress
 
-$('#confpass').keyup(function (e) {
+$('#confpass').on('keyup', (e) => {
     //get values
     let pass = $('#registration_form_plainPassword').val();
     let confpass = $(this).val();
@@ -21,7 +21,7 @@ $('#confpass').keyup(function (e) {
 });
 
 //jquery form submit
-$('.regisForm').submit(function () {
+$('.regisForm').on('click', () => {
 
     let pass = $('#registration_form_plainPassword').val();
     let confpass = $('#confpass').val();
