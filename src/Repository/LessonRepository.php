@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use DateTime;
 use App\Entity\Lesson;
 use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
@@ -48,6 +49,43 @@ class LessonRepository extends ServiceEntityRepository
                 new Parameter('val2', $creator),
             ]))
             ->orderBy('l.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * This method find the links with search bar data.
+     */
+    public function findBySearch(?string $title, ?string $level, ?string $creator, ?DateTime $date): array
+    {
+        $query = $this->createQueryBuilder('l');
+
+        if (isset($title)) {
+            $query = $query->andWhere('l.title LIKE :title')
+                ->setParameter('title', "%{$title}%")
+            ;
+        }
+
+        if (isset($level)) {
+            $query = $query->andWhere('l.level = :level')
+                ->setParameter('level', $level)
+            ;
+        }
+
+        if (isset($creator)) {
+            $query = $query->andWhere('l.creator = :creator')
+                ->setParameter('creator', $creator)
+            ;
+        }
+
+        if (isset($date)) {
+            $query = $query->andWhere('l.date_creation = :date')
+                ->setParameter('date', $date)
+            ;
+        }
+
+        return $query->orderBy('l.id', 'ASC')
             ->getQuery()
             ->getResult()
         ;

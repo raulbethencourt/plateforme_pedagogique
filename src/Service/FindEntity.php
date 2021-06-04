@@ -2,26 +2,26 @@
 
 namespace App\Service;
 
-use App\Entity\Link;
-use App\Entity\Pass;
-use App\Entity\User;
+use App\Entity\Classroom;
 use App\Entity\Lesson;
+use App\Entity\Link;
+use App\Entity\Notification;
+use App\Entity\Pass;
+use App\Entity\Question;
+use App\Entity\Questionnaire;
 use App\Entity\Student;
 use App\Entity\Teacher;
-use App\Entity\Question;
-use App\Entity\Classroom;
-use App\Entity\Notification;
-use App\Entity\Questionnaire;
-use App\Repository\LinkRepository;
-use App\Repository\PassRepository;
-use App\Repository\UserRepository;
+use App\Entity\User;
+use App\Repository\ClassroomRepository;
 use App\Repository\LessonRepository;
+use App\Repository\LinkRepository;
+use App\Repository\NotificationRepository;
+use App\Repository\PassRepository;
+use App\Repository\QuestionnaireRepository;
+use App\Repository\QuestionRepository;
 use App\Repository\StudentRepository;
 use App\Repository\TeacherRepository;
-use App\Repository\QuestionRepository;
-use App\Repository\ClassroomRepository;
-use App\Repository\NotificationRepository;
-use App\Repository\QuestionnaireRepository;
+use App\Repository\UserRepository;
 use DateTime;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -93,6 +93,14 @@ class FindEntity
     }
 
     /**
+     * find lessons with search bar.
+     */
+    public function searchLesson(?string $title, ?string $level, ?string $creator, ?DateTime $date): array
+    {
+        return $this->lessonRepo->findBySearch($title, $level, $creator, $date);
+    }
+
+    /**
      * Find a Questionnaire.
      */
     public function findQuestionnaire(): ?Questionnaire
@@ -107,7 +115,7 @@ class FindEntity
     }
 
     /**
-     * find questionnaires with search bar
+     * find questionnaires with search bar.
      */
     public function searchQuestionnaire(?string $title, ?string $level, ?string $category, ?string $creator, ?DateTime $date): array
     {
@@ -143,7 +151,7 @@ class FindEntity
     }
 
     /**
-     * find links with search bar
+     * find links with search bar.
      */
     public function searchLink(?string $name, ?string $category, ?string $creator): array
     {
@@ -180,6 +188,14 @@ class FindEntity
     public function findUsersByRole(string $role): array
     {
         return $this->userRepo->findByRole($role);
+    }
+
+    /**
+     * find user with search bar.
+     */
+    public function searchUser(?string $name, ?string $surname, ?string $email, ?string $phone): array
+    {
+        return $this->userRepo->findBySearch($name, $surname, $email, $phone);
     }
 
     /**

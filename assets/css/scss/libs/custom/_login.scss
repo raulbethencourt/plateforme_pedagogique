@@ -1,6 +1,12 @@
+.img--rounded {
+	border-radius: 50%;
+}
+
 .login__title {
 	margin: 25px 0;
 	font-weight: bold;
+	font-size: 2rem;
+	font-family: "Open Sans", "Arial", sans-serif;
 
 	.text--red {
 		color: $red;
@@ -12,6 +18,7 @@
 	flex-direction: column;
 	margin: auto 0;
 	max-width: 280px;
+	font-family: Quicksand;
 
 	form {
 		background-color: $gray-800;

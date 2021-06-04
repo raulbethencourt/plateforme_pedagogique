@@ -113,7 +113,7 @@ class QuestionnaireType extends AbstractType
                     'choices' => [
                         'QCM ' => 'qcm',
                         'Vrai/faux 2' => 'vf',
-                        'Text a trous' => 'tous',
+                        'Texte à trous' => 'trous',
                     ],
                     'label' => 'Type d\'activité',
                 ]

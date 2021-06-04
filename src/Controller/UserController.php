@@ -6,6 +6,7 @@ use App\Controller\Service\InvitationsController;
 use App\Entity\Invite;
 use App\Form\EditUserType;
 use App\Form\InviteType;
+use App\Form\SearchUserType;
 use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
@@ -73,12 +74,31 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/list", name="user_list")
+     * @Route("/list", name="user_list", methods={"GET"})
      */
     public function listUsers(): Response
     {
         $type = $this->request->query->get('type');
         $listProfileEdit = $this->request->query->get('list_profile_edit');
+
+        $form = $this->createForm(SearchUserType::class);
+        $form->handleRequest($this->request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $name = $form->getData()['name'];
+            $surname = $form->getData()['surname'];
+            $email = $form->getData()['email'];
+            $phone = $form->getData()['telephone'];
+
+            $users = $this->find->searchUser($name, $surname, $email, $phone);
+            $users = $this->paginator->paginate($users, $this->request->query->getInt('page', 1), 10);
+
+            return $this->render('user/list.html.twig', [
+                'users' => $users,
+                'type' => $type,
+                'list_profile_edit' => $listProfileEdit,
+                'form' => $form->createView(),
+            ]);
+        }
 
         if ('teachers' === $type) {
             $users = $this->find->findUsersByRole('ROLE_TEACHER');
@@ -94,6 +114,7 @@ class UserController extends AbstractController
             'users' => $users,
             'type' => $type,
             'list_profile_edit' => $listProfileEdit,
+            'form' => $form->createView(),
         ]);
     }
 

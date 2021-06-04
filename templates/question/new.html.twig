@@ -17,7 +17,7 @@
 	{% endfor %}
 
 	<div class="d-flex justify-content-between">
-		<h1>Créer une question</h1>
+		<h3>Créer une question</h3>
 
 		<div class="text-right">
 			<a class="btn btn-primary" href="{{ path('questionnaire_show', {id: questionnaire.id, classroom_id: classroom_id, lesson_id: lesson_id, list: list, lonely: lonely, extra: extra}) }}" role="button">{{ button|default('Activité terminé') }}</a>

@@ -211,7 +211,7 @@ class QuestionnaireController extends AbstractController
     public function delete(Questionnaire $questionnaire): Response
     {
         // check the token to delete
-        if ($this->isCsrfTokenValid('delete'.$questionnaire->getId(), $this->request->query->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$questionnaire->getId(), $this->request->get('_token'))) {
             $this->em->remove($questionnaire);
             $this->em->flush();
             $this->addFlash('success', 'Activité supprimé avec succès.');

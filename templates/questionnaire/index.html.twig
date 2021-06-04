@@ -22,42 +22,38 @@
 		</div>
 	</div>
 
+	{{ form_start(form) }}
 	<div class="row">
-		<div class="col-12">
-			{{ form_start(form) }}
-			<div class="invite-form--responsive justify-content-sm-around align-items-center ">
-				<div class="form-group m-2">
-					{{ form_errors(form.title) }}
-					{{ form_widget(form.title) }}
-					{{ form_help(form.title) }}
-				</div>
-				<div class="form-group m-2">
-					{{ form_errors(form.level) }}
-					{{ form_widget(form.level) }}
-					{{ form_help(form.level) }}
-				</div>
-				<div class="form-group m-2">
-					{{ form_errors(form.category) }}
-					{{ form_widget(form.category) }}
-					{{ form_help(form.category) }}
-				</div>
-				<div class="form-group m-2">
-					{{ form_errors(form.author) }}
-					{{ form_widget(form.author) }}
-					{{ form_help(form.author) }}
-				</div>
-				<div class="form-group m-2">
-					{{ form_errors(form.date) }}
-					{{ form_widget(form.date) }}
-					{{ form_help(form.date) }}
-				</div>
-				<div class="form-group m-2">
-					{{ form_widget(form.submit) }}
-				</div>
-			</div>
-			{{ form_end(form) }}
+		<div class="form-group col-2">
+			{{ form_errors(form.title) }}
+			{{ form_widget(form.title) }}
+			{{ form_help(form.title) }}
+		</div>
+		<div class="form-group col-2">
+			{{ form_errors(form.level) }}
+			{{ form_widget(form.level) }}
+			{{ form_help(form.level) }}
+		</div>
+		<div class="form-group col-2">
+			{{ form_errors(form.category) }}
+			{{ form_widget(form.category) }}
+			{{ form_help(form.category) }}
+		</div>
+		<div class="form-group col-2">
+			{{ form_errors(form.author) }}
+			{{ form_widget(form.author) }}
+			{{ form_help(form.author) }}
+		</div>
+		<div class="form-group col-3">
+			{{ form_errors(form.date) }}
+			{{ form_widget(form.date) }}
+			{{ form_help(form.date) }}
+		</div>
+		<div class="form-group col-1">
+			{{ form_widget(form.submit) }}
 		</div>
 	</div>
+	{{ form_end(form) }}
 
 	{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and lesson_id is null %}
 		<a href="{{ path('questionnaire_new') }}" class="btn btn-secondary mb-2" role="button">Créer nouvelle</a>
@@ -66,7 +62,7 @@
 
 	<div class="row">
 		<div class="col-12">
-			<h1>Liste des activités</h1>
+			<h3>Liste des activités</h3>
 			<table class="table border-bottom">
 				<thead class="thead-dark">
 					<tr>
@@ -82,7 +78,7 @@
 				<tbody>
 					{% for questionnaire in questionnaires %}
 						{% if questionnaire.lessons|length > 1 %}
-							<tr class="table-danger">
+							<tr class="table-warning">
 							{% elseif questionnaire.visibility %}
 								<tr class="table-success">
 								{% else %}
@@ -115,7 +111,6 @@
 												<form method="post" action="{{ path('questionnaire_delete', {id: questionnaire.id}) }}" style="display: inline-block" onsubmit="return confirm('Attention cette activité est utilisée dans d\'autres modules.\nSi vous la supprimez, elle sera également supprimée de ces autres modules.')">
 												{% else %}
 													<form method="post" action="{{ path('questionnaire_delete', {id: questionnaire.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous sur·e de vouloir supprimer cette activité ? \nCette action est irréversible.')">
-
 													{% endif %}
 													<input type="hidden" name="_method" value='DELETE'>
 													<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ questionnaire.id) }}">

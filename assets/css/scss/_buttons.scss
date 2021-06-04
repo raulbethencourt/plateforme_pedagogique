@@ -5,6 +5,8 @@
 //
 
 .btn {
+  width: max-content;
+  height: max-content;
   display: inline-block;
   font-family: $btn-font-family;
   font-weight: $btn-font-weight;
@@ -15,8 +17,8 @@
   vertical-align: middle;
   user-select: none;
   background-color: transparent;
-  border: $btn-border-width solid transparent;
-  box-shadow:  0 .5rem 1rem rgba($black, .15);
+  border: $btn-border-width solid $gray-700;
+  box-shadow:  none;
   @include button-size($btn-padding-y, $btn-padding-x, $btn-font-size, $btn-line-height, $rounded-pill);
   @include transition($btn-transition);
 
