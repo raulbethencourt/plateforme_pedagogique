@@ -32,7 +32,7 @@
 
 	<h3>Liste des activites</h3>
 	{% if lesson.classrooms|length > 1 %}
-		<table class="table border-bottom table-danger">
+		<table class="table border-bottom table-warning">
 		{% elseif lesson.visibility %}
 			<table class="table border-bottom table-success">
 			{% else %}

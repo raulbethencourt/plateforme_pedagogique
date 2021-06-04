@@ -208,12 +208,12 @@
 
 		<div class="row">
 			<div class="col-10 offset-1 d-flex flex-column align-items-center">
-				{% if classroom.lessons|length > 0 %}
 					<div class="d-flex">
-						<h3>Liste des modules</h3>
+						{% if classroom.lessons|length > 0 %}
+							<h3>Liste des modules</h3>
+						{% endif %}
 						<a href="{{ path('lesson_new', {classroom_id: classroom.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
 					</div>
-				{% endif %}
 				<div class="d-flex flex-wrap">
 					{% for lesson in lessons %}
 						{% if lesson.classrooms|length > 1 %}

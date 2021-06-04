@@ -111,7 +111,6 @@
 												<form method="post" action="{{ path('questionnaire_delete', {id: questionnaire.id}) }}" style="display: inline-block" onsubmit="return confirm('Attention cette activité est utilisée dans d\'autres modules.\nSi vous la supprimez, elle sera également supprimée de ces autres modules.')">
 												{% else %}
 													<form method="post" action="{{ path('questionnaire_delete', {id: questionnaire.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous sur·e de vouloir supprimer cette activité ? \nCette action est irréversible.')">
-
 													{% endif %}
 													<input type="hidden" name="_method" value='DELETE'>
 													<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ questionnaire.id) }}">

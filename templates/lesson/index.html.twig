@@ -68,7 +68,7 @@
 				<tbody>
 					{% for lesson in lessons %}
 						{% if lesson.classrooms|length > 1 %}
-							<tr class="table-danger">
+							<tr class="table-warning">
 							{% elseif lesson.visibility %}
 								<tr class="table-success">
 								{% else %}
