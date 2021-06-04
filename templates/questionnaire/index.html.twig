@@ -4,66 +4,70 @@
 {% endblock %}
 
 {% block body %}
-	{% for message in app.flashes('success') %}
-		<div class="alert alert-success mr-2 mb-0">
-			{{ message }}
-		</div>
-	{% endfor %}
-
-	{% for message in app.flashes('error') %}
-		<div class="alert alert-danger mr-2 mb-0">
-			{{ message }}
-		</div>
-	{% endfor %}
 
 	<div class="row">
-		<div class="col-12">
+		<div class="col-10 offset-1">
 			{{ wo_render_breadcrumbs() }}
+
+		{% for message in app.flashes('success') %}
+			<div class="alert alert-success">
+				{{ message }}
+			</div>
+		{% endfor %}
+
+		{% for message in app.flashes('error') %}
+			<div class="alert alert-danger">
+				{{ message }}
+			</div>
+		{% endfor %}
 		</div>
 	</div>
 
-	{{ form_start(form) }}
-	<div class="row">
-		<div class="form-group col-2">
-			{{ form_errors(form.title) }}
-			{{ form_widget(form.title) }}
-			{{ form_help(form.title) }}
+	<div class="row mt-4">
+		<div class="col-5 offset-1">
+			{{ form_start(form) }}
+			<div class="form-group">
+				{{ form_errors(form.title) }}
+				{{ form_widget(form.title) }}
+				{{ form_help(form.title) }}
+			</div>
+			<div class="form-group">
+				{{ form_errors(form.level) }}
+				{{ form_widget(form.level) }}
+				{{ form_help(form.level) }}
+			</div>
+			<div class="form-group">
+				{{ form_errors(form.category) }}
+				{{ form_widget(form.category) }}
+				{{ form_help(form.category) }}
+			</div>
 		</div>
-		<div class="form-group col-2">
-			{{ form_errors(form.level) }}
-			{{ form_widget(form.level) }}
-			{{ form_help(form.level) }}
-		</div>
-		<div class="form-group col-2">
-			{{ form_errors(form.category) }}
-			{{ form_widget(form.category) }}
-			{{ form_help(form.category) }}
-		</div>
-		<div class="form-group col-2">
-			{{ form_errors(form.author) }}
-			{{ form_widget(form.author) }}
-			{{ form_help(form.author) }}
-		</div>
-		<div class="form-group col-3">
-			{{ form_errors(form.date) }}
-			{{ form_widget(form.date) }}
-			{{ form_help(form.date) }}
-		</div>
-		<div class="form-group col-1">
-			{{ form_widget(form.submit) }}
+		<div class="col-5">
+				<div class="form-group">
+					{{ form_errors(form.author) }}
+					{{ form_widget(form.author) }}
+					{{ form_help(form.author) }}
+				</div>
+				<div class="form-group d-flex justify-content-between">
+					{{ form_errors(form.date) }}
+					{{ form_widget(form.date) }}
+					{{ form_help(form.date) }}
+					{{ form_widget(form.submit) }}
+				</div>
+			{{ form_end(form) }}
 		</div>
 	</div>
-	{{ form_end(form) }}
 
-	{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and lesson_id is null %}
-		<a href="{{ path('questionnaire_new') }}" class="btn btn-secondary mb-2" role="button">Créer nouvelle</a>
-	{% endif %}
+	<div class="row mt-5">
+		<div class="col-10 offset-1">
+			<div class="d-flex justify-content-around align-items-center">
+				<h3>Liste des activités</h3>
+				{% if lesson_id is null %}
+					<a href="{{ path('questionnaire_new') }}" class="btn btn-secondary mb-2" role="button">Créer nouvelle</a>
+				{% endif %}
+			</div>
 
-
-	<div class="row">
-		<div class="col-12">
-			<h3>Liste des activités</h3>
-			<table class="table border-bottom">
+			<table class="table border-bottom mt-2">
 				<thead class="thead-dark">
 					<tr>
 						<th scope="col"></th>
@@ -106,7 +110,7 @@
 									<td>{{ questionnaire.dateCreation }}</td>
 									<td>
 										{% if (is_granted('ROLE_ADMIN') or app.user.username == questionnaire.creator) and lesson_id is null %}
-											<a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}" {% if questionnaire.lessons|length > 1 %} id="editerInList" {% endif %} class="btn btn-secondary mr-2" role="button">Éditer</a>
+											<a href="{{ path('questionnaire_edit', {id: questionnaire.id}) }}" {% if questionnaire.lessons|length > 1 %} id="editerInList" {% endif %} class="btn btn-secondary mb-2" role="button">Éditer</a>
 											{% if questionnaire.lessons|length > 1 %}
 												<form method="post" action="{{ path('questionnaire_delete', {id: questionnaire.id}) }}" style="display: inline-block" onsubmit="return confirm('Attention cette activité est utilisée dans d\'autres modules.\nSi vous la supprimez, elle sera également supprimée de ces autres modules.')">
 												{% else %}
@@ -123,14 +127,16 @@
 												<a href="{{ path('lesson_questionnaire_add', {id: lesson_id, questionnaire_id: questionnaire.id, list: list}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
 											{% endif %}
 										</td>
-									</td>
 								</tr>
-							{% endfor %}
+							{% else %}
+							<tr>
+								<td colspan="6">Pas de resultat trouvé</td>
+							</tr>
+						{% endfor %}
 						</tbody>
 					</table>
 					<div class="pagination">
 						{{ knp_pagination_render(questionnaires) }}</div>
-				</tbody>
 			</div>
 		</div>
 	{% endblock %}

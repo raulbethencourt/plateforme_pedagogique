@@ -4,52 +4,62 @@
 {% endblock %}
 
 {% block body %}
-	{% for message in app.flashes('success') %}
-		<div class="alert alert-success mr-2 mb-0">
-			{{ message }}
-		</div>
-	{% endfor %}
 
 	<div class="row">
-		<div class="col-12">
+		<div class="col-10 offset-1">
 			{{ wo_render_breadcrumbs() }}
+
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success">
+					{{ message }}
+				</div>
+			{% endfor %}
+
+			{% for message in app.flashes('error') %}
+				<div class="alert alert-danger">
+					{{ message }}
+				</div>
+			{% endfor %}
 		</div>
 	</div>
 
-	<div class="row">
-		<div class="col-12">
+	<div class="row mt-4">
+		<div class="col-10 offset-1">
 			{{ form_start(form) }}
-			<div class="invite-form--responsive justify-content-sm-around align-items-center ">
-				<div class="form-group m-2">
+			<div class="d-flex justify-content-between">
+				<div class="form-group">
 					{{ form_errors(form.text) }}
 					{{ form_widget(form.text) }}
 					{{ form_help(form.text) }}
 				</div>
-				<div class="form-group m-2">
+				<div class="form-group">
 					{{ form_errors(form.category) }}
 					{{ form_widget(form.category) }}
 					{{ form_help(form.category) }}
 				</div>
-				<div class="form-group m-2">
+				<div class="form-group">
 					{{ form_errors(form.author) }}
 					{{ form_widget(form.author) }}
 					{{ form_help(form.author) }}
 				</div>
-				<div class="form-group m-2">
+				<div class="form-group">
 					{{ form_widget(form.submit) }}
 				</div>
 			</div>
 			{{ form_end(form) }}
 		</div>
 	</div>
-	
-	{% if not classroom_id %}
-		<a href="{{ path('link_new') }}" class="btn btn-secondary mb-2" role="button">Créer nouveau</a>
-	{% endif %}
 
-	<div class="row">
-		<div class="col-12">
-			<h3>Liste des liens</h3>
+
+	<div class="row mt-5">
+		<div class="col-10 offset-1">
+			<div class="d-flex justify-content-around align-items-center">
+				<h3>Liste des liens</h3>
+				{% if not classroom_id %}
+					<a href="{{ path('link_new') }}" class="btn btn-secondary mb-2" role="button">Créer nouveau</a>
+				{% endif %}
+			</div>
+
 			<table class="table border-bottom">
 				<thead class="thead-dark">
 					<tr>
@@ -65,7 +75,7 @@
 				<tbody>
 					{% for link in links %}
 						{% if link.classrooms|length > 1 %}
-							<tr class="table-danger">
+							<tr class="table-warning">
 							{% else %}
 								<tr>
 								{% endif %}
@@ -78,7 +88,7 @@
 								<td>{{ link.creator }}</td>
 								<td>
 									{% if (is_granted('ROLE_ADMIN') or app.user.username == link.creator) and classroom_id is null %}
-										<a href="{{ path('link_edit', {id: link.id, classroom_id: classroom_id}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+										<a href="{{ path('link_edit', {id: link.id, classroom_id: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Éditer</a>
 										{% if link.classrooms|length > 1 %}
 											<form method="post" action="{{ path('link_delete', {id: link.id}) }}" style="display: inline-block" onsubmit="return confirm('Attention ce lien est utilisé dans d\'autres classes.\nSi vous le supprimez, il sera également supprimé de ces autres classes.')">
 											{% else %}
@@ -95,11 +105,11 @@
 									</td>
 								</td>
 							</tr>
-					{% else %}
-						<tr>
-							<td colspan="6">Pas de resultat trouvé</td>
-						</tr>
-					{% endfor %}
+						{% else %}
+							<tr>
+								<td colspan="6">Pas de resultat trouvé</td>
+							</tr>
+						{% endfor %}
 				</tbody>
 			</table>
 			<div class="pagination">

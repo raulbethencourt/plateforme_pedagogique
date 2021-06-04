@@ -4,56 +4,58 @@
 {% endblock %}
 
 {% block body %}
-	{% for message in app.flashes('success') %}
-		<div class="alert alert-success mr-2 mb-0">
-			{{ message }}
-		</div>
-	{% endfor %}
-
 	<div class="row">
-		<div class="col-12">
+		<div class="col-10 offset-1">
 			{{ wo_render_breadcrumbs() }}
+
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success">
+					{{ message }}
+				</div>
+			{% endfor %}
 		</div>
 	</div>
 
-	{{ form_start(form) }}
-	<div class="row">
-		<div class="form-group col-3">
-			{{ form_errors(form.title) }}
-			{{ form_widget(form.title) }}
-			{{ form_help(form.title) }}
+	<div class="row mt-4">
+		<div class="col-5 offset-1">
+			{{ form_start(form) }}
+			<div class="form-group">
+				{{ form_errors(form.title) }}
+				{{ form_widget(form.title) }}
+				{{ form_help(form.title) }}
+			</div>
+			<div class="form-group">
+				{{ form_errors(form.level) }}
+				{{ form_widget(form.level) }}
+				{{ form_help(form.level) }}
+			</div>
 		</div>
-		<div class="form-group col-2">
-			{{ form_errors(form.level) }}
-			{{ form_widget(form.level) }}
-			{{ form_help(form.level) }}
-		</div>
-		<div class="form-group col-3">
-			{{ form_errors(form.author) }}
-			{{ form_widget(form.author) }}
-			{{ form_help(form.author) }}
-		</div>
-		<div class="form-group col-3">
-			{{ form_errors(form.date) }}
-			{{ form_widget(form.date) }}
-			{{ form_help(form.date) }}
-		</div>
-		<div class="form-group col-1">
-			{{ form_widget(form.submit) }}
+		<div class="col-5">
+			<div class="form-group">
+				{{ form_errors(form.author) }}
+				{{ form_widget(form.author) }}
+				{{ form_help(form.author) }}
+			</div>
+			<div class="form-group d-flex justify-content-between">
+				{{ form_errors(form.date) }}
+				{{ form_widget(form.date) }}
+				{{ form_help(form.date) }}
+				{{ form_widget(form.submit) }}
+			</div>
+			{{ form_end(form) }}
 		</div>
 	</div>
-	{{ form_end(form) }}
 
-	<div class="d-flex justify-content-around">
-		<h3>Liste des modules</h3>
-		{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and classroom_id is null %}
-			<a href="{{ path('lesson_new') }}" class="btn btn-secondary mb-2" role="button">Créer nouveau</a>
-		{% endif %}
-	</div>
+	<div class="row mt-5">
+		<div class="col-10 offset-1">
+			<div class="d-flex justify-content-around align-items-center">
+				<h3>Liste des modules</h3>
+				{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and classroom_id is null %}
+					<a href="{{ path('lesson_new') }}" class="btn btn-secondary mb-2" role="button">Créer nouveau</a>
+				{% endif %}
+			</div>
 
-	<div class="row">
-		<div class="col-12">
-			<table class="table border-bottom">
+			<table class="table border-bottom mt-2">
 				<thead class="thead-dark">
 					<tr>
 						<th scope="col"></th>
@@ -68,56 +70,58 @@
 				<tbody>
 					{% for lesson in lessons %}
 						{% if lesson.classrooms|length > 1 %}
-							<tr class="table-warning">
+								<tr class="table-warning">
 							{% elseif lesson.visibility %}
 								<tr class="table-success">
-								{% else %}
-									<tr>
-									{% endif %}
-									<th scope="row"></th>
-									<td>
-										{% if lonely is not defined %}
-											<a href="{{ path('lesson_show', {id: lesson.id, classroom_id: classroom_id, list: true}) }}">
-												{{ lesson.title }}
-											</a>
-										{% else %}
-											<a href="{{ path('lesson_show', {id: lesson.id, classroom_id: classroom_id, list: list}) }}">
-												{{ lesson.title }}
-											</a>
+							{% else %}
+								<tr>
+								{% endif %}
+								<th scope="row"></th>
+								<td>
+									{% if lonely is not defined %}
+										<a href="{{ path('lesson_show', {id: lesson.id, classroom_id: classroom_id, list: true}) }}">
+											{{ lesson.title }}
+										</a>
+									{% else %}
+										<a href="{{ path('lesson_show', {id: lesson.id, classroom_id: classroom_id, list: list}) }}">
+											{{ lesson.title }}
+										</a>
 										{% endif %}
-									</td>
-									<td>{{ lesson.creator }}</td>
-									<td>{{ lesson.level}}</td>
-									<td>{{ lesson.dateCreation}}</td>
-									<td>
-										{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
-											{% if classroom_id is null%}
-												<a href="{{ path('lesson_edit', {id: lesson.id, list: list}) }}" {% if lesson.classrooms|length > 1 %} id="editerInList" {% endif %} class=" btn btn-secondary mr-2" role="button">Éditer</a>
-												{% if lesson.classrooms|length > 1 %}
-													<form method="post" action="{{ path('lesson_delete', {id: lesson.id, list: list}) }}" style="display: inline-block" onsubmit="return confirm('Attention ce module est utilisé dans d\'autres classes.\nSi vous le supprimez, il sera également supprimé de ces autres classes.')">
-													{% else %}
-														<form method="post" action="{{ path('lesson_delete', {id: lesson.id, list: list}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous sur·e de vouloir supprimer ce module ? \nCette action est irréversible.')">
-														{% endif %}
-														<input type="hidden" name="_method" value='DELETE'>
-														<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
-														<button class="btn btn-danger">Supprimer</button>
-													</form>
-												{% endif %}
-												{% if classroom_id is not null %}
-													<a href="{{ path('classroom_lesson_add', {id: classroom_id, lesson_id: lesson.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
-												{% endif %}
+								</td>
+								<td>{{ lesson.creator }}</td>
+								<td>{{ lesson.level}}</td>
+								<td>{{ lesson.dateCreation}}</td>
+								<td>
+									{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
+										{% if classroom_id is null%}
+										<a href="{{ path('lesson_edit', {id: lesson.id, list: list}) }}" {% if lesson.classrooms|length > 1 %} id="editerInList" {% endif %} class=" btn btn-secondary mr-2" role="button">Éditer</a>
+											{% if lesson.classrooms|length > 1 %}
+												<form method="post" action="{{ path('lesson_delete', {id: lesson.id, list: list}) }}" style="display: inline-block" onsubmit="return confirm('Attention ce module est utilisé dans d\'autres classes.\nSi vous le supprimez, il sera également supprimé de ces autres classes.')">
+												{% else %}
+													<form method="post" action="{{ path('lesson_delete', {id: lesson.id, list: list}) }}" style="display: inline-block" onsubmit="return confirm('Êtes vous sur·e de vouloir supprimer ce module ? \nCette action est irréversible.')">
+													{% endif %}
+													<input type="hidden" name="_method" value='DELETE'>
+													<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
+													<button class="btn btn-danger">Supprimer</button>
+												</form>
 											{% endif %}
-										</td>
-									</td>
-								</tr>
-							{% endfor %}
-						</tbody>
-					</table>
+											{% if classroom_id is not null %}
+												<a href="{{ path('classroom_lesson_add', {id: classroom_id, lesson_id: lesson.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
+											{% endif %}
+									{% endif %}
+								</td>
+							</tr>
+					{% else %}
+						<tr>
+							<td colspan="6">Pas de resultat trouvé</td>
+						</tr>
+					{% endfor %}
 				</tbody>
+			</table>
+
+			<div class="pagination">
+				{{ knp_pagination_render(lessons) }}
 			</div>
 		</div>
-		<div class="pagination">
-			{{ knp_pagination_render(lessons) }}
-		</div>
-
-	{% endblock %}
+	</div>
+{% endblock %}
