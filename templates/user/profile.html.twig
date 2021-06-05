@@ -1,56 +1,66 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Admin profil{% endblock %}
+{% block title %}Admin profil
+{% endblock %}
 
 {% block body %}
-	{% for message in app.flashes('success') %}
-		<div class="alert alert-success mr-2 mb-0">
-			{{ message }}
-		</div>
-	{% endfor %}
-
 	<div class="row">
-		<div class="col-12">
+		<div class="col-10 offset-1">
 			{{ wo_render_breadcrumbs() }}
+
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success mr-2 mb-0">
+					{{ message }}
+				</div>
+			{% endfor %}
+
+			{% for message in app.flashes('error') %}
+				<div class="alert alert-danger">
+					{{ message }}
+				</div>
+			{% endfor %}
 		</div>
 	</div>
 
-	<div class="d-flex">
-		<div class="card w-100 m-1">
-			<h3 class="card-header text-white bg-dark">Informations personnelles</h3>
-			<div class="card-body d-flex justify-content-around">
-				<div class="flex-column w-75">
-					<ul class="list-group w-100">
+	<div class="row mt-4 mb-5">
+		<div class="col-10 offset-1">
+			<h3>Informations personnelles</h3>
+			<div class="d-flex justify-content-between align-items-center">
+				<ul class="list-group w-75">
+					<li class="list-group-item list-group-item-info">
+						<span class="font-weight-bold">Nom d'utilisateur·rice</span>
+					</li>
+					<li class="list-group-item">{{ user.username }}</li>
+					{% if user.name or user.surname %}
 						<li class="list-group-item list-group-item-info">
-							<span class="font-weight-bold">Nom d'utilisateur·rice</span>
+							<span class="font-weight-bold">Prénom et nom</span>
 						</li>
-						<li class="list-group-item">{{ user.username }}</li>
-						{% if user.name and user.surname %}
-							<li class="list-group-item list-group-item-info">
-								<span class="font-weight-bold">Prénom et nom</span>
-							</li>
-							<li class="list-group-item">{{ user.name ~ " " ~ user.surname }}</li>
-						{% endif %}
+						<li class="list-group-item">{{ user.name ~ " " ~ user.surname }}</li>
+					{% endif %}
+					{% if user.email %}
 						<li class="list-group-item list-group-item-info">
 							<span class="font-weight-bold">Email</span>
 						</li>
 						<li class="list-group-item">{{ user.email }}</li>
-						{% if user.telephone %}
-							<li class="list-group-item list-group-item-info">
-								<span class="font-weight-bold">Téléphone</span>
-							</li>
-							<li class="list-group-item">{{ user.telephone }}</li>
-						{% endif %}
-					</ul>
-					<a href="{{ path('user_edit_profile') }}" class="btn btn-primary mt-4">Éditer profil</a>
-				</div>
-				<a href="{{ path('user_edit_avatar') }}" class="d-flex flex-column align-items-center justify-content-center">
-					{% if user.avatar is defined and user.avatar is not null %}
-						<img src="{{ vich_uploader_asset(user.avatar) | imagine_filter('profile') }}" alt="profile" class="rounded-circle profile__img">
-					{% else %}
-						<img src="{{ asset('images/image-profile.png') | imagine_filter('profile') }}" alt="profile" class="rounded-circle profile__img mb-xl-5">
 					{% endif %}
-				</a>
+					{% if user.telephone %}
+						<li class="list-group-item list-group-item-info">
+							<span class="font-weight-bold">Téléphone</span>
+						</li>
+						<li class="list-group-item">{{ user.telephone }}</li>
+					{% endif %}
+				</ul>
+
+				<div class="d-flex flex-column align-items-center">
+					<a href="{{ path('user_edit_avatar') }}">
+						{% if user.avatar is defined and user.avatar is not null %}
+							<img src="{{ vich_uploader_asset(user.avatar) | imagine_filter('profile') }}" alt="profile" class="rounded-circle profile__img">
+						{% else %}
+							<img src="{{ asset('images/image-profile.png') | imagine_filter('profile') }}" alt="profile" class="rounded-circle profile__img mb-xl-5">
+						{% endif %}
+					</a>
+					<a href="{{ path('user_edit_profile') }}" class="btn btn-primary mt-4">Éditer</a>
+				</div>
 			</div>
 		</div>
 	</div>

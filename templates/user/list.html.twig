@@ -4,55 +4,58 @@
 {% endblock %}
 
 {% block body %}
-	{% for message in app.flashes('success') %}
-		<div class="alert alert-success mr-2 mb-0">
-			{{ message }}
-		</div>
-	{% endfor %}
 
-	{{ wo_render_breadcrumbs() }}
-
-	{{ form_start(form) }}
 	<div class="row">
-		<div class="form-group col-3">
-			{{ form_errors(form.name) }}
-			{{ form_widget(form.name) }}
-			{{ form_help(form.name) }}
-		</div>
-		<div class="form-group col-2">
-			{{ form_errors(form.surname) }}
-			{{ form_widget(form.surname) }}
-			{{ form_help(form.surname) }}
-		</div>
-		<div class="form-group col-3">
-			{{ form_errors(form.email) }}
-			{{ form_widget(form.email) }}
-			{{ form_help(form.email) }}
-		</div>
-		<div class="form-group col-3">
-			{{ form_errors(form.telephone) }}
-			{{ form_widget(form.telephone) }}
-			{{ form_help(form.telephone) }}
-		</div>
-		<div class="form-group col-1">
-			{{ form_widget(form.submit) }}
+		<div class="col-10 offset-1">
+			{{ wo_render_breadcrumbs() }}
+
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success mr-2 mb-0">
+					{{ message }}
+				</div>
+			{% endfor %}
 		</div>
 	</div>
-	{{ form_end(form) }}
-	
-	<div class="row">
-		<div class="col-12">
+
+	<div class="row mt-4">
+		<div class="col-5 offset-1">
+			{{ form_start(form) }}
+			<div class="form-group">
+				{{ form_errors(form.name) }}
+				{{ form_widget(form.name) }}
+				{{ form_help(form.name) }}
+			</div>
+			<div class="form-group">
+				{{ form_errors(form.surname) }}
+				{{ form_widget(form.surname) }}
+				{{ form_help(form.surname) }}
+			</div>
+		</div>
+		<div class="col-5">
+			<div class="form-group">
+				{{ form_errors(form.email) }}
+				{{ form_widget(form.email) }}
+				{{ form_help(form.email) }}
+			</div>
+			<div class="form-group d-flex justify-content-between">
+				{{ form_errors(form.telephone) }}
+				{{ form_widget(form.telephone) }}
+				{{ form_help(form.telephone) }}
+				{{ form_widget(form.submit) }}
+			</div>
+			{{ form_end(form) }}
+		</div>
+	</div>
+
+	<div class="row mt-5">
+		<div class="col-10 offset-1">
 			{% if type == 'teachers' %}
 				<h3>Liste des formateurs·rices</h3>
 			{% else %}
 				<h3>Liste des apprenants·es</h3>
 			{% endif %}
-		</div>
-	</div>
 
-	<div class="row">
-		<div class="col-12">
-			<table class="table border-bottom">
+			<table class="table border-bottom mt-2">
 				<thead class="thead-dark">
 					<tr>
 						<th scope="col"></th>
@@ -76,7 +79,7 @@
 							{% endif %}
 							<td>{{ user.email }}</td>
 							<td>
-								<a {% if user.roles[0] == 'ROLE_TEACHER' %} href="{{ path('teacher_edit_profile', {username: user.username, type: type, list_profile_edit: true}) }}" {% else %} href="{{ path('student_edit_profile', {username: user.username, type: type, list_profile_edit: true}) }}" {% endif %} class="btn btn-primary w-75 mt-4">Éditer profil</a>
+								<a {% if user.roles[0] == 'ROLE_TEACHER' %} href="{{ path('teacher_edit_profile', {username: user.username, type: type, list_profile_edit: true}) }}" {% else %} href="{{ path('student_edit_profile', {username: user.username, type: type, list_profile_edit: true}) }}" {% endif %} class="btn btn-secondary mr-2">Éditer</a>
 								{% if type == 'teachers' %}
 									<form method="post" action="{{ path('user_delete', {id: user.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer ce·tte formateur·rice ? \nCette action est irréversible.')">
 									{% else %}
@@ -92,9 +95,9 @@
 					{% endfor %}
 				</tbody>
 			</table>
+			<div class="pagination">
+				{{ knp_pagination_render(users) }}
+			</div>
 		</div>
-	</div>
-	<div class="pagination">
-		{{ knp_pagination_render(users) }}
 	</div>
 {% endblock %}

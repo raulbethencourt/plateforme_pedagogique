@@ -5,50 +5,57 @@
 {% endblock %}
 
 {% block body %}
-	{% for message in app.flashes('success') %}
-		<div class="alert alert-success mr-2 mb-0">
-			{{ message }}
-		</div>
-	{% endfor %}
 
 	<div class="row">
-		<div class="col-12">
+		<div class="col-10 offset-1">
 			{{ wo_render_breadcrumbs() }}
+
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success mr-2 mb-0">
+					{{ message }}
+				</div>
+			{% endfor %}
+
+			{% for message in app.flashes('error') %}
+				<div class="alert alert-danger">
+					{{ message }}
+				</div>
+			{% endfor %}
 		</div>
 	</div>
 
-
-	<div class="d-flex">
-		<div class="card w-50 m-1">
-			<h3 class="card-header text-white bg-dark">Informations personnelles</h3>
-			<div class="card-body d-flex justify-content-between">
-				<div class="flex-column w-75">
-					<ul class="list-group w-100">
+	<div class="row mt-4">
+		<div class="col-6 offset-1">
+			<h3>Informations personnelles</h3>
+			<div class="d-flex justify-content-between align-items-center">
+				<ul class="list-group w-50">
+					<li class="list-group-item list-group-item-info">
+						<span class="font-weight-bold">Nom d'utilisateur·rice</span>
+					</li>
+					<li class="list-group-item">{{ student.username }}</li>
+					{% if student.name and student.surname %}
 						<li class="list-group-item list-group-item-info">
-							<span class="font-weight-bold">Nom d'utilisateur</span>
+							<span class="font-weight-bold">Prénom et nom</span>
 						</li>
-						<li class="list-group-item">{{ student.username }}</li>
-						{% if student.name and student.surname %}
-							<li class="list-group-item list-group-item-info">
-								<span class="font-weight-bold">Prénom et nom</span>
-							</li>
-							<li class="list-group-item">
-								{{ student.name ~ " " ~ student.surname }}
-							{% endif %}
+						<li class="list-group-item">
+							{{ student.name ~ " " ~ student.surname }}
 						</li>
+					{% endif %}
+					{% if student.email %}
 						<li class="list-group-item list-group-item-info">
 							<span class="font-weight-bold">Email</span>
 						</li>
 						<li class="list-group-item">{{ student.email }}</li>
-						{% if student.telephone %}
-							<li class="list-group-item list-group-item-info">
-								<span class="font-weight-bold">Téléphone</span>
-							</li>
-							<li class="list-group-item">p{{ student.telephone }}</li>
-						{% endif %}
-					</ul>
-				</div>
-				<div class="d-flex flex-column justify-content-center align-items-center h-100 ml-4">
+					{% endif %}
+					{% if student.telephone %}
+						<li class="list-group-item list-group-item-info">
+							<span class="font-weight-bold">Téléphone</span>
+						</li>
+						<li class="list-group-item">p{{ student.telephone }}</li>
+					{% endif %}
+				</ul>
+
+				<div class="d-flex flex-column align-items-center mr-5">
 					<a href="{{ path('student_edit_avatar') }}">
 						{% if student.avatar is defined and student.avatar is not null %}
 							<img src="{{ vich_uploader_asset(student.avatar) | imagine_filter('profile') }}" alt="profile" class="rounded-circle profile__img">
@@ -56,63 +63,61 @@
 							<img src="{{ asset('images/image-profile.png') | imagine_filter('profile') }}" alt="profile" class="rounded-circle profile__img">
 						{% endif %}
 					</a>
-					<a href="{{ path('student_edit_profile') }}" class="btn btn-primary w-75 mt-3">Éditer Profil</a>
+					<a href="{{ path('student_edit_profile') }}" class="btn btn-primary mt-4">Éditer</a>
 				</div>
 			</div>
 		</div>
-		<div class="card w-50 m-1">
-			<h3 class="card-header text-white bg-dark">Statistiques</h3>
-			<div class="card-body">
-				<ul class="list-group">
-					<li class="list-group-item list-group-item-info">
-						<span class="font-weight-bold">Nombre de questionnaires joués :</span>
-					</li>
-					<li class="list-group-item">{{ passes|length }}
+
+		<div class="col-4">
+			<h3>Statistiques</h3>
+			<ul class="list-group">
+				<li class="list-group-item list-group-item-info">
+					<span class="font-weight-bold">Nombre de questionnaires joués :</span>
+				</li>
+				<li class="list-group-item">{{ passes|length }}
+					-
+					{{ passes|length <= 1 ? 'questionnaire' : 'questionnaires' }}</li>
+				<li class="list-group-item list-group-item-info">
+					<span class="font-weight-bold">Questions jouées :</span>
+				</li>
+				<li class="list-group-item">
+					{% if numberOfQuestions is not null %}
+						{{ numberOfQuestions }}
 						-
-						{{ passes|length <= 1 ? 'questionnaire' : 'questionnaires' }}</li>
-					<li class="list-group-item list-group-item-info">
-						<span class="font-weight-bold">Questions jouées :</span>
-					</li>
-					<li class="list-group-item">
-						{% if numberOfQuestions is not null %}
-							{{ numberOfQuestions }}
-							-
-							{{ numberOfQuestions <= 1 ? 'question' : 'questions' }}
-						{% else %}
-							0 - question
-						{% endif %}
-					</li>
-					<li class="list-group-item list-group-item-info">
-						<span class="font-weight-bold">Résultat total :</span>
-					</li>
-					<li class="list-group-item">
-						{% if sum is not null %}
-							{{ sum }}
-						{% else %}
-							0
-						{% endif %}
-					</li>
-					<li class="list-group-item list-group-item-info">
-						<span class="font-weight-bold">Résultat moyen :</span>
-					</li>
-					<li class="list-group-item">{{ average }}</li>
-				</ul>
-			</div>
+						{{ numberOfQuestions <= 1 ? 'question' : 'questions' }}
+					{% else %}
+						0 - question
+					{% endif %}
+				</li>
+				<li class="list-group-item list-group-item-info">
+					<span class="font-weight-bold">Résultat total :</span>
+				</li>
+				<li class="list-group-item">
+					{% if sum is not null %}
+						{{ sum }}
+					{% else %}
+						0
+					{% endif %}
+				</li>
+				<li class="list-group-item list-group-item-info">
+					<span class="font-weight-bold">Résultat moyen :</span>
+				</li>
+				<li class="list-group-item">{{ average }}</li>
+			</ul>
 		</div>
 	</div>
-	<div class="mr-auto ml-auto text-center mt-3 w-75">
-		<h3>
-			<span class="badge badge-dark rounded p-2">Résultats par type :</span>
-		</h3>
-		<canvas id="studentChart"></canvas>
+
+	<div class="row mt-5 mb-5">
+		<div class="col-10 offset-1">
+			<h3>Résultats par type :</h3>
+			<canvas id="studentChart"></canvas>
+		</div>
 	</div>
 {% endblock %}
 
 {% block javascripts %}
-
 	<script>
 		let data = {{ spdjson|raw }}
 	</script>
 	{{ parent() }}
-
 {% endblock %}
