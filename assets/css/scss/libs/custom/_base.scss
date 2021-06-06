@@ -1,7 +1,7 @@
 /* base.html.twig */
 .navbar {
 	padding: 0;
-	font-family: "Open Sans", "Arial", sans-serif;
+	font-family: 'Open Sans', 'Arial', sans-serif;
 
 	a {
 		color: $gray-900;
@@ -12,6 +12,7 @@
 	a:hover {
 		color: $yellow;
 	}
+
 	.navbar-brand {
 		padding: 0;
 
@@ -19,6 +20,13 @@
 			width: 200px;
 			height: auto;
 		}
+	}
+
+	.nav-username {
+		font-size: 1.5rem;
+		text-transform: capitalize;
+		font-weight: bold;
+		color: $yellow;
 	}
 }
 

@@ -5,7 +5,6 @@
 {% endblock %}
 
 {% block body %}
-
 	{% for message in app.flashes('success') %}
 		<div class="alert alert-success mr-2">
 			{{ message }}
@@ -19,7 +18,7 @@
 	{% endfor %}
 
 	<div class="row">
-		<div class="col-12 d-flex flex-column align-items-center">
+		<div class="col-10 offset-1 d-flex flex-column align-items-start">
 			<h3>Liste des classes</h3>
 			<div class="table-responsive">
 				<table class="table border-bottom">
@@ -27,30 +26,27 @@
 						<tr>
 							<th scope="col"></th>
 							<th scope="col">Nom</th>
+							<th scope="col">Localisation</th>
 							<th scope="col">Niveau</th>
-							<th scope="col">Formateurs</th>
+							<th scope="col">Formateurs·rices</th>
 						</tr>
 					</thead>
 					<tbody>
 						{% for classroom in classrooms %}
 							<tr>
-								<th scope="row">{{ loop.index }}</th>
+								<th scope="row"></th>
 								<td>
-									<a href="{{ path('classroom_show', {id: classroom.id}) }}">{{ classroom.name }}</a>
+									<a href="{{ path('classroom_show', {id: classroom.id, extra: true}) }}">{{ classroom.name }}</a>
 								</td>
+								<td>{{ classroom.location }}</td>
+								<td>{{ classroom.discipline }}</td>
 								<td>
-									<div class="d-flex justify-content-between ">
-										{{ classroom.discipline }}</div>
-								</td>
-								<td>
-									<div class="d-flex justify-content-between">
-										{% for user in classroom.users %}
+									{% for user in classroom.users %}
+										{% if user.roles[0] == 'ROLE_TEACHER' %}
 											/
-											{% if user.roles[0] == 'ROLE_TEACHER' %}
-												{{ user.name }}
-											{% endif %}
-										{% endfor %}
-									</div>
+											{{ user.name }}
+										{% endif %}
+									{% endfor %}
 								</td>
 							</tr>
 						{% endfor %}

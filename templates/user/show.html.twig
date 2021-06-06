@@ -95,7 +95,7 @@
 								<td>
 									{% for user in classroom.users %}
 										{% if user.roles[0] == 'ROLE_TEACHER' %}
-										/
+											/
 											{{ user.name }}
 										{% endif %}
 									{% endfor %}
