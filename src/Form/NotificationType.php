@@ -28,7 +28,7 @@ class NotificationType extends AbstractType
                 [
                     'label' => 'Publier',
                     'attr' => [
-                        'class' => 'btn btn-secondary',
+                        'class' => 'btn-primary h-100',
                     ],
                 ]
             )

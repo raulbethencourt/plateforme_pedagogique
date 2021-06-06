@@ -27,7 +27,7 @@ class AvatarType extends AbstractType
                 'submit',
                 SubmitType::class,
                 [
-                    'label' => 'Ajouter photo',
+                    'label' => 'Ajouter',
                 ]
             );
     }

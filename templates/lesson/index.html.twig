@@ -13,6 +13,12 @@
 					{{ message }}
 				</div>
 			{% endfor %}
+
+			{% for message in app.flashes('error') %}
+				<div class="alert alert-danger">
+					{{ message }}
+				</div>
+			{% endfor %}
 		</div>
 	</div>
 
@@ -48,7 +54,7 @@
 
 	<div class="row mt-5">
 		<div class="col-10 offset-1">
-			<div class="d-flex justify-content-around align-items-center">
+			<div class="d-flex justify-content-between align-items-center">
 				<h3>Liste des modules</h3>
 				{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and classroom_id is null %}
 					<a href="{{ path('lesson_new') }}" class="btn btn-secondary mb-2" role="button">Créer nouveau</a>
