@@ -18,12 +18,3 @@ import './password_confirm';
 import './invite';
 import './bootstrap';
 
-/**
- * ------------------------------------------------------------------------
- * Personal JS from Raul
- * ------------------------------------------------------------------------
- */
-$('.nav .nav-link').on('click', function () {
-	$('.nav').find('.active').removeClass('active');
-	$(this).addClass('active');
-});

@@ -1,15 +1,14 @@
 // call jquery
 import $ from 'jquery';
-
 var $collectionHolder;
 
 // setup an "add a proposition" link
-var $addPropositionButton = $(
+const $addPropositionButton = $(
 	'<button type="button" class="btn btn-outline-dark add_tag_link">Ajouter une réponse</button>'
 );
 var $newLinkLi = $('<li></li>').append($addPropositionButton);
 
-$(document).ready(function () {
+$(document).ready(function (e) {
 	// Get the ul that holds the collection of tags
 	$collectionHolder = $('ul.propositions');
 
@@ -18,14 +17,14 @@ $(document).ready(function () {
 
 	// count the current form inputs we have (e.g. 2), use that as the new
 	// index when inserting a new item (e.g. 2)
-	$collectionHolder.data('index', $collectionHolder.find('input').length);
+	$collectionHolder.data('index', $collectionHolder.find(':input').length);
 
-	$addPropositionButton.on('click', (e) => {
+	$addPropositionButton.on('click', function (e) {
 		// add a new tag form (see next code block)
 		addPropositionForm($collectionHolder, $newLinkLi);
 	});
 
-	$('.remove-tag').on('click', (e) => {
+	$('.remove-tag').click(function (e) {
 		e.preventDefault();
 
 		$(this).parent().remove();
@@ -33,7 +32,7 @@ $(document).ready(function () {
 		return false;
 	});
 });
-          
+
 function addPropositionForm($collectionHolder, $newLinkLi) {
 	// Get the data-prototype explained earlier
 	var prototype = $collectionHolder.data('prototype');
@@ -62,8 +61,7 @@ function addPropositionForm($collectionHolder, $newLinkLi) {
 
 	$newLinkLi.before($newFormLi);
 
-	// handle the removal
-	$('.remove-tag').on('click', function (e) {
+	$('.remove-tag').click(function (e) {
 		e.preventDefault();
 
 		$(this).parent().remove();
