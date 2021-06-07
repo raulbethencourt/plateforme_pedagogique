@@ -65,161 +65,163 @@
 			<div class="form-group">
 				{{ form_row(formInvite.email) }}
 			</div>
-			{% if is_granted('ROLE_TEACHER') %}
-				<div class="form-group d-none">
-				{% else %}
-					<div class="form-group d-flex justify-content-between">
-					{% endif %}
+			<div class="form-group d-flex justify-content-between">
+				{% if is_granted('ROLE_ADMIN') %}
 					{{ form_row(formInvite.type) }}
-					{{ form_widget(formInvite.submit) }}
-				</div>
-				{{ form_end(formInvite) }}
+				{% else %}
+					<div class="d-none">
+						{{ form_row(formInvite.type) }}
+					</div>
+				{% endif %}
+				{{ form_widget(formInvite.submit) }}
+			</div>
+			{{ form_end(formInvite) }}
+		</div>
+	</div>
+
+	{% if classroom.users|length > 0 %}
+		<div class="row mt-5">
+			<div class="col-10 offset-1">
+				<h3>Liste des utilisateurs·rices</h3>
 			</div>
 		</div>
 
-		{% if classroom.users|length > 0 %}
-			<div class="row mt-5">
-				<div class="col-10 offset-1">
-					<h3>Liste des utilisateurs·rices</h3>
+		<div class="row">
+			<div class="col-5 offset-1">
+				<ul class="list-group">
+					<li class="list-group-item list-group-item-dark font-weight-bolder pl-3">Formateur(s)·rice(s)</li>
+					{% for user in classroom.users %}
+						{% if user.roles[0] == 'ROLE_TEACHER' %}
+							<li class="list-group-item  d-flex justify-content-between align-items-center pl-3 pr-3">
+								{{ user.name }}
+								{{ user.surname }}
+								<form method="post" action="{{ path('classroom_user_remove', {id: classroom.id, user_id: user.id, extra: extra }) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer ce·tte formateur·rice de cette classe ?')">
+									<input type="hidden" name="_method" value='DELETE'>
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+									<button class="btn btn-danger">Supprimer</button>
+								</form>
+							</li>
+						{% endif %}
+					{% endfor %}
+				</ul>
+			</div>
+			<div class="col-5">
+				<ul class="list-group">
+					<li class="list-group-item list-group-item-dark font-weight-bold pl-3">Apprenant(s)·e(s)</li>
+					{% for user in classroom.users %}
+						{% if user.roles[0] == 'ROLE_STUDENT' %}
+							<li class="list-group-item  d-flex justify-content-between align-items-center pl-3 pr-3">
+								{{ user.name }}
+								{{ user.surname }}
+								<form method="post" action="{{ path('classroom_user_remove', {id: classroom.id, user_id: user.id, extra: extra}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer cet·te apprenant·e de cette classe ?')">
+									<input type="hidden" name="_method" value='DELETE'>
+									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+									<button class="btn btn-danger">Supprimer</button>
+								</form>
+							</li>
+						{% endif %}
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	{% endif %}
+
+	<div class="row mt-5">
+		<div class="col-10 offset-1">
+			<h3>ESPACE ANNONCE</h3>
+			{% if notification %}
+				<p>{{ notification.text }}</p>
+			{% endif %}
+			{{ form_start(formNotify) }}
+			<div class="input-group">
+				{{ form_errors(formNotify.text)}}
+				{{ form_widget(formNotify.text)}}
+				{{ form_help(formNotify.text)}}
+				<div class="input-group-append">
+					{{ form_widget(formNotify.submit) }}
 				</div>
 			</div>
+			{{ form_end(formNotify) }}
+		</div>
+	</div>
 
-			<div class="row">
-				<div class="col-5 offset-1">
-					<ul class="list-group">
-						<li class="list-group-item list-group-item-dark font-weight-bolder pl-3">Formateur(s)·rice(s)</li>
-						{% for user in classroom.users %}
-							{% if user.roles[0] == 'ROLE_TEACHER' %}
-								<li class="list-group-item  d-flex justify-content-between align-items-center pl-3 pr-3">
-									{{ user.name }}
-									{{ user.surname }}
-									<form method="post" action="{{ path('classroom_user_remove', {id: classroom.id, user_id: user.id, extra: extra }) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer ce·tte formateur·rice de cette classe ?')">
-										<input type="hidden" name="_method" value='DELETE'>
-										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-										<button class="btn btn-danger">Supprimer</button>
-									</form>
-								</li>
-							{% endif %}
-						{% endfor %}
-					</ul>
-				</div>
-				<div class="col-5">
-					<ul class="list-group">
-						<li class="list-group-item list-group-item-dark font-weight-bold pl-3">Apprenant(s)·e(s)</li>
-						{% for user in classroom.users %}
-							{% if user.roles[0] == 'ROLE_STUDENT' %}
-								<li class="list-group-item  d-flex justify-content-between align-items-center pl-3 pr-3">
-									{{ user.name }}
-									{{ user.surname }}
-									<form method="post" action="{{ path('classroom_user_remove', {id: classroom.id, user_id: user.id, extra: extra}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer cet·te apprenant·e de cette classe ?')">
-										<input type="hidden" name="_method" value='DELETE'>
-										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-										<button class="btn btn-danger">Supprimer</button>
-									</form>
-								</li>
-							{% endif %}
-						{% endfor %}
-					</ul>
-				</div>
+	<div class="row mt-5">
+		<div class="col-10 offset-1">
+			<div class="d-flex justify-content-between align-items-center">
+				<h3>Liste des liens</h3>
+				<a href="{{ path('link_new', {classroom_id: classroom.id, extra: extra}) }}" class="btn btn-primary" role="button">Ajouter</a>
 			</div>
-		{% endif %}
-
-		<div class="row mt-5">
-			<div class="col-10 offset-1">
-				<h3>ESPACE ANNONCE</h3>
-				{% if notification %}
-					<p>{{ notification.text }}</p>
+			{% if classroom.links|length > 0 %}
+				<ul class="list-group">
+					{% for link in classroom.links %}
+						{% if link.classrooms|length > 1 %}
+							<li class="list-group-item list-group-item-warning d-flex justify-content-between align-items-center">
+							{% else %}
+								<li class="list-group-item d-flex justify-content-between align-items-center pl-3 pr-3">
+								{% endif %}
+								<a href="{{ link.link }}" target="_blank" rel="noopener noreferrer">{{ link.name }}
+									//
+									{{ link.category }}</a>
+								{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+									<div class="d-flex">
+										<a href="{{ path('link_edit', {id: link.id, classroom_id: classroom.id, extra: extra}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+										<form method="post" action="{{ path('classroom_link_remove', {id: classroom.id, link_id: link.id, extra: extra}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer ce lien de cette classe ?')">
+											<input type="hidden" name="_method" value='DELETE'>
+											<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ link.id) }}">
+											<button class="btn btn-danger">Supprimer</button>
+										</form>
+									</div>
+								{% endif %}
+							</li>
+						{% endfor %}
+					</ul>
 				{% endif %}
-				{{ form_start(formNotify) }}
-				<div class="input-group">
-					{{ form_errors(formNotify.text)}}
-					{{ form_widget(formNotify.text)}}
-					{{ form_help(formNotify.text)}}
-					<div class="input-group-append">
-						{{ form_widget(formNotify.submit) }}
-					</div>
-				</div>
-				{{ form_end(formNotify) }}
 			</div>
 		</div>
 
 		<div class="row mt-5">
 			<div class="col-10 offset-1">
 				<div class="d-flex justify-content-between align-items-center">
-					<h3>Liste des liens</h3>
-					<a href="{{ path('link_new', {classroom_id: classroom.id, extra: extra}) }}" class="btn btn-primary" role="button">Ajouter</a>
+					<h3>Liste des modules</h3>
+					<a href="{{ path('lesson_new', {classroom_id: classroom.id}) }}" class="btn btn-primary" role="button">Ajouter</a>
 				</div>
-				{% if classroom.links|length > 0 %}
-					<ul class="list-group">
-						{% for link in classroom.links %}
-							{% if link.classrooms|length > 1 %}
-								<li class="list-group-item list-group-item-warning d-flex justify-content-between align-items-center">
+				<div class="d-flex flex-wrap">
+					{% for lesson in lessons %}
+						{% if lesson.classrooms|length > 1 %}
+							<div class="card bg-warning">
+							{% elseif lesson.visibility %}
+								<div class="card bg-success">
 								{% else %}
-									<li class="list-group-item d-flex justify-content-between align-items-center pl-3 pr-3">
+									<div class="card">
 									{% endif %}
-									<a href="{{ link.link }}" target="_blank" rel="noopener noreferrer">{{ link.name }}
-										//
-										{{ link.category }}</a>
-									{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
-										<div class="d-flex">
-											<a href="{{ path('link_edit', {id: link.id, classroom_id: classroom.id, extra: extra}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-											<form method="post" action="{{ path('classroom_link_remove', {id: classroom.id, link_id: link.id, extra: extra}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer ce lien de cette classe ?')">
-												<input type="hidden" name="_method" value='DELETE'>
-												<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ link.id) }}">
-												<button class="btn btn-danger">Supprimer</button>
-											</form>
-										</div>
-									{% endif %}
-								</li>
-							{% endfor %}
-						</ul>
-					{% endif %}
-				</div>
-			</div>
-
-			<div class="row mt-5">
-				<div class="col-10 offset-1">
-					<div class="d-flex justify-content-between align-items-center">
-						<h3>Liste des modules</h3>
-						<a href="{{ path('lesson_new', {classroom_id: classroom.id}) }}" class="btn btn-primary" role="button">Ajouter</a>
-					</div>
-					<div class="d-flex flex-wrap">
-						{% for lesson in lessons %}
-							{% if lesson.classrooms|length > 1 %}
-								<div class="card bg-warning text-white">
-								{% elseif lesson.visibility %}
-									<div class="card bg-success">
-									{% else %}
-										<div class="card">
-										{% endif %}
-										<div class="card-header">
-											<a href="{{ path('lesson_show', {id: lesson.id, classroom_id: classroom.id, lonely: true}) }}">
-												<h4 class="card-title">{{lesson.title}}</h4>
-											</a>
-										</div>
-										<img src="{{ asset('images/lesson_category/books.webp') }}" alt="books" width="250" height="auto">
-										<div class="card-body">
-											<h6 class="card-subtitle mb-2 text-muted">{{lesson.level}}</h6>
-											{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
-												<div class="d-flex">
-													{% if is_granted('ROLE_ADMIN') or app.user.username == lesson.creator %}
-														<a href="{{ path('lesson_edit', {id: lesson.id, classroom_id: classroom.id, extra: extra}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
-													{% endif %}
-													<form method="post" action="{{ path('classroom_lesson_remove', {id: classroom.id, lesson_id: lesson.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer ce module de cette classe ?')">
-														<input type="hidden" name="_method" value='DELETE'>
-														<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
-														<button class="btn btn-danger">Supprimer</button>
-													</form>
-												</div>
-											{% endif %}
-										</div>
+									<div class="card-header">
+										<a href="{{ path('lesson_show', {id: lesson.id, classroom_id: classroom.id, lonely: true}) }}">
+											<h4 class="card-title font-weight-bolder">{{lesson.title}}</h4>
+										</a>
 									</div>
-								{% endfor %}
-							</div>
+									<img src="{{ asset('images/lesson_category/books.webp') }}" alt="books" width="250" height="auto">
+									<div class="card-body">
+										<h6 class="card-subtitle mb-2">{{lesson.level}}</h6>
+										{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+											<div class="d-flex">
+												{% if is_granted('ROLE_ADMIN') or app.user.username == lesson.creator %}
+													<a href="{{ path('lesson_edit', {id: lesson.id, classroom_id: classroom.id, extra: extra}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+												{% endif %}
+												<form method="post" action="{{ path('classroom_lesson_remove', {id: classroom.id, lesson_id: lesson.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer ce module de cette classe ?')">
+													<input type="hidden" name="_method" value='DELETE'>
+													<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
+													<button class="btn btn-danger">Supprimer</button>
+												</form>
+											</div>
+										{% endif %}
+									</div>
+								</div>
+							{% endfor %}
+						</div>
 
-							<div class="pagination">
-								{{ knp_pagination_render(lessons) }}
-							</div>
+						<div class="pagination">
+							{{ knp_pagination_render(lessons) }}
 						</div>
 					</div>
-				{% endblock %}
+				</div>
+			{% endblock %}
