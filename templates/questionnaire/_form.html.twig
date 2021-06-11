@@ -15,33 +15,31 @@
 	</div>
 {% endif %}
 
-<div class="d-flex flex-column">
-	{{ form_row(form.link_description) }}
-	<div class="d-flex">
-		{{ form_row(form.link) }}
-		<div class="alert alert-info" role="alert">
-			Votre lien doit commencer avec http:// ou https:// et doit finir avec un pointquelquechose.
-		</div>
+{{ form_row(form.link_description) }}
+<div class="d-flex align-items-end">
+	{{ form_row(form.link) }}
+	<div class="alert alert-info ml-4" role="alert">
+		Votre lien doit commencer avec http:// ou https:// et doit finir avec un pointquelquechose.
 	</div>
 </div>
 
 {{ form_row(form.difficulty) }}
 {{ form_row(form.level) }}
 
-<div class="d-flex">
+<div class="d-flex align-items-end">
 	{{ form_row(form.realisation_time) }}
-	<div class="alert alert-info" role="alert">
+	<div class="alert alert-info ml-4" role="alert">
 		Indiquez ici combien de temps votre apprenant·e aura besoin pour realiser cette activité.
 	</div>
 </div>
 
-<div class="d-flex">
+<div class="d-flex align-items-end">
 	{{ form_row(form.visibility) }}
-	<div class="alert alert-info" role="alert">
-	{% if questionnaire.lessons|length > 0 %}
+	<div class="alert alert-info ml-4" role="alert">
+		{% if questionnaire.lessons|length > 0 %}
 			Cette action rendra visible votre activité dans votre module et dans la boîte à outils.
-        {% else %}
-            Cette action rendra visible votre activité dans la boîte à outils.
+		{% else %}
+			Cette action rendra visible votre activité dans la boîte à outils.
 		{% endif %}
 	</div>
 </div>

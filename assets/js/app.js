@@ -15,6 +15,5 @@ let data = null;
 import './student';
 import './question_create';
 import './password_confirm';
-import './invite';
 import './bootstrap';
 

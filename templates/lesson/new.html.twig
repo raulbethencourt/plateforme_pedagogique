@@ -5,21 +5,21 @@
 
 {% block body %}
 	<div class="row">
-		<div class="col-12">
+		<div class="col10 offset-1">
 			{{ wo_render_breadcrumbs() }}
 		</div>
 	</div>
 
 	{% if classroom %}
 		<div class="row">
-			<div class="col-12 d-flex justify-content-center">
-				<a href="{{ path('lesson_index', {classroom_id: classroom.id, list: true}) }}" class="btn btn-secondary">importer module existante</a>
+			<div class="col-10 offset-1 d-flex justify-content-center">
+				<a href="{{ path('lesson_index', {classroom_id: classroom.id, list: true}) }}" class="btn btn-primary">Importer module</a>
 			</div>
 		</div>
 	{% endif %}
 
-	<div class="row">
-		<div class="col-12">
+	<div class="row mt-4 mb-5">
+		<div class="col-10 offset-1">
 			<h3>Créer un module</h3>
 			{{ include('lesson/_form.html.twig', {form: form, button: 'Créer'}) }}
 		</div>

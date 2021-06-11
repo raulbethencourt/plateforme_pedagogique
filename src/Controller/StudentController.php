@@ -6,6 +6,7 @@ use App\Entity\Questionnaire;
 use App\Form\EditStudentType;
 use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,12 +30,14 @@ class StudentController extends AbstractController
     /**
      * @Route("/", name="student_show")
      */
-    public function show(): Response
+    public function show(PaginatorInterface $paginator, Request $request): Response
     {
         $student = $this->getUser();
+        $lessons = $paginator->paginate($student->getClassrooms()[0]->getLessons(), $request->query->getInt('page', 1), 10);
 
         return $this->render('student/show.html.twig', [
             'student' => $student,
+            'lessons' => $lessons,
         ]);
     }
 

@@ -5,27 +5,36 @@
 
 {% block body %}
 	<div class="row">
-		<div class="col-12">
+		<div class="col-10 offset-1">
 			{{ wo_render_breadcrumbs() }}
+
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success mr-2 mb-0">
+					{{ message }}
+				</div>
+			{% endfor %}
+
+			{% for message in app.flashes('error') %}
+				<div class="alert alert-danger">
+					{{ message }}
+				</div>
+			{% endfor %}
 		</div>
 	</div>
 
-	{% for message in app.flashes('success') %}
-		<div class="alert alert-success mr-2 mb-3">
-			{{ message }}
-		</div>
-	{% endfor %}
+	<div class="row">
+		<div class="col-10 offset-1">
+			<div class="d-flex justify-content-between">
+				<h3>Créer une question</h3>
 
-	<div class="d-flex justify-content-between">
-		<h3>Créer une question</h3>
+				<div class="text-right">
+					<a class="btn btn-primary" href="{{ path('questionnaire_show', {id: questionnaire.id, classroom_id: classroom_id, lesson_id: lesson_id, list: list, lonely: lonely, extra: extra}) }}" role="button">{{ button|default('Activité terminé') }}</a>
+				</div>
+			</div>
 
-		<div class="text-right">
-			<a class="btn btn-primary" href="{{ path('questionnaire_show', {id: questionnaire.id, classroom_id: classroom_id, lesson_id: lesson_id, list: list, lonely: lonely, extra: extra}) }}" role="button">{{ button|default('Activité terminé') }}</a>
+			{{ include('question/_form.html.twig') }}
 		</div>
 	</div>
-
-	{{ include('question/_form.html.twig') }}
-
 {% endblock %}
 
 {% block javascripts %}
