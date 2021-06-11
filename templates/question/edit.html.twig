@@ -1,18 +1,35 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Éditer la question{% endblock %}
+{% block title %}Éditer la question
+{% endblock %}
 
 {% block body %}
 	<div class="row">
-		<div class="col-12">
+		<div class="col-10 offset-1">
 			{{ wo_render_breadcrumbs() }}
+
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success mr-2 mb-0">
+					{{ message }}
+				</div>
+			{% endfor %}
+
+			{% for message in app.flashes('error') %}
+				<div class="alert alert-danger">
+					{{ message }}
+				</div>
+			{% endfor %}
 		</div>
 	</div>
 
-    <h3>Éditer la question</h3>
-    {{ include('question/_form.html.twig') }}
+	<div class="row">
+		<div class="col-10 offset-1">
+			<h3>Éditer la question</h3>
+			{{ include('question/_form.html.twig') }}
+		</div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
+	{{ parent() }}
 {% endblock %}

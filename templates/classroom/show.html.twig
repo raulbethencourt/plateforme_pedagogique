@@ -35,7 +35,6 @@
 		</div>
 	</div>
 
-
 	<div class="row mt-4">
 		<div class="col-10 offset-1 d-flex justify-content-center">
 			<h2>{{ classroom.name }}
@@ -87,25 +86,29 @@
 		</div>
 
 		<div class="row">
-			<div class="col-5 offset-1">
-				<ul class="list-group">
-					<li class="list-group-item list-group-item-dark font-weight-bolder pl-3">Formateur(s)·rice(s)</li>
-					{% for user in classroom.users %}
-						{% if user.roles[0] == 'ROLE_TEACHER' %}
-							<li class="list-group-item  d-flex justify-content-between align-items-center pl-3 pr-3">
-								{{ user.name }}
-								{{ user.surname }}
-								<form method="post" action="{{ path('classroom_user_remove', {id: classroom.id, user_id: user.id, extra: extra }) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer ce·tte formateur·rice de cette classe ?')">
-									<input type="hidden" name="_method" value='DELETE'>
-									<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-									<button class="btn btn-danger">Supprimer</button>
-								</form>
-							</li>
-						{% endif %}
-					{% endfor %}
-				</ul>
-			</div>
-			<div class="col-5">
+			{% if is_granted('ROLE_ADMIN') %}
+				<div class="col-5 offset-1">
+					<ul class="list-group">
+						<li class="list-group-item list-group-item-dark font-weight-bolder pl-3">Formateur(s)·rice(s)</li>
+						{% for user in classroom.users %}
+							{% if user.roles[0] == 'ROLE_TEACHER' %}
+								<li class="list-group-item  d-flex justify-content-between align-items-center pl-3 pr-3">
+									{{ user.name }}
+									{{ user.surname }}
+									<form method="post" action="{{ path('classroom_user_remove', {id: classroom.id, user_id: user.id, extra: extra }) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer ce·tte formateur·rice de cette classe ?')">
+										<input type="hidden" name="_method" value='DELETE'>
+										<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+										<button class="btn btn-danger">Supprimer</button>
+									</form>
+								</li>
+							{% endif %}
+						{% endfor %}
+					</ul>
+				</div>
+				<div class="col-5">
+				{% else %}
+				<div class="col-10 offset-1">
+			{% endif %}
 				<ul class="list-group">
 					<li class="list-group-item list-group-item-dark font-weight-bold pl-3">Apprenant(s)·e(s)</li>
 					{% for user in classroom.users %}
@@ -185,14 +188,14 @@
 					<h3>Liste des modules</h3>
 					<a href="{{ path('lesson_new', {classroom_id: classroom.id}) }}" class="btn btn-primary" role="button">Ajouter</a>
 				</div>
-				<div class="d-flex flex-wrap">
+				<div class="d-flex flex-wrap mt-3">
 					{% for lesson in lessons %}
 						{% if lesson.classrooms|length > 1 %}
-							<div class="card bg-warning">
+							<div class="card bg-warning w-25 mb-4">
 							{% elseif lesson.visibility %}
-								<div class="card bg-success">
+								<div class="card bg-success w-25 mb-4">
 								{% else %}
-									<div class="card">
+									<div class="card w-25 mb-4">
 									{% endif %}
 									<div class="card-header">
 										<a href="{{ path('lesson_show', {id: lesson.id, classroom_id: classroom.id, lonely: true}) }}">

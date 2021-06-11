@@ -1,15 +1,18 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Éditer module{% endblock %}
+{% block title %}Éditer module
+{% endblock %}
 
 {% block body %}
 	<div class="row">
-		<div class="col-12">
+		<div class="col10 offset-1">
 			{{ wo_render_breadcrumbs() }}
 		</div>
 	</div>
-
-    <h3>Éditer le module</h3>
-    {{ include('lesson/_form.html.twig', {form: form, button: 'Éditer'}) }}
+	<div class="row mt-4 mb-5">
+		<div class="col-10 offset-1">
+			<h3>Éditer le module</h3>
+			{{ include('lesson/_form.html.twig', {form: form, button: 'Éditer'}) }}
+		</div>
+	</div>
 {% endblock %}
-

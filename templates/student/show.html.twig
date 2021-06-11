@@ -6,13 +6,84 @@
 
 {% block body %}
 	<div class="row">
-		<div class="col-12 d-flex flex-column align-items-center">
-		{% for classroom in student.classrooms %}
-			
-		<pre>
-			{{ dump(classroom) }}
-		</pre>
-		{% endfor %}
+		<div class="col-10 offset-1">
+			{{ wo_render_breadcrumbs() }}
+
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success mr-2 mb-0">
+					{{ message }}
+				</div>
+			{% endfor %}
+
+			{% for message in app.flashes('error') %}
+				<div class="alert alert-danger">
+					{{ message }}
+				</div>
+			{% endfor %}
 		</div>
 	</div>
+
+	<div class="row mt-4">
+		<div class="col-10 offset-1 d-flex justify-content-center">
+			<h2>{{ student.classrooms[0].name }}
+				-
+				<span class="badge badge-pill badge-info text-white">{{ student.classrooms[0].discipline }}</span>
+			</h2>
+		</div>
+	</div>
+
+	<div class="row mt-5">
+		<div class="col-10 offset-1">
+			<h3>ESPACE ANNONCE</h3>
+			{% if student.classrooms[0].notifications[0] %}
+				<p class="alert alert-info">{{ student.classrooms[0].notifications[0].text }}</p>
+			{% endif %}
+		</div>
+	</div>
+
+	<div class="row mt-5">
+		<div class="col-10 offset-1">
+			<div class="d-flex justify-content-between align-items-center">
+				<h3>Liste des liens</h3>
+			</div>
+			{% if student.classrooms[0].links|length > 0 %}
+				<ul class="list-group">
+					{% for link in student.classrooms[0].links %}
+						<li class="list-group-item d-flex justify-content-between align-items-center pl-3 pr-3">
+							<a href="{{ link.link }}" target="_blank" rel="noopener noreferrer">{{ link.name }}
+								//
+								{{ link.category }}</a>
+						</li>
+					{% endfor %}
+				</ul>
+			{% endif %}
+		</div>
+	</div>
+
+	<div class="row mt-5">
+		<div class="col-10 offset-1">
+			<h3>Liste des modules</h3>
+			<div class="d-flex flex-wrap mt-3">
+				{% for lesson in lessons %}
+					<div class="card w-25 mb-3">
+						<div class="card-header ">
+							<a href="{{ path('lesson_show', {id: lesson.id}) }}">
+								<h4 class="card-title font-weight-bolder">{{lesson.title}}</h4>
+							</a>
+						</div>
+						<img src="{{ asset('images/lesson_category/books.webp') }}" alt="books" width="250" height="auto">
+						<div class="card-body">
+							<h6 class="card-subtitle mb-2">{{lesson.level}}</h6>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+
+			<div class="pagination">
+				{{ knp_pagination_render(lessons) }}
+			</div>
+		</div>
+	</div>
+
+
 {% endblock %}

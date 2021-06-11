@@ -4,17 +4,34 @@
 {% endblock %}
 
 {% block body %}
+	<div class="row">
+		<div class="col-10 offset-1">
+			{{ wo_render_breadcrumbs() }}
 
-	{{ wo_render_breadcrumbs() }}
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success mr-2 mb-0">
+					{{ message }}
+				</div>
+			{% endfor %}
+
+			{% for message in app.flashes('error') %}
+				<div class="alert alert-danger">
+					{{ message }}
+				</div>
+			{% endfor %}
+		</div>
+	</div>
 
 	{% if classroom_id %}
-		<div class="row col-12">
-			<a href="{{ path('link_index', {classroom_id: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter un lien</a>
+		<div class="row">
+			<div class="col-10 offset-1">
+				<a href="{{ path('link_index', {classroom_id: classroom_id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter un lien</a>
+			</div>
 		</div>
 	{% endif %}
 
-	<div class="row">
-		<div class="col-12">
+	<div class="row mt-4 mb-5">
+		<div class="col-10 offset-1">
 			<h3>Ajouter nouveau lien</h3>
 			{{ include('link/_form.html.twig') }}
 		</div>

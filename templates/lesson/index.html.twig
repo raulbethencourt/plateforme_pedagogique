@@ -57,7 +57,7 @@
 			<div class="d-flex justify-content-between align-items-center">
 				<h3>Liste des modules</h3>
 				{% if (is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')) and classroom_id is null %}
-					<a href="{{ path('lesson_new') }}" class="btn btn-secondary mb-2" role="button">Créer nouveau</a>
+					<a href="{{ path('lesson_new') }}" class="btn btn-primary mb-2" role="button">Créer nouveau</a>
 				{% endif %}
 			</div>
 

@@ -5,13 +5,25 @@
 
 {% block body %}
 	<div class="row">
-		<div class="col-12">
+		<div class="col-10 offset-1">
 			{{ wo_render_breadcrumbs() }}
+
+			{% for message in app.flashes('success') %}
+				<div class="alert alert-success mr-2 mb-0">
+					{{ message }}
+				</div>
+			{% endfor %}
+
+			{% for message in app.flashes('error') %}
+				<div class="alert alert-danger">
+					{{ message }}
+				</div>
+			{% endfor %}
 		</div>
 	</div>
 
 	{% if lesson_id is not null %}
-		<div class="row">
+		<div class="row mt-4">
 			<div class="col-12 d-flex justify-content-center">
 				{% if lonely is defined and lonely is not null %}
 					<a href="{{ path('questionnaire_index', {lesson_id: lesson_id, classroom_id: classroom_id, lonely: lonely}) }}" class="btn btn-secondary">importer activité existante</a>
@@ -22,10 +34,15 @@
 		</div>
 	{% endif %}
 
-	<div class="row">
-		<div class="col-12">
-			<h3>Créer une activité</h3>
-			{{ include('questionnaire/_form.html.twig', {form: form, button: 'Créer'}) }}
+
+	{% if lesson_id is not null %}
+		<div class="row mt-3 mb-5">
+		{% else %}
+			<div class="row mt-4 mb-5">
+			{% endif %}
+			<div class="col-10 offset-1">
+				<h3>Créer une activité</h3>
+				{{ include('questionnaire/_form.html.twig', {form: form, button: 'Créer'}) }}
+			</div>
 		</div>
-	</div>
-{% endblock %}
+	{% endblock %}
