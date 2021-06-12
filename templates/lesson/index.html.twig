@@ -111,9 +111,9 @@
 													<button class="btn btn-danger">Supprimer</button>
 												</form>
 											{% endif %}
-											{% if classroom_id is not null %}
-												<a href="{{ path('classroom_lesson_add', {id: classroom_id, lesson_id: lesson.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
-											{% endif %}
+									{% endif %}
+									{% if classroom_id is not null %}
+										<a href="{{ path('classroom_lesson_add', {id: classroom_id, lesson_id: lesson.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
 									{% endif %}
 								</td>
 							</tr>

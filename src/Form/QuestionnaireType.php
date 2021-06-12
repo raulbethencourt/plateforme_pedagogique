@@ -49,7 +49,7 @@ class QuestionnaireType extends AbstractType
                 TextType::class,
                 [
                     'purify_html' => true,
-                    'label' => 'Descrition du lien',
+                    'label' => 'Description du lien',
                     'required' => false,
                 ]
             )

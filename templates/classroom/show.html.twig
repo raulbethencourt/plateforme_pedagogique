@@ -208,12 +208,12 @@
 										{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
 											<div class="d-flex">
 												{% if is_granted('ROLE_ADMIN') or app.user.username == lesson.creator %}
-													<a href="{{ path('lesson_edit', {id: lesson.id, classroom_id: classroom.id, extra: extra}) }}" class="btn btn-secondary mr-2" role="button">Éditer</a>
+													<a href="{{ path('lesson_edit', {id: lesson.id, classroom_id: classroom.id, extra: extra}) }}" class="btn btn-secondary mr-2 p-2" role="button">Éditer</a>
 												{% endif %}
 												<form method="post" action="{{ path('classroom_lesson_remove', {id: classroom.id, lesson_id: lesson.id}) }}" style="display: inline-block" onsubmit="return confirm('Êtes-vous sûr·e de vouloir supprimer ce module de cette classe ?')">
 													<input type="hidden" name="_method" value='DELETE'>
 													<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ lesson.id) }}">
-													<button class="btn btn-danger">Supprimer</button>
+													<button class="btn btn-danger p-2">Supprimer</button>
 												</form>
 											</div>
 										{% endif %}
