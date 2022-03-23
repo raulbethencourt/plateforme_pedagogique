@@ -44,5 +44,4 @@ class TeacherRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }*/
-
 }

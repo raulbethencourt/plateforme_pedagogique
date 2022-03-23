@@ -37,7 +37,7 @@ class InviteType extends AbstractType
                     ],
                     'purify_html' => true,
                 ]
-                )
+            )
             ->add(
                 'surname',
                 TextType::class,
@@ -72,14 +72,14 @@ class InviteType extends AbstractType
                             'Apprenant·e' => 'student',
                         ],
                     ]
-                    )
+                )
                     ;
         } else {
             $builder
                 ->add(
-                        'type',
-                        ChoiceType::class,
-                        [
+                    'type',
+                    ChoiceType::class,
+                    [
                             'label' => false,
                             'choices' => [
                                 'Formateur·rice' => 'teacher',

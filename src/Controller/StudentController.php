@@ -74,7 +74,6 @@ class StudentController extends AbstractController
 
         $numberOfQuestions = array_reduce(
             $passes,
-
             function ($i, $pass) {
                 return $i += count($pass->getQuestionnaire()->getQuestions());
             }

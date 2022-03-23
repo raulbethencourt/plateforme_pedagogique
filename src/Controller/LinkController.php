@@ -21,9 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class LinkController extends AbstractController
 {
     private $breadCrumbs;
-
     private $request;
-
     private $find;
 
     public function __construct(BreadCrumbs $breadCrumbs, RequestStack $request, FindEntity $find)
