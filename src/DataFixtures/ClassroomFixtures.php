@@ -16,6 +16,7 @@ class ClassroomFixtures extends Fixture
             $classroom = new Classroom();
             $classroom->setName($faker->streetName);
             $classroom->setDiscipline($faker->domainName);
+            $classroom->setLocation($faker->domainName);
             $manager->persist($classroom);
         }
         $manager->flush();

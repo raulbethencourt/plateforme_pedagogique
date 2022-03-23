@@ -17,9 +17,7 @@ class LinkFixtures extends Fixture
             $link->setName($faker->city);
             $link->setLink($faker->url);
             $link->setCreator($faker->firstName);
-            $link->setVisibility(true);
-            $link->setUsable(true);
-            $link->setDescription($faker->text);
+            $link->setCategory($faker->firstName);
             $manager->persist($link);
         }
         $manager->flush();
