@@ -9,6 +9,17 @@
       "css": [
         "/build/app.css"
       ]
+    },
+    "calendar": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors~calendar.js",
+        "/build/calendar.js"
+      ],
+      "css": [
+        "/build/vendors~calendar.css",
+        "/build/calendar.css"
+      ]
     }
   }
 }

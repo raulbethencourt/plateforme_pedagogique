@@ -21,9 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class LinkController extends AbstractController
 {
     private $breadCrumbs;
-
     private $request;
-
     private $find;
 
     public function __construct(BreadCrumbs $breadCrumbs, RequestStack $request, FindEntity $find)
@@ -147,7 +145,7 @@ class LinkController extends AbstractController
      */
     public function delete(Link $link): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$link->getId(), $this->request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $link->getId(), $this->request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($link);
             $entityManager->flush();

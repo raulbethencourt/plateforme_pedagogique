@@ -37,3 +37,4 @@ yarn-error.log
 ###< friendsofphp/php-cs-fixer ###
 
 node_modules/
+public/build/

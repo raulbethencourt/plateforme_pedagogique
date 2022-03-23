@@ -7,7 +7,7 @@ use App\Entity\Classroom;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
-class ClassroomFixtures extends Fixture 
+class ClassroomFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
@@ -16,6 +16,7 @@ class ClassroomFixtures extends Fixture
             $classroom = new Classroom();
             $classroom->setName($faker->streetName);
             $classroom->setDiscipline($faker->domainName);
+            $classroom->setLocation($faker->address);
             $manager->persist($classroom);
         }
         $manager->flush();
