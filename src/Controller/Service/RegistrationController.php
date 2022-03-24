@@ -15,11 +15,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
-use function PHPSTORM_META\type;
 
 /**
  * Class RegistrationController
@@ -28,9 +28,7 @@ use function PHPSTORM_META\type;
 class RegistrationController extends AbstractController
 {
     private $emailVerifier;
-
     private $find;
-
     private $request;
 
     public function __construct(EmailVerifier $emailVerifier, FindEntity $find, RequestStack $requestStack)
@@ -46,7 +44,7 @@ class RegistrationController extends AbstractController
      * @param Request $request
      */
     public function register(
-        UserPasswordEncoderInterface $passwordEncoder,
+        UserPasswordHasherInterface $hasher,
         GuardAuthenticatorHandler $guardHandler,
         LoginFormAuthenticator $authenticator
     ): Response {
@@ -77,7 +75,7 @@ class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
-                $passwordEncoder->encodePassword(
+                $hasher->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )

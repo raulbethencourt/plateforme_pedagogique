@@ -76,7 +76,7 @@ class QuestionnaireController extends AbstractController
 
         $user = $this->getUser();
         if ('ROLE_TEACHER' === $user->getRoles()[0]) {
-            $questionnaires = $questionnaireRepo->findByVisibilityOrCreator(true, $user->getUsername());
+            $questionnaires = $questionnaireRepo->findByVisibilityOrCreator(true, $user->getUserIdentifier());
         } else {
             $questionnaires = $questionnaireRepo->findAll();
         }
@@ -110,7 +110,7 @@ class QuestionnaireController extends AbstractController
         }
 
         $questionnaire->setDateCreation(new \DateTime());
-        $questionnaire->setCreator($this->getUser()->getUsername());
+        $questionnaire->setCreator($this->getUser()->getUserIdentifier());
         $form = $this->createForm(QuestionnaireType::class, $questionnaire);
         $form->handleRequest($request);
 
