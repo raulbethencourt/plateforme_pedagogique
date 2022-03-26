@@ -38,33 +38,13 @@ class StudentController extends AbstractController
     public function show(PaginatorInterface $paginator, Request $request): Response
     {
         $student = $this->getUser();
-        $classrooms = $student->getClassrooms();
-        $lessons = [];
-
-        if (count($classrooms) > 0) {
-            foreach ($classrooms as $classroom) {
-                $lessons[] = $paginator->paginate($classroom->getLessons(), $request->query->getInt('page', 1), 10);
-            }
-        }
+        $classroom = $student->getClassrooms()[0];
+        $lessons = $paginator->paginate($classroom->getLessons(), $request->query->getInt('page', 1), 10);
 
         return $this->render('student/show.html.twig', [
             'student' => $student,
             'lessons' => $lessons,
-            'classrooms' => $classrooms,
-        ]);
-    }
-
-    /**
-     * @Route("/", name="student_classrooms")
-     */
-    public function showClassrooms(): Response
-    {
-        $student = $this->getUser();
-        $classrooms = $student->getClassrooms();
-
-        return $this->render('student/classrooms.html.twig', [
-            'student' => $student,
-            'classrooms' => $classrooms,
+            'classroom' => $classroom,
         ]);
     }
 

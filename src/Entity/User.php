@@ -77,11 +77,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $avatar;
 
     /**
+     * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity=Lesson::class, mappedBy="users")
      */
     private $lessons;
 
     /**
+     * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity=Classroom::class, inversedBy="users")
      */
     private $classrooms;

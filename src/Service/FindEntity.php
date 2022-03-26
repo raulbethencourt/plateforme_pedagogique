@@ -25,32 +25,36 @@ use App\Repository\UserRepository;
 use DateTime;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/*
+* Helper class to get different entities
+*/
 class FindEntity
 {
     private $classroomRepo;
-
     private $lessonRepo;
-
     private $userRepo;
-
     private $request;
-
     private $notificationRepo;
-
     private $questionnaireRepo;
-
     private $questionRepo;
-
     private $passRepo;
-
     private $teacherRepo;
-
     private $studentRepo;
-
     private $linkRepo;
 
-    public function __construct(ClassroomRepository $classroomRepo, LessonRepository $lessonRepo, RequestStack $requestStack, UserRepository $userRepo, NotificationRepository $notificationRepo, QuestionnaireRepository $questionnaireRepo, QuestionRepository $questionRepo, PassRepository $passRepo, TeacherRepository $teacherRepo, StudentRepository $studentRepo, LinkRepository $linkRepo)
-    {
+    public function __construct(
+        ClassroomRepository $classroomRepo,
+        LessonRepository $lessonRepo,
+        RequestStack $requestStack,
+        UserRepository $userRepo,
+        NotificationRepository $notificationRepo,
+        QuestionnaireRepository $questionnaireRepo,
+        QuestionRepository $questionRepo,
+        PassRepository $passRepo,
+        TeacherRepository $teacherRepo,
+        StudentRepository $studentRepo,
+        LinkRepository $linkRepo
+    ) {
         $this->classroomRepo = $classroomRepo;
         $this->lessonRepo = $lessonRepo;
         $this->request = $requestStack->getCurrentRequest();
