@@ -23,6 +23,13 @@
 		</div>
 	</div>
 
+    <pre>
+        {{ dump(student.classrooms) }}
+    </pre>
+    {% for classroom in student.classrooms %}
+
+        
+    {% endfor %}
 	<div class="row mt-4">
 		<div class="col-10 offset-1 d-flex justify-content-center">
 			<h2>{{ student.classrooms[0].name }}
@@ -51,7 +58,6 @@
 					{% for link in student.classrooms[0].links %}
 						<li class="list-group-item d-flex justify-content-between align-items-center pl-3 pr-3">
 							<a href="{{ link.link }}" target="_blank" rel="noopener noreferrer">{{ link.name }}
-								//
 								{{ link.category }}</a>
 						</li>
 					{% endfor %}

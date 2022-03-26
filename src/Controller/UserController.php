@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Class UserController.
@@ -25,22 +26,26 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     private $em;
-
     private $find;
-
     private $request;
-
     private $breadCrumbs;
-
     private $paginator;
+    private $doctrine;
 
-    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, BreadCrumbs $breadCrumbs, PaginatorInterface $paginator)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        FindEntity $find,
+        RequestStack $requestStack,
+        BreadCrumbs $breadCrumbs,
+        PaginatorInterface $paginator,
+        ManagerRegistry $doctrine
+    ) {
         $this->em = $em;
         $this->find = $find;
         $this->request = $requestStack->getCurrentRequest();
         $this->breadCrumbs = $breadCrumbs;
         $this->paginator = $paginator;
+        $this->doctrine = $doctrine;
     }
 
     /**
@@ -178,7 +183,7 @@ class UserController extends AbstractController
         $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 

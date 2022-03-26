@@ -7,6 +7,7 @@ use App\Form\EditStudentType;
 use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
 use Knp\Component\Pager\PaginatorInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,13 +19,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class StudentController extends AbstractController
 {
     private $breadCrumbs;
-
     private $find;
+    private $doctrine;
 
-    public function __construct(FindEntity $find, BreadCrumbs $breadCrumbs)
-    {
+    public function __construct(
+        FindEntity $find,
+        BreadCrumbs $breadCrumbs,
+        ManagerRegistry $doctrine
+    ) {
         $this->find = $find;
         $this->breadCrumbs = $breadCrumbs;
+        $this->doctrine = $doctrine;
     }
 
     /**
@@ -33,11 +38,19 @@ class StudentController extends AbstractController
     public function show(PaginatorInterface $paginator, Request $request): Response
     {
         $student = $this->getUser();
-        $lessons = $paginator->paginate($student->getClassrooms()[0]->getLessons(), $request->query->getInt('page', 1), 10);
+        $classrooms = $student->getClassrooms();
+        $lessons = [];
+
+        if (count($classrooms) > 0) {
+            foreach ($classrooms as $classroom) {
+                $lessons[] = $paginator->paginate($classroom->getLessons(), $request->query->getInt('page', 1), 10);
+            }
+        }
 
         return $this->render('student/show.html.twig', [
             'student' => $student,
             'lessons' => $lessons,
+            'classrooms' => $classrooms,
         ]);
     }
 
@@ -160,7 +173,7 @@ class StudentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($student);
             $entityManager->flush();
             $this->addFlash('success', 'Profil édité avec succès.');

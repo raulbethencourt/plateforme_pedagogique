@@ -7,18 +7,17 @@ use App\Entity\Teacher;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
-use App\Security\LoginFormAuthenticator;
 use App\Service\FindEntity;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 /**
@@ -31,8 +30,11 @@ class RegistrationController extends AbstractController
     private $find;
     private $request;
 
-    public function __construct(EmailVerifier $emailVerifier, FindEntity $find, RequestStack $requestStack)
-    {
+    public function __construct(
+        EmailVerifier $emailVerifier,
+        FindEntity $find,
+        RequestStack $requestStack
+    ) {
         $this->emailVerifier = $emailVerifier;
         $this->find = $find;
         $this->request = $requestStack->getCurrentRequest();
@@ -40,13 +42,11 @@ class RegistrationController extends AbstractController
 
     /**
      * @Route("/register", name="app_register")
-     *
      * @param Request $request
      */
     public function register(
         UserPasswordHasherInterface $hasher,
-        GuardAuthenticatorHandler $guardHandler,
-        LoginFormAuthenticator $authenticator
+        ManagerRegistry $doctrine
     ): Response {
         // I get User type property to change the registration way
         $type = $this->request->query->get('type');
@@ -86,7 +86,7 @@ class RegistrationController extends AbstractController
             }
 
             $user->setEntryDate(new \DateTime());
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $doctrine->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -101,12 +101,7 @@ class RegistrationController extends AbstractController
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
 
-            return $guardHandler->authenticateUserAndHandleSuccess(
-                $user,
-                $this->request,
-                $authenticator,
-                'main' // firewall name in security.yaml
-            );
+            // return $this->redirectToRoute('_profiler_home');
         }
 
         return $this->render(
