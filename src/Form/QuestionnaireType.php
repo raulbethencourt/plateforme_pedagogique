@@ -78,12 +78,12 @@ class QuestionnaireType extends AbstractType
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'Compréhension écrite' => 'Compréhension écrite',
-                        'Compréhension orale' => 'Compréhension orale',
-                        'Expression écrite' => 'Expression écrite',
-                        'Lexique' => 'Lexique',
-                        'Phonétique' => 'Phonetique',
-                        'Grammaire' => 'Grammaire',
+                        'Compréhension écrite' => 'cEcrite',
+                        'Compréhension orale' => 'cOrale',
+                        'Expression écrite' => 'eEcrite',
+                        'Lexique' => 'lexique',
+                        'Phonétique' => 'phonetique',
+                        'Grammaire' => 'grammaire',
                     ],
                     'label' => 'Catégorie',
                 ]

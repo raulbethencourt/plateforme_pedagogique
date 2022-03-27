@@ -15,15 +15,22 @@ security:
             security: false
         main:
             # allow authentication using a form or HTTP basic
-            form_login: ~
-            http_basic: ~
+            form_login:
+                # "login" is the name of the route created previously
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
+                default_target_path: home_page
+                always_use_default_target_path: true
+            http_basic: 
+                realm: Secured Area
 
             # configure the form authentication as the entry point for unauthenticated users
             entry_point: form_login
             provider: app_user_provider
-            guard:
-                authenticators:
-                    - App\Security\LoginFormAuthenticator
+            # guard:
+            #     authenticators:
+            #         - App\Security\LoginFormAuthenticator
             logout:
                 path: app_logout
                 # where to redirect after logout

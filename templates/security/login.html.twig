@@ -10,7 +10,7 @@
 			<span class="text--red">et</span>
 			PROMOTION</h2>
 		<div class="login-form__container">
-			<form method="post" class="border rounded p-4 shadow">
+        <form action="{{ path('app_login') }}" method="post" class="border rounded p-4 shadow">
 				{% if error %}
 					<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 				{% endif %}
@@ -22,11 +22,10 @@
 						<a href="{{ path('app_logout') }}">Se déconnecter</a>
 					</div>
 				{% endif %}
-
-				<label for="inputUsername" class="font-weight-bold text-white">Nom d'utilisateur·rice</label>
-				<input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" required autofocus>
+				<label for="username" class="font-weight-bold text-white">Nom d'utilisateur·rice</label>
+				<input type="text" value="{{ last_username }}" name="_username" id="username" class="form-control" required autofocus>
 				<label for="inputPassword" class="font-weight-bold mt-2 text-white">Mot de passe</label>
-				<input type="password" name="password" id="inputPassword" class="form-control" required>
+				<input type="password" name="_password" id="password" class="form-control" required>
 
 				<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
@@ -34,9 +33,7 @@
 					Se connecter
 				</button>
 			</form>
-            <div>
-                <a href="{{ path('app_forgot_password_request') }}">Mot de pass oublié...</a>
-            </div>
+            <a href="{{ path('app_forgot_password_request') }}" class="mt-2">Mot de passe oublié...</a>
 		</div>
 	</div>
 {% endblock %}

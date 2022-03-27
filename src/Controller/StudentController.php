@@ -83,18 +83,21 @@ class StudentController extends AbstractController
                     return $pass->getQuestionnaire()->getDifficulty() == $difficulty;
                 }
             );
+
             $totalScore = array_reduce(
                 $playsPerDiff[$difficulty],
                 function ($i, $play) {
                     return $i += $play->getQuestionnaire()->getTotalScore();
                 }
             );
+
             $playerScore = array_reduce(
                 $playsPerDiff[$difficulty],
                 function ($i, $play) {
                     return $i += $play->getPoints();
                 }
             );
+
             if (null != $totalScore) {
                 $statsPerDiff[$difficulty] = round(($playerScore / $totalScore) * 100, 2);
             } else {
@@ -167,12 +170,9 @@ class StudentController extends AbstractController
             return $this->redirectToRoute('student_profile');
         }
 
-        return $this->render(
-            'student/edit-profile.html.twig',
-            [
-                'editForm' => $form->createView(),
-                'student' => $this->getUser(),
-            ]
-        );
+        return $this->render('student/edit-profile.html.twig', [
+            'editForm' => $form->createView(),
+            'student' => $this->getUser(),
+        ]);
     }
 }
