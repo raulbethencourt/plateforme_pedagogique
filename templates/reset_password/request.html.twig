@@ -1,10 +1,13 @@
+{% extends 'security/security_base.html.twig' %}
+
 {% block title %}Reset your password{% endblock %}
 
 {% block body %}
+<div class="container mt-5">
     {% for flash_error in app.flashes('reset_password_error') %}
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
-    <h1>Reset your password</h1>
+    <div class="h1 font-weight-bold">Reset your password</div>
 
     {{ form_start(requestForm) }}
         {{ form_row(requestForm.email) }}
@@ -15,6 +18,7 @@
             </small>
         </div>
 
-        <button class="btn btn-primary">Send password reset email</button>
+        <button class="btn btn-primary mt-3">Send password reset email</button>
     {{ form_end(requestForm) }}
+</div>
 {% endblock %}
