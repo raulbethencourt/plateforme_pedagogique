@@ -94,7 +94,7 @@
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
-            "requirements-checker": "script"
+            "vendor/bin/requirements-checker": "php-script"
         },
         "post-install-cmd": [
             "@auto-scripts"
