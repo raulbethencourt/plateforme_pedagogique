@@ -23,15 +23,17 @@ use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs as ModelBreadcrumbs;
 class QuestionController extends AbstractController
 {
     private $em;
-
     private $find;
-
     private $request;
-
     private $breadCrumbs;
 
-    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, BreadCrumbs $breadCrumbs)
-    {
+
+    public function __construct(
+        EntityManagerInterface $em, 
+        FindEntity $find, 
+        RequestStack $requestStack, 
+        BreadCrumbs $breadCrumbs
+    ) {
         $this->em = $em;
         $this->find = $find;
         $this->request = $requestStack->getCurrentRequest();
@@ -148,7 +150,7 @@ class QuestionController extends AbstractController
     }
 
     /**
-     * Helping methodss to call breadcrumbsService.
+     * Helping methods to call breadcrumbsService.
      */
     private function questionBC(?Question $question, string $method): ModelBreadcrumbs
     {
@@ -160,7 +162,7 @@ class QuestionController extends AbstractController
             $this->request->get('questionnaire_id'),
             $this->request->get('list'),
             $this->request->get('lonely'),
-            $this->request->get('extra'),
+            $this->request->get('extra'),   
         );
     }
 }
