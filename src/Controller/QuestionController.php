@@ -27,7 +27,6 @@ class QuestionController extends AbstractController
     private $request;
     private $breadCrumbs;
 
-
     public function __construct(
         EntityManagerInterface $em, 
         FindEntity $find, 
@@ -127,6 +126,7 @@ class QuestionController extends AbstractController
         ]);
     }
 
+
     /**
      * @Route("/{id}", name="question_delete", methods={"DELETE"})
      */
@@ -149,7 +149,7 @@ class QuestionController extends AbstractController
         ]);
     }
 
-    /**
+     /**
      * Helping methods to call breadcrumbsService.
      */
     private function questionBC(?Question $question, string $method): ModelBreadcrumbs
@@ -162,7 +162,7 @@ class QuestionController extends AbstractController
             $this->request->get('questionnaire_id'),
             $this->request->get('list'),
             $this->request->get('lonely'),
-            $this->request->get('extra'),   
+            $this->request->get('extra')
         );
     }
 }

@@ -86,7 +86,7 @@ class EditStudentType extends AbstractType
                     'required' => false,
                     'purify_html' => true,
                     'label' => 'Email',
-                ],
+                ]
             )
         ;
     }
