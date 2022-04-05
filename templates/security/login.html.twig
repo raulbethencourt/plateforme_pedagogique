@@ -10,7 +10,7 @@
 			<span class="text--red">et</span>
 			PROMOTION</h2>
 		<div class="login-form__container">
-        <form action="{{ path('app_login') }}" method="post" class="border rounded p-4 shadow">
+        <form action="{{ path('login') }}" method="post" class="border rounded p-4 shadow">
 				{% if error %}
 					<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 				{% endif %}

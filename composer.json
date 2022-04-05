@@ -14,7 +14,7 @@
         "friendsofphp/php-cs-fixer": "^2.18",
         "friendsofsymfony/rest-bundle": "^3.0",
         "fzaninotto/faker": "^1.5",
-        "knplabs/knp-paginator-bundle": "^5.4",
+        "knplabs/knp-paginator-bundle": "^5.3",
         "liip/imagine-bundle": "^2.3",
         "mhujer/breadcrumbs-bundle": "^1.5",
         "phpdocumentor/reflection-docblock": "^5.2",
@@ -48,6 +48,7 @@
         "symfonycasts/reset-password-bundle": "^1.13",
         "symfonycasts/verify-email-bundle": "^1.0",
         "tattali/calendar-bundle": "^1.2",
+        "twig/cssinliner-extra": "*",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0",
         "vich/uploader-bundle": "^1.15"

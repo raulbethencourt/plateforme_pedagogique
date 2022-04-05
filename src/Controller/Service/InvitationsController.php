@@ -22,15 +22,16 @@ use Symfony\Component\Mime\Address;
 class InvitationsController extends AbstractController
 {
     private $mailer;
-
     private $em;
-
     private $request;
-
     private $find;
 
-    public function __construct(MailerInterface $mailer, EntityManagerInterface $em, RequestStack $requestStack, FindEntity $find)
-    {
+    public function __construct(
+        MailerInterface $mailer, 
+        EntityManagerInterface $em, 
+        RequestStack $requestStack, 
+        FindEntity $find
+    ) {
         $this->mailer = $mailer;
         $this->em = $em;
         $this->request = $requestStack->getCurrentRequest();
