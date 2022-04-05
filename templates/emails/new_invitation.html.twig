@@ -1,3 +1,4 @@
+{% apply inline_css %}
 <div class="container">
 	<div id="contact">
 		<h3>{{ data.name }}, bienvenue à</h3>
@@ -9,11 +10,11 @@
 
 		<fieldset>
 			{% if data.type is defined and data.type == "teacher" %}
-				<a href="https://plataform.loc/register?type=teacher&classroom_id={{ data.classroom }}" class="btn">Enregistrement</a>
+				<a href="https://www.plateforme.contact-promotion.org/register?type=teacher&classroom_id={{ data.classroom }}" class="btn">Enregistrement</a>
 			{% elseif data.type is defined and data.type == "student" %}
-				<a href="https://plataform.loc/register?type=student&classroom_id={{ data.classroom }}" class="btn">Enregistrement</a>
+				<a href="https://www.plateforme.contact-promotion.org/register?type=student&classroom_id={{ data.classroom }}" class="btn">Enregistrement</a>
 			{% else %}
-				<a href="https://plataform.loc/register" class="btn">Enregistrement</a>
+				<a href="https://www.plateforme.contact-promotion.org/register" class="btn">Enregistrement</a>
 			{% endif %}
 		</fieldset>
 	</div>
@@ -121,3 +122,4 @@
 		box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
 	}
 </style>
+{% endapply %}
