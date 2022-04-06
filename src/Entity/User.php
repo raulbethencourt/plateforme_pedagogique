@@ -104,6 +104,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->username;
     }
 
+    /*
+     * @deprecated since Symfony 5.3
+     */
     public function getUsername(): string
     {
         return (string) $this->username;
@@ -212,8 +215,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->isVerified;
     }
 
-    public function getSalt()
+    public function getSalt(): ?string
     {
+        return null;
     }
 
     public function eraseCredentials()
