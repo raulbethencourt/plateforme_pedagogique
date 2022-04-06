@@ -10,6 +10,7 @@ use App\Service\FindEntity;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
@@ -40,7 +41,6 @@ class RegistrationController extends AbstractController
     ) {
         $this->verifyEmailHelper = $verifyEmailHelper;
         $this->find = $find;
-
         $this->request = $requestStack->getCurrentRequest();
         $this->mailer = $mailer;
     }
@@ -49,7 +49,10 @@ class RegistrationController extends AbstractController
      * @Route("/register", name="app_register")
      * @param Request $request
      */
-    public function register(UserPasswordHasherInterface $hasher): Response {
+    public function register(
+        UserPasswordHasherInterface $hasher,
+        ManagerRegistry $doctrine
+    ): Response {
         // I get User type property to change the registration way
         $type = $this->request->query->get('type');
         $classroom = $this->find->findClassroom();
@@ -88,7 +91,7 @@ class RegistrationController extends AbstractController
             }
 
             $user->setEntryDate(new \DateTime());
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $doctrine->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -136,7 +139,6 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_register');
         }
 
-        //set user as verified
         $user->setIsVerified(true);
         $entityManager->flush();
         

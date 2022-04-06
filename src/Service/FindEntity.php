@@ -235,12 +235,9 @@ class FindEntity
     /**
      * find user that its already in the db.
      */
-    public function findUserAlready(string $name, string $surname): ?User
+    public function findUserAlready(string $email): ?User
     {
-        return $this->userRepo->findOneBy([
-            'name' => $name,
-            'surname' => $surname,
-        ]);
+        return $this->userRepo->findOneBy(['email' => $email]);
     }
 
     /**

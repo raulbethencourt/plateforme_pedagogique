@@ -46,7 +46,7 @@ class InvitationsController extends AbstractController
         $form->handleRequest($this->request);
         if ($form->isSubmitted() && $form->isValid()) {
             // Check if user is in the data base already
-            $userAlready = $this->find->findUserAlready($invite->getName(), $invite->getSurname());
+            $userAlready = $this->find->findUserAlready($invite->getEmail());
 
             if (isset($userAlready)) {
                 $this->invite($invite, $classroom, $userAlready);
