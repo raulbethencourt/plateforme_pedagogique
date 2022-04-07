@@ -111,7 +111,7 @@ class RegistrationController extends AbstractController
         
             $this->mailer->send($email);
 
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('confirm_mail');
         }
 
         return $this->render('registration/register.html.twig', [
@@ -132,7 +132,11 @@ class RegistrationController extends AbstractController
 
         // Do not get the User's Id or Email Address from the Request object
         try {
-            $this->verifyEmailHelper->validateEmailConfirmation($request->getUri(), $user->getId(), $user->getEmail());
+            $this->verifyEmailHelper->validateEmailConfirmation(
+                $request->getUri(), 
+                $user->getId(), 
+                $user->getEmail()
+            );
         } catch (VerifyEmailExceptionInterface $e) {
             $this->addFlash('verify_email_error', $translator->trans($e->getReason(), [], 'VerifyEmailBundle'));
             
@@ -144,7 +148,7 @@ class RegistrationController extends AbstractController
         
         $this->addFlash('success', 'Your e-mail address has been verified.');
 
-        return $this->redirectToRoute('app_home');
+        return $this->redirectToRoute('login');
     }
 
     /**
