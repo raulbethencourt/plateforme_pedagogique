@@ -148,7 +148,15 @@ class RegistrationController extends AbstractController
         
         $this->addFlash('success', 'Your e-mail address has been verified.');
 
-        return $this->redirectToRoute('login');
+        // Depends on type of user we redirect to home
+        switch ($user->getRoles()[0]) {
+            case 'ROLE_TEACHER':
+                return $this->redirectToRoute('teacher_show');
+            case 'ROLE_STUDENT':
+                return $this->redirectToRoute('student_show');
+            default:
+                return $this->redirectToRoute('user_show');
+        }
     }
 
     /**
