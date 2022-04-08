@@ -6,24 +6,6 @@
 {% block body %}
 	<div class="row">
 		<div class="col-10 offset-1">
-			{{ wo_render_breadcrumbs() }}
-
-			{% for message in app.flashes('success') %}
-				<div class="alert alert-success mb-2">
-					{{ message }}
-				</div>
-			{% endfor %}
-
-			{% for message in app.flashes('error') %}
-				<div class="alert alert-danger mb-2">
-					{{ message }}
-				</div>
-			{% endfor %}
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-10 offset-1">
 			<div class="d-flex justify-content-between">
 				<h3>Créer une question</h3>
 
