@@ -19,6 +19,7 @@
 	<div class="row mt-4 mb-5">
 		<div class="col-10 offset-1">
 			<h3>Liste des activites</h3>
+            <div class="table-responsive">
 			{% if lesson.classrooms|length > 1 %}
 				<table class="table border-bottom table-warning">
 				{% elseif lesson.visibility %}
@@ -97,22 +98,23 @@
 							{% endfor %}
 						</tbody>
 					</table>
+                </div>
 
-					<div class="pagination">
-						{{ knp_pagination_render(questionnaires) }}
-					</div>
-
-
-					{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
-						<div class="text-right">
-							{% if lonely is defined and lonely is not null %}
-								<a href="{{ path('questionnaire_new', {lesson_id: lesson.id, classroom_id: classroom_id, lonely: lonely, extra: true }) }}" class="btn btn-primary">Créer activité</a>
-							{% elseif list is not null and classroom_id is null%}
-								<a href="{{ path('questionnaire_new', {lesson_id: lesson.id, classroom_id: classroom_id, list: list }) }}" class="btn btn-primary">Créer activité</a>
-							{% endif %}
-						</div>
-					{% endif %}
+				<div class="pagination">
+					{{ knp_pagination_render(questionnaires) }}
 				</div>
+   
+   
+				{% if (is_granted('ROLE_ADMIN') or app.user.username == lesson.creator) %}
+			     	<div class="text-right">
+			     		{% if lonely is defined and lonely is not null %}
+			     			<a href="{{ path('questionnaire_new', {lesson_id: lesson.id, classroom_id: classroom_id, lonely: lonely, extra: true }) }}" class="btn btn-primary">Créer activité</a>
+				 		{% elseif list is not null and classroom_id is null%}
+				 			<a href="{{ path('questionnaire_new', {lesson_id: lesson.id, classroom_id: classroom_id, list: list }) }}" class="btn btn-primary">Créer activité</a>
+			     		{% endif %}
+				 	</div>
+				{% endif %}
 			</div>
+		</div>
 
 		{% endblock %}

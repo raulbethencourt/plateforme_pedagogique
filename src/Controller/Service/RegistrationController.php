@@ -146,7 +146,7 @@ class RegistrationController extends AbstractController
         $user->setIsVerified(true);
         $entityManager->flush();
         
-        $this->addFlash('success', 'Your e-mail address has been verified.');
+        $this->addFlash('success', 'Votre adresse e-mail a été vérifiée.');
 
         // Depends on type of user we redirect to home
         switch ($user->getRoles()[0]) {

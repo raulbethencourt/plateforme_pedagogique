@@ -1,0 +1,9 @@
+.lesson-card {
+  width: 25%;
+}
+
+@media #{$large-down} {
+  .lesson-card {
+    width: 100%;
+  }
+}

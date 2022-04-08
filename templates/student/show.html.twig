@@ -7,10 +7,10 @@
 {% block body %}
 	<div class="row mt-4">
 		<div class="col-10 offset-1 d-flex justify-content-center">
-			<h2>{{ student.classrooms[0].name }}
+			<div class="title">{{ student.classrooms[0].name }}
 				-
 				<span class="badge badge-pill badge-info text-white">{{ classroom.discipline }}</span>
-			</h2>
+			</div>
 		</div>
 	</div>
 
@@ -47,7 +47,7 @@
 			<div class="d-flex flex-wrap mt-3">
 				{% for lesson in lessons %}
 					{% if lesson.visibility %}
-						<div class="card w-25 mb-3">
+						<div class="lesson-card card mb-3">
 							<div class="card-header ">
 								<a href="{{ path('lesson_show', {id: lesson.id}) }}">
 									<h4 class="card-title font-weight-bolder">{{lesson.title}}</h4>

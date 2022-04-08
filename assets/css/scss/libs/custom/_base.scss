@@ -1,50 +1,50 @@
 /* base.html.twig */
 .navbar {
-	padding: 0;
-	font-family: 'Open Sans', 'Arial', sans-serif;
+  padding: 0;
+  font-family: "Open Sans", "Arial", sans-serif;
 
-	a {
-		color: $gray-900;
-		font-size: 1.1rem;
-		letter-spacing: 4px;
-	}
+  a {
+    color: $gray-900;
+    font-size: 1.1rem;
+    letter-spacing: 4px;
+  }
 
-	a:hover {
-		color: $yellow;
-	}
+  a:hover {
+    color: $yellow;
+  }
 
-	.navbar-brand {
-		padding: 0;
+  .navbar-brand {
+    padding: 0;
 
-		.logo-contact {
-			width: 200px;
-			height: auto;
-		}
-	}
+    .logo-contact {
+      width: 200px;
+      height: auto;
+    }
+  }
 
-	.nav-username {
-		font-size: 1.5rem;
-		text-transform: capitalize;
-		font-weight: bold;
-		color: $yellow;
-	}
+  .nav-username {
+    font-size: 1.5rem;
+    text-transform: capitalize;
+    font-weight: bold;
+    color: $yellow;
+  }
 }
 
 .profile {
-	width: 40px;
-	height: auto;
-	color: white;
+  width: 40px;
+  height: auto;
+  color: white;
 }
 
 @media #{$large-down} {
-	.collapse {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-	}
+  .collapse {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-	.nav__logout--responsive {
-		flex-direction: column;
-		justify-content: space-between;
-	}
+  .nav__logout--responsive {
+    flex-direction: column;
+    justify-content: space-between;
+  }
 }
