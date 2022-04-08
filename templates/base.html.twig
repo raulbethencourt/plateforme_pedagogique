@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="author" content="Raul Bethencourt Gonzalez">
-		<meta name="description" content="Carpa is a pedagogical platform for modern training schools">
+		<meta name="description" content="Pedagogical platform for modern training schools">
 		<title>
 			{% block title %}Admin - C&P
 			{% endblock %}
@@ -33,7 +33,7 @@
 					</button>
 
 					<div class="collapse navbar-collapse" id="navbarSupportedContent">
-						<ul class="navbar-nav justify-content-center w-100">
+						<ul class="navbar-nav justify-content-center navbar--width">
 
 							{% if is_granted('ROLE_ADMIN') %}
 								<li class="nav-item dropdown mr-5">
@@ -70,7 +70,7 @@
 								</li>
 							{% endif %}
 
-							<li class="nav-item d-flex justify-content-center ml-5">
+							<li class="nav-item d-flex justify-content-center ml-sm-5">
 								<a class="nav-link mr-2" {% if is_granted('ROLE_TEACHER') %} href="{{ path('teacher_profile') }} {% elseif is_granted('ROLE_STUDENT') %} href=" {{ path('student_profile') }} {% else %} href="{{ path('user_profile') }} {% endif %}">PROFIL</a>
 								{% if app.user.avatar %}
 									<img class="profile rounded-circle bg-black" src="{{ vich_uploader_asset(app.user.avatar) | imagine_filter('nav') }}" alt="profil icon">
@@ -80,7 +80,7 @@
 							</li>
 						</ul>
 
-						<div class="nav-item d-flex flex-column mr-4">
+						<div class="nav-item d-flex flex-column mr-sm-4">
 							<span class="nav-username">{{ app.user.username }}</span>
 							<a class="nav-link pl-0" href="{{ path('app_logout') }}">Déconnexion</a>
 						</div>

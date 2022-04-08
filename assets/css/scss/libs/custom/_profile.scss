@@ -4,13 +4,5 @@
   max-width: 180px;
 }
 
-@media #{$xlarge-down} {
-  .wrapper {
-    width: 1150px;
-  }
-
-  img {
-    width: 80px;
-    height: 80px;
-  }
+@media #{$large-down} {
 }
