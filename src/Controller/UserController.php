@@ -67,15 +67,12 @@ class UserController extends AbstractController
         $form = $this->createForm(InviteType::class, $invite, ['user' => $user]);
         $invitation->invitation($form, $invite);
 
-        return $this->render(
-            'user/show.html.twig',
-            [
-                'admins' => $this->find->findUsersByRole('ROLE_ADMIN'),
-                'classrooms' => $classrooms,
-                'user' => $user,
-                'form' => $form->createView(),
-            ]
-        );
+        return $this->render('user/show.html.twig', [
+            'admins' => $this->find->findUsersByRole('ROLE_ADMIN'),
+            'classrooms' => $classrooms,
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
@@ -132,7 +129,7 @@ class UserController extends AbstractController
         $role = $user->getRoles()[0];
         // Check the token
         if ($this->isCsrfTokenValid(
-            'delete'.$user->getId(),
+            'delete' . $user->getId(),
             $this->request->get('_token')
         )) {
             $this->em->remove($user);
