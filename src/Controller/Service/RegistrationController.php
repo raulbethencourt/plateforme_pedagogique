@@ -6,6 +6,7 @@ use App\Entity\Student;
 use App\Entity\Teacher;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Repository\UserRepository;
 use App\Service\FindEntity;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -99,7 +100,8 @@ class RegistrationController extends AbstractController
             $signatureComponents = $this->verifyEmailHelper->generateSignature(
                 'registration_confirmation_route',
                 $user->getId(),
-                $user->getEmail()
+                $user->getEmail(),
+                ['id' => $user->getId()]
             );
         
             $email = new TemplatedEmail();
@@ -125,10 +127,25 @@ class RegistrationController extends AbstractController
     public function verifyUserEmail(
         Request $request, 
         TranslatorInterface $translator, 
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        UserRepository $userRepo
     ): Response {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $user = $this->getUser();
+        // $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // $user = $this->getUser();
+
+        $id = $request->get('id'); // retrieve the user id from the url
+
+        // Verify the user id exists add is not null
+        if (null === $id) {
+            return $this->redirectToRoute('login');
+        }
+
+        $user = $userRepo->find($id);
+
+        // Ensure the user exists in persistence
+        if (null === $user) {
+            return $this->redirectToRoute('login');
+        }
 
         // Do not get the User's Id or Email Address from the Request object
         try {
