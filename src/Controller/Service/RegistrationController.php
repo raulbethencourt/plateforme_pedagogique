@@ -103,21 +103,21 @@ class RegistrationController extends AbstractController
                 $user->getEmail(),
                 ['id' => $user->getId()]
             );
-        
+
             $email = new TemplatedEmail();
             $email->from(new Address('fle@contact-promotion.org', 'contact-promotion'))
                 ->to($user->getEmail())
                 ->subject('Merci de confirmer votre email.')
                 ->htmlTemplate('registration/confirmation_email.html.twig')
                 ->context(['signedUrl' => $signatureComponents->getSignedUrl()]);
-        
+
             $this->mailer->send($email);
 
             return $this->redirectToRoute('confirm_mail');
         }
 
         return $this->render('registration/register.html.twig', [
-                'registrationForm' => $form->createView(),
+            'registrationForm' => $form->createView(),
         ]);
     }
 
@@ -125,8 +125,8 @@ class RegistrationController extends AbstractController
      * @Route("/verify", name="registration_confirmation_route")
      */
     public function verifyUserEmail(
-        Request $request, 
-        TranslatorInterface $translator, 
+        Request $request,
+        TranslatorInterface $translator,
         EntityManagerInterface $entityManager,
         UserRepository $userRepo
     ): Response {
@@ -150,30 +150,23 @@ class RegistrationController extends AbstractController
         // Do not get the User's Id or Email Address from the Request object
         try {
             $this->verifyEmailHelper->validateEmailConfirmation(
-                $request->getUri(), 
-                $user->getId(), 
+                $request->getUri(),
+                $user->getId(),
                 $user->getEmail()
             );
         } catch (VerifyEmailExceptionInterface $e) {
             $this->addFlash('verify_email_error', $translator->trans($e->getReason(), [], 'VerifyEmailBundle'));
-            
+
             return $this->redirectToRoute('app_register');
         }
 
         $user->setIsVerified(true);
         $entityManager->flush();
-        
-        $this->addFlash('success', 'Votre adresse e-mail a été vérifiée.');
+
+        $this->addFlash('success', 'Votre adresse e-mail a été vérifiée. Connectez vous.');
 
         // Depends on type of user we redirect to home
-        switch ($user->getRoles()[0]) {
-            case 'ROLE_TEACHER':
-                return $this->redirectToRoute('teacher_show');
-            case 'ROLE_STUDENT':
-                return $this->redirectToRoute('student_show');
-            default:
-                return $this->redirectToRoute('user_show');
-        }
+        return $this->redirectToRoute('login');
     }
 
     /**

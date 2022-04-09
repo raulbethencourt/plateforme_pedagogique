@@ -15,6 +15,12 @@
 					<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 				{% endif %}
 
+				{% for message in app.flashes('success') %}
+					<div class="alert alert-success mr-2 mb-0">
+						{{ message }}
+					</div>
+				{% endfor %}
+
 				{% if app.user %}
 					<div class="mb-3">
 						Vous êtes connecté en tant que
