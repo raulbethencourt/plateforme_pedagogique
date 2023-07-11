@@ -34,6 +34,7 @@ yarn-error.log
 ###> friendsofphp/php-cs-fixer ###
 /.php_cs
 /.php_cs.cache
+tools/
 ###< friendsofphp/php-cs-fixer ###
 
 node_modules/

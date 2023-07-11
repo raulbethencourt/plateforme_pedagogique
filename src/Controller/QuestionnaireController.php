@@ -26,13 +26,9 @@ use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs as ModelBreadcrumbs;
 class QuestionnaireController extends AbstractController
 {
     private $em;
-
     private $find;
-
     private $request;
-
     private $breadCrumbs;
-
     private $paginator;
 
     public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $request, BreadCrumbs $breadCrumbs, PaginatorInterface $paginator)

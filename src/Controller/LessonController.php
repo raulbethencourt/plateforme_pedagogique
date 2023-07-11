@@ -22,13 +22,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class LessonController extends AbstractController
 {
     private $em;
-
     private $find;
-
     private $request;
-
     private $breadCrumbs;
-
     private $paginator;
 
     public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, BreadCrumbs $breadCrumbs, PaginatorInterface $paginator)
