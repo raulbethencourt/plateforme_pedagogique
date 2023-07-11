@@ -6,7 +6,7 @@ use Faker\Factory;
 use App\Entity\Student;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * Class StudentFixtures
@@ -15,17 +15,17 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class StudentFixtures extends Fixture
 {
-    private $passwordEncoder;
+    private $hasher;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserPasswordHasherInterface $hasher)
     {
-        $this->passwordEncoder = $passwordEncoder;
+        $this->hasher = $hasher;
     }
 
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create('fr_FR');
-        for ($i = 0; $i < 30; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $student = new Student();
             $student->setUsername($faker->userName);
             $student->setEmail($faker->safeEmail);
@@ -33,7 +33,7 @@ class StudentFixtures extends Fixture
             $student->setSurname($faker->firstNameMale);
             $student->setRoles(["ROLE_STUDENT"]);
             $student->setPassword(
-                $this->passwordEncoder->encodePassword($student, "student")
+                $this->hasher->hashPassword($student, "student")
             );
             $student->setEntryDate(new \DateTime());
             $manager->persist($student);

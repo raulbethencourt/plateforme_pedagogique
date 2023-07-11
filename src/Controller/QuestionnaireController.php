@@ -26,13 +26,9 @@ use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs as ModelBreadcrumbs;
 class QuestionnaireController extends AbstractController
 {
     private $em;
-
     private $find;
-
     private $request;
-
     private $breadCrumbs;
-
     private $paginator;
 
     public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $request, BreadCrumbs $breadCrumbs, PaginatorInterface $paginator)
@@ -76,7 +72,7 @@ class QuestionnaireController extends AbstractController
 
         $user = $this->getUser();
         if ('ROLE_TEACHER' === $user->getRoles()[0]) {
-            $questionnaires = $questionnaireRepo->findByVisibilityOrCreator(true, $user->getUsername());
+            $questionnaires = $questionnaireRepo->findByVisibilityOrCreator(true, $user->getUserIdentifier());
         } else {
             $questionnaires = $questionnaireRepo->findAll();
         }
@@ -110,7 +106,7 @@ class QuestionnaireController extends AbstractController
         }
 
         $questionnaire->setDateCreation(new \DateTime());
-        $questionnaire->setCreator($this->getUser()->getUsername());
+        $questionnaire->setCreator($this->getUser()->getUserIdentifier());
         $form = $this->createForm(QuestionnaireType::class, $questionnaire);
         $form->handleRequest($request);
 

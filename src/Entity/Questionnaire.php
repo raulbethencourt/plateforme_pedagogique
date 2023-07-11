@@ -54,7 +54,7 @@ class Questionnaire implements Serializable
     /**
      * @Assert\File(
      *  mimeTypes = {"image/jpeg", "image/png", "image/svg+xml"},
-     *  mimeTypesMessage = "Chargé un image correct - jpeg, png -"    
+     *  mimeTypesMessage = "Chargé un image correct - jpeg, png -"
      * )
      * @Vich\UploadableField(mapping="questionnaire_image", fileNameProperty="imageName")
      *
@@ -235,7 +235,7 @@ class Questionnaire implements Serializable
     public function getTotalScore(): int
     {
         $total = 0;
-        foreach($this->questions as $question){
+        foreach ($this->questions as $question) {
             $total+= $question->getScore();
         }
         return $total;
@@ -248,10 +248,10 @@ class Questionnaire implements Serializable
      */
     public function isPlayable(): bool
     {
-        if(count($this->questions) === 0) {
+        if (count($this->questions) === 0) {
             return false;
         }
-        return $this->questions->forAll(function($key, $question) {
+        return $this->questions->forAll(function ($key, $question) {
             return count($question->getPropositions()) >= 2;
         });
     }
@@ -309,7 +309,7 @@ class Questionnaire implements Serializable
     /** @see \Serializable::unserialize() */
     public function unserialize($serialized)
     {
-        list (
+        list(
             $this->id,
             $this->imageName,
             ) = unserialize($serialized, array('allowed_classes' => false));

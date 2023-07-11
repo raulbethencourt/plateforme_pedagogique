@@ -27,19 +27,20 @@ use Symfony\Component\Routing\Annotation\Route;
 class ClassroomController extends AbstractController
 {
     private $em;
-
     private $find;
-
     private $request;
-
     private $notifications;
-
     private $invitations;
-
     private $breadCrumbs;
 
-    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, Notify $notifications, Invitations $invitations, BreadCrumbs $breadCrumbs)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        FindEntity $find,
+        RequestStack $requestStack,
+        Notify $notifications,
+        Invitations $invitations,
+        BreadCrumbs $breadCrumbs
+    ) {
         $this->em = $em;
         $this->find = $find;
         $this->request = $requestStack->getCurrentRequest();

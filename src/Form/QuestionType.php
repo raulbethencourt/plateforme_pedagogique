@@ -77,7 +77,7 @@ class QuestionType extends AbstractType
                 SubmitType::class,
                 [
                     'label' => 'Ajouter cette question',
-                    'attr' => ['class' => 'btn-secondary'],
+                    'attr' => ['class' => 'btn-primary'],
                 ]
             )
         ;

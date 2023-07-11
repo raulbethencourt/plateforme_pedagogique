@@ -6,7 +6,7 @@ use Faker\Factory;
 use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * Class AdminFixtures
@@ -15,11 +15,11 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class AdminFixtures extends Fixture
 {
-    private $passwordEncoder;
+    private $hasher;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserPasswordHasherInterface $hasher)
     {
-        $this->passwordEncoder = $passwordEncoder;
+        $this->hasher = $hasher;
     }
 
     public function load(ObjectManager $manager)
@@ -33,7 +33,7 @@ class AdminFixtures extends Fixture
             $admin->setSurname($faker->firstNameFemale);
             $admin->setRoles(["ROLE_ADMIN"]);
             $admin->setPassword(
-                $this->passwordEncoder->encodePassword($admin, "admin")
+                $this->hasher->hashPassword($admin, "admin")
             );
             $admin->setEntryDate(new \DateTime());
 

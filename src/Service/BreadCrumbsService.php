@@ -52,8 +52,10 @@ class BreadCrumbsService
      */
     private function classroomStart(string $classroom_id): Breadcrumbs
     {
-        $this->userHome()->addRouteItem('Classe',
-            'classroom_show', [
+        $this->userHome()->addRouteItem(
+            'Classe',
+            'classroom_show',
+            [
                 'id' => $classroom_id,
             ]
         );

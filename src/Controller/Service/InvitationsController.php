@@ -22,15 +22,16 @@ use Symfony\Component\Mime\Address;
 class InvitationsController extends AbstractController
 {
     private $mailer;
-
     private $em;
-
     private $request;
-
     private $find;
 
-    public function __construct(MailerInterface $mailer, EntityManagerInterface $em, RequestStack $requestStack, FindEntity $find)
-    {
+    public function __construct(
+        MailerInterface $mailer, 
+        EntityManagerInterface $em, 
+        RequestStack $requestStack, 
+        FindEntity $find
+    ) {
         $this->mailer = $mailer;
         $this->em = $em;
         $this->request = $requestStack->getCurrentRequest();
@@ -45,7 +46,7 @@ class InvitationsController extends AbstractController
         $form->handleRequest($this->request);
         if ($form->isSubmitted() && $form->isValid()) {
             // Check if user is in the data base already
-            $userAlready = $this->find->findUserAlready($invite->getName(), $invite->getSurname());
+            $userAlready = $this->find->findUserAlready($invite->getEmail());
 
             if (isset($userAlready)) {
                 $this->invite($invite, $classroom, $userAlready);
@@ -75,7 +76,7 @@ class InvitationsController extends AbstractController
             $classroom->addUser($user);
             $this->em->persist($classroom);
             $this->em->flush();
-            $this->addFlash('success', 'Utilisateur ajouté dans la classe avec succès.');
+            $this->addFlash('success', 'Utilisateur ajouté dans la class avec succès.');
             $this->email('emails/old_invitation.html.twig', $data, $classroom);
         } else {
             // If the user is not in the data base
@@ -91,9 +92,9 @@ class InvitationsController extends AbstractController
     public function email(string $template, Invite $data, ?Classroom $classroom)
     {
         $email = (new TemplatedEmail())
-            ->from(Address::fromString('Carpa <carpa@exemple.com>'))
+            ->from(Address::create('Contact-promotion <fle@contact-promotion.org>'))
             ->to($data->getEmail())
-            ->subject('Invitation à Carpa')
+            ->subject('Invitation à la plateforme de Contact et Promotion')
             ->htmlTemplate($template)
         ;
         if (isset($classroom)) {

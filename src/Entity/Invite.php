@@ -26,7 +26,7 @@ class Invite
     private $name;
 
     /**
-     * @var string 
+     * @var string
      * @Assert\NotBlank
      */
     private $surname;
@@ -61,22 +61,22 @@ class Invite
         $this->name = $name;
     }
 
-	/**
-	 * @return  string
-	 */
-	public function getSurname(): string
-	{
-		return $this->surname;
-	}
+    /**
+     * @return  string
+     */
+    public function getSurname(): string
+    {
+        return $this->surname;
+    }
 
-	/**
-	 * @param   string  $surname  
-	 * @return  self
-	 */
-	public function setSurname(string $surname): self 
-	{
-		$this->surname = $surname;
+    /**
+     * @param   string  $surname
+     * @return  self
+     */
+    public function setSurname(string $surname): self
+    {
+        $this->surname = $surname;
 
-		return $this;
-	}
+        return $this;
+    }
 }

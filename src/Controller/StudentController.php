@@ -7,6 +7,7 @@ use App\Form\EditStudentType;
 use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
 use Knp\Component\Pager\PaginatorInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,13 +19,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class StudentController extends AbstractController
 {
     private $breadCrumbs;
-
     private $find;
+    private $doctrine;
 
-    public function __construct(FindEntity $find, BreadCrumbs $breadCrumbs)
-    {
+    public function __construct(
+        FindEntity $find,
+        BreadCrumbs $breadCrumbs,
+        ManagerRegistry $doctrine
+    ) {
         $this->find = $find;
         $this->breadCrumbs = $breadCrumbs;
+        $this->doctrine = $doctrine;
     }
 
     /**
@@ -33,25 +38,13 @@ class StudentController extends AbstractController
     public function show(PaginatorInterface $paginator, Request $request): Response
     {
         $student = $this->getUser();
-        $lessons = $paginator->paginate($student->getClassrooms()[0]->getLessons(), $request->query->getInt('page', 1), 10);
+        $classroom = $student->getClassrooms()[0];
+        $lessons = $paginator->paginate($classroom->getLessons(), $request->query->getInt('page', 1), 10);
 
         return $this->render('student/show.html.twig', [
             'student' => $student,
             'lessons' => $lessons,
-        ]);
-    }
-
-    /**
-     * @Route("/", name="student_classrooms")
-     */
-    public function showClassrooms(): Response
-    {
-        $student = $this->getUser();
-        $classrooms = $student->getClassrooms();
-
-        return $this->render('student/classrooms.html.twig', [
-            'student' => $student,
-            'classrooms' => $classrooms,
+            'classroom' => $classroom,
         ]);
     }
 
@@ -74,7 +67,6 @@ class StudentController extends AbstractController
 
         $numberOfQuestions = array_reduce(
             $passes,
-
             function ($i, $pass) {
                 return $i += count($pass->getQuestionnaire()->getQuestions());
             }
@@ -91,18 +83,21 @@ class StudentController extends AbstractController
                     return $pass->getQuestionnaire()->getDifficulty() == $difficulty;
                 }
             );
+
             $totalScore = array_reduce(
                 $playsPerDiff[$difficulty],
                 function ($i, $play) {
                     return $i += $play->getQuestionnaire()->getTotalScore();
                 }
             );
+
             $playerScore = array_reduce(
                 $playsPerDiff[$difficulty],
                 function ($i, $play) {
                     return $i += $play->getPoints();
                 }
             );
+
             if (null != $totalScore) {
                 $statsPerDiff[$difficulty] = round(($playerScore / $totalScore) * 100, 2);
             } else {
@@ -161,7 +156,7 @@ class StudentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($student);
             $entityManager->flush();
             $this->addFlash('success', 'Profil édité avec succès.');
@@ -175,12 +170,9 @@ class StudentController extends AbstractController
             return $this->redirectToRoute('student_profile');
         }
 
-        return $this->render(
-            'student/edit-profile.html.twig',
-            [
-                'editForm' => $form->createView(),
-                'student' => $this->getUser(),
-            ]
-        );
+        return $this->render('student/edit-profile.html.twig', [
+            'editForm' => $form->createView(),
+            'student' => $this->getUser(),
+        ]);
     }
 }

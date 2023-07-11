@@ -4,24 +4,6 @@
 {% endblock %}
 
 {% block body %}
-	<div class="row">
-		<div class="col-10 offset-1">
-			{{ wo_render_breadcrumbs() }}
-
-			{% for message in app.flashes('success') %}
-				<div class="alert alert-success">
-					{{ message }}
-				</div>
-			{% endfor %}
-
-			{% for message in app.flashes('error') %}
-				<div class="alert alert-danger">
-					{{ message }}
-				</div>
-			{% endfor %}
-		</div>
-	</div>
-
 	<div class="row mt-4">
 		<div class="col-5 offset-1">
 			{{ form_start(form) }}
@@ -111,9 +93,9 @@
 													<button class="btn btn-danger">Supprimer</button>
 												</form>
 											{% endif %}
-											{% if classroom_id is not null %}
-												<a href="{{ path('classroom_lesson_add', {id: classroom_id, lesson_id: lesson.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
-											{% endif %}
+									{% endif %}
+									{% if classroom_id is not null %}
+										<a href="{{ path('classroom_lesson_add', {id: classroom_id, lesson_id: lesson.id}) }}" class="btn btn-secondary mb-2" role="button">Ajouter</a>
 									{% endif %}
 								</td>
 							</tr>

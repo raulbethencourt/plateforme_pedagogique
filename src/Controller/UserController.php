@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Class UserController.
@@ -25,22 +26,26 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     private $em;
-
     private $find;
-
     private $request;
-
     private $breadCrumbs;
-
     private $paginator;
+    private $doctrine;
 
-    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, BreadCrumbs $breadCrumbs, PaginatorInterface $paginator)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        FindEntity $find,
+        RequestStack $requestStack,
+        BreadCrumbs $breadCrumbs,
+        PaginatorInterface $paginator,
+        ManagerRegistry $doctrine
+    ) {
         $this->em = $em;
         $this->find = $find;
         $this->request = $requestStack->getCurrentRequest();
         $this->breadCrumbs = $breadCrumbs;
         $this->paginator = $paginator;
+        $this->doctrine = $doctrine;
     }
 
     /**
@@ -62,15 +67,12 @@ class UserController extends AbstractController
         $form = $this->createForm(InviteType::class, $invite, ['user' => $user]);
         $invitation->invitation($form, $invite);
 
-        return $this->render(
-            'user/show.html.twig',
-            [
-                'admins' => $this->find->findUsersByRole('ROLE_ADMIN'),
-                'classrooms' => $classrooms,
-                'user' => $user,
-                'form' => $form->createView(),
-            ]
-        );
+        return $this->render('user/show.html.twig', [
+            'admins' => $this->find->findUsersByRole('ROLE_ADMIN'),
+            'classrooms' => $classrooms,
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
@@ -127,7 +129,7 @@ class UserController extends AbstractController
         $role = $user->getRoles()[0];
         // Check the token
         if ($this->isCsrfTokenValid(
-            'delete'.$user->getId(),
+            'delete' . $user->getId(),
             $this->request->get('_token')
         )) {
             $this->em->remove($user);
@@ -178,7 +180,7 @@ class UserController extends AbstractController
         $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->doctrine->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 

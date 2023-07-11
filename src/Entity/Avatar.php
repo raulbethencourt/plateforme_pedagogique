@@ -26,7 +26,7 @@ class Avatar implements Serializable
     /**
      * @Assert\File(
      *  mimeTypes = {"image/jpeg", "image/png", "image/svg+xml"},
-     *  mimeTypesMessage = "Chargé un image correct - jpeg, png -"    
+     *  mimeTypesMessage = "Chargé un image correct - jpeg, png -"
      * )
      * @Vich\UploadableField(mapping="profile_image", fileNameProperty="imageName")
      *
@@ -123,7 +123,7 @@ class Avatar implements Serializable
     /** @see \Serializable::unserialize() */
     public function unserialize($serialized)
     {
-        list (
+        list(
             $this->id,
             $this->imageName,
             ) = unserialize($serialized, array('allowed_classes' => false));

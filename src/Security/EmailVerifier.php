@@ -68,7 +68,11 @@ class EmailVerifier extends AbstractController
      */
     public function handleEmailConfirmation(Request $request, UserInterface $user)
     {
-        $this->verifyEmailHelper->validateEmailConfirmation($request->getUri(), $user->getId(), $user->getEmail());
+        $this->verifyEmailHelper->validateEmailConfirmation(
+            $request->getUri(),
+            $user->getId(),
+            $user->getEmail()
+        );
 
         $user->setIsVerified(true);
 

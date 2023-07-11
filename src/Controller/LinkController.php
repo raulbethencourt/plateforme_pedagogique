@@ -72,7 +72,7 @@ class LinkController extends AbstractController
     public function new(): Response
     {
         $link = new Link();
-        $link->setCreator($this->getUser()->getUsername());
+        $link->setCreator($this->getUser()->getUserIdentifier());
 
         $classroom_id = $this->request->query->get('classroom_id');
         if (isset($classroom_id)) {

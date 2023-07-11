@@ -22,13 +22,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class LessonController extends AbstractController
 {
     private $em;
-
     private $find;
-
     private $request;
-
     private $breadCrumbs;
-
     private $paginator;
 
     public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, BreadCrumbs $breadCrumbs, PaginatorInterface $paginator)
@@ -70,7 +66,7 @@ class LessonController extends AbstractController
         }
 
         if ('ROLE_TEACHER' === $user->getRoles()[0]) {
-            $lessons = $lessonRepo->findByVisibilityOrCreator(true, $user->getUsername());
+            $lessons = $lessonRepo->findByVisibilityOrCreator(true, $user->getUserIdentifier());
         } else {
             $lessons = $lessonRepo->findAll();
         }
@@ -104,7 +100,7 @@ class LessonController extends AbstractController
         }
         $lesson->setDateCreation(new \DateTime());
         $lesson->addUser($this->getUser());
-        $lesson->setCreator($this->getUser()->getUsername());
+        $lesson->setCreator($this->getUser()->getUserIdentifier());
         $form = $this->createForm(LessonType::class, $lesson);
 
         $form->handleRequest($this->request);

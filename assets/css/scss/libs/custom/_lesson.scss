@@ -1,0 +1,14 @@
+.lesson-card {
+  width: 25%;
+}
+
+.lesson-card-img {
+  width: 100%;
+  height: auto;
+}
+
+@media #{$large-down} {
+  .lesson-card {
+    width: 100%;
+  }
+}

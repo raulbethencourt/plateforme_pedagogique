@@ -33,6 +33,7 @@ if ($('#studentChart').length) {
             }]
         },
         options: {
+            aspectRatio: 1,
             legend: {
                 display: false
             },

@@ -1,13 +1,10 @@
 security:
     enable_authenticator_manager: true
 
-    encoders:
-        App\Entity\User:
-            algorithm: auto
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
 
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
                 class: App\Entity\User
@@ -18,15 +15,22 @@ security:
             security: false
         main:
             # allow authentication using a form or HTTP basic
-            form_login: ~
-            http_basic: ~
+            form_login:
+                # "login" is the name of the route created previously
+                login_path: login
+                check_path: login
+                enable_csrf: true
+                default_target_path: home_page
+                always_use_default_target_path: true
+            http_basic: 
+                realm: Secured Area
 
             # configure the form authentication as the entry point for unauthenticated users
             entry_point: form_login
             provider: app_user_provider
-            guard:
-                authenticators:
-                    - App\Security\LoginFormAuthenticator
+            # guard:
+            #     authenticators:
+            #         - App\Security\LoginFormAuthenticator
             logout:
                 path: app_logout
                 # where to redirect after logout

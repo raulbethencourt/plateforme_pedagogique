@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="author" content="Raul Bethencourt Gonzalez">
-		<meta name="description" content="Carpa is a pedagogical platform for modern training schools">
+		<meta name="description" content="Pedagogical platform for modern training schools">
 		<title>
 			{% block title %}Admin - C&P
 			{% endblock %}
@@ -17,83 +17,102 @@
 		{% endblock %}
 	</head>
 	<body>
-		<nav class="navbar navbar-expand-lg sticky-top bg-white">
-		{% if is_granted('ROLE_TEACHER') %}
-			<a class="navbar-brand ml-4" href="{{ path('teacher_show') }}">
-		{% elseif is_granted('ROLE_STUDENT') %}
-			<a class="navbar-brand ml-4" href="{{ path('student_show') }}">
-		{% else %}
-			<a class="navbar-brand ml-4" href="{{ path('user_show') }}">
-		{% endif %}
-				<img src="{{ asset('images/cp-logo-big.webp') }}" class="logo-contact" alt="logo C&P">
-			</a>
-
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav justify-content-center w-100">
-
-				{% if is_granted('ROLE_ADMIN') %}
-					<li class="nav-item dropdown mr-5">
-						<a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-expanded="false">
-							UTILISATEURS
-						</a>
-						<ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
-							<li>
-								<a href="{{ path('user_list', {type: 'teachers'}) }}" class="dropdown-item">LISTE DES FORMATEURS·RICES</a>
-							</li>
-							<li>
-								<a href="{{ path('user_list', {type: 'students'}) }}" class="dropdown-item">LISTE DES APPRENANTS·TES</a>
-							</li>
-						</ul>
-					</li>
-				{% endif %}
-
-				{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-expanded="false">
-							BOÎTE À OUTILS
-						</a>
-						<ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
-							<li>
-								<a class="dropdown-item" href="{{path('lesson_index')}}">MODULES</a>
-							</li>
-							<li>
-								<a class="dropdown-item" href="{{ path('questionnaire_index') }}">ACTIVITÉS</a>
-							</li>
-							<li>
-								<a class="dropdown-item" href="{{ path('link_index') }}">LIENS</a>
-							</li>
-						</ul>
-					</li>
-				{% endif %}
-
-					<li class="nav-item d-flex justify-content-center ml-5">
-						<a class="nav-link mr-2" {% if is_granted('ROLE_TEACHER') %} href="{{ path('teacher_profile') }} {% elseif is_granted('ROLE_STUDENT') %} href=" {{ path('student_profile') }} {% else %} href="{{ path('user_profile') }} {% endif %}">PROFIL</a>
-						{% if app.user.avatar %}
-							<img class="profile rounded-circle bg-black" src="{{ vich_uploader_asset(app.user.avatar) | imagine_filter('nav') }}" alt="profil icon">
-						{% else %}
-							<img class="profile" src="{{ asset('images/image-profile.png') | imagine_filter('profile') }}" alt="profil icon">
+		<nav class="navbar navbar-expand-lg sticky-top navbar-light bg-white">
+			{% if is_granted('ROLE_TEACHER') %}
+				<a class="navbar-brand ml-4" href="{{ path('teacher_show') }}">
+				{% elseif is_granted('ROLE_STUDENT') %}
+					<a class="navbar-brand ml-4" href="{{ path('student_show') }}">
+					{% else %}
+						<a class="navbar-brand ml-4" href="{{ path('user_show') }}">
 						{% endif %}
-					</li>
-				</ul>
+						<img src="{{ asset('images/cp-logo-big.webp') }}" class="logo-contact" alt="logo C&P">
+					</a>
 
-				<div class="nav-item d-flex flex-column mr-4">
-					<span class="nav-username">{{ app.user.username }}</span>
-					<a class="nav-link pl-0" href="{{ path('app_logout') }}">Déconnexion</a>
+					<button class="navbar-toggler mr-4" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="navbar-nav justify-content-center navbar--width">
+
+							{% if is_granted('ROLE_ADMIN') %}
+								<li class="nav-item dropdown mr-5">
+									<a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-expanded="false">
+										UTILISATEURS
+									</a>
+									<ul class="dropdown-menu" aria-labelledby="navbarDropdown1">
+										<li>
+											<a href="{{ path('user_list', {type: 'teachers'}) }}" class="dropdown-item">LISTE DES FORMATEURS·RICES</a>
+										</li>
+										<li>
+											<a href="{{ path('user_list', {type: 'students'}) }}" class="dropdown-item">LISTE DES APPRENANTS·TES</a>
+										</li>
+									</ul>
+								</li>
+							{% endif %}
+
+							{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+								<li class="nav-item dropdown">
+									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-expanded="false">
+										BOÎTE À OUTILS
+									</a>
+									<ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
+										<li>
+											<a class="dropdown-item" href="{{path('lesson_index')}}">MODULES</a>
+										</li>
+										<li>
+											<a class="dropdown-item" href="{{ path('questionnaire_index') }}">ACTIVITÉS</a>
+										</li>
+										<li>
+											<a class="dropdown-item" href="{{ path('link_index') }}">LIENS</a>
+										</li>
+									</ul>
+								</li>
+							{% endif %}
+
+							<li class="nav-item d-flex justify-content-center ml-sm-5">
+								<a class="nav-link mr-2" {% if is_granted('ROLE_TEACHER') %} href="{{ path('teacher_profile') }} {% elseif is_granted('ROLE_STUDENT') %} href=" {{ path('student_profile') }} {% else %} href="{{ path('user_profile') }} {% endif %}">PROFIL</a>
+								{% if app.user.avatar %}
+									<img class="profile rounded-circle bg-black" src="{{ vich_uploader_asset(app.user.avatar) | imagine_filter('nav') }}" alt="profil icon">
+								{% else %}
+									<img class="profile" src="{{ asset('images/image-profile.png') | imagine_filter('profile') }}" alt="profil icon">
+								{% endif %}
+							</li>
+						</ul>
+
+						<div class="nav-item d-flex flex-column mr-sm-4">
+							<span class="nav-username">{{ app.user.username }}</span>
+							<a class="nav-link pl-0" href="{{ path('app_logout') }}">Déconnexion</a>
+						</div>
+					</div>
+				</nav>
+
+				<div class="container-sm d-flex justify-content-center flex-column  p-4 mt-5 mb-5 bg-white rounded-lg">
+					<h1 class="d-none">C&P</h1>
+					<div class="row">
+						<div class="col-10 offset-1">
+							{{ wo_render_breadcrumbs() }}
+
+							{% for message in app.flashes('success') %}
+								<div class="alert alert-success mr-2 mb-0">
+									{{ message }}
+								</div>
+							{% endfor %}
+
+							{% for message in app.flashes('error') %}
+								<div class="alert alert-danger">
+									{{ message }}
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+					{% block body %}{% endblock %}
 				</div>
-			</div>
-		</nav>
 
-		<div class="container-sm d-flex justify-content-center flex-column  p-4 mt-5 mb-5 bg-white rounded-lg"> 
-		<h1 class="d-none">C&P</h1>
-		{% block body %}{% endblock %}
-		</div>
-		
-		{% block javascripts %}
-			{{ encore_entry_script_tags('app') }}
-		{% endblock %}
+				{% block javascripts %}
+					{{ encore_entry_script_tags('app') }}
+				{% endblock %}
+			</body>
+		</html>
 	</body>
 </html>

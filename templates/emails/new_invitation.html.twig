@@ -1,3 +1,4 @@
+{% apply inline_css %}
 <div class="container">
 	<div id="contact">
 		<h3>{{ data.name }}, bienvenue à</h3>
@@ -20,31 +21,13 @@
 </div>
 
 <style>
-	@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,600,400italic);
-
-	* {
-		margin: 0;
-		padding: 0;
-		box-sizing: border-box;
-		-webkit-box-sizing: border-box;
-		-moz-box-sizing: border-box;
-		-webkit-font-smoothing: antialiased;
-		-moz-font-smoothing: antialiased;
-		-o-font-smoothing: antialiased;
-		font-smoothing: antialiased;
-		text-rendering: optimizeLegibility;
-	}
-
-	body {
-		font-family: "Roboto", Helvetica, Arial, sans-serif;
+	.container {
+		background: #d6d6d6;
+		font-family: Arial, sans-serif;
 		font-weight: 100;
 		font-size: 12px;
 		line-height: 30px;
 		color: #777;
-		background: #d6d6d6;
-	}
-
-	.container {
 		max-width: 400px;
 		width: 100%;
 		margin: 0 auto;
@@ -52,9 +35,6 @@
 	}
 
 	#contact {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
 		background: #F9F9F9;
 		padding: 25px;
 		margin: 150px 0;
@@ -63,7 +43,6 @@
 
 	#contact h3 {
 		text-align: center;
-		display: block;
 		font-size: 30px;
 		font-weight: 300;
 		margin-bottom: 10px;
@@ -72,7 +51,6 @@
 	#contact h4 {
 		text-align: center;
 		margin: 5px 0 10px;
-		display: block;
 		font-size: 16px;
 		font-weight: 400;
 	}
@@ -87,6 +65,8 @@
 
 	p {
 		text-align: center;
+		margin-left: auto;
+		margin-right: auto;
 	}
 
 	fieldset {
@@ -121,3 +101,4 @@
 		box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
 	}
 </style>
+{% endapply %}

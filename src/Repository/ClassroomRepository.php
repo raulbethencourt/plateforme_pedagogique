@@ -20,10 +20,10 @@ class ClassroomRepository extends ServiceEntityRepository
         parent::__construct($registry, Classroom::class);
     }
 
-     /**
-      * This method allows to find a class by a Student
-      * @return Classroom[] Returns an array of Classroom objects
-      */
+    /**
+     * This method allows to find a class by a Student
+     * @return Classroom[] Returns an array of Classroom objects
+     */
     public function findByStudent($student): array
     {
         return $this->createQueryBuilder('c')
