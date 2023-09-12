@@ -25,6 +25,7 @@ class AdminFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create('fr_FR');
+        
         for ($i = 0; $i < 5; $i++) {
             $admin = new User();
             $admin->setUsername($faker->userName);
