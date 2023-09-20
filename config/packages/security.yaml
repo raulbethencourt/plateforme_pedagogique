@@ -4,6 +4,7 @@ security:
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
 
+    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     providers:
         app_user_provider:
             entity:
@@ -27,7 +28,8 @@ security:
 
             # configure the form authentication as the entry point for unauthenticated users
             entry_point: form_login
-            provider: app_user_provider
+            # TODO: check new security system for providers
+            # provider: app_user_provider
             # guard:
             #     authenticators:
             #         - App\Security\LoginFormAuthenticator
@@ -36,9 +38,13 @@ security:
                 # where to redirect after logout
                 # target: app_any_route
             switch_user: true
+            anonymous: true
+            lazy: true
+            provider: users_in_memory
 
             # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
+            # https://symfony.com/doc/current/security.html#the-firewall
+
             # https://symfony.com/doc/current/security/impersonating_user.html
 
     # Give ROLE_SUPER_ADMIN same rights as ROLE_ADMIN
@@ -51,3 +57,16 @@ security:
         - { path: ^/user, roles: [ROLE_ADMIN] }
         - { path: ^/teacher, roles: [ROLE_TEACHER, ROLE_ADMIN] }
         - { path: ^/student, roles: [ROLE_STUDENT, ROLE_ADMIN] }
+
+when@test:
+    security:
+        password_hashers:
+            # By default, password hashers are resource intensive and take time. This is
+            # important to generate secure password hashes. In tests however, secure hashes
+            # are not important, waste resources and increase test times. The following
+            # reduces the work factor to the lowest possible values.
+            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+                algorithm: auto
+                cost: 4 # Lowest possible value for bcrypt
+                time_cost: 3 # Lowest possible value for argon
+                memory_cost: 10 # Lowest possible value for argon
