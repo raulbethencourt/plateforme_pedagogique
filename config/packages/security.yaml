@@ -29,7 +29,7 @@ security:
             # configure the form authentication as the entry point for unauthenticated users
             entry_point: form_login
             # TODO: check new security system for providers
-            # provider: app_user_provider
+            provider: app_user_provider
             # guard:
             #     authenticators:
             #         - App\Security\LoginFormAuthenticator
@@ -38,9 +38,9 @@ security:
                 # where to redirect after logout
                 # target: app_any_route
             switch_user: true
-            anonymous: true
+            # anonymous: true
             lazy: true
-            provider: users_in_memory
+              #provider: users_in_memory
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall

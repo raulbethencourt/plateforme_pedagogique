@@ -36,6 +36,7 @@
         "symfony/property-access": "5.3.*",
         "symfony/property-info": "5.2.*",
         "symfony/requirements-checker": "^2.0",
+        "symfony/runtime": "5.4.*",
         "symfony/security-bundle": "5.3.*",
         "symfony/serializer": "5.2.*",
         "symfony/string": "5.2.*",
@@ -72,7 +73,8 @@
         },
         "sort-packages": true,
         "allow-plugins": {
-            "symfony/flex": true
+            "symfony/flex": true,
+            "symfony/runtime": true
         }
     },
     "autoload": {
