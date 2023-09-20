@@ -38,3 +38,5 @@ tools/
 ###< friendsofphp/php-cs-fixer ###
 
 node_modules/
+
+/doctrine.doctrine-fixtures-bundle.updates-for-deleted-files.patch
