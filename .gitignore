@@ -41,3 +41,6 @@ tools/
 node_modules/
 
 /doctrine.doctrine-fixtures-bundle.updates-for-deleted-files.patch
+
+### personal config
+/.php-cs-fixer.cache
