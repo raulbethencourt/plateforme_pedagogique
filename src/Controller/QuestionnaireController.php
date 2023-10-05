@@ -11,18 +11,17 @@ use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs as ModelBreadcrumbs;
 
-/**
- * @Route("/questionnaire")
- */
+#[Route('/questionnaire', name: 'questionnaire_')]
 class QuestionnaireController extends AbstractController
 {
     private $em;
@@ -40,10 +39,12 @@ class QuestionnaireController extends AbstractController
         $this->paginator = $paginator;
     }
 
-    /**
-     * @Route("/", name="questionnaire_index", methods={"GET"})
-     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
-     */
+    #[Route(
+        '/',
+        name: 'index',
+        methods: ['GET']
+    )]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")'))]
     public function index(QuestionnaireRepository $questionnaireRepo): Response
     {
         $this->questionnaireBC(null, 'index');
@@ -90,10 +91,12 @@ class QuestionnaireController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/new", name="questionnaire_new", methods={"GET", "POST"})
-     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
-     */
+    #[Route(
+        '/new',
+        name: 'new',
+        methods: ['GET', 'POST']
+    )]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")'))]
     public function new(Request $request): Response
     {
         $this->questionnaireBC(null, 'new');
@@ -136,10 +139,11 @@ class QuestionnaireController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="questionnaire_show", methods={"GET"})
-     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
-     */
+    #[Route(
+        '/{id}',
+        name: 'show',
+        methods: ['GET']
+    )]
     public function show(Questionnaire $questionnaire): Response
     {
         $this->questionnaireBC($questionnaire, 'show');
@@ -157,10 +161,12 @@ class QuestionnaireController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="questionnaire_edit", methods={"GET", "POST"})
-     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
-     */
+    #[Route(
+        '/{id}/edit',
+        name: 'edit',
+        methods: ['GET', 'POST']
+    )]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")'))]
     public function edit(Questionnaire $questionnaire, Request $request): Response
     {
         $this->questionnaireBC($questionnaire, 'edit');
@@ -200,10 +206,12 @@ class QuestionnaireController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/{id}", name="questionnaire_delete", methods={"DELETE"})
-     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
-     */
+    #[Route(
+        '/{id}',
+        name: 'delete',
+        methods: ['POST']
+    )]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")'))]
     public function delete(Questionnaire $questionnaire): Response
     {
         // check the token to delete
@@ -221,10 +229,11 @@ class QuestionnaireController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/play", name="questionnaire_play", methods={"GET", "POST"})
-     * @Security("is_granted('ROLE_STUDENT') or is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
-     */
+    #[Route(
+        '/{id}/play',
+        name: 'play',
+        methods: ['GET', 'POST']
+    )]
     public function play(Questionnaire $questionnaire, Request $requestOne): Response
     {
         $this->questionnaireBC($questionnaire, 'play');
@@ -234,7 +243,6 @@ class QuestionnaireController extends AbstractController
         // Check if we can play the questionnaire or not
         if (!$questionnaire->isPlayable()) {
             $this->addFlash('error', 'Activité indisponible !');
-            $lesson_id = $this->request->query->get('lesson_id');
 
             return $this->redirectToRoute('questionnaire_show', [
                 'id' => $questionnaire->getId(),
@@ -252,7 +260,7 @@ class QuestionnaireController extends AbstractController
         $points = null;
 
         if ($requestOne->isMethod('post')) {
-            $answers = $requestOne->request; //equivalent à $_POST
+            $answers = $requestOne->request; // equivalent à $_POST
             $eval = $this->evaluateQuestionnaire($answers, $questionnaire);
             $rights = $eval['corrects'];
             $points = $eval['points'];
@@ -292,7 +300,7 @@ class QuestionnaireController extends AbstractController
     }
 
     /**
-     * This methode checks questionnaire answers.
+     * This method checks questionnaire answers.
      */
     private function evaluateQuestionnaire(ParameterBag $answers, Questionnaire $questionnaire): array
     {
@@ -317,7 +325,7 @@ class QuestionnaireController extends AbstractController
     }
 
     /**
-     * Helping methodss to call breadcrumbsService.
+     * Helping methods to call breadcrumbsService.
      */
     private function questionnaireBC(?Questionnaire $questionnaire, string $method): ModelBreadcrumbs
     {

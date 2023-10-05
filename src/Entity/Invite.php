@@ -73,7 +73,7 @@ class Invite
      * @param   string  $surname
      * @return  self
      */
-    public function setSurname(string $surname): self
+    public function setSurname(string $surname): \App\Entity\Invite
     {
         $this->surname = $surname;
 

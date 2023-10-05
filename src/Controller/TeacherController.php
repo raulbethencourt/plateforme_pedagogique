@@ -5,26 +5,25 @@ namespace App\Controller;
 use App\Form\EditTeacherType;
 use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/teacher")
- */
+#[Route('/teacher', name: 'teacher_')]
 class TeacherController extends AbstractController
 {
     private $breadCrumbs;
+    private $em;
 
-    public function __construct(BreadCrumbs $breadCrumbs)
+    public function __construct(BreadCrumbs $breadCrumbs, EntityManagerInterface $em)
     {
+        $this->em = $em;
         $this->breadCrumbs = $breadCrumbs;
     }
 
-    /**
-     * @Route("/", name="teacher_show")
-     */
+    #[Route('/teacher', name: 'show')]
     public function show(): Response
     {
         $teacher = $this->getUser();
@@ -38,9 +37,11 @@ class TeacherController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/profile", name="teacher_profile")
-     */
+    #[Route(
+        '/profile',
+        name: 'profile',
+        methods: ['GET']
+    )]
     public function profile(): Response
     {
         $this->breadCrumbs->bcProfile(false, false);
@@ -53,9 +54,11 @@ class TeacherController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/profile/edit", name="teacher_edit_profile")
-     */
+    #[Route(
+        '/profile/edit',
+        name: 'edit_profile',
+        methods: ['GET', 'POST']
+    )]
     public function editProfile(Request $request, FindEntity $find): Response
     {
         if ($request->query->get('list_profile_edit')) {
@@ -75,9 +78,8 @@ class TeacherController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($teacher);
-            $entityManager->flush();
+            $this->em->persist($teacher);
+            $this->em->flush();
             $this->addFlash('success', 'Profil édité avec succès.');
 
             if (isset($teacher_name)) {

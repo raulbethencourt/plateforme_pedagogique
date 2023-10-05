@@ -6,16 +6,14 @@ use App\Entity\Questionnaire;
 use App\Form\EditStudentType;
 use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
-use Knp\Component\Pager\PaginatorInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/student")
- */
+#[Route('/student', name: 'student_')]
 class StudentController extends AbstractController
 {
     private $breadCrumbs;
@@ -32,9 +30,7 @@ class StudentController extends AbstractController
         $this->doctrine = $doctrine;
     }
 
-    /**
-     * @Route("/", name="student_show")
-     */
+    #[Route('/', name: 'show')]
     public function show(PaginatorInterface $paginator, Request $request): Response
     {
         $student = $this->getUser();
@@ -48,9 +44,11 @@ class StudentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/profile", name="student_profile")
-     */
+    #[Route(
+        '/profile',
+        name: 'profile',
+        methods: ['GET']
+    )]
     public function profile(): Response
     {
         $this->breadCrumbs->bcProfile(false, false);
@@ -133,9 +131,11 @@ class StudentController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/profile/edit", name="student_edit_profile")
-     */
+    #[Route(
+        '/profile/edit',
+        name: 'edit_profile',
+        methods: ['GET', 'POST']
+    )]
     public function editProfile(Request $request): Response
     {
         if ($request->query->get('list_profile_edit')) {

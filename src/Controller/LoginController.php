@@ -9,10 +9,8 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class LoginController extends AbstractController
 {
-    /**
-     * @Route("/", name="login")
-     * @Route("/login")
-     */
+    #[Route('/', name: 'login')]
+    #[Route('/login')]
     public function index(AuthenticationUtils $authenticationUtils): Response
     {
         // get the login error if there is one
@@ -20,34 +18,34 @@ class LoginController extends AbstractController
 
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
+
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,
             'error' => $error,
         ]);
     }
 
-    /**
-    * @Route("/secure-area", name="home_page")
-    */
-    public function indexAction() : ?Response
+    #[Route('/secure-area', name: 'home_page')]
+    public function indexAction(): ?Response
     {
-        $role = $this->getUser()->getRoles()[0];
+        $user = $this->getUser();
+        $role = $user->getRoles()[0];
         // I do a redirection using the user type to arrive a different parts of the application
         switch ($role) {
             case 'ROLE_TEACHER':
                 return $this->redirect(
                     $this->generateUrl(
                         'teacher_show',
-                        ['user' => $this->getUser()]
+                        ['user' => $user]
                     )
                 );
             case 'ROLE_STUDENT':
                 return $this->redirect(
                     $this->generateUrl(
-                            'student_show',
-                            ['user' => $this->getUser()]
-                        )
-                    );
+                        'student_show',
+                        ['user' => $user]
+                    )
+                );
             default:
                 return $this->redirect($this->generateUrl('user_show'));
         }

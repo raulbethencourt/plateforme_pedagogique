@@ -25,7 +25,7 @@ class LessonRepository extends ServiceEntityRepository
     /**
      * @return Lesson[] Returns an array of Lesson objects
      */
-    public function findByClassroom($classroom)
+    public function findByClassroom($classroom): array
     {
         return $this->createQueryBuilder('l')
             ->andWhere('l.classrooms LIKE :val')

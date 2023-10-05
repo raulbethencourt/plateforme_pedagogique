@@ -5,10 +5,11 @@ namespace App\Controller\Service;
 use App\Entity\Events;
 use App\Form\EventsType;
 use App\Repository\EventsRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/events")
@@ -28,16 +29,15 @@ class EventsController extends AbstractController
     /**
      * @Route("/new", name="events_new", methods={"GET", "POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, EntityManagerInterface $em): Response
     {
         $event = new Events();
         $form = $this->createForm(EventsType::class, $event);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($event);
-            $entityManager->flush();
+            $em->persist($event);
+            $em->flush();
 
             return $this->redirectToRoute('events_index');
         }
@@ -61,13 +61,13 @@ class EventsController extends AbstractController
     /**
      * @Route("/{id_events}/edit", name="events_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, Events $event): Response
+    public function edit(Request $request, Events $event, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(EventsType::class, $event);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $em->flush();
 
             return $this->redirectToRoute('events_index');
         }
@@ -81,12 +81,11 @@ class EventsController extends AbstractController
     /**
      * @Route("/{id}/delete", name="events_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Events $event): Response
+    public function delete(Request $request, Events $event, EntityManagerInterface $em): Response
     {
         if ($this->isCsrfTokenValid('delete'.$event->getId_events(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($event);
-            $entityManager->flush();
+            $em->remove($event);
+            $em->flush();
         }
 
         return $this->redirectToRoute('events_index');

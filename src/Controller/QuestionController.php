@@ -8,18 +8,17 @@ use App\Form\QuestionType;
 use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs as ModelBreadcrumbs;
 
-/**
- * @Route("/question")
- * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
- */
+#[Route('/question', name: 'question_')]
+#[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")'))]
 class QuestionController extends AbstractController
 {
     private $em;
@@ -28,9 +27,9 @@ class QuestionController extends AbstractController
     private $breadCrumbs;
 
     public function __construct(
-        EntityManagerInterface $em, 
-        FindEntity $find, 
-        RequestStack $requestStack, 
+        EntityManagerInterface $em,
+        FindEntity $find,
+        RequestStack $requestStack,
         BreadCrumbs $breadCrumbs
     ) {
         $this->em = $em;
@@ -39,9 +38,11 @@ class QuestionController extends AbstractController
         $this->breadCrumbs = $breadCrumbs;
     }
 
-    /**
-     * @Route("/new", name="question_new", methods={"GET", "POST"})
-     */
+    #[Route(
+        '/new',
+        name: 'new',
+        methods: ['GET', 'POST']
+    )]
     public function new(): Response
     {
         $this->questionBC(null, 'new');
@@ -87,9 +88,11 @@ class QuestionController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="question_edit", methods={"GET", "POST"})
-     */
+    #[Route(
+        '/{id}/edit',
+        name: 'edit',
+        methods: ['GET', 'POST']
+    )]
     public function edit(Question $question): Response
     {
         $this->questionBC($question, 'edit');
@@ -126,10 +129,11 @@ class QuestionController extends AbstractController
         ]);
     }
 
-
-    /**
-     * @Route("/{id}", name="question_delete", methods={"DELETE"})
-     */
+    #[Route(
+        '/{id}/delete',
+        name: 'delete',
+        methods: ['POST']
+    )]
     public function delete(Question $question): RedirectResponse
     {
         // Check the token for validation
@@ -149,7 +153,7 @@ class QuestionController extends AbstractController
         ]);
     }
 
-     /**
+    /**
      * Helping methods to call breadcrumbsService.
      */
     private function questionBC(?Question $question, string $method): ModelBreadcrumbs

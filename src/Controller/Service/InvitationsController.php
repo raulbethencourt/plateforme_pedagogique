@@ -27,9 +27,9 @@ class InvitationsController extends AbstractController
     private $find;
 
     public function __construct(
-        MailerInterface $mailer, 
-        EntityManagerInterface $em, 
-        RequestStack $requestStack, 
+        MailerInterface $mailer,
+        EntityManagerInterface $em,
+        RequestStack $requestStack,
         FindEntity $find
     ) {
         $this->mailer = $mailer;
@@ -57,10 +57,8 @@ class InvitationsController extends AbstractController
             if (null !== $classroom) {
                 return $this->redirectToRoute('classroom_show', [
                     'id' => $classroom->getId(),
-                    'extra' => $this->request->query->get('extra')
+                    'extra' => $this->request->query->get('extra'),
                 ]);
-            } else {
-                return $this->redirectToRoute('user_show');
             }
         }
 

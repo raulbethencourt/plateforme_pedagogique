@@ -22,7 +22,7 @@ class CalendarSubscriber implements EventSubscriberInterface
         $this->router = $router;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             CalendarEvents::SET_DATA => 'onCalendarSetData',

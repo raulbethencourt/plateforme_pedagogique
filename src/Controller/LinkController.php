@@ -4,37 +4,45 @@ namespace App\Controller;
 
 use App\Entity\Link;
 use App\Form\LinkType;
-use App\Service\FindEntity;
 use App\Form\SearchLinkType;
 use App\Repository\LinkRepository;
+use App\Service\BreadCrumbsService as BreadCrumbs;
+use App\Service\FindEntity;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\BreadCrumbsService as BreadCrumbs;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-/**
- * @Route("/link")
- */
+#[Route('/link', name: 'link_')]
+#[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")'))]
 class LinkController extends AbstractController
 {
     private $breadCrumbs;
     private $request;
     private $find;
+    private $em;
 
-    public function __construct(BreadCrumbs $breadCrumbs, RequestStack $request, FindEntity $find)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        BreadCrumbs $breadCrumbs,
+        RequestStack $request,
+        FindEntity $find
+    ) {
+        $this->em = $em;
         $this->breadCrumbs = $breadCrumbs;
         $this->request = $request->getCurrentRequest();
         $this->find = $find;
     }
 
-    /**
-     * @Route("/", name="link_index", methods={"GET"})
-     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
-     */
+    #[Route(
+        '/',
+        name: 'index',
+        methods: ['GET']
+    )]
     public function index(LinkRepository $linkRepo, PaginatorInterface $paginator): Response
     {
         $classroom_id = $this->request->query->get('classroom_id');
@@ -65,10 +73,11 @@ class LinkController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/new", name="link_new", methods={"GET", "POST"})
-     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
-     */
+    #[Route(
+        '/new',
+        name: 'new',
+        methods: ['GET', 'POST']
+    )]
     public function new(): Response
     {
         $link = new Link();
@@ -86,9 +95,8 @@ class LinkController extends AbstractController
         $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($link);
-            $entityManager->flush();
+            $this->em->persist($link);
+            $this->em->flush();
             $this->addFlash('success', 'Lien créée avec succès.');
 
             if (isset($classroom_id)) {
@@ -107,10 +115,11 @@ class LinkController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="link_edit", methods={"GET", "POST"})
-     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
-     */
+    #[Route(
+        '/{id}/edit',
+        name: 'edit',
+        methods: ['GET', 'POST']
+    )]
     public function edit(Link $link): Response
     {
         $classroom_id = $this->request->query->get('classroom_id');
@@ -121,7 +130,7 @@ class LinkController extends AbstractController
         $form->handleRequest($this->request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->em->flush($link);
             $this->addFlash('success', 'Lien modifiée avec succès.');
 
             if (isset($classroom_id)) {
@@ -140,15 +149,16 @@ class LinkController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="link_delete", methods={"DELETE"})
-     */
+    #[Route(
+        '/{id}',
+        name: 'delete',
+        methods: ['POST']
+    )]
     public function delete(Link $link): Response
     {
         if ($this->isCsrfTokenValid('delete'.$link->getId(), $this->request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($link);
-            $entityManager->flush();
+            $this->em->remove($link);
+            $this->em->flush();
             $this->addFlash('success', 'Lien supprimée avec succès.');
         }
 

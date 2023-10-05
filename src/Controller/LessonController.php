@@ -4,21 +4,20 @@ namespace App\Controller;
 
 use App\Entity\Lesson;
 use App\Form\LessonType;
-use App\Service\FindEntity;
 use App\Form\SearchLessonType;
 use App\Repository\LessonRepository;
+use App\Service\BreadCrumbsService as BreadCrumbs;
+use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\BreadCrumbsService as BreadCrumbs;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-/**
- * @Route("/lesson")
- */
+#[Route('/lesson', name: 'lesson_')]
 class LessonController extends AbstractController
 {
     private $em;
@@ -27,8 +26,13 @@ class LessonController extends AbstractController
     private $breadCrumbs;
     private $paginator;
 
-    public function __construct(EntityManagerInterface $em, FindEntity $find, RequestStack $requestStack, BreadCrumbs $breadCrumbs, PaginatorInterface $paginator)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        FindEntity $find,
+        RequestStack $requestStack,
+        BreadCrumbs $breadCrumbs,
+        PaginatorInterface $paginator
+    ) {
         $this->em = $em;
         $this->find = $find;
         $this->request = $requestStack->getCurrentRequest();
@@ -36,10 +40,12 @@ class LessonController extends AbstractController
         $this->paginator = $paginator;
     }
 
-    /**
-     * @Route("/", name="lesson_index", methods={"GET"})
-     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
-     */
+    #[Route(
+        '/',
+        name: 'index',
+        methods: ['GET']
+    )]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")'))]
     public function index(LessonRepository $lessonRepo): Response
     {
         $request = $this->request->query;
@@ -65,11 +71,9 @@ class LessonController extends AbstractController
             ]);
         }
 
-        if ('ROLE_TEACHER' === $user->getRoles()[0]) {
-            $lessons = $lessonRepo->findByVisibilityOrCreator(true, $user->getUserIdentifier());
-        } else {
-            $lessons = $lessonRepo->findAll();
-        }
+        $lessons = (in_array('ROLE_TEACHER', $user->getRoles())) ?
+            $lessonRepo->findByVisibilityOrCreator(true, $user->getUserIdentifier()) :
+            $lessonRepo->findAll();
 
         $this->breadCrumbs->bcLesson(null, 'index', $classroom_id, $list, null, null);
 
@@ -83,10 +87,12 @@ class LessonController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/new", name="lesson_new", methods={"GET", "POST"})
-     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
-     */
+    #[Route(
+        '/new',
+        name: 'new',
+        methods: ['GET', 'POST']
+    )]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")'))]
     public function new(): Response
     {
         $classroom_id = $this->request->query->get('classroom_id');
@@ -131,10 +137,11 @@ class LessonController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="lesson_show", methods={"GET"})
-     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') or is_granted('ROLE_STUDENT')")
-     */
+    #[Route(
+        '/{id}',
+        name: 'show',
+        methods: ['GET']
+    )]
     public function show(Lesson $lesson): Response
     {
         $request = $this->request->query;
@@ -166,10 +173,12 @@ class LessonController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="lesson_edit", methods={"GET", "POST"})
-     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
-     */
+    #[Route(
+        '/{id}/edit',
+        name: 'edit',
+        methods: ['GET', 'POST']
+    )]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")'))]
     public function edit(Lesson $lesson): Response
     {
         $classroom_id = $this->request->query->get('classroom_id');
@@ -200,10 +209,12 @@ class LessonController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/delete/{id}", name="lesson_delete", methods={"DELETE"})
-     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
-     */
+    #[Route(
+        '/{id}',
+        name: 'delete',
+        methods: ['POST']
+    )]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")'))]
     public function deleteLesson(Lesson $lesson): Response
     {
         if ($this->isCsrfTokenValid('delete'.$lesson->getId(), $this->request->get('_token'))) {
@@ -223,10 +234,12 @@ class LessonController extends AbstractController
         return $this->redirectToRoute('lesson_index');
     }
 
-    /**
-     * @Route("/{id}/add_questionnaire", name="lesson_questionnaire_add", methods={"GET"})
-     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
-     */
+    #[Route(
+        '/{id}/add_questionnaire',
+        name: 'questionnaire_add',
+        methods: ['GET', 'POST']
+    )]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")'))]
     public function addQuestionnaireToLesson(Lesson $lesson): Response
     {
         $questionnaire = $this->find->findQuestionnaire();
@@ -243,10 +256,12 @@ class LessonController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/questionnaire_remove", name="lesson_questionnaire_remove", methods={"DELETE"})
-     * @Security("is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER')")
-     */
+    #[Route(
+        '/{id}/questionnaire_remove',
+        name: 'questionnaire_remove',
+        methods: ['POST']
+    )]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")'))]
     public function removeQuestionnaireFromLesson(Lesson $lesson): Response
     {
         $questionnaire = $this->find->findQuestionnaire();

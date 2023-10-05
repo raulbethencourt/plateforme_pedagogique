@@ -14,16 +14,15 @@ use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-/**
- * @Route("/classroom")
- */
+#[Route('/classroom', name: 'classroom_')]
 class ClassroomController extends AbstractController
 {
     private $em;
@@ -49,10 +48,12 @@ class ClassroomController extends AbstractController
         $this->breadCrumbs = $breadCrumbs;
     }
 
-    /**
-     * @Route("/new", name="classroom_new", methods={"GET", "POST"})
-     * @Security("is_granted('ROLE_ADMIN')")
-     */
+    #[Route(
+        '/new',
+        name: 'new',
+        methods: ['GET', 'POST']
+    )]
+    #[IsGranted('ROLE_ADMIN')]
     public function new(): Response
     {
         $this->breadCrumbs->bcClassroom(null, 'new');
@@ -77,10 +78,11 @@ class ClassroomController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="classroom_show", methods={"GET", "POST"})
-     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN') or is_granted('ROLE_STUDENT')")
-     */
+    #[Route(
+        '/{id}',
+        name: 'show',
+        methods: ['GET']
+    )]
     public function show(Classroom $classroom, PaginatorInterface $paginator): Response
     {
         $this->breadCrumbs->bcClassroom($classroom, 'show');
@@ -108,9 +110,12 @@ class ClassroomController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="classroom_edit", methods={"GET", "POST"})
-     */
+    #[Route(
+        '/{id}/edit',
+        name: 'edit',
+        methods: ['GET', 'POST']
+    )]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")'))]
     public function edit(Classroom $classroom): Response
     {
         $this->breadCrumbs->bcClassroom($classroom, 'edit');
@@ -132,9 +137,12 @@ class ClassroomController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}", name="classroom_delete", methods={"DELETE"})
-     */
+    #[Route(
+        '/{id}/delete',
+        name: 'delete',
+        methods: ['POST']
+    )]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")'))]
     public function delete(Classroom $classroom): Response
     {
         if ($this->isCsrfTokenValid('delete'.$classroom->getId(), $this->request->request->get('_token'))) {
@@ -146,10 +154,12 @@ class ClassroomController extends AbstractController
         return $this->redirectToRoute('user_show');
     }
 
-    /**
-     * @Route("/{id}/user_delete", name="classroom_user_remove", methods={"DELETE"})
-     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
-     */
+    #[Route(
+        '/{id}/user_delete',
+        name: 'user_remove',
+        methods: ['POST']
+    )]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")'))]
     public function removeUserFromClassroom(Classroom $classroom): Response
     {
         // find user
@@ -165,10 +175,12 @@ class ClassroomController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/add_lesson", name="classroom_lesson_add", methods={"GET"})
-     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
-     */
+    #[Route(
+        '/{id}/add_lesson',
+        name: 'lesson_add',
+        methods: ['GET', 'POST']
+    )]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")'))]
     public function addLessonToClass(Classroom $classroom): RedirectResponse
     {
         // find lesson
@@ -183,10 +195,12 @@ class ClassroomController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/lesson_remove", name="classroom_lesson_remove", methods={"DELETE"})
-     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
-     */
+    #[Route(
+        '/{id}/lesson_remove',
+        name: 'lesson_remove',
+        methods: ['POST']
+    )]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")'))]
     public function removeLessonFromClass(Classroom $classroom): Response
     {
         // find lesson
@@ -204,10 +218,12 @@ class ClassroomController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/link_add", name="classroom_link_add", methods={"GET"})
-     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
-     */
+    #[Route(
+        '/{id}/link_add',
+        name: 'link_add',
+        methods: ['GET', 'POST']
+    )]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")'))]
     public function addLinkToClass(Classroom $classroom): RedirectResponse
     {
         $link = $this->find->findLink();
@@ -221,10 +237,12 @@ class ClassroomController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/link_remove", name="classroom_link_remove", methods={"DELETE"})
-     * @Security("is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')")
-     */
+    #[Route(
+        '/{id}/link_remove',
+        name: 'classroom_link_remove',
+        methods: ['POST']
+    )]
+    #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_TEACHER")'))]
     public function removeLinkFromClass(Classroom $classroom): Response
     {
         $link = $this->find->findLink();

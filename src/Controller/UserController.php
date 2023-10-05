@@ -10,19 +10,15 @@ use App\Form\SearchUserType;
 use App\Service\BreadCrumbsService as BreadCrumbs;
 use App\Service\FindEntity;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-/**
- * Class UserController.
- *
- * @Route("/user")
- */
 class UserController extends AbstractController
 {
     private $em;
@@ -48,36 +44,61 @@ class UserController extends AbstractController
         $this->doctrine = $doctrine;
     }
 
-    /**
-     * @Route("/", name="user_show")
-     */
+    #[Route('/user', name: 'user_show', methods: ['GET'])]
+    #[Route('/teacher', name: 'teacher_show', methods: ['GET'])]
+    #[Route('/student', name: 'student_show', methods: ['GET'])]
     public function show(InvitationsController $invitation): Response
     {
         $user = $this->getUser();
-        if ('ROLE_ADMIN' === $user->getRoles()[0]) {
-            $classrooms = $user->getClassrooms();
-        } else {
-            $classrooms = $this->find->findAllClassrooms();
-        }
+        $user_role = $user->getRoles()[0];
 
-        $classrooms = $this->paginator->paginate($classrooms, $this->request->query->getInt('page', 1), 10);
+        $classrooms = match ($user_role) {
+            'ROLE_ADMIN', 'ROLE_TEACHER' => $user->getClassrooms(),
+            'ROLE_STUDENT' => $user->getClassrooms()[0],
+            default => $this->find->findAllClassrooms(),
+        };
 
         // admin invitation
-        $invite = new Invite();
-        $form = $this->createForm(InviteType::class, $invite, ['user' => $user]);
-        $invitation->invitation($form, $invite);
+        if ('ROLE_ADMIN' == $user_role) {
+            $invite = new Invite();
+            $form = $this->createForm(InviteType::class, $invite, ['user' => $user]);
+            $invitation->invitation($form, $invite);
+        }
 
-        return $this->render('user/show.html.twig', [
-            'admins' => $this->find->findUsersByRole('ROLE_ADMIN'),
-            'classrooms' => $classrooms,
-            'user' => $user,
-            'form' => $form->createView(),
+        $users_data = match ($user_role) {
+            'ROLE_TEACHER' => [
+                'teacher' => $user,
+            ],
+            'ROLE_STUDENT' => [
+                'student' => $user,
+                'lessons' => $this->paginator->paginate(
+                    $classrooms->getLessons(),
+                    $this->request->query->getInt('page', 1),
+                    10
+                ),
+            ],
+            default => [
+                'admins' => $this->find->findUsersByRole('ROLE_ADMIN'),
+                'form' => $form->createView(),
+            ],
+        };
+
+        $render_data = array_merge($users_data, [
+            'classroom' => $this->paginator->paginate(
+                $classrooms,
+                $this->request->query->getInt('page', 1),
+                10
+            ),
         ]);
+
+        return $this->render('user/show.html.twig', $render_data);
     }
 
-    /**
-     * @Route("/list", name="user_list", methods={"GET"})
-     */
+    #[Route(
+        '/user/list',
+        name: 'user_list',
+        methods: ['GET']
+    )]
     public function listUsers(): Response
     {
         $type = $this->request->query->get('type');
@@ -120,16 +141,19 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{id}/delete", name="user_delete", methods={"DELETE"})
-     */
+    #[Route(
+        '/user/{id}',
+        name: 'user_delete',
+        methods: ['POST']
+    )]
+    #[IsGranted('ROLE_ADMIN')]
     public function deleteUser(): RedirectResponse
     {
         $user = $this->find->findUser();
         $role = $user->getRoles()[0];
         // Check the token
         if ($this->isCsrfTokenValid(
-            'delete' . $user->getId(),
+            'delete'.$user->getId(),
             $this->request->get('_token')
         )) {
             $this->em->remove($user);
@@ -156,9 +180,11 @@ class UserController extends AbstractController
         return $this->redirectToRoute('user_show');
     }
 
-    /**
-     * @Route("/profile", name="user_profile")
-     */
+    #[Route(
+        '/user/profile',
+        name: 'user_profile',
+        methods: ['GET']
+    )]
     public function profile(): Response
     {
         $this->breadCrumbs->bcProfile(false, false);
@@ -168,9 +194,11 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/profile/edit", name="user_edit_profile")
-     */
+    #[Route(
+        '/user/profile/edit',
+        name: 'user_edit_profile',
+        methods: ['GET', 'POST']
+    )]
     public function editProfile(): Response
     {
         $this->breadCrumbs->bcProfile(true, false);
