@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Questionnaire;
+use App\Form\EditStudentType;
 use App\Controller\Service\InvitationsController;
 use App\Entity\Invite;
 use App\Form\EditUserType;
@@ -84,7 +86,7 @@ class UserController extends AbstractController
         };
 
         $render_data = array_merge($users_data, [
-            'classroom' => $this->paginator->paginate(
+            'classrooms' => $this->paginator->paginate(
                 $classrooms,
                 $this->request->query->getInt('page', 1),
                 10
@@ -185,13 +187,109 @@ class UserController extends AbstractController
         name: 'user_profile',
         methods: ['GET']
     )]
+    #[Route(
+        '/teacher/profile',
+        name: 'teacher_profile',
+        methods: ['GET']
+    )]
+    #[Route(
+        '/student/profile',
+        name: 'student_profile',
+        methods: ['GET']
+    )]
     public function profile(): Response
     {
+        $user = $this->getUser();
+        $user_role = $user->getRoles()[0];
+
         $this->breadCrumbs->bcProfile(false, false);
 
-        return $this->render('user/profile.html.twig', [
-            'user' => $this->getUser(),
-        ]);
+        // student data for charts 
+        if ('ROLE_STUDENT' == $user_role) {
+            // Get each time that the student has passed q questionnaire
+            $passes = $this->find->findPasses($this->getUser());
+
+            $sum = array_reduce(
+                $passes,
+                function ($i, $pass) {
+                    return $i += $pass->getPoints();
+                }
+            );
+
+            $numberOfQuestions = array_reduce(
+                $passes,
+                function ($i, $pass) {
+                    return $i += count($pass->getQuestionnaire()->getQuestions());
+                }
+            );
+
+            $difficulties = Questionnaire::DIFFICULTIES;
+            $playsPerDiff = [];
+            $statsPerDiff = [];
+
+            foreach ($difficulties as $difficulty) {
+                $playsPerDiff[$difficulty] = array_filter(
+                    $passes,
+                    function ($pass) use ($difficulty) {
+                        return $pass->getQuestionnaire()->getDifficulty() == $difficulty;
+                    }
+                );
+
+                $totalScore = array_reduce(
+                    $playsPerDiff[$difficulty],
+                    function ($i, $play) {
+                        return $i += $play->getQuestionnaire()->getTotalScore();
+                    }
+                );
+
+                $playerScore = array_reduce(
+                    $playsPerDiff[$difficulty],
+                    function ($i, $play) {
+                        return $i += $play->getPoints();
+                    }
+                );
+
+                if (null != $totalScore) {
+                    $statsPerDiff[$difficulty] = round(($playerScore / $totalScore) * 100, 2);
+                } else {
+                    $statsPerDiff[$difficulty] = null;
+                }
+            }
+
+            $sumMax = array_reduce(
+                $passes,
+                function ($i, $pass) {
+                    return $i += $pass->getQuestionnaire()->getTotalScore();
+                }
+            );
+
+            if ($sumMax) {
+                $average = (round($sum / $sumMax, 2) * 100).'%';
+            } else {
+                $average = 0;
+            }
+        }
+        
+        $render_data = match ($user_role) {
+            'ROLE_TEACHER' => [
+                'teacher' => $user,
+            ],
+            'ROLE_STUDENT' => [
+                'student' => $user,
+                'passes' => $passes,
+                'sum' => $sum,
+                'average' => $average,
+                'statsPerDiff' => $statsPerDiff,
+                'spdjson' => json_encode(array_values($statsPerDiff)),
+                'numberOfQuestions' => $numberOfQuestions,
+                'avatar' => $user->getAvatar(),
+            ],
+            default => [
+                'user' => $user,
+            ],
+        };
+
+        return $this->render('user/profile.html.twig', $render_data);
     }
 
     #[Route(
@@ -201,6 +299,7 @@ class UserController extends AbstractController
     )]
     public function editProfile(): Response
     {
+        // TODO: continue refactoring
         $this->breadCrumbs->bcProfile(true, false);
 
         $user = $this->getUser();
